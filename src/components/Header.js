@@ -85,7 +85,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`header fixed top-0 left-0 right-0 z-50 border-b border-gray-200 transition-transform duration-300 ease-in-out ${
+        className={`header sticky top-0 z-50 border-b border-gray-200 transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
         style={{ backgroundColor: "var(--primary)" }}
@@ -294,10 +294,10 @@ export default function Header() {
       {isMenuOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            className="fixed inset-0 bg-transparent z-40 lg:hidden"
             onClick={() => setIsMenuOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-80 bg-white z-50 transform transition-transform lg:hidden overflow-y-auto">
+          <div className="fixed inset-y-0 left-0 w-80 bg-white z-50 transform transition-transform lg:hidden overflow-y-auto shadow-lg">
             <div className="p-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold">Menu</h2>

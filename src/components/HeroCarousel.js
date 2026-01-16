@@ -45,7 +45,7 @@ export default function HeroCarousel() {
   return (
     <div className="relative w-full">
       {/* Carousel Slides */}
-      <div className="relative w-full h-[600px] lg:h-[700px] overflow-hidden">
+      <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[700px] overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={index}
@@ -63,9 +63,9 @@ export default function HeroCarousel() {
             />
             {/* Overlay Content - SHOP NOW Button */}
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full px-4 lg:px-8">
-                <div className="w-2/5 flex justify-end">
-                  <button className="bg-primary text-black px-8 py-3 rounded-md uppercase tracking-wide hover:bg-gray-100 transition-colors shadow-lg">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="w-full sm:w-2/3 lg:w-2/5 flex justify-start sm:justify-end">
+                  <button className="bg-primary text-black px-4 py-2 sm:px-6 sm:py-2.5 lg:px-8 lg:py-3 rounded-md text-xs sm:text-sm uppercase tracking-wide hover:bg-gray-100 transition-colors shadow-lg">
                     SHOP NOW
                   </button>
                 </div>
@@ -76,8 +76,8 @@ export default function HeroCarousel() {
       </div>
 
       {/* Navigation Controls - Centered on White Background */}
-      <div className="bg-white py-6">
-        <div className="flex items-center justify-center gap-8">
+      <div className="bg-white py-4 sm:py-6">
+        <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8">
           {/* Left Arrow */}
           <button
             onClick={prevSlide}
@@ -100,7 +100,7 @@ export default function HeroCarousel() {
           </button>
 
           {/* Dots Indicator */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
             {slides.map((_, index) => (
               <button
                 key={index}
