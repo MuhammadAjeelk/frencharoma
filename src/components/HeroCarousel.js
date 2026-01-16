@@ -63,9 +63,9 @@ export default function HeroCarousel() {
             />
             {/* Overlay Content - SHOP NOW Button */}
             <div className="absolute inset-0 flex items-center">
-              <div className="container mx-auto px-4 lg:px-8">
-                <div className="max-w-md lg:max-w-lg">
-                  <button className="bg-white text-black px-8 py-3 rounded-md uppercase tracking-wide hover:bg-gray-100 transition-colors shadow-lg">
+              <div className="w-full px-4 lg:px-8">
+                <div className="w-2/5 flex justify-end">
+                  <button className="bg-primary text-black px-8 py-3 rounded-md uppercase tracking-wide hover:bg-gray-100 transition-colors shadow-lg">
                     SHOP NOW
                   </button>
                 </div>
