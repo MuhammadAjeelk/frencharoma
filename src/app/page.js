@@ -1,3 +1,9 @@
+import HeroCarousel from "@/components/HeroCarousel";
+
 export default function Home() {
-  return <div className="min-h-screen">{/* Your page content here */}</div>;
+  return (
+    <div className="min-h-screen">
+      <HeroCarousel />
+    </div>
+  );
 }
