@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'www.linea-debella.com',
         pathname: '/cdn/shop/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'saeedghani.pk',
+        pathname: '/cdn/shop/**',
+      },
     ],
   },
 };

@@ -200,8 +200,13 @@ export default function Header() {
               </button>
             </div>
 
-            {/* Logo - Center */}
-            <Link href="/" className="flex-1 flex justify-center">
+            {/* Logo - Center - Hide on mobile when search is open */}
+            <Link
+              href="/"
+              className={`flex-1 flex justify-center ${
+                isSearchOpen ? "lg:flex hidden" : "flex"
+              }`}
+            >
               <div className="flex items-center">
                 <Image
                   src="https://www.linea-debella.com/cdn/shop/files/Linea-De-Bella-Logo1_b35278ae-0b10-4868-9659-dcbdcd15d2d6.png?v=1751979015&width=240"
@@ -297,7 +302,7 @@ export default function Header() {
             className="fixed inset-0 bg-transparent z-40 lg:hidden"
             onClick={() => setIsMenuOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-80 bg-white z-50 transform transition-transform lg:hidden overflow-y-auto shadow-lg">
+          <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-white z-50 transform transition-transform lg:hidden overflow-y-auto shadow-lg">
             <div className="p-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold">Menu</h2>
@@ -393,20 +398,22 @@ export default function Header() {
         </>
       )}
 
-      {/* Search Modal */}
+      {/* Search Modal - Mobile Full Screen */}
       {isSearchOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 bg-black z-40 lg:hidden"
             onClick={() => setIsSearchOpen(false)}
           />
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">Search</h2>
+          <div className="fixed inset-0 z-50 lg:hidden flex flex-col">
+            {/* Search Modal Content */}
+            <div className="bg-white w-full h-full flex flex-col border-t border-gray-300">
+              {/* Header with Title and Close Button */}
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h2 className="text-lg font-bold text-gray-900">Search</h2>
                 <button
                   onClick={() => setIsSearchOpen(false)}
-                  className="p-2 focus:outline-none"
+                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity"
                   aria-label="Close search"
                 >
                   <Image
@@ -418,26 +425,80 @@ export default function Header() {
                   />
                 </button>
               </div>
-              <form action="/search" method="get" className="relative">
-                <input
-                  type="search"
-                  name="q"
-                  placeholder="Search..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  autoFocus
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2"
-                  aria-label="Search"
-                >
-                  <img
-                    src="/icons/search.svg"
-                    alt="Search"
-                    className="w-5 h-5"
+
+              {/* Search Input */}
+              <div className="flex-1 p-4">
+                <form action="/search" method="get" className="relative">
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder="Search..."
+                    className="w-full px-4 py-3 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 text-base"
+                    autoFocus
                   />
-                </button>
-              </form>
+                  <button
+                    type="submit"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2"
+                    aria-label="Search"
+                  >
+                    <Image
+                      src="/icons/search.svg"
+                      alt="Search"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Search Modal */}
+          <div className="hidden lg:block">
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setIsSearchOpen(false)}
+            />
+            <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
+              <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold">Search</h2>
+                  <button
+                    onClick={() => setIsSearchOpen(false)}
+                    className="p-2 focus:outline-none"
+                    aria-label="Close search"
+                  >
+                    <Image
+                      src="/icons/close.svg"
+                      alt="Close"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </div>
+                <form action="/search" method="get" className="relative">
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder="Search..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    autoFocus
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2"
+                    aria-label="Search"
+                  >
+                    <img
+                      src="/icons/search.svg"
+                      alt="Search"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </>

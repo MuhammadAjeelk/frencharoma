@@ -2,25 +2,25 @@
 
 import ShopCard from "./ShopCard";
 
-export default function ShopByGender() {
-  const genders = [
+export default function ShopByCategory() {
+  const categories = [
     {
-      name: "Men",
+      name: "Luxury Edition",
       image:
         "https://www.linea-debella.com/cdn/shop/files/MEN-min.jpg?v=1753724171&width=750",
-      href: "/collections/shop-all?gender=men",
+      href: "/collections/shop-all?category=luxury-edition",
     },
     {
-      name: "Women",
+      name: "Premium Edition",
       image:
         "https://www.linea-debella.com/cdn/shop/files/WOMEN-min.jpg?v=1753724179&width=750",
-      href: "/collections/shop-all?gender=women",
+      href: "/collections/shop-all?category=premium-edition",
     },
     {
-      name: "Unisex",
+      name: "Classic Edition",
       image:
         "https://www.linea-debella.com/cdn/shop/files/UNISEX-min.jpg?v=1753779949&width=750",
-      href: "/collections/shop-all?gender=unisex",
+      href: "/collections/shop-all?category=classic-edition",
     },
   ];
 
@@ -32,17 +32,17 @@ export default function ShopByGender() {
           className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8"
           style={{ color: "#1a1a2e" }}
         >
-          SHOP BY GENDER
+          SHOP BY CATEGORY
         </h2>
 
-        {/* Gender Cards */}
+        {/* Category Cards */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto">
-          {genders.map((gender, index) => (
+          {categories.map((category, index) => (
             <ShopCard
               key={index}
-              name={gender.name}
-              image={gender.image}
-              href={gender.href}
+              name={category.name}
+              image={category.image}
+              href={category.href}
             />
           ))}
         </div>

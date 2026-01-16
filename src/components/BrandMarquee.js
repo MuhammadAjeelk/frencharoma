@@ -23,20 +23,20 @@ export default function BrandMarquee() {
   ];
 
   return (
-    <div className="py-8 overflow-hidden relative">
+    <div className="py-6 md:py-8 overflow-hidden relative">
       <Marquee
         pauseOnHover={true}
         speed={50}
         direction="left"
         autoFill={true}
         gradient={false}
-        className="gap-8"
+        className="gap-4 md:gap-8"
       >
         {brands.map((brand, index) => (
           <Link
             key={index}
             href={brand.href}
-            className="shrink-0 w-48 sm:w-64 h-32 relative mx-4 block cursor-pointer hover:opacity-80 transition-opacity"
+            className="shrink-0 w-40 sm:w-48 md:w-64 h-24 sm:h-28 md:h-32 relative mx-2 sm:mx-4 block cursor-pointer hover:opacity-80 transition-opacity"
           >
             <Image
               src={brand.image}
