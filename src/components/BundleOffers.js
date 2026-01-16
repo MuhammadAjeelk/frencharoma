@@ -49,7 +49,7 @@ export default function BundleOffers() {
             <Link
               key={index}
               href={offer.href}
-              className="group relative border-2 border-gray-200 rounded-xl overflow-hidden bg-white hover:border-gray-300 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+              className="group relative border-1 border-gray-200 rounded-xl overflow-hidden bg-white hover:border-gray-300 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
             >
               {/* Discount Badge */}
               <div className="absolute top-2 md:top-4 right-2 md:right-4 z-10 bg-red-600 text-white text-sm md:text-lg font-bold px-3 md:px-4 py-1.5 md:py-2 rounded-full shadow-lg">
