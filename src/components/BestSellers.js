@@ -194,18 +194,6 @@ export default function BestSellers() {
   return (
     <div className="py-8 md:py-12 px-4 bg-white relative overflow-visible">
       <div className="max-w-7xl mx-auto overflow-visible">
-        {/* Product Count - Top Right Corner */}
-        <div className="absolute top-2 right-2 md:top-4 md:right-4 lg:top-8 lg:right-8 z-10">
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-2 md:px-4 py-1 md:py-2 flex items-center gap-1 md:gap-2">
-            <span className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-900">
-              {totalProducts}
-            </span>
-            <span className="text-xs md:text-sm text-gray-600 font-medium hidden sm:inline">
-              Products
-            </span>
-          </div>
-        </div>
-
         {/* Title */}
         <h2
           className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8"

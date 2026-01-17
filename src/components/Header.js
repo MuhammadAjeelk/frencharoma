@@ -88,27 +88,36 @@ export default function Header() {
         className={`header sticky top-0 z-50 border-b border-gray-200 transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
-        style={{ backgroundColor: "var(--primary)" }}
+        style={{ backgroundColor: "var(--primary)", cursor: "default" }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4" style={{ cursor: "default" }}>
           {/* Top Section */}
-          <div className="flex items-center justify-between py-4">
+          <div
+            className="flex items-center justify-between py-4"
+            style={{ cursor: "default" }}
+          >
             {/* Left Side - Search Input */}
-            <div className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible">
+            <div
+              className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible"
+              style={{ cursor: "default" }}
+            >
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden p-2 focus:outline-none"
+                className="lg:hidden p-2 focus:outline-none cursor-pointer"
                 aria-label="Menu"
               >
                 <img src="/icons/menu.svg" alt="Menu" className="w-5 h-5" />
               </button>
 
               {/* Search - Animated Expand */}
-              <div className="hidden lg:block relative overflow-visible">
+              <div
+                className="hidden lg:block relative overflow-visible"
+                style={{ cursor: "default" }}
+              >
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity whitespace-nowrap ${
+                  className={`flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity whitespace-nowrap cursor-pointer ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
@@ -170,7 +179,7 @@ export default function Header() {
                           setIsSearchExpanded(false);
                           setSearchQuery("");
                         }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity cursor-pointer"
                         aria-label="Close search"
                       >
                         <img
@@ -187,7 +196,7 @@ export default function Header() {
               {/* Mobile Search Button */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity"
+                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
                 aria-label="Search"
               >
                 <Image
@@ -201,30 +210,35 @@ export default function Header() {
             </div>
 
             {/* Logo - Center - Hide on mobile when search is open */}
-            <Link
-              href="/"
+            <div
               className={`flex-1 flex justify-center ${
                 isSearchOpen ? "lg:flex hidden" : "flex"
               }`}
             >
-              <div className="flex items-center">
-                <Image
-                  src="https://www.linea-debella.com/cdn/shop/files/Linea-De-Bella-Logo1_b35278ae-0b10-4868-9659-dcbdcd15d2d6.png?v=1751979015&width=240"
-                  alt="Linea De Bella | Divina Perfumes"
-                  width={120}
-                  height={45}
-                  className="h-auto w-auto max-w-[120px]"
-                  priority
-                />
-              </div>
-            </Link>
+              {" "}
+              <Link href="/">
+                <div className="flex items-center">
+                  <Image
+                    src="https://www.linea-debella.com/cdn/shop/files/Linea-De-Bella-Logo1_b35278ae-0b10-4868-9659-dcbdcd15d2d6.png?v=1751979015&width=240"
+                    alt="Linea De Bella | Divina Perfumes"
+                    width={120}
+                    height={45}
+                    className="h-auto w-auto max-w-[120px] "
+                    priority
+                  />
+                </div>
+              </Link>
+            </div>
 
             {/* Right Icons - Account and Cart */}
-            <div className="flex items-center gap-4 flex-1 justify-end lg:flex-none">
+            <div
+              className="flex items-center gap-4 flex-1 justify-end lg:flex-none"
+              style={{ cursor: "default" }}
+            >
               {/* Account Icon */}
               <Link
                 href="/account/login"
-                className="hidden lg:block p-2 focus:outline-none hover:opacity-70 transition-opacity"
+                className="hidden lg:block p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
                 aria-label="Account"
               >
                 <img
@@ -237,7 +251,7 @@ export default function Header() {
               {/* Cart Icon */}
               <Link
                 href="/cart"
-                className="focus:outline-none relative hover:opacity-70 transition-opacity"
+                className="focus:outline-none relative hover:opacity-70 transition-opacity cursor-pointer"
                 aria-label="Cart"
               >
                 <img src="/icons/cart.svg" alt="Cart" className="w-11 h-11" />
@@ -246,16 +260,29 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation Menu */}
-          <nav className="hidden lg:flex items-center justify-center py-4 border-t border-gray-200">
-            <ul className="flex items-center gap-8">
+          <nav
+            className="hidden lg:flex items-center justify-center py-4 border-t border-gray-200"
+            style={{ cursor: "default" }}
+          >
+            <ul
+              className="flex items-center gap-8"
+              style={{ cursor: "default" }}
+            >
               {menuItems.map((item, index) => (
-                <li key={index} className="relative group">
+                <li
+                  key={index}
+                  className="relative group"
+                  style={{ cursor: "default" }}
+                >
                   {item.submenu ? (
-                    <div className="relative group">
+                    <div
+                      className="relative group"
+                      style={{ cursor: "default" }}
+                    >
                       <button
                         onMouseEnter={() => setIsCollectionOpen(true)}
                         onMouseLeave={() => setIsCollectionOpen(false)}
-                        className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity"
+                        className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity cursor-pointer"
                       >
                         {item.name}
                         <img
@@ -268,12 +295,13 @@ export default function Header() {
                         className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 shadow-lg rounded-md py-2 max-h-96 overflow-y-auto z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
                         onMouseEnter={() => setIsCollectionOpen(true)}
                         onMouseLeave={() => setIsCollectionOpen(false)}
+                        style={{ cursor: "default" }}
                       >
                         {item.submenu.map((subItem, subIndex) => (
                           <Link
                             key={subIndex}
                             href={subItem.href}
-                            className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+                            className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors cursor-pointer"
                           >
                             {subItem.name}
                           </Link>
@@ -283,7 +311,7 @@ export default function Header() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="block py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity"
+                      className="block py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity cursor-pointer"
                     >
                       {item.name}
                     </Link>
@@ -308,7 +336,7 @@ export default function Header() {
                 <h2 className="text-lg font-semibold">Menu</h2>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 focus:outline-none"
+                  className="p-2 focus:outline-none cursor-pointer"
                   aria-label="Close menu"
                 >
                   <Image
@@ -331,7 +359,7 @@ export default function Header() {
                             onClick={() =>
                               setIsCollectionOpen(!isCollectionOpen)
                             }
-                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
+                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide cursor-pointer"
                           >
                             {item.name}
                             <Image
@@ -350,7 +378,7 @@ export default function Header() {
                                 <li key={subIndex}>
                                   <Link
                                     href={subItem.href}
-                                    className="block py-2 text-sm hover:opacity-70 transition-opacity"
+                                    className="block py-2 text-sm hover:opacity-70 transition-opacity cursor-pointer"
                                     onClick={() => {
                                       setIsCollectionOpen(false);
                                       setIsMenuOpen(false);
@@ -366,7 +394,7 @@ export default function Header() {
                       ) : (
                         <Link
                           href={item.href}
-                          className="block py-3 text-sm font-medium uppercase tracking-wide"
+                          className="block py-3 text-sm font-medium uppercase tracking-wide cursor-pointer"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.name}
@@ -380,7 +408,7 @@ export default function Header() {
               <div className="mt-8 pt-8 border-t border-gray-200">
                 <Link
                   href="/account/login"
-                  className="flex items-center gap-2 py-3 text-sm font-medium"
+                  className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Image
@@ -413,7 +441,7 @@ export default function Header() {
                 <h2 className="text-lg font-bold text-gray-900">Search</h2>
                 <button
                   onClick={() => setIsSearchOpen(false)}
-                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity"
+                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
                   aria-label="Close search"
                 >
                   <Image
@@ -438,7 +466,7 @@ export default function Header() {
                   />
                   <button
                     type="submit"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
                     aria-label="Search"
                   >
                     <Image
@@ -466,7 +494,7 @@ export default function Header() {
                   <h2 className="text-xl font-semibold">Search</h2>
                   <button
                     onClick={() => setIsSearchOpen(false)}
-                    className="p-2 focus:outline-none"
+                    className="p-2 focus:outline-none cursor-pointer"
                     aria-label="Close search"
                   >
                     <Image
@@ -488,7 +516,7 @@ export default function Header() {
                   />
                   <button
                     type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
                     aria-label="Search"
                   >
                     <img
