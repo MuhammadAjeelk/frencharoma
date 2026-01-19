@@ -206,55 +206,101 @@ export default async function PerfumeDetailPage({ params }) {
                       </p>
                     )}
 
-                    {/* Variants Table */}
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-2 text-gray-500 font-medium">
-                            Size
-                          </th>
-                          <th className="text-left py-2 text-gray-500 font-medium">
-                            Price
-                          </th>
-                          <th className="text-left py-2 text-gray-500 font-medium">
-                            Stock
-                          </th>
-                          <th className="text-left py-2 text-gray-500 font-medium">
-                            SKU
-                          </th>
-                          <th className="text-left py-2 text-gray-500 font-medium">
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {edition.variants.map((variant, vIndex) => (
-                          <tr key={vIndex} className="border-b border-gray-100">
-                            <td className="py-2 text-gray-900">
-                              {SIZE_LABELS[variant.size]}
-                            </td>
-                            <td className="py-2 text-gray-900">
-                              PKR {variant.price?.toFixed(2)}
-                            </td>
-                            <td className="py-2 text-gray-900">{variant.stock}</td>
-                            <td className="py-2 text-gray-500">
-                              {variant.sku || "-"}
-                            </td>
-                            <td className="py-2">
-                              <span
-                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                  variant.isActive
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-gray-100 text-gray-600"
-                                }`}
-                              >
-                                {variant.isActive ? "Active" : "Inactive"}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    {/* Variants */}
+                    <div className="space-y-4">
+                      {edition.variants.map((variant, vIndex) => (
+                        <div
+                          key={vIndex}
+                          className="border border-gray-200 rounded-lg p-4"
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Variant Info */}
+                            <div className="md:col-span-2">
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                  <p className="text-gray-500 mb-1">Size</p>
+                                  <p className="text-gray-900 font-medium">
+                                    {SIZE_LABELS[variant.size]}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-gray-500 mb-1">Price</p>
+                                  <p className="text-gray-900 font-medium">
+                                    PKR {variant.price?.toFixed(2)}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-gray-500 mb-1">Stock</p>
+                                  <p className="text-gray-900 font-medium">
+                                    {variant.stock}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-gray-500 mb-1">Status</p>
+                                  <span
+                                    className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
+                                      variant.isActive
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-gray-100 text-gray-600"
+                                    }`}
+                                  >
+                                    {variant.isActive ? "Active" : "Inactive"}
+                                  </span>
+                                </div>
+                              </div>
+                              {variant.sku && (
+                                <div className="mt-3">
+                                  <p className="text-gray-500 text-sm mb-1">SKU</p>
+                                  <p className="text-gray-900 text-sm font-mono">
+                                    {variant.sku}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Variant Images */}
+                            <div>
+                              <p className="text-gray-500 text-sm mb-2">Images</p>
+                              {variant.images?.main || (variant.images?.gallery && variant.images.gallery.length > 0) ? (
+                                <div className="space-y-2">
+                                  {variant.images.main && (
+                                    <div>
+                                      <p className="text-xs text-gray-500 mb-1">Main</p>
+                                      <img
+                                        src={variant.images.main}
+                                        alt={`${edition.key} ${variant.size} main`}
+                                        className="w-full h-20 object-cover rounded border border-gray-200"
+                                      />
+                                    </div>
+                                  )}
+                                  {variant.images.gallery && variant.images.gallery.length > 0 && (
+                                    <div>
+                                      <p className="text-xs text-gray-500 mb-1">
+                                        Gallery ({variant.images.gallery.length})
+                                      </p>
+                                      <div className="grid grid-cols-2 gap-1">
+                                        {variant.images.gallery.slice(0, 4).map((img, imgIndex) => (
+                                          <img
+                                            key={imgIndex}
+                                            src={img}
+                                            alt={`${edition.key} ${variant.size} gallery ${imgIndex + 1}`}
+                                            className="w-full h-16 object-cover rounded border border-gray-200"
+                                          />
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <p className="text-gray-400 text-xs italic">
+                                  No images
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
