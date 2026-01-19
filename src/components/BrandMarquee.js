@@ -10,14 +10,14 @@ export default function BrandMarquee() {
       name: "DIVINA PERFUMES",
       image:
         "https://www.linea-debella.com/cdn/shop/files/DIVINA-LOGO_5b9a00b1-9776-4399-998e-1636d99f93a8.jpg?v=1760715774&width=750",
-      price: "UNDER 99 AED",
+      price: "UNDER 99 PKR",
       href: "/collections/divina",
     },
     {
       name: "ORCHID",
       image:
         "https://www.linea-debella.com/cdn/shop/files/O-LOGO.jpg?v=1760715795&width=750",
-      price: "UNDER 79 AED",
+      price: "UNDER 79 PKR",
       href: "/collections/orchid",
     },
   ];

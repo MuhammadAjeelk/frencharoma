@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,6 +13,9 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const accountRef = useRef(null);
+  const { user, logout, isAdmin, loading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +39,23 @@ export default function Header() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  // Close account dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setIsAccountOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    setIsAccountOpen(false);
+  };
 
   const menuItems = [
     { name: "BEST-SELLING", href: "/collections/best-seller-perfumes" },
@@ -235,18 +256,88 @@ export default function Header() {
               className="flex items-center gap-4 flex-1 justify-end lg:flex-none"
               style={{ cursor: "default" }}
             >
-              {/* Account Icon */}
-              <Link
-                href="/account/login"
-                className="hidden lg:block p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
-                aria-label="Account"
-              >
-                <img
-                  src="/icons/account.svg"
-                  alt="Account"
-                  className="w-5 h-5"
-                />
-              </Link>
+              {/* Account Icon with Dropdown */}
+              <div className="hidden lg:block relative" ref={accountRef}>
+                <button
+                  onClick={() => setIsAccountOpen(!isAccountOpen)}
+                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
+                  aria-label="Account"
+                >
+                  <img
+                    src="/icons/account.svg"
+                    alt="Account"
+                    className="w-5 h-5"
+                  />
+                </button>
+
+                {/* Account Dropdown */}
+                {isAccountOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md py-2 z-50 animate-fadeIn">
+                    {loading ? (
+                      <div className="px-4 py-2 text-sm text-gray-500">
+                        Loading...
+                      </div>
+                    ) : user ? (
+                      <>
+                        <div className="px-4 py-2 border-b border-gray-100">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {user.name || user.email}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user.email}
+                          </p>
+                        </div>
+                        {isAdmin && (
+                          <Link
+                            href="/admin"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                            onClick={() => setIsAccountOpen(false)}
+                          >
+                            Admin Panel
+                          </Link>
+                        )}
+                        <Link
+                          href="/account"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
+                          My Account
+                        </Link>
+                        <Link
+                          href="/account/orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
+                          My Orders
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors"
+                        >
+                          Log Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          href="/account/login"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
+                          Log In
+                        </Link>
+                        <Link
+                          href="/account/signup"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
+                          Sign Up
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
 
               {/* Cart Icon */}
               <Link
@@ -406,20 +497,119 @@ export default function Header() {
               </nav>
 
               <div className="mt-8 pt-8 border-t border-gray-200">
-                <Link
-                  href="/account/login"
-                  className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Image
-                    src="/icons/account.svg"
-                    alt="Account"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
-                  Log in
-                </Link>
+                {loading ? (
+                  <div className="py-3 text-sm text-gray-500">Loading...</div>
+                ) : user ? (
+                  <>
+                    <div className="py-3 border-b border-gray-100 mb-2">
+                      <p className="text-sm font-medium text-gray-900">
+                        {user.name || user.email}
+                      </p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-2 py-3 text-sm font-medium text-gray-900 cursor-pointer"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        Admin Panel
+                      </Link>
+                    )}
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Image
+                        src="/icons/account.svg"
+                        alt="Account"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5"
+                      />
+                      My Account
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center gap-2 py-3 text-sm font-medium text-red-600 cursor-pointer"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+                      </svg>
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/account/login"
+                      className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Image
+                        src="/icons/account.svg"
+                        alt="Account"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5"
+                      />
+                      Log In
+                    </Link>
+                    <Link
+                      href="/account/signup"
+                      className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                        />
+                      </svg>
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

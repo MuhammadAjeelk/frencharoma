@@ -57,7 +57,7 @@ Shipping Options:
 • Express Shipping: 2-5 business days
 • Standard Shipping: 5-10 business days
 • International Shipping: 10-15 business days
-• Free shipping on orders over AED 200
+• Free shipping on orders over PKR 200
 
 Our Shipping Partners:
 • DHL Express

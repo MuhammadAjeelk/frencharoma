@@ -69,11 +69,11 @@ export default function ProductCard({
         <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
           {hasSale && originalPrice && (
             <span className="text-xs sm:text-sm text-gray-500 line-through">
-              AED {originalPrice.toFixed(2)}
+              PKR {originalPrice.toFixed(2)}
             </span>
           )}
           <span className="text-sm sm:text-base font-bold text-gray-900">
-            AED {salePrice.toFixed(2)}
+            PKR {salePrice.toFixed(2)}
           </span>
         </div>
 
