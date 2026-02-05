@@ -4,6 +4,27 @@ import connectDB from "@/lib/db";
 import Perfume from "@/lib/models/Perfume";
 import { deleteFile } from "@/lib/upload";
 
+const normalizeBrands = (brandsInput) => {
+  const items = Array.isArray(brandsInput)
+    ? brandsInput
+    : brandsInput
+    ? [brandsInput]
+    : [];
+
+  const brandMap = new Map();
+  for (const item of items) {
+    if (typeof item !== "string") continue;
+    const trimmed = item.trim();
+    if (!trimmed) continue;
+    const key = trimmed.toLowerCase();
+    if (!brandMap.has(key)) {
+      brandMap.set(key, trimmed);
+    }
+  }
+
+  return Array.from(brandMap.values());
+};
+
 // GET /api/admin/perfumes/[id] - Get a single perfume
 export async function GET(request, { params }) {
   try {
@@ -74,6 +95,12 @@ export async function PUT(request, { params }) {
           { status: 400 }
         );
       }
+    }
+
+    if ("brands" in body || "brand" in body) {
+      const normalizedBrands = normalizeBrands(body.brands || body.brand);
+      body.brands = normalizedBrands;
+      body.brand = normalizedBrands[0] || "";
     }
 
     // Validate editions if setting to active

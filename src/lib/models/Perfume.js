@@ -89,6 +89,10 @@ const PerfumeSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    brands: {
+      type: [String],
+      default: [],
+    },
     description: {
       type: String,
       trim: true,
@@ -206,7 +210,7 @@ PerfumeSchema.pre("validate", function () {
 });
 
 // Index for searching
-PerfumeSchema.index({ name: "text", brand: "text", tags: "text" });
+PerfumeSchema.index({ name: "text", brand: "text", brands: "text", tags: "text" });
 PerfumeSchema.index({ status: 1 });
 
 const Perfume = mongoose.models.Perfume || mongoose.model("Perfume", PerfumeSchema);

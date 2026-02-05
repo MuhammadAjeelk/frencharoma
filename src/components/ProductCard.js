@@ -13,6 +13,8 @@ export default function ProductCard({
   hasSale = false,
   rating = 0,
 }) {
+  const brandLabel = Array.isArray(brand) ? brand.join(", ") : brand;
+
   return (
     <div className="group relative border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300">
       {/* Sale Badge */}
@@ -43,9 +45,11 @@ export default function ProductCard({
         </Link>
 
         {/* Brand */}
-        <p className="text-[10px] sm:text-xs text-gray-600 mb-1.5 sm:mb-2">
-          {brand}
-        </p>
+        {brandLabel && (
+          <p className="text-[10px] sm:text-xs text-gray-600 mb-1.5 sm:mb-2">
+            {brandLabel}
+          </p>
+        )}
 
         {/* Rating - Always show */}
         <div className="flex items-center gap-0.5 sm:gap-1 mb-1.5 sm:mb-2">

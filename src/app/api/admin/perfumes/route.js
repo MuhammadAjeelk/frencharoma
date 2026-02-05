@@ -3,6 +3,27 @@ import { requireAdmin } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Perfume from "@/lib/models/Perfume";
 
+const normalizeBrands = (brandsInput) => {
+  const items = Array.isArray(brandsInput)
+    ? brandsInput
+    : brandsInput
+    ? [brandsInput]
+    : [];
+
+  const brandMap = new Map();
+  for (const item of items) {
+    if (typeof item !== "string") continue;
+    const trimmed = item.trim();
+    if (!trimmed) continue;
+    const key = trimmed.toLowerCase();
+    if (!brandMap.has(key)) {
+      brandMap.set(key, trimmed);
+    }
+  }
+
+  return Array.from(brandMap.values());
+};
+
 // GET /api/admin/perfumes - List all perfumes with search/filter
 export async function GET(request) {
   try {
@@ -16,10 +37,12 @@ export async function GET(request) {
     const query = {};
 
     if (search) {
+      const searchRegex = new RegExp(search, "i");
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { brand: { $regex: search, $options: "i" } },
-        { tags: { $in: [new RegExp(search, "i")] } },
+        { brands: { $in: [searchRegex] } },
+        { tags: { $in: [searchRegex] } },
       ];
     }
 
@@ -29,7 +52,7 @@ export async function GET(request) {
 
     const perfumes = await Perfume.find(query)
       .sort({ updatedAt: -1 })
-      .select("name brand slug status editions images updatedAt")
+      .select("name brand brands slug status editions images updatedAt")
       .lean();
 
     return NextResponse.json({
@@ -77,6 +100,10 @@ export async function POST(request) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
     }
+
+    const normalizedBrands = normalizeBrands(body.brands || body.brand);
+    body.brands = normalizedBrands;
+    body.brand = normalizedBrands[0] || "";
 
     // Check for duplicate slug
     const existingSlug = await Perfume.findOne({ slug: body.slug });

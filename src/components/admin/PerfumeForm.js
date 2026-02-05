@@ -31,12 +31,18 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
   const { success, error } = useToast();
   const [loading, setLoading] = useState(false);
   const [deletedImages, setDeletedImages] = useState([]);
+  const [brandOptions, setBrandOptions] = useState([]);
 
   // Form state
   const [formData, setFormData] = useState({
     name: perfume?.name || "",
     slug: perfume?.slug || "",
-    brand: perfume?.brand || "",
+    brands:
+      perfume?.brands?.length
+        ? perfume.brands
+        : perfume?.brand
+        ? [perfume.brand]
+        : [],
     description: perfume?.description || "",
     notes: {
       top: perfume?.notes?.top || [],
@@ -66,6 +72,29 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
       setFormData((prev) => ({ ...prev, slug }));
     }
   }, [formData.name, isEdit, perfume?.slug]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadBrands = async () => {
+      try {
+        const res = await fetch("/api/admin/brands");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isActive && Array.isArray(data.brands)) {
+          setBrandOptions(data.brands);
+        }
+      } catch (err) {
+        console.error("Failed to load brands:", err);
+      }
+    };
+
+    loadBrands();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const updateField = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -143,8 +172,19 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     setLoading(true);
 
     try {
+      const normalizedBrands = Array.from(
+        new Map(
+          (formData.brands || [])
+            .map((brand) => (typeof brand === "string" ? brand.trim() : ""))
+            .filter(Boolean)
+            .map((brand) => [brand.toLowerCase(), brand])
+        ).values()
+      );
+
       const payload = {
         ...formData,
+        brands: normalizedBrands,
+        brand: normalizedBrands[0] || "",
         _deletedImages: deletedImages,
       };
 
@@ -206,14 +246,13 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
           {/* Brand */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Brand
+              Brands
             </label>
-            <input
-              type="text"
-              value={formData.brand}
-              onChange={(e) => updateField("brand", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-              placeholder="Enter brand name"
+            <TagInput
+              tags={formData.brands}
+              onChange={(brands) => updateField("brands", brands)}
+              suggestions={brandOptions}
+              placeholder="Select or add brands..."
             />
           </div>
 

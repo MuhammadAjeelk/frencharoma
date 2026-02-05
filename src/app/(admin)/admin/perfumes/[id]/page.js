@@ -73,8 +73,14 @@ export default async function PerfumeDetailPage({ params }) {
                 {perfume.status}
               </span>
             </div>
-            {perfume.brand && (
-              <p className="text-gray-600 mt-1">by {perfume.brand}</p>
+            {((Array.isArray(perfume.brands) && perfume.brands.length > 0) ||
+              perfume.brand) && (
+              <p className="text-gray-600 mt-1">
+                by{" "}
+                {Array.isArray(perfume.brands) && perfume.brands.length > 0
+                  ? perfume.brands.join(", ")
+                  : perfume.brand}
+              </p>
             )}
           </div>
 

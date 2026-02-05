@@ -197,45 +197,51 @@ export default function PerfumesListPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {perfumes.map((perfume) => (
-                  <tr key={perfume._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        {perfume.images?.main ? (
-                          <img
-                            src={perfume.images.main}
-                            alt={perfume.name}
-                            className="w-10 h-10 rounded-lg object-cover"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                            <svg
-                              className="w-5 h-5 text-gray-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
-                          </div>
-                        )}
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            {perfume.name}
-                          </p>
-                          {perfume.brand && (
-                            <p className="text-sm text-gray-500">
-                              {perfume.brand}
-                            </p>
+                {perfumes.map((perfume) => {
+                  const brandLabel =
+                    Array.isArray(perfume.brands) && perfume.brands.length > 0
+                      ? perfume.brands.join(", ")
+                      : perfume.brand;
+
+                  return (
+                    <tr key={perfume._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          {perfume.images?.main ? (
+                            <img
+                              src={perfume.images.main}
+                              alt={perfume.name}
+                              className="w-10 h-10 rounded-lg object-cover"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                              <svg
+                                className="w-5 h-5 text-gray-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                              </svg>
+                            </div>
                           )}
+                          <div>
+                            <p className="font-medium text-gray-900">
+                              {perfume.name}
+                            </p>
+                            {brandLabel && (
+                              <p className="text-sm text-gray-500">
+                                {brandLabel}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
                     <td className="px-6 py-4">
                       <span
                         className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
@@ -327,7 +333,8 @@ export default function PerfumesListPage() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
