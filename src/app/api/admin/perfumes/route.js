@@ -24,6 +24,9 @@ const normalizeBrands = (brandsInput) => {
   return Array.from(brandMap.values());
 };
 
+const escapeRegExp = (value) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // GET /api/admin/perfumes - List all perfumes with search/filter
 export async function GET(request) {
   try {
@@ -33,22 +36,47 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search");
     const status = searchParams.get("status");
+    const brand = searchParams.get("brand");
 
-    const query = {};
+    const conditions = [];
 
     if (search) {
       const searchRegex = new RegExp(search, "i");
-      query.$or = [
+      conditions.push({
+        $or: [
         { name: { $regex: search, $options: "i" } },
         { brand: { $regex: search, $options: "i" } },
         { brands: { $in: [searchRegex] } },
         { tags: { $in: [searchRegex] } },
-      ];
+        ],
+      });
     }
 
     if (status && status !== "all") {
-      query.status = status;
+      conditions.push({ status });
     }
+
+    if (brand && brand !== "all") {
+      const brandValues = brand
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      if (brandValues.length > 0) {
+        const brandRegexes = brandValues.map(
+          (value) => new RegExp(`^${escapeRegExp(value)}$`, "i")
+        );
+
+        conditions.push({
+          $or: [
+            { brand: { $in: brandRegexes } },
+            { brands: { $in: brandRegexes } },
+          ],
+        });
+      }
+    }
+
+    const query = conditions.length > 0 ? { $and: conditions } : {};
 
     const perfumes = await Perfume.find(query)
       .sort({ updatedAt: -1 })

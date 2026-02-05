@@ -3,13 +3,35 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useToast } from "@/context/ToastContext";
+import TagInput from "@/components/admin/TagInput";
 
 export default function PerfumesListPage() {
   const [perfumes, setPerfumes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [brandFilter, setBrandFilter] = useState([]);
+  const [brandOptions, setBrandOptions] = useState([]);
   const { success, error } = useToast();
+
+  const getPerfumeThumbnail = (perfume) => {
+    if (perfume?.images?.main) return perfume.images.main;
+    if (perfume?.images?.gallery?.length) return perfume.images.gallery[0];
+
+    const editions = perfume?.editions || [];
+    const enabledEditions = editions.filter((edition) => edition.enabled);
+    const candidates = enabledEditions.length > 0 ? enabledEditions : editions;
+
+    for (const edition of candidates) {
+      const variants = edition?.variants || [];
+      for (const variant of variants) {
+        if (variant?.images?.main) return variant.images.main;
+        if (variant?.images?.gallery?.length) return variant.images.gallery[0];
+      }
+    }
+
+    return null;
+  };
 
   const fetchPerfumes = async () => {
     try {
@@ -17,6 +39,9 @@ export default function PerfumesListPage() {
       const params = new URLSearchParams();
       if (search) params.set("search", search);
       if (statusFilter !== "all") params.set("status", statusFilter);
+      if (brandFilter.length > 0) {
+        params.set("brand", brandFilter.join(","));
+      }
 
       const res = await fetch(`/api/admin/perfumes?${params.toString()}`);
       const data = await res.json();
@@ -35,7 +60,30 @@ export default function PerfumesListPage() {
 
   useEffect(() => {
     fetchPerfumes();
-  }, [statusFilter]);
+  }, [statusFilter, brandFilter]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadBrands = async () => {
+      try {
+        const res = await fetch("/api/admin/brands");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isActive && Array.isArray(data.brands)) {
+          setBrandOptions(data.brands);
+        }
+      } catch (err) {
+        console.error("Failed to load brands:", err);
+      }
+    };
+
+    loadBrands();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -141,6 +189,16 @@ export default function PerfumesListPage() {
             <option value="draft">Draft</option>
             <option value="archived">Archived</option>
           </select>
+
+          {/* Brand Filter */}
+          <div className="min-w-[220px] flex-1 sm:flex-none">
+            <TagInput
+              tags={brandFilter}
+              onChange={setBrandFilter}
+              suggestions={brandOptions}
+              placeholder="Filter by brands..."
+            />
+          </div>
         </div>
       </div>
 
@@ -202,14 +260,15 @@ export default function PerfumesListPage() {
                     Array.isArray(perfume.brands) && perfume.brands.length > 0
                       ? perfume.brands.join(", ")
                       : perfume.brand;
+                  const mainImage = getPerfumeThumbnail(perfume);
 
                   return (
                     <tr key={perfume._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          {perfume.images?.main ? (
+                          {mainImage ? (
                             <img
-                              src={perfume.images.main}
+                              src={mainImage}
                               alt={perfume.name}
                               className="w-10 h-10 rounded-lg object-cover"
                             />

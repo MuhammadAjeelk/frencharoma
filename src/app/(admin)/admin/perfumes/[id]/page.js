@@ -125,6 +125,45 @@ export default async function PerfumeDetailPage({ params }) {
             )}
           </div>
 
+          {/* Images */}
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Images</h2>
+            {perfume.images?.main ||
+            (perfume.images?.gallery && perfume.images.gallery.length > 0) ? (
+              <div className="space-y-4">
+                {perfume.images?.main && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Main</p>
+                    <img
+                      src={perfume.images.main}
+                      alt={`${perfume.name} main`}
+                      className="w-full max-w-sm h-48 object-cover rounded-lg border border-gray-200"
+                    />
+                  </div>
+                )}
+                {perfume.images?.gallery && perfume.images.gallery.length > 0 && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">
+                      Gallery ({perfume.images.gallery.length})
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {perfume.images.gallery.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`${perfume.name} gallery ${index + 1}`}
+                          className="w-full h-24 object-cover rounded border border-gray-200"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-gray-500 italic">No images uploaded</p>
+            )}
+          </div>
+
           {/* Fragrance Notes */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
