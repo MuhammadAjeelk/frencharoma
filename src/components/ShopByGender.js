@@ -7,19 +7,19 @@ export default function ShopByGender() {
     {
       name: "Men",
       image:
-        "https://www.linea-debella.com/cdn/shop/files/MEN-min.jpg?v=1753724171&width=750",
+        "https://frencharoma.sparksgate.com/uploads/perfumes/1770289762669-aokoen.png",
       href: "/collections/shop-all?gender=men",
     },
     {
       name: "Women",
       image:
-        "https://www.linea-debella.com/cdn/shop/files/WOMEN-min.jpg?v=1753724179&width=750",
+        "https://frencharoma.sparksgate.com/uploads/perfumes/1770294420203-294t77.png",
       href: "/collections/shop-all?gender=women",
     },
     {
       name: "Unisex",
       image:
-        "https://www.linea-debella.com/cdn/shop/files/UNISEX-min.jpg?v=1753779949&width=750",
+        "https://frencharoma.sparksgate.com/uploads/perfumes/1770294414215-qush9i.png",
       href: "/collections/shop-all?gender=unisex",
     },
   ];

@@ -9,7 +9,7 @@ export default function ShopCard({ name, image, href }) {
       href={href}
       className="group relative border-2 border-gray-300 rounded-lg overflow-hidden hover:border-gray-500 transition-all duration-300 hover:shadow-md w-full md:w-auto flex-1 max-w-sm"
     >
-      <div className="relative w-full aspect-[4/3]">
+      <div className="relative w-full aspect-square">
         <Image
           src={image}
           alt={name}
