@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
 import { useToast } from "@/context/ToastContext";
 
 export default function ImageUploader({
@@ -11,6 +11,7 @@ export default function ImageUploader({
 }) {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
+  const inputId = useId();
   const { error } = useToast();
 
   const images = multiple ? (value || []) : (value ? [value] : []);
@@ -116,10 +117,10 @@ export default function ImageUploader({
             multiple={multiple}
             onChange={handleFileSelect}
             className="hidden"
-            id={`upload-${multiple ? "multiple" : "single"}-${Math.random()}`}
+            id={`upload-${multiple ? "multiple" : "single"}-${inputId}`}
           />
           <label
-            htmlFor={fileInputRef.current?.id || ""}
+            htmlFor={`upload-${multiple ? "multiple" : "single"}-${inputId}`}
             onClick={() => fileInputRef.current?.click()}
             className={`flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-gray-400 transition-colors ${
               uploading ? "opacity-50 cursor-not-allowed" : ""
