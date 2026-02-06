@@ -13,7 +13,7 @@ export default function BestSellers() {
       name: "GRANDEUR BELLE EDP UNISEX 200ML",
       brand: "LINEA DE BELLA",
       image:
-        "https://www.linea-debella.com/cdn/shop/files/grandeur-belle-unisex-perfume-for-men-and-women-long-lasting-200ml-perfume-1.jpg?v=1755187706&width=720",
+        "https://frencharoma.sparksgate.com/uploads/perfumes/1770367575470-hwypqf.png",
       originalPrice: 350.0,
       salePrice: 199.0,
       href: "/products/grandeur-belle",
