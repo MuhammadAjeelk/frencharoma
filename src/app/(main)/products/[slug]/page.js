@@ -304,7 +304,7 @@ export default function ProductDetailPage() {
             {/* ── LEFT: Image Gallery ── */}
             <div className="flex flex-col gap-4">
               {/* Main Image */}
-              <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-white flex items-center justify-center">
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-white flex items-center justify-center">
                 {activeImage || displayImages[0] ? (
                   <Image
                     src={activeImage || displayImages[0]}
@@ -340,7 +340,7 @@ export default function ProductDetailPage() {
                     <button
                       key={idx}
                       onClick={() => setActiveImage(img)}
-                      className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors bg-white ${
+                      className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors bg-white shrink-0 ${
                         activeImage === img
                           ? "border-black"
                           : "border-gray-200 hover:border-gray-400"
