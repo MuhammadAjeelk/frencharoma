@@ -84,17 +84,18 @@ button {
 }
 
 @keyframes jiggle {
-  0%   { transform: rotate(0deg); }
-  10%  { transform: rotate(-4deg); }
-  20%  { transform: rotate(4deg); }
-  30%  { transform: rotate(-4deg); }
-  40%  { transform: rotate(4deg); }
-  50%  { transform: rotate(-2deg); }
-  60%  { transform: rotate(2deg); }
-  70%  { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
+  0%,  100% { transform: translateX(0); }
+  8%         { transform: translateX(-6px); }
+  16%        { transform: translateX(6px); }
+  24%        { transform: translateX(-6px); }
+  32%        { transform: translateX(6px); }
+  40%        { transform: translateX(-4px); }
+  48%        { transform: translateX(4px); }
+  56%        { transform: translateX(-2px); }
+  64%        { transform: translateX(2px); }
+  72%        { transform: translateX(0); }
 }
 
 .animate-jiggle {
-  animation: jiggle 0.6s ease-in-out 3s 3;
+  animation: jiggle 3s ease-in-out infinite;
 }
