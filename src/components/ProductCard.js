@@ -12,11 +12,12 @@ export default function ProductCard({
   href,
   hasSale = false,
   rating = 0,
+  onQuickView,
 }) {
   const brandLabel = Array.isArray(brand) ? brand.join(", ") : brand;
 
   return (
-    <div className="group relative border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300">
+    <div className="group relative border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300 flex flex-col">
       {/* Sale Badge */}
       {hasSale && (
         <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 bg-red-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
@@ -36,7 +37,7 @@ export default function ProductCard({
       </Link>
 
       {/* Product Details */}
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 flex flex-col flex-1">
         {/* Product Name */}
         <Link href={href || "#"}>
           <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1 line-clamp-2 hover:text-gray-600 transition-colors">
@@ -81,10 +82,42 @@ export default function ProductCard({
           </span>
         </div>
 
-        {/* Add to Cart Button */}
-        <button className="w-full border border-black text-black py-1.5 sm:py-2 px-3 sm:px-4 rounded hover:bg-black hover:text-white transition-colors duration-200 text-xs sm:text-sm font-medium">
-          Add to cart
-        </button>
+        <div className="flex-1" />
+
+        {/* Buttons */}
+        <div className="flex gap-2">
+          <button className="flex-1 border border-black text-black py-1.5 sm:py-2 px-2 sm:px-3 rounded hover:bg-black hover:text-white transition-colors duration-200 text-xs sm:text-sm font-medium">
+            Add to cart
+          </button>
+          {onQuickView && (
+            <button
+              onClick={onQuickView}
+              className="px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded hover:border-black transition-colors text-xs sm:text-sm text-gray-600 hover:text-black"
+              aria-label="Quick view"
+              title="Quick View"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
