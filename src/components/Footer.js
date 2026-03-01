@@ -21,6 +21,7 @@ export default function Footer() {
 
   const support = [
     { name: "ABOUT US", href: "/pages/about-us" },
+    { name: "TRACK ORDER", href: "/track-order" },
     { name: "TERMS & CONDITIONS", href: "/pages/terms-conditions" },
     { name: "PRIVACY POLICY", href: "/pages/privacy-policy" },
     { name: "SHIPPING POLICY", href: "/pages/shipping-policy" },

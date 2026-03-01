@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import UniversalModal from "@/components/UniversalModal";
+import { useCart } from "@/context/CartContext";
 
 // Helper: get lowest price across all enabled editions/variants
 function getLowestPrice(editions) {
@@ -110,10 +111,13 @@ function NotesPyramid({ notes }) {
 export default function ProductDetailPage() {
   const params = useParams();
   const slug = params?.slug;
+  const router = useRouter();
+  const { addItem } = useCart();
 
   const [perfume, setPerfume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [cartAdded, setCartAdded] = useState(false);
 
   // Selections
   const [selectedEdition, setSelectedEdition] = useState(null);
@@ -538,13 +542,29 @@ export default function ProductDetailPage() {
                 {/* Add to Cart */}
                 <button
                   disabled={!inStock || !selectedVariant}
+                  onClick={() => {
+                    if (!inStock || !selectedVariant) return;
+                    for (let i = 0; i < quantity; i++) {
+                      addItem({
+                        perfumeId: perfume._id,
+                        slug: perfume.slug,
+                        name: perfume.name,
+                        image: perfume.images?.main || "",
+                        edition: selectedEdition?.key || "",
+                        size: selectedVariant.size,
+                        price: selectedVariant.price,
+                      });
+                    }
+                    setCartAdded(true);
+                    setTimeout(() => setCartAdded(false), 2500);
+                  }}
                   className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm transition-all ${
                     inStock && selectedVariant
                       ? "bg-black text-white hover:bg-gray-800 shadow-sm hover:shadow-md"
                       : "bg-gray-200 text-gray-400 cursor-not-allowed"
                   }`}
                 >
-                  {!selectedVariant
+                  {cartAdded ? "✓ Added to Cart!" : !selectedVariant
                     ? "Select a Size"
                     : !inStock
                     ? "Out of Stock"
@@ -554,7 +574,23 @@ export default function ProductDetailPage() {
 
               {/* Buy Now */}
               {inStock && selectedVariant && (
-                <button className="animate-jiggle w-full py-3 px-6 rounded-lg font-bold text-sm border-2 border-black text-black hover:bg-black hover:text-white transition-all mb-6">
+                <button
+                  onClick={() => {
+                    for (let i = 0; i < quantity; i++) {
+                      addItem({
+                        perfumeId: perfume._id,
+                        slug: perfume.slug,
+                        name: perfume.name,
+                        image: perfume.images?.main || "",
+                        edition: selectedEdition?.key || "",
+                        size: selectedVariant.size,
+                        price: selectedVariant.price,
+                      });
+                    }
+                    router.push("/checkout");
+                  }}
+                  className="animate-jiggle w-full py-3 px-6 rounded-lg font-bold text-sm border-2 border-black text-black hover:bg-black hover:text-white transition-all mb-6"
+                >
                   Buy Now
                 </button>
               )}

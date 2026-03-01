@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function Header() {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const accountRef = useRef(null);
   const { user, logout, isAdmin, loading } = useAuth();
+  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -310,6 +312,13 @@ export default function Header() {
                         >
                           My Orders
                         </Link>
+                        <Link
+                          href="/track-order"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
+                          Track Order
+                        </Link>
                         <button
                           onClick={handleLogout}
                           className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors"
@@ -346,6 +355,11 @@ export default function Header() {
                 aria-label="Cart"
               >
                 <img src="/icons/cart.svg" alt="Cart" className="w-11 h-11" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {itemCount > 99 ? "99+" : itemCount}
+                  </span>
+                )}
               </Link>
             </div>
           </div>

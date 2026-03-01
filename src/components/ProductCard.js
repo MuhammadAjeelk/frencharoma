@@ -18,10 +18,10 @@ export default function ProductCard({
 
   return (
     <div className="group relative border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300 flex flex-col">
-      {/* Sale Badge */}
-      {hasSale && (
-        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 bg-red-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
-          Sale
+      {/* Range Badge */}
+      {hasSale && originalPrice && (
+        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 bg-[#1a1a2e] text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
+          Multiple Editions
         </div>
       )}
 
@@ -71,17 +71,13 @@ export default function ProductCard({
         </div>
 
         {/* Price */}
-        <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 flex-wrap">
+        <div className="flex items-center gap-1 mb-2 sm:mb-3 flex-wrap">
           {hasSale && originalPrice ? (
-            <>
-              <span className="text-xs sm:text-sm text-gray-900 font-bold">
-                PKR {salePrice.toLocaleString()}
-              </span>
-              <span className="text-[10px] sm:text-xs text-gray-400">–</span>
-              <span className="text-xs sm:text-sm text-gray-900 font-bold">
-                PKR {originalPrice.toLocaleString()}
-              </span>
-            </>
+            <span className="text-sm sm:text-base font-bold text-gray-900">
+              PKR {salePrice.toLocaleString()}{" "}
+              <span className="font-normal text-gray-400 text-xs sm:text-sm">–</span>{" "}
+              PKR {originalPrice.toLocaleString()}
+            </span>
           ) : (
             <span className="text-sm sm:text-base font-bold text-gray-900">
               PKR {salePrice.toLocaleString()}
@@ -93,7 +89,10 @@ export default function ProductCard({
 
         {/* Buttons */}
         <div className="flex gap-2">
-          <button className="flex-1 border border-black text-black py-1.5 sm:py-2 px-2 sm:px-3 rounded hover:bg-black hover:text-white transition-colors duration-200 text-xs sm:text-sm font-medium">
+          <button
+            onClick={onQuickView}
+            className="flex-1 border border-black text-black py-1.5 sm:py-2 px-2 sm:px-3 rounded hover:bg-black hover:text-white transition-colors duration-200 text-xs sm:text-sm font-medium"
+          >
             Add to cart
           </button>
           {onQuickView && (

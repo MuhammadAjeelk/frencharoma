@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
+import { useCart } from "@/context/CartContext";
 
 // Helper: get main image
 function getMainImage(perfume) {
@@ -29,8 +30,10 @@ function getPriceRange(editions) {
 
 // Quick view modal content
 function QuickViewContent({ perfume, onClose }) {
+  const { addItem } = useCart();
   const [selectedEdition, setSelectedEdition] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [added, setAdded] = useState(false);
 
   const enabledEditions = (perfume.editions || []).filter((e) => e.enabled);
 
@@ -191,10 +194,24 @@ function QuickViewContent({ perfume, onClose }) {
       {/* CTA */}
       <div className="flex flex-col gap-2">
         <button
-          className="w-full bg-black text-white py-3 rounded font-semibold text-sm hover:bg-gray-800 transition-colors"
+          className="w-full bg-black text-white py-3 rounded font-semibold text-sm hover:bg-gray-800 transition-colors disabled:opacity-40"
           disabled={!selectedVariant}
+          onClick={() => {
+            if (!selectedVariant) return;
+            addItem({
+              perfumeId: perfume._id,
+              slug: perfume.slug,
+              name: perfume.name,
+              image: perfume.images?.main || "",
+              edition: selectedEdition?.key || "",
+              size: selectedVariant.size,
+              price: selectedVariant.price,
+            });
+            setAdded(true);
+            setTimeout(() => setAdded(false), 2000);
+          }}
         >
-          Add to Cart
+          {added ? "✓ Added to Cart!" : "Add to Cart"}
         </button>
         <Link
           href={`/products/${perfume.slug}`}

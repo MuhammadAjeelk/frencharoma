@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
+import { useCart } from "@/context/CartContext";
 
 // Get price range across all enabled editions/variants
 function getPriceRange(editions) {
@@ -23,6 +24,7 @@ function getPriceRange(editions) {
 
 // Quick view modal content (same as shop-all)
 function QuickViewContent({ perfume, onClose }) {
+  const { addItem } = useCart();
   const enabledEditions = (perfume.editions || []).filter((e) => e.enabled);
   const firstEdition = enabledEditions[0] || null;
   const firstVariant = firstEdition
@@ -31,6 +33,7 @@ function QuickViewContent({ perfume, onClose }) {
 
   const [selectedEdition, setSelectedEdition] = useState(firstEdition);
   const [selectedVariant, setSelectedVariant] = useState(firstVariant);
+  const [added, setAdded] = useState(false);
 
   const handleEditionChange = (edition) => {
     setSelectedEdition(edition);
@@ -134,8 +137,22 @@ function QuickViewContent({ perfume, onClose }) {
         <button
           className="w-full bg-black text-white py-3 rounded font-semibold text-sm hover:bg-gray-800 transition-colors disabled:opacity-40"
           disabled={!selectedVariant}
+          onClick={() => {
+            if (!selectedVariant) return;
+            addItem({
+              perfumeId: perfume._id,
+              slug: perfume.slug,
+              name: perfume.name,
+              image: perfume.images?.main || "",
+              edition: selectedEdition?.key || "",
+              size: selectedVariant.size,
+              price: selectedVariant.price,
+            });
+            setAdded(true);
+            setTimeout(() => setAdded(false), 2000);
+          }}
         >
-          Add to Cart
+          {added ? "✓ Added to Cart!" : "Add to Cart"}
         </button>
         <a
           href={`/products/${perfume.slug}`}
