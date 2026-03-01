@@ -304,13 +304,13 @@ export default function ProductDetailPage() {
             {/* ── LEFT: Image Gallery ── */}
             <div className="flex flex-col gap-4">
               {/* Main Image */}
-              <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100">
+              <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-white flex items-center justify-center">
                 {activeImage || displayImages[0] ? (
                   <Image
                     src={activeImage || displayImages[0]}
                     alt={perfume.name}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                   />
@@ -340,7 +340,7 @@ export default function ProductDetailPage() {
                     <button
                       key={idx}
                       onClick={() => setActiveImage(img)}
-                      className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors ${
+                      className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors bg-white ${
                         activeImage === img
                           ? "border-black"
                           : "border-gray-200 hover:border-gray-400"
@@ -350,7 +350,7 @@ export default function ProductDetailPage() {
                         src={img}
                         alt={`${perfume.name} view ${idx + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-contain p-1"
                         sizes="80px"
                       />
                     </button>

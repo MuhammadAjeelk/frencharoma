@@ -58,12 +58,12 @@ function QuickViewContent({ perfume, onClose }) {
     <div>
       {/* Product image */}
       {image && (
-        <div className="relative w-full aspect-square rounded-lg overflow-hidden mb-4 bg-gray-50">
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden mb-4 bg-white">
           <Image
             src={image}
             alt={perfume.name}
             fill
-            className="object-cover"
+            className="object-contain p-4"
             sizes="500px"
           />
         </div>
