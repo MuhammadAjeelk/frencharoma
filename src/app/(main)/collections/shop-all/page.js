@@ -279,11 +279,6 @@ export default function ShopAllPage() {
           >
             ALL PERFUMES
           </h1>
-          {!loading && (
-            <p className="text-sm text-gray-500 mt-2">
-              {total} {total === 1 ? "product" : "products"} found
-            </p>
-          )}
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-8">

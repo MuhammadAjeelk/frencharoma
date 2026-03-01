@@ -554,7 +554,7 @@ export default function ProductDetailPage() {
 
               {/* Buy Now */}
               {inStock && selectedVariant && (
-                <button className="w-full py-3 px-6 rounded-lg font-bold text-sm border-2 border-black text-black hover:bg-black hover:text-white transition-all mb-6">
+                <button className="animate-jiggle w-full py-3 px-6 rounded-lg font-bold text-sm border-2 border-black text-black hover:bg-black hover:text-white transition-all mb-6">
                   Buy Now
                 </button>
               )}
