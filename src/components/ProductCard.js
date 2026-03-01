@@ -71,15 +71,22 @@ export default function ProductCard({
         </div>
 
         {/* Price */}
-        <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-          {hasSale && originalPrice && (
-            <span className="text-xs sm:text-sm text-gray-500 line-through">
-              PKR {originalPrice.toFixed(2)}
+        <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 flex-wrap">
+          {hasSale && originalPrice ? (
+            <>
+              <span className="text-xs sm:text-sm text-gray-900 font-bold">
+                PKR {salePrice.toLocaleString()}
+              </span>
+              <span className="text-[10px] sm:text-xs text-gray-400">–</span>
+              <span className="text-xs sm:text-sm text-gray-900 font-bold">
+                PKR {originalPrice.toLocaleString()}
+              </span>
+            </>
+          ) : (
+            <span className="text-sm sm:text-base font-bold text-gray-900">
+              PKR {salePrice.toLocaleString()}
             </span>
           )}
-          <span className="text-sm sm:text-base font-bold text-gray-900">
-            PKR {salePrice.toFixed(2)}
-          </span>
         </div>
 
         <div className="flex-1" />

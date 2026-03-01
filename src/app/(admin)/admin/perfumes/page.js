@@ -290,9 +290,16 @@ export default function PerfumesListPage() {
                             </div>
                           )}
                           <div>
-                            <p className="font-medium text-gray-900">
-                              {perfume.name}
-                            </p>
+                            <div className="flex items-center gap-1.5">
+                              <p className="font-medium text-gray-900">
+                                {perfume.name}
+                              </p>
+                              {perfume.isBestSeller && (
+                                <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">
+                                  ⭐ Best Seller
+                                </span>
+                              )}
+                            </div>
                             {brandLabel && (
                               <p className="text-sm text-gray-500">
                                 {brandLabel}

@@ -53,6 +53,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     gender: perfume?.gender || "",
     scentFamily: perfume?.scentFamily || "",
     status: perfume?.status || "draft",
+    isBestSeller: perfume?.isBestSeller || false,
     images: {
       main: perfume?.images?.main || null,
       gallery: perfume?.images?.gallery || [],
@@ -291,6 +292,31 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Best Seller Toggle */}
+          <div className="flex items-center gap-4 p-4 bg-amber-50 border border-amber-200 rounded-lg col-span-1 md:col-span-2">
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-amber-900">⭐ Best Seller</p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                Mark this perfume as a best seller — it will appear in the Best Sellers section on the homepage.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateField("isBestSeller", !formData.isBestSeller)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.isBestSeller ? "bg-amber-500" : "bg-gray-300"
+              }`}
+              role="switch"
+              aria-checked={formData.isBestSeller}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  formData.isBestSeller ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
           </div>
 
           {/* Gender */}

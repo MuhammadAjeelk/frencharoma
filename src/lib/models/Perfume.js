@@ -131,6 +131,10 @@ const PerfumeSchema = new mongoose.Schema(
       enum: ["draft", "active", "archived"],
       default: "draft",
     },
+    isBestSeller: {
+      type: Boolean,
+      default: false,
+    },
     images: {
       main: {
         type: String,

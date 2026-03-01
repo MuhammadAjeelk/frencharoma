@@ -12,6 +12,7 @@ export async function GET(request) {
     const gender = searchParams.get("gender");
     const scentFamily = searchParams.get("scentFamily");
     const tag = searchParams.get("tag");
+    const bestSeller = searchParams.get("bestSeller");
     const sort = searchParams.get("sort") || "newest";
     const limit = parseInt(searchParams.get("limit") || "50");
     const page = parseInt(searchParams.get("page") || "1");
@@ -43,6 +44,10 @@ export async function GET(request) {
       conditions.push({ tags: { $in: [new RegExp(tag, "i")] } });
     }
 
+    if (bestSeller === "true") {
+      conditions.push({ isBestSeller: true });
+    }
+
     const query = { $and: conditions };
 
     let sortObj = {};
@@ -60,7 +65,7 @@ export async function GET(request) {
         .skip(skip)
         .limit(limit)
         .select(
-          "name slug brand brands gender scentFamily tags images editions description notes status"
+          "name slug brand brands gender scentFamily tags images editions description notes status isBestSeller"
         )
         .lean(),
       Perfume.countDocuments(query),

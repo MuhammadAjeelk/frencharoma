@@ -11,16 +11,20 @@ function getMainImage(perfume) {
   return perfume?.images?.main || null;
 }
 
-// Helper: get lowest price across all enabled editions/variants
-function getLowestPrice(editions) {
-  let lowest = Infinity;
+// Helper: get price range across all enabled editions/variants
+function getPriceRange(editions) {
+  let min = Infinity;
+  let max = -Infinity;
   for (const ed of editions || []) {
     if (!ed.enabled) continue;
     for (const v of ed.variants || []) {
-      if (v.isActive && v.price < lowest) lowest = v.price;
+      if (!v.isActive) continue;
+      if (v.price < min) min = v.price;
+      if (v.price > max) max = v.price;
     }
   }
-  return lowest === Infinity ? null : lowest;
+  if (min === Infinity) return null;
+  return { min, max };
 }
 
 // Quick view modal content
@@ -210,6 +214,7 @@ const SORT_OPTIONS = [
   { value: "oldest", label: "Oldest" },
   { value: "name-asc", label: "Name A–Z" },
   { value: "name-desc", label: "Name Z–A" },
+  { value: "best-sellers", label: "⭐ Best Sellers" },
 ];
 
 export default function ShopAllPage() {
@@ -234,7 +239,12 @@ export default function ShopAllPage() {
       if (search) params.set("search", search);
       if (gender !== "all") params.set("gender", gender);
       if (scentFamily) params.set("scentFamily", scentFamily);
-      params.set("sort", sort);
+      if (sort === "best-sellers") {
+        params.set("bestSeller", "true");
+        params.set("sort", "newest");
+      } else {
+        params.set("sort", sort);
+      }
       params.set("limit", "48");
 
       const res = await fetch(`/api/perfumes?${params.toString()}`);
@@ -384,7 +394,7 @@ export default function ShopAllPage() {
           {!loading && perfumes.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {perfumes.map((perfume) => {
-                const price = getLowestPrice(perfume.editions);
+                const range = getPriceRange(perfume.editions);
                 const brand = Array.isArray(perfume.brands)
                   ? perfume.brands.join(", ")
                   : perfume.brand || "";
@@ -394,9 +404,10 @@ export default function ShopAllPage() {
                     name={perfume.name}
                     brand={brand}
                     image={perfume.images?.main || ""}
-                    salePrice={price || 0}
+                    salePrice={range ? range.min : 0}
+                    originalPrice={range && range.max !== range.min ? range.max : undefined}
+                    hasSale={range ? range.max !== range.min : false}
                     href={`/products/${perfume.slug}`}
-                    hasSale={false}
                     rating={0}
                     onQuickView={() => handleQuickView(perfume)}
                   />
