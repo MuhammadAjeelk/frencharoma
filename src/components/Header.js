@@ -242,8 +242,8 @@ export default function Header() {
               <Link href="/">
                 <div className="flex items-center">
                   <Image
-                    src="https://www.linea-debella.com/cdn/shop/files/Linea-De-Bella-Logo1_b35278ae-0b10-4868-9659-dcbdcd15d2d6.png?v=1751979015&width=240"
-                    alt="Linea De Bella | Divina Perfumes"
+                    src="/logo.png"
+                    alt="Frencharomas | French Perfumes"
                     width={120}
                     height={45}
                     className="h-auto w-auto max-w-[120px] "

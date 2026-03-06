@@ -8,14 +8,15 @@ export async function GET(request) {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get("search");
-    const gender = searchParams.get("gender");
+    const search      = searchParams.get("search");
+    const gender      = searchParams.get("gender");
     const scentFamily = searchParams.get("scentFamily");
-    const tag = searchParams.get("tag");
-    const bestSeller = searchParams.get("bestSeller");
-    const sort = searchParams.get("sort") || "newest";
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const page = parseInt(searchParams.get("page") || "1");
+    const tag         = searchParams.get("tag");
+    const edition     = searchParams.get("edition");
+    const bestSeller  = searchParams.get("bestSeller");
+    const sort        = searchParams.get("sort") || "newest";
+    const limit       = parseInt(searchParams.get("limit") || "20");
+    const page        = parseInt(searchParams.get("page")  || "1");
 
     const conditions = [{ status: "active" }];
 
@@ -23,10 +24,10 @@ export async function GET(request) {
       const searchRegex = new RegExp(search, "i");
       conditions.push({
         $or: [
-          { name: { $regex: search, $options: "i" } },
-          { brand: { $regex: search, $options: "i" } },
-          { brands: { $in: [searchRegex] } },
-          { tags: { $in: [searchRegex] } },
+          { name:        { $regex: search, $options: "i" } },
+          { brand:       { $regex: search, $options: "i" } },
+          { brands:      { $in: [searchRegex] } },
+          { tags:        { $in: [searchRegex] } },
           { description: { $regex: search, $options: "i" } },
         ],
       });
@@ -44,20 +45,94 @@ export async function GET(request) {
       conditions.push({ tags: { $in: [new RegExp(tag, "i")] } });
     }
 
+    // Filter by edition key (Luxury / Premium / Classic)
+    if (edition && edition !== "all") {
+      conditions.push({
+        editions: { $elemMatch: { key: edition, enabled: true } },
+      });
+    }
+
     if (bestSeller === "true") {
       conditions.push({ isBestSeller: true });
     }
 
     const query = { $and: conditions };
+    const skip  = (page - 1) * limit;
 
+    // ── Price-based sort: needs aggregation pipeline ──────────────────────
+    if (sort === "price-asc" || sort === "price-desc") {
+      const sortDir = sort === "price-asc" ? 1 : -1;
+
+      const dataPipeline = [
+        { $match: query },
+        {
+          $addFields: {
+            _minPrice: {
+              $min: {
+                $reduce: {
+                  input: { $ifNull: ["$editions", []] },
+                  initialValue: [],
+                  in: {
+                    $concatArrays: [
+                      "$$value",
+                      {
+                        $map: {
+                          input: {
+                            $filter: {
+                              input: { $ifNull: ["$$this.variants", []] },
+                              as: "v",
+                              cond: { $eq: ["$$v.isActive", true] },
+                            },
+                          },
+                          as: "v",
+                          in: "$$v.price",
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+        { $sort: { _minPrice: sortDir } },
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $project: {
+            _minPrice: 0,
+            name: 1, slug: 1, brand: 1, brands: 1, gender: 1,
+            scentFamily: 1, tags: 1, images: 1, editions: 1,
+            description: 1, notes: 1, status: 1, isBestSeller: 1,
+          },
+        },
+      ];
+
+      const [perfumesAgg, totalCount] = await Promise.all([
+        Perfume.aggregate(dataPipeline),
+        Perfume.countDocuments(query),
+      ]);
+
+      const serialized = perfumesAgg.map((p) => ({
+        ...p,
+        _id: p._id.toString(),
+      }));
+
+      return NextResponse.json({
+        perfumes: serialized,
+        total:    totalCount,
+        page,
+        pages:    Math.ceil(totalCount / limit),
+      });
+    }
+
+    // ── Standard sort ─────────────────────────────────────────────────────
     let sortObj = {};
-    if (sort === "newest") sortObj = { createdAt: -1 };
-    else if (sort === "oldest") sortObj = { createdAt: 1 };
-    else if (sort === "name-asc") sortObj = { name: 1 };
+    if      (sort === "newest")    sortObj = { createdAt: -1 };
+    else if (sort === "oldest")    sortObj = { createdAt:  1 };
+    else if (sort === "name-asc")  sortObj = { name:  1 };
     else if (sort === "name-desc") sortObj = { name: -1 };
-    else sortObj = { createdAt: -1 };
-
-    const skip = (page - 1) * limit;
+    else                           sortObj = { createdAt: -1 };
 
     const [perfumes, total] = await Promise.all([
       Perfume.find(query)
