@@ -8,6 +8,18 @@ import TagInput from "./TagInput";
 import EditionManager from "./EditionManager";
 
 const SIZES = ["5ml", "30ml", "50ml", "100ml"];
+
+const SEASON_TAGS = [
+  { value: "spring-summer", label: "🌸 Spring & Summer" },
+  { value: "autumn-winter", label: "🍂 Autumn & Winter" },
+  { value: "spring",        label: "🌱 Spring"          },
+  { value: "summer",        label: "☀️ Summer"           },
+  { value: "autumn",        label: "🍁 Autumn"           },
+  { value: "winter",        label: "❄️ Winter"           },
+  { value: "all-seasons",   label: "🌍 All Seasons"      },
+];
+const SEASON_TAG_VALUES = SEASON_TAGS.map((t) => t.value);
+
 const GENDERS = [
   { value: "", label: "Select Gender" },
   { value: "men", label: "Men" },
@@ -33,6 +45,11 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
   const [deletedImages, setDeletedImages] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
 
+  // Split existing tags → season tags vs custom tags
+  const existingTags        = perfume?.tags || [];
+  const existingSeasonTags  = existingTags.filter((t) => SEASON_TAG_VALUES.includes(t));
+  const existingCustomTags  = existingTags.filter((t) => !SEASON_TAG_VALUES.includes(t));
+
   // Form state
   const [formData, setFormData] = useState({
     name: perfume?.name || "",
@@ -49,13 +66,15 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
       middle: perfume?.notes?.middle || [],
       base: perfume?.notes?.base || [],
     },
-    tags: perfume?.tags || [],
-    gender: perfume?.gender || "",
-    scentFamily: perfume?.scentFamily || "",
-    status: perfume?.status || "draft",
-    isBestSeller: perfume?.isBestSeller || false,
+    tags:        existingCustomTags,
+    seasonTags:  existingSeasonTags,
+    gender:      perfume?.gender       || "",
+    scentFamily: perfume?.scentFamily  || "",
+    status:      perfume?.status       || "draft",
+    isBestSeller:    perfume?.isBestSeller    || false,
+    discountPercent: perfume?.discountPercent ?? 0,
     images: {
-      main: perfume?.images?.main || null,
+      main:    perfume?.images?.main    || null,
       gallery: perfume?.images?.gallery || [],
     },
     editions: perfume?.editions?.length ? perfume.editions : DEFAULT_EDITIONS,
@@ -182,12 +201,20 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
         ).values()
       );
 
+      // Merge season tags + custom tags into one tags array
+      const mergedTags = [
+        ...new Set([...(formData.seasonTags || []), ...(formData.tags || [])]),
+      ];
+
       const payload = {
         ...formData,
-        brands: normalizedBrands,
-        brand: normalizedBrands[0] || "",
-        _deletedImages: deletedImages,
+        brands:          normalizedBrands,
+        brand:           normalizedBrands[0] || "",
+        tags:            mergedTags,
+        discountPercent: Number(formData.discountPercent) || 0,
+        _deletedImages:  deletedImages,
       };
+      delete payload.seasonTags; // not a DB field
 
       const url = isEdit
         ? `/api/admin/perfumes/${perfume._id}`
@@ -294,6 +321,31 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
             </select>
           </div>
 
+          {/* Discount % */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Discount (%)
+              <span className="ml-2 text-xs text-gray-400 font-normal">0 = no discount</span>
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="number"
+                min="0"
+                max="99"
+                value={formData.discountPercent}
+                onChange={(e) => updateField("discountPercent", Math.min(99, Math.max(0, Number(e.target.value))))}
+                className="w-28 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                placeholder="0"
+              />
+              <span className="text-sm text-gray-500">%</span>
+              {formData.discountPercent > 0 && (
+                <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full font-semibold">
+                  {formData.discountPercent}% OFF active
+                </span>
+              )}
+            </div>
+          </div>
+
           {/* Best Seller Toggle */}
           <div className="flex items-center gap-4 p-4 bg-amber-50 border border-amber-200 rounded-lg col-span-1 md:col-span-2">
             <div className="flex-1">
@@ -366,15 +418,50 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
           />
         </div>
 
-        {/* Tags */}
+        {/* Season Tags */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Season Tags
+          </label>
+          <p className="text-xs text-gray-400 mb-3">
+            Tag this perfume with one or more seasons so customers can filter by season on the shop page.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {SEASON_TAGS.map((st) => {
+              const active = (formData.seasonTags || []).includes(st.value);
+              return (
+                <button
+                  key={st.value}
+                  type="button"
+                  onClick={() => {
+                    const cur = formData.seasonTags || [];
+                    updateField(
+                      "seasonTags",
+                      active ? cur.filter((v) => v !== st.value) : [...cur, st.value]
+                    );
+                  }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    active
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-600 border-gray-300 hover:border-gray-600"
+                  }`}
+                >
+                  {st.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Custom Tags */}
         <div className="mt-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tags
+            Custom Tags
           </label>
           <TagInput
             tags={formData.tags}
             onChange={(tags) => updateField("tags", tags)}
-            placeholder="Add tags..."
+            placeholder="Add custom tags..."
           />
         </div>
       </div>

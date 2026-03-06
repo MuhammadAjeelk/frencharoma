@@ -305,6 +305,8 @@ export default function BestSellers() {
                         salePrice={range ? range.min : 0}
                         originalPrice={range && range.max !== range.min ? range.max : undefined}
                         hasSale={range ? range.max !== range.min : false}
+                        discountPercent={perfume.discountPercent || 0}
+                        tags={perfume.tags || []}
                         href={`/products/${perfume.slug}`}
                         rating={0}
                         onQuickView={() => {

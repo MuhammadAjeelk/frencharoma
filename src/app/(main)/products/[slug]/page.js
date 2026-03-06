@@ -191,6 +191,10 @@ export default function ProductDetailPage() {
   // ── Cart / Buy Now ─────────────────────────────────────────────────────
   const handleAddToCart = () => {
     if (!inStock || !selectedVariant) return;
+    const disc        = perfume.discountPercent || 0;
+    const finalPrice  = disc > 0
+      ? Math.round(selectedVariant.price * (1 - disc / 100))
+      : selectedVariant.price;
     for (let i = 0; i < quantity; i++) {
       addItem({
         perfumeId: perfume._id,
@@ -199,7 +203,7 @@ export default function ProductDetailPage() {
         image:     perfume.images?.main || "",
         edition:   selectedEdition?.key || "",
         size:      selectedVariant.size,
-        price:     selectedVariant.price,
+        price:     finalPrice,
       });
     }
     setCartAdded(true);
@@ -373,6 +377,32 @@ export default function ProductDetailPage() {
                 </p>
               )}
 
+            {/* Season Tags */}
+            {(() => {
+              const SEASON_LABELS = {
+                "spring-summer": "Spring & Summer",
+                "autumn-winter": "Autumn & Winter",
+                "spring":        "Spring",
+                "summer":        "Summer",
+                "autumn":        "Autumn",
+                "winter":        "Winter",
+                "all-seasons":   "All Seasons",
+              };
+              const seasonTags = (perfume.tags || []).filter((t) => SEASON_LABELS[t]);
+              return seasonTags.length > 0 ? (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {seasonTags.map((tag) => (
+                  <span
+                    key={tag}
+                      className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200 uppercase tracking-wide"
+                  >
+                      {SEASON_LABELS[tag]}
+                  </span>
+                ))}
+              </div>
+              ) : null;
+            })()}
+
             <div className="h-px bg-gray-100 my-3" />
 
             {/* ── Edition Selector ── */}
@@ -384,8 +414,12 @@ export default function ProductDetailPage() {
 
                 <div className="flex flex-wrap gap-2 mb-2">
                   {enabledEditions.map((ed) => {
-                    const variants = (ed.variants || []).filter((v) => v.isActive);
-                    const minPrice = variants.reduce((m, v) => (v.price < m ? v.price : m), Infinity);
+                    const variants  = (ed.variants || []).filter((v) => v.isActive);
+                    const minPrice  = variants.reduce((m, v) => (v.price < m ? v.price : m), Infinity);
+                    const disc      = perfume.discountPercent || 0;
+                    const dispPrice = disc > 0 && minPrice < Infinity
+                      ? Math.round(minPrice * (1 - disc / 100))
+                      : minPrice;
                     const isSelected = selectedEdition?.key === ed.key;
                     return (
                       <button
@@ -400,7 +434,8 @@ export default function ProductDetailPage() {
                         <span className="text-xs font-bold uppercase tracking-wide">{ed.key} Edition</span>
                         {minPrice < Infinity && (
                           <span className={`text-xs mt-0.5 font-semibold ${isSelected ? "text-gray-300" : "text-gray-500"}`}>
-                            PKR {minPrice.toLocaleString()}
+                            PKR {dispPrice.toLocaleString()}
+                            {disc > 0 && <span className="ml-1 line-through opacity-60">{minPrice.toLocaleString()}</span>}
                           </span>
                         )}
                       </button>
@@ -448,6 +483,30 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
               )}
+
+            {/* ── Price display ── */}
+            {selectedVariant && (() => {
+              const disc = perfume.discountPercent || 0;
+              const orig = selectedVariant.price;
+              const final = disc > 0 ? Math.round(orig * (1 - disc / 100)) : orig;
+              return (
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+                    PKR {final.toLocaleString()}
+                  </span>
+                  {disc > 0 && (
+                    <>
+                      <span className="text-base text-gray-400 line-through">
+                        PKR {orig.toLocaleString()}
+                    </span>
+                      <span className="text-xs font-bold bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                        -{disc}% OFF
+                      </span>
+                    </>
+                    )}
+                  </div>
+              );
+            })()}
 
             {/* ── Quantity ── */}
             <div className="mb-4">

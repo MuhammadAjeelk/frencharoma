@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import UniversalModal from "@/components/UniversalModal";
@@ -46,12 +47,11 @@ const SEASON_OPTIONS = [
 ];
 
 const SORT_OPTIONS = [
-  { value: "newest",     label: "All (Newest first)"       },
-  { value: "best-sellers", label: "Best Sellers"           },
-  { value: "name-asc",   label: "Alphabetically (A – Z)"  },
-  { value: "name-desc",  label: "Alphabetically (Z – A)"  },
-  { value: "price-asc",  label: "Price (Low – High)"      },
-  { value: "price-desc", label: "Price (High – Low)"      },
+  { value: "newest",     label: "All (Newest first)"      },
+  { value: "name-asc",   label: "Alphabetically (A – Z)" },
+  { value: "name-desc",  label: "Alphabetically (Z – A)" },
+  { value: "price-asc",  label: "Price (Low – High)"     },
+  { value: "price-desc", label: "Price (High – Low)"     },
 ];
 
 // ── Reusable filter dropdown ───────────────────────────────────────────────
@@ -255,6 +255,8 @@ function QuickViewContent({ perfume, onClose }) {
 
 // ── Main Page ──────────────────────────────────────────────────────────────
 export default function ShopAllPage() {
+  const searchParams = useSearchParams();
+
   // Products state
   const [perfumes,    setPerfumes]    = useState([]);
   const [page,        setPage]        = useState(1);
@@ -262,12 +264,19 @@ export default function ShopAllPage() {
   const [loading,     setLoading]     = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Filters
-  const [gender,  setGender]  = useState("all");
-  const [edition, setEdition] = useState("all");
-  const [season,  setSeason]  = useState("all");
-  const [brand,   setBrand]   = useState("");
-  const [sort,    setSort]    = useState("newest");
+  // Filters — initialise bestSeller from URL ?bestSeller=true
+  const [gender,      setGender]      = useState("all");
+  const [edition,     setEdition]     = useState("all");
+  const [season,      setSeason]      = useState("all");
+  const [brand,       setBrand]       = useState("");
+  const [bestSeller,  setBestSeller]  = useState(() => searchParams.get("bestSeller") === "true");
+
+  // Keep bestSeller in sync whenever the URL ?bestSeller param changes
+  // (e.g. user clicks "BEST-SELLING" in the header while already on this page)
+  useEffect(() => {
+    setBestSeller(searchParams.get("bestSeller") === "true");
+  }, [searchParams]);
+  const [sort,        setSort]        = useState("newest");
 
   // Debounce brand search
   const [debouncedBrand, setDebouncedBrand] = useState("");
@@ -284,26 +293,22 @@ export default function ShopAllPage() {
   const sentinelRef = useRef(null);
 
   // Derived
-  const hasMore       = !loading && perfumes.length < total;
-  const hasActiveFilters = gender !== "all" || edition !== "all" || season !== "all" || debouncedBrand;
+  const hasMore          = !loading && perfumes.length < total;
+  const hasActiveFilters = gender !== "all" || edition !== "all" || season !== "all" || debouncedBrand || bestSeller;
 
   // ── Build fetch URL ──────────────────────────────────────────────────────
   const buildUrl = useCallback((pageNum) => {
     const p = new URLSearchParams();
-    if (gender !== "all")    p.set("gender",  gender);
-    if (edition !== "all")   p.set("edition", edition);
-    if (season !== "all")    p.set("tag",     season);
-    if (debouncedBrand)      p.set("search",  debouncedBrand);
-    if (sort === "best-sellers") {
-      p.set("bestSeller", "true");
-      p.set("sort", "newest");
-    } else {
-      p.set("sort", sort);
-    }
+    if (gender !== "all")    p.set("gender",     gender);
+    if (edition !== "all")   p.set("edition",    edition);
+    if (season !== "all")    p.set("tag",        season);
+    if (debouncedBrand)      p.set("search",     debouncedBrand);
+    if (bestSeller)          p.set("bestSeller", "true");
+    p.set("sort",  sort);
     p.set("limit", PAGE_SIZE.toString());
     p.set("page",  pageNum.toString());
     return `/api/perfumes?${p.toString()}`;
-  }, [gender, edition, season, debouncedBrand, sort]);
+  }, [gender, edition, season, debouncedBrand, bestSeller, sort]);
 
   // ── Fetch page 1 whenever filters change ────────────────────────────────
   useEffect(() => {
@@ -360,6 +365,7 @@ export default function ShopAllPage() {
     setEdition("all");
     setSeason("all");
     setBrand("");
+    setBestSeller(false);
     setSort("newest");
   };
 
@@ -374,7 +380,13 @@ export default function ShopAllPage() {
             <Link href="/" className="hover:text-gray-800 transition-colors">Home</Link>
             <span>/</span>
             <Link href="/collections/shop-all" className="hover:text-gray-800 transition-colors">Shop</Link>
-            {hasActiveFilters && (
+            {bestSeller && (
+              <>
+                <span>/</span>
+                <span className="text-gray-900 font-medium">Best Sellers</span>
+              </>
+            )}
+            {!bestSeller && hasActiveFilters && (
               <>
                 <span>/</span>
                 <span className="text-gray-900 font-medium">Filtered</span>
@@ -419,6 +431,18 @@ export default function ShopAllPage() {
                 value={season}
                 onChange={setSeason}
               />
+
+              {/* Best Sellers toggle */}
+              <button
+                onClick={() => setBestSeller((b) => !b)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border rounded transition-colors select-none ${
+                  bestSeller
+                    ? "border-black bg-black text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+                }`}
+              >
+                ⭐ Best Sellers
+              </button>
 
               {/* Brand search */}
               <div className="relative">
@@ -541,6 +565,8 @@ export default function ShopAllPage() {
                     salePrice={range ? range.min : 0}
                     originalPrice={range && range.max !== range.min ? range.max : undefined}
                     hasSale={range ? range.max !== range.min : false}
+                    discountPercent={perfume.discountPercent || 0}
+                    tags={perfume.tags || []}
                     href={`/products/${perfume.slug}`}
                     rating={0}
                     onQuickView={() => {

@@ -60,7 +60,7 @@ export default function Header() {
   };
 
   const menuItems = [
-    { name: "BEST-SELLING", href: "/collections/best-seller-perfumes" },
+    { name: "BEST-SELLING", href: "/collections/shop-all?bestSeller=true" },
     { name: "SHOP ALL", href: "/collections/shop-all" },
     {
       name: "COLLECTION",

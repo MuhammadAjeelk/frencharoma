@@ -128,11 +128,13 @@ export async function GET(request) {
 
     // ── Standard sort ─────────────────────────────────────────────────────
     let sortObj = {};
-    if      (sort === "newest")    sortObj = { createdAt: -1 };
-    else if (sort === "oldest")    sortObj = { createdAt:  1 };
-    else if (sort === "name-asc")  sortObj = { name:  1 };
-    else if (sort === "name-desc") sortObj = { name: -1 };
-    else                           sortObj = { createdAt: -1 };
+    if      (sort === "newest")       sortObj = { createdAt: -1 };
+    else if (sort === "oldest")       sortObj = { createdAt:  1 };
+    else if (sort === "name-asc")     sortObj = { name:  1 };
+    else if (sort === "name-desc")    sortObj = { name: -1 };
+    // Best sellers FIRST (does not filter out non-best-sellers)
+    else if (sort === "best-sellers") sortObj = { isBestSeller: -1, createdAt: -1 };
+    else                              sortObj = { createdAt: -1 };
 
     const [perfumes, total] = await Promise.all([
       Perfume.find(query)
@@ -140,7 +142,7 @@ export async function GET(request) {
         .skip(skip)
         .limit(limit)
         .select(
-          "name slug brand brands gender scentFamily tags images editions description notes status isBestSeller"
+          "name slug brand brands gender scentFamily tags images editions description notes status isBestSeller discountPercent"
         )
         .lean(),
       Perfume.countDocuments(query),

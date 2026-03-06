@@ -3,6 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const SEASON_LABELS = {
+  "spring-summer": "Spring & Summer",
+  "autumn-winter": "Autumn & Winter",
+  "spring":        "Spring",
+  "summer":        "Summer",
+  "autumn":        "Autumn",
+  "winter":        "Winter",
+  "all-seasons":   "All Seasons",
+};
+
 export default function ProductCard({
   name,
   brand,
@@ -11,15 +21,31 @@ export default function ProductCard({
   salePrice,
   href,
   hasSale = false,
+  discountPercent = 0,
+  tags = [],
   rating = 0,
   onQuickView,
 }) {
-  const brandLabel = Array.isArray(brand) ? brand.join(", ") : brand;
+  const brandLabel  = Array.isArray(brand) ? brand.join(", ") : brand;
+  const seasonTags  = (tags || []).filter((t) => SEASON_LABELS[t]);
+
+  // Compute effective display prices
+  const hasDiscount   = discountPercent > 0 && salePrice > 0;
+  const discountedMin = hasDiscount ? Math.round(salePrice * (1 - discountPercent / 100)) : salePrice;
+  const discountedMax = hasDiscount && originalPrice
+    ? Math.round(originalPrice * (1 - discountPercent / 100))
+    : originalPrice;
 
   return (
     <div className="group relative border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300 flex flex-col">
-      {/* Range Badge */}
-      {hasSale && originalPrice && (
+      {/* Discount badge */}
+      {hasDiscount && (
+        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 bg-red-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
+          -{discountPercent}% OFF
+        </div>
+      )}
+      {/* Multiple editions badge */}
+      {!hasDiscount && hasSale && originalPrice && (
         <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 bg-[#1a1a2e] text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
           Multiple Editions
         </div>
@@ -52,6 +78,20 @@ export default function ProductCard({
           </p>
         )}
 
+        {/* Season Tags */}
+        {seasonTags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-1.5 sm:mb-2">
+            {seasonTags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200 uppercase tracking-wide"
+              >
+                {SEASON_LABELS[tag]}
+              </span>
+            ))}
+          </div>
+        )}
+
         {/* Rating - Always show */}
         <div className="flex items-center gap-0.5 sm:gap-1 mb-1.5 sm:mb-2">
           {[...Array(5)].map((_, i) => (
@@ -71,8 +111,30 @@ export default function ProductCard({
         </div>
 
         {/* Price */}
-        <div className="flex items-center gap-1 mb-2 sm:mb-3 flex-wrap">
-          {hasSale && originalPrice ? (
+        <div className="flex flex-col gap-0.5 mb-2 sm:mb-3">
+          {hasDiscount ? (
+            <>
+              {/* Discounted price */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm sm:text-base font-bold text-gray-900">
+                  PKR {discountedMin.toLocaleString()}
+                  {hasSale && discountedMax && discountedMax !== discountedMin && (
+                    <> – PKR {discountedMax.toLocaleString()}</>
+                  )}
+                </span>
+                <span className="text-[10px] sm:text-xs bg-red-100 text-red-600 font-bold px-1.5 py-0.5 rounded">
+                  -{discountPercent}%
+                </span>
+              </div>
+              {/* Original crossed-out price */}
+              <span className="text-xs text-gray-400 line-through">
+                PKR {salePrice.toLocaleString()}
+                {hasSale && originalPrice && originalPrice !== salePrice && (
+                  <> – PKR {originalPrice.toLocaleString()}</>
+                )}
+              </span>
+            </>
+          ) : hasSale && originalPrice ? (
             <span className="text-sm sm:text-base font-bold text-gray-900">
               PKR {salePrice.toLocaleString()}{" "}
               <span className="font-normal text-gray-400 text-xs sm:text-sm">–</span>{" "}

@@ -135,6 +135,12 @@ const PerfumeSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    discountPercent: {
+      type: Number,
+      default: 0,
+      min: [0,  "Discount cannot be negative"],
+      max: [99, "Discount cannot exceed 99%"],
+    },
     images: {
       main: {
         type: String,
