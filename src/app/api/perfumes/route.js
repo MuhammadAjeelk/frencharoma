@@ -67,43 +67,84 @@ export async function GET(request) {
         { $match: query },
         {
           $addFields: {
-            _minPrice: {
-              $min: {
-                $reduce: {
-                  input: { $ifNull: ["$editions", []] },
-                  initialValue: [],
-                  in: {
-                    $concatArrays: [
-                      "$$value",
-                      {
-                        $map: {
-                          input: {
-                            $filter: {
-                              input: { $ifNull: ["$$this.variants", []] },
-                              as: "v",
-                              cond: { $eq: ["$$v.isActive", true] },
-                            },
+            _enabledEditions: {
+              $filter: {
+                input: { $ifNull: ["$editions", []] },
+                as: "ed",
+                cond: { $eq: ["$$ed.enabled", true] },
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            _activePrices: {
+              $reduce: {
+                input: "$_enabledEditions",
+                initialValue: [],
+                in: {
+                  $concatArrays: [
+                    "$$value",
+                    {
+                      $map: {
+                        input: {
+                          $filter: {
+                            input: { $ifNull: ["$$this.variants", []] },
+                            as: "v",
+                            cond: { $eq: ["$$v.isActive", true] },
                           },
-                          as: "v",
-                          in: "$$v.price",
                         },
+                        as: "v",
+                        in: "$$v.price",
                       },
-                    ],
-                  },
+                    },
+                  ],
                 },
               },
             },
           },
         },
-        { $sort: { _minPrice: sortDir } },
+        {
+          $addFields: {
+            _minPrice: { $min: "$_activePrices" },
+            _hasPrice: { $gt: [{ $size: "$_activePrices" }, 0] },
+            _sortPrice: {
+              $let: {
+                vars: {
+                  basePrice: { $min: "$_activePrices" },
+                  discount: { $ifNull: ["$discountPercent", 0] },
+                },
+                in: {
+                  $cond: [
+                    { $eq: ["$$basePrice", null] },
+                    null,
+                    {
+                      $cond: [
+                        { $gt: ["$$discount", 0] },
+                        {
+                          $multiply: [
+                            "$$basePrice",
+                            { $subtract: [1, { $divide: ["$$discount", 100] }] },
+                          ],
+                        },
+                        "$$basePrice",
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        { $sort: { _hasPrice: -1, _sortPrice: sortDir, createdAt: -1, _id: 1 } },
         { $skip: skip },
         { $limit: limit },
         {
           $project: {
-            _minPrice: 0,
             name: 1, slug: 1, brand: 1, brands: 1, gender: 1,
             scentFamily: 1, tags: 1, images: 1, editions: 1,
             description: 1, notes: 1, status: 1, isBestSeller: 1,
+            discountPercent: 1,
           },
         },
       ];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -74,15 +74,15 @@ function FilterDropdown({ label, options, value, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border rounded transition-colors select-none ${
+        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
           isActive
-            ? "border-black bg-black text-white"
-            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+            ? "border-black bg-black text-white shadow-sm"
+            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black hover:shadow-sm"
         }`}
       >
         <span>{label}</span>
         {isActive && (
-          <span className="opacity-70">: {selected?.label}</span>
+          <span className="opacity-75">: {selected?.label}</span>
         )}
         <svg
           className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
@@ -93,7 +93,7 @@ function FilterDropdown({ label, options, value, onChange }) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-30 min-w-[160px] py-1 overflow-hidden">
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-30 min-w-[180px] py-1 overflow-hidden">
           {options.map((opt) => (
             <button
               key={opt.value}
@@ -254,7 +254,7 @@ function QuickViewContent({ perfume, onClose }) {
 }
 
 // ── Main Page ──────────────────────────────────────────────────────────────
-export default function ShopAllPage() {
+function ShopAllContent() {
   const searchParams = useSearchParams();
 
   // Products state
@@ -281,7 +281,7 @@ export default function ShopAllPage() {
   // Debounce brand search
   const [debouncedBrand, setDebouncedBrand] = useState("");
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedBrand(brand), 400);
+    const t = setTimeout(() => setDebouncedBrand(brand.trim()), 400);
     return () => clearTimeout(t);
   }, [brand]);
 
@@ -293,8 +293,42 @@ export default function ShopAllPage() {
   const sentinelRef = useRef(null);
 
   // Derived
-  const hasMore          = !loading && perfumes.length < total;
-  const hasActiveFilters = gender !== "all" || edition !== "all" || season !== "all" || debouncedBrand || bestSeller;
+  const hasMore           = !loading && perfumes.length < total;
+  const hasActiveFilters  = gender !== "all" || edition !== "all" || season !== "all" || brand.trim() || bestSeller;
+  const hasControlChanges = hasActiveFilters || sort !== "newest";
+  const getOptionLabel = (options, value) => options.find((o) => o.value === value)?.label || value;
+  const activeFilterChips = [
+    gender !== "all" && {
+      key: "gender",
+      label: `Gender: ${getOptionLabel(GENDER_OPTIONS, gender)}`,
+      clear: () => setGender("all"),
+    },
+    edition !== "all" && {
+      key: "edition",
+      label: `Category: ${getOptionLabel(EDITION_OPTIONS, edition)}`,
+      clear: () => setEdition("all"),
+    },
+    season !== "all" && {
+      key: "season",
+      label: `Season: ${getOptionLabel(SEASON_OPTIONS, season)}`,
+      clear: () => setSeason("all"),
+    },
+    brand.trim() && {
+      key: "brand",
+      label: `Brand: ${brand.trim()}`,
+      clear: () => setBrand(""),
+    },
+    bestSeller && {
+      key: "bestSeller",
+      label: "Best Sellers",
+      clear: () => setBestSeller(false),
+    },
+    sort !== "newest" && {
+      key: "sort",
+      label: `Sort: ${getOptionLabel(SORT_OPTIONS, sort)}`,
+      clear: () => setSort("newest"),
+    },
+  ].filter(Boolean);
 
   // ── Build fetch URL ──────────────────────────────────────────────────────
   const buildUrl = useCallback((pageNum) => {
@@ -372,11 +406,13 @@ export default function ShopAllPage() {
   // ────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-gradient-to-b from-[#f8f5ef] via-white to-white">
 
         {/* ── Page Header ── */}
-        <div className="py-8 md:py-12 text-center" style={{ backgroundColor: "#f3f3f3" }}>
-          <nav className="flex justify-center items-center gap-2 text-xs text-gray-500 mb-3">
+        <div className="relative py-10 md:py-14 text-center overflow-hidden bg-[#f3efe8] border-b border-black/5">
+          <div className="absolute -left-16 -top-16 w-56 h-56 bg-[#d8c7ae]/35 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -right-12 bottom-0 w-64 h-64 bg-[#eadbc6]/40 rounded-full blur-3xl pointer-events-none" />
+          <nav className="relative flex justify-center items-center gap-2 text-xs text-gray-500 mb-3">
             <Link href="/" className="hover:text-gray-800 transition-colors">Home</Link>
             <span>/</span>
             <Link href="/collections/shop-all" className="hover:text-gray-800 transition-colors">Shop</Link>
@@ -386,25 +422,29 @@ export default function ShopAllPage() {
                 <span className="text-gray-900 font-medium">Best Sellers</span>
               </>
             )}
-            {!bestSeller && hasActiveFilters && (
+            {!bestSeller && hasControlChanges && (
               <>
                 <span>/</span>
-                <span className="text-gray-900 font-medium">Filtered</span>
+                <span className="text-gray-900 font-medium">Refined</span>
               </>
             )}
           </nav>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wide" style={{ color: "#1a1a2e" }}>
+          <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wide text-[#1f1a16]">
             All Perfumes
           </h1>
+          <p className="relative mt-3 text-sm md:text-base text-[#5f5a54]">
+            Discover signature impressions curated by mood, season and style.
+          </p>
         </div>
 
         {/* ── Sticky Filter Bar ── */}
-        <div className="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex flex-wrap items-center gap-2 py-3">
+        <div className="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-3 md:p-4 shadow-[0_8px_28px_rgba(15,23,42,0.06)]">
+              <div className="flex flex-wrap items-center gap-2.5">
 
               {/* Label */}
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest mr-1 shrink-0">
+              <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.16em] mr-1 shrink-0">
                 Filters:
               </span>
 
@@ -435,26 +475,29 @@ export default function ShopAllPage() {
               {/* Best Sellers toggle */}
               <button
                 onClick={() => setBestSeller((b) => !b)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border rounded transition-colors select-none ${
+                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
                   bestSeller
-                    ? "border-black bg-black text-white"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black"
+                    ? "border-black bg-black text-white shadow-sm"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black hover:shadow-sm"
                 }`}
               >
                 ⭐ Best Sellers
               </button>
 
               {/* Brand search */}
-              <div className="relative">
+              <div className="relative min-w-[170px]">
                 <input
                   type="text"
                   placeholder="Brand..."
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  className={`px-3 py-1.5 text-xs border rounded focus:outline-none transition-colors w-28 ${
-                    brand ? "border-black" : "border-gray-300 hover:border-gray-400 focus:border-black"
+                  className={`w-full pl-8 pr-7 py-2 text-xs font-medium border rounded-full focus:outline-none transition-colors ${
+                    brand ? "border-black text-black" : "border-gray-300 text-gray-700 hover:border-gray-400 focus:border-black"
                   }`}
                 />
+                <svg className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z" />
+                </svg>
                 {brand && (
                   <button
                     onClick={() => setBrand("")}
@@ -462,47 +505,68 @@ export default function ShopAllPage() {
                   >
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+                    </svg>
                   </button>
                 )}
-            </div>
+              </div>
 
               {/* Spacer */}
               <div className="flex-1" />
 
               {/* Clear All Filters */}
-                <button
+              <button
                 onClick={clearFilters}
-                disabled={!hasActiveFilters}
-                className={`text-xs px-3 py-1.5 rounded border transition-colors shrink-0 ${
-                  hasActiveFilters
-                    ? "border-gray-400 text-gray-600 hover:border-black hover:text-black"
+                disabled={!hasControlChanges}
+                className={`text-xs px-3 py-2 rounded-full border transition-colors shrink-0 font-semibold ${
+                  hasControlChanges
+                    ? "border-gray-400 text-gray-700 hover:border-black hover:text-black"
                     : "border-gray-200 text-gray-300 cursor-default"
                 }`}
               >
-                Clear All Filters
-                </button>
+                Reset
+              </button>
+              </div>
+
+              {activeFilterChips.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {activeFilterChips.map((chip) => (
+                    <button
+                      key={chip.key}
+                      onClick={chip.clear}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs border border-gray-300 bg-[#faf8f4] text-gray-700 hover:border-black hover:text-black transition-colors"
+                    >
+                      <span>{chip.label}</span>
+                      <span className="text-gray-400">✕</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-            </div>
+        </div>
 
         {/* ── Content ── */}
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto px-4 py-8">
 
           {/* Sort + Count Row */}
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-gray-500">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+            <p className="text-sm text-gray-600">
               {loading
                 ? <span className="inline-block w-16 h-4 bg-gray-100 rounded animate-pulse" />
-                : <><span className="font-semibold text-gray-900">{total.toLocaleString()}</span> Products</>
+                : (
+                  <>
+                    Showing <span className="font-semibold text-gray-900">{perfumes.length.toLocaleString()}</span> of{" "}
+                    <span className="font-semibold text-gray-900">{total.toLocaleString()}</span> products
+                  </>
+                )
               }
             </p>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 hidden sm:inline">Sort by:</span>
+            <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 w-fit shadow-sm">
+              <span className="text-xs text-gray-500">Sort by</span>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-                className="text-xs border border-gray-300 rounded px-2 py-1.5 focus:outline-none focus:border-black bg-white cursor-pointer"
+                className="text-xs border border-gray-300 rounded-full px-3 py-1.5 focus:outline-none focus:border-black bg-white cursor-pointer font-medium"
             >
               {SORT_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -537,12 +601,12 @@ export default function ShopAllPage() {
               </svg>
               <h3 className="text-lg font-semibold text-gray-700 mb-2">No perfumes found</h3>
               <p className="text-sm text-gray-400 mb-6">Try adjusting your filters or search term.</p>
-              {hasActiveFilters && (
+              {hasControlChanges && (
                 <button
                   onClick={clearFilters}
                   className="text-sm border border-black text-black px-5 py-2 rounded hover:bg-black hover:text-white transition-colors"
                 >
-                  Clear All Filters
+                  Reset Filters
                 </button>
               )}
             </div>
@@ -608,5 +672,36 @@ export default function ShopAllPage() {
         )}
       </UniversalModal>
     </>
+  );
+}
+
+function ShopAllFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#f8f5ef] via-white to-white">
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="h-8 w-48 bg-gray-100 rounded animate-pulse mb-8" />
+        <div className="h-16 w-full bg-gray-100 rounded-2xl animate-pulse mb-8" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="border border-gray-200 rounded-lg overflow-hidden animate-pulse">
+              <div className="aspect-[6.818/7.5] bg-gray-100" />
+              <div className="p-3 space-y-2">
+                <div className="h-3 bg-gray-100 rounded w-3/4" />
+                <div className="h-3 bg-gray-100 rounded w-1/2" />
+                <div className="h-8 bg-gray-100 rounded mt-3" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ShopAllPage() {
+  return (
+    <Suspense fallback={<ShopAllFallback />}>
+      <ShopAllContent />
+    </Suspense>
   );
 }
