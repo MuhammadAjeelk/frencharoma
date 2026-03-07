@@ -19,7 +19,7 @@ export async function GET(request) {
     const edition     = searchParams.get("edition");
     const bestSeller  = searchParams.get("bestSeller");
     const specialOffer = searchParams.get("specialOffer");
-    const sort        = searchParams.get("sort") || "newest";
+    const sort        = searchParams.get("sort") || "global-admire-desc";
     const limit       = parseInt(searchParams.get("limit") || "20");
     const page        = parseInt(searchParams.get("page")  || "1");
 
@@ -174,7 +174,7 @@ export async function GET(request) {
             name: 1, slug: 1, brand: 1, brands: 1, gender: 1,
             scentFamily: 1, tags: 1, images: 1, editions: 1,
             description: 1, impressionName: 1, notes: 1, status: 1, isBestSeller: 1, isSpecialOffer: 1,
-            discountPercent: 1,
+            discountPercent: 1, globalAdmirePercent: 1,
           },
         },
       ];
@@ -187,6 +187,7 @@ export async function GET(request) {
       const serialized = perfumesAgg.map((p) => ({
         ...p,
         _id: p._id.toString(),
+        globalAdmirePercent: p.globalAdmirePercent ?? 60,
       }));
 
       return NextResponse.json({
@@ -199,13 +200,15 @@ export async function GET(request) {
 
     // ── Standard sort ─────────────────────────────────────────────────────
     let sortObj = {};
-    if      (sort === "newest")       sortObj = { createdAt: -1 };
+    if      (sort === "global-admire-desc") sortObj = { globalAdmirePercent: -1, createdAt: -1 };
+    else if (sort === "global-admire-asc")  sortObj = { globalAdmirePercent:  1, createdAt: -1 };
+    else if (sort === "newest")       sortObj = { createdAt: -1 };
     else if (sort === "oldest")       sortObj = { createdAt:  1 };
     else if (sort === "name-asc")     sortObj = { name:  1 };
     else if (sort === "name-desc")    sortObj = { name: -1 };
     // Best sellers FIRST (does not filter out non-best-sellers)
     else if (sort === "best-sellers") sortObj = { isBestSeller: -1, createdAt: -1 };
-    else                              sortObj = { createdAt: -1 };
+    else                              sortObj = { globalAdmirePercent: -1, createdAt: -1 };
 
     const [perfumes, total] = await Promise.all([
       Perfume.find(query)
@@ -213,7 +216,7 @@ export async function GET(request) {
         .skip(skip)
         .limit(limit)
         .select(
-          "name slug brand brands gender scentFamily tags images editions description impressionName notes status isBestSeller isSpecialOffer discountPercent"
+          "name slug brand brands gender scentFamily tags images editions description impressionName notes status isBestSeller isSpecialOffer discountPercent globalAdmirePercent"
         )
         .lean(),
       Perfume.countDocuments(query),
@@ -222,6 +225,7 @@ export async function GET(request) {
     const serialized = perfumes.map((p) => ({
       ...p,
       _id: p._id.toString(),
+      globalAdmirePercent: p.globalAdmirePercent ?? 60,
     }));
 
     return NextResponse.json({

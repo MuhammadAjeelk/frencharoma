@@ -86,7 +86,7 @@ export async function GET(request) {
 
     let perfumesQuery = Perfume.find(query)
       .sort(sortObj)
-      .select("name impressionName brand brands slug status isBestSeller isSpecialOffer editions images updatedAt");
+      .select("name impressionName brand brands slug status isBestSeller isSpecialOffer globalAdmirePercent editions images updatedAt");
 
     if (sort === "name-asc" || sort === "name-desc") {
       perfumesQuery = perfumesQuery.collation({ locale: "en", strength: 2 });
@@ -143,6 +143,12 @@ export async function POST(request) {
     const normalizedBrands = normalizeBrands(body.brands || body.brand);
     body.brands = normalizedBrands;
     body.brand = normalizedBrands[0] || "";
+    body.impressionName =
+      typeof body.impressionName === "string" ? body.impressionName.trim() : "";
+    body.globalAdmirePercent = Math.min(
+      100,
+      Math.max(60, Number(body.globalAdmirePercent) || 60)
+    );
 
     // Check for duplicate slug
     const existingSlug = await Perfume.findOne({ slug: body.slug });

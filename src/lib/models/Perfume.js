@@ -151,6 +151,12 @@ const PerfumeSchema = new mongoose.Schema(
       min: [0,  "Discount cannot be negative"],
       max: [99, "Discount cannot exceed 99%"],
     },
+    globalAdmirePercent: {
+      type: Number,
+      default: 60,
+      min: [60, "Global admire percent cannot be less than 60%"],
+      max: [100, "Global admire percent cannot exceed 100%"],
+    },
     images: {
       main: {
         type: String,
@@ -255,6 +261,16 @@ if (mongoose.models.Perfume) {
         trim: true,
         default: "",
         maxlength: [200, "Impression name cannot exceed 200 characters"],
+      },
+    });
+  }
+  if (!Perfume.schema.path("globalAdmirePercent")) {
+    Perfume.schema.add({
+      globalAdmirePercent: {
+        type: Number,
+        default: 60,
+        min: [60, "Global admire percent cannot be less than 60%"],
+        max: [100, "Global admire percent cannot exceed 100%"],
       },
     });
   }

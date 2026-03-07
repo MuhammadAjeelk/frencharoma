@@ -90,6 +90,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     isBestSeller:    perfume?.isBestSeller    || false,
     isSpecialOffer:  perfume?.isSpecialOffer  || false,
     discountPercent: perfume?.discountPercent ?? 0,
+    globalAdmirePercent: perfume?.globalAdmirePercent ?? 60,
     images: {
       main:    perfume?.images?.main    || null,
       gallery: perfume?.images?.gallery || [],
@@ -229,6 +230,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
         brand:           normalizedBrands[0] || "",
         tags:            mergedTags,
         discountPercent: Number(formData.discountPercent) || 0,
+        globalAdmirePercent: Math.min(100, Math.max(60, Number(formData.globalAdmirePercent) || 60)),
         _deletedImages:  deletedImages,
       };
       delete payload.seasonTags; // not a DB field
@@ -375,6 +377,24 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
                 </span>
               )}
             </div>
+          </div>
+
+          {/* Globally Admired % */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Globally Admired (%)
+            </label>
+            <select
+              value={formData.globalAdmirePercent}
+              onChange={(e) => updateField("globalAdmirePercent", Number(e.target.value))}
+              className="w-40 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+            >
+              {Array.from({ length: 41 }, (_, i) => 60 + i).map((value) => (
+                <option key={value} value={value}>
+                  {value}%
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Best Seller Toggle */}

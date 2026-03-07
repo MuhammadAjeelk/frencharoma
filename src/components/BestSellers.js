@@ -309,10 +309,10 @@ export default function BestSellers() {
                         originalPrice={range && range.max !== range.min ? range.max : undefined}
                         hasSale={range ? range.max !== range.min : false}
                         discountPercent={perfume.discountPercent || 0}
+                        globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
                         isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
                         tags={perfume.tags || []}
                         href={`/products/${perfume.slug}`}
-                        rating={0}
                         onQuickView={() => {
                           setSelectedPerfume(perfume);
                           setModalOpen(true);

@@ -103,6 +103,20 @@ export async function PUT(request, { params }) {
       body.brand = normalizedBrands[0] || "";
     }
 
+    if ("impressionName" in body) {
+      body.impressionName =
+        typeof body.impressionName === "string" ? body.impressionName.trim() : "";
+    }
+
+    if ("globalAdmirePercent" in body) {
+      body.globalAdmirePercent = Math.min(
+        100,
+        Math.max(60, Number(body.globalAdmirePercent) || 60)
+      );
+    } else if (existingPerfume.globalAdmirePercent == null) {
+      body.globalAdmirePercent = 60;
+    }
+
     // Validate editions if setting to active
     if (body.status === "active") {
       const enabledEditions = body.editions?.filter((e) => e.enabled) || [];

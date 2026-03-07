@@ -23,8 +23,8 @@ export default function ProductCard({
   hasSale = false,
   discountPercent = 0,
   isSpecialOffer = false,
+  globalAdmirePercent = 60,
   tags = [],
-  rating = 0,
   onQuickView,
 }) {
   const brandLabel  = Array.isArray(brand) ? brand.join(", ") : brand;
@@ -99,22 +99,14 @@ export default function ProductCard({
           </div>
         )}
 
-        {/* Rating - Always show */}
-        <div className="flex items-center gap-0.5 sm:gap-1 mb-1.5 sm:mb-2">
-          {[...Array(5)].map((_, i) => (
-            <svg
-              key={i}
-              className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                i < rating ? "fill-black" : "fill-none stroke-black"
-              }`}
-              viewBox="0 0 20 20"
-            >
-              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-            </svg>
-          ))}
-          <span className="text-[10px] sm:text-xs text-gray-600 ml-0.5 sm:ml-1">
-            ({rating})
-          </span>
+        {/* Globally admired text */}
+        <div className="mb-1.5 sm:mb-2">
+          <p className="text-[10px] sm:text-xs text-gray-600">
+            Globally Admired:{" "}
+            <span className="font-semibold text-gray-800">
+              {Math.min(100, Math.max(60, Number(globalAdmirePercent) || 60))}%
+            </span>
+          </p>
         </div>
 
         {/* Price */}

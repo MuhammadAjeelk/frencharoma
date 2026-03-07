@@ -34,21 +34,34 @@ export async function getSession() {
       return null;
     }
 
-    await connectDB();
-    const user = await User.findById(decoded.userId).select("-passwordHash");
+    try {
+      await connectDB();
+      const user = await User.findById(decoded.userId).select("-passwordHash");
 
-    if (!user) {
-      return null;
+      if (!user) {
+        return null;
+      }
+
+      return {
+        user: {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        },
+      };
+    } catch (dbError) {
+      // Keep session alive from signed JWT if DB DNS/connection is temporarily down.
+      console.error("Session DB lookup failed, falling back to token:", dbError);
+      return {
+        user: {
+          id: decoded.userId,
+          email: "",
+          name: "",
+          role: decoded.role,
+        },
+      };
     }
-
-    return {
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
-    };
   } catch (error) {
     console.error("Session error:", error);
     return null;

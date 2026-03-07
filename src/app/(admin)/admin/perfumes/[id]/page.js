@@ -399,6 +399,12 @@ export default async function PerfumeDetailPage({ params }) {
                 </dd>
               </div>
               <div>
+                <dt className="text-sm text-gray-500">Globally Admired</dt>
+                <dd className="text-sm text-gray-900">
+                  {perfume.globalAdmirePercent ?? 60}%
+                </dd>
+              </div>
+              <div>
                 <dt className="text-sm text-gray-500">Created</dt>
                 <dd className="text-sm text-gray-900">
                   {new Date(perfume.createdAt).toLocaleDateString()}

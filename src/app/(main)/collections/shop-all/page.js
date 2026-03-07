@@ -49,6 +49,8 @@ const SEASON_OPTIONS = [
 ];
 
 const SORT_OPTIONS = [
+  { value: "global-admire-desc", label: "Globally Admired (High – Low)" },
+  { value: "global-admire-asc",  label: "Globally Admired (Low – High)" },
   { value: "newest",     label: "All (Newest first)"      },
   { value: "name-asc",   label: "Alphabetically (A – Z)" },
   { value: "name-desc",  label: "Alphabetically (Z – A)" },
@@ -322,6 +324,7 @@ function QuickViewContent({ perfume, onClose }) {
 // ── Main Page ──────────────────────────────────────────────────────────────
 function ShopAllContent() {
   const searchParams = useSearchParams();
+  const DEFAULT_SORT = "global-admire-desc";
 
   // Products state
   const [perfumes,    setPerfumes]    = useState([]);
@@ -343,7 +346,7 @@ function ShopAllContent() {
     setBestSeller(searchParams.get("bestSeller") === "true");
     setSpecialOffer(searchParams.get("specialOffer") === "true");
   }, [searchParams]);
-  const [sort,        setSort]        = useState("newest");
+  const [sort,        setSort]        = useState(DEFAULT_SORT);
 
   // Debounce brand search
   const [debouncedBrand, setDebouncedBrand] = useState("");
@@ -362,7 +365,7 @@ function ShopAllContent() {
   // Derived
   const hasMore           = !loading && perfumes.length < total;
   const hasActiveFilters  = gender !== "all" || edition !== "all" || seasons.length > 0 || brand.trim() || bestSeller || specialOffer;
-  const hasControlChanges = hasActiveFilters || sort !== "newest";
+  const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
   const getOptionLabel = (options, value) => options.find((o) => o.value === value)?.label || value;
   const activeFilterChips = [
     gender !== "all" && {
@@ -394,11 +397,6 @@ function ShopAllContent() {
       key: "specialOffer",
       label: "Special Offer",
       clear: () => setSpecialOffer(false),
-    },
-    sort !== "newest" && {
-      key: "sort",
-      label: `Sort: ${getOptionLabel(SORT_OPTIONS, sort)}`,
-      clear: () => setSort("newest"),
     },
   ].filter(Boolean);
 
@@ -474,7 +472,7 @@ function ShopAllContent() {
     setBrand("");
     setBestSeller(false);
     setSpecialOffer(false);
-    setSort("newest");
+    setSort(DEFAULT_SORT);
   };
 
   // ────────────────────────────────────────────────────────────────────────
@@ -725,10 +723,10 @@ function ShopAllContent() {
                     originalPrice={range && range.max !== range.min ? range.max : undefined}
                     hasSale={range ? range.max !== range.min : false}
                     discountPercent={perfume.discountPercent || 0}
+                    globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
                     isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
                     tags={perfume.tags || []}
                     href={`/products/${perfume.slug}`}
-                    rating={0}
                     onQuickView={() => {
                       setSelectedPerfume(perfume);
                       setModalOpen(true);
