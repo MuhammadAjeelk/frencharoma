@@ -72,6 +72,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     scentFamily: perfume?.scentFamily  || "",
     status:      perfume?.status       || "draft",
     isBestSeller:    perfume?.isBestSeller    || false,
+    isSpecialOffer:  perfume?.isSpecialOffer  || false,
     discountPercent: perfume?.discountPercent ?? 0,
     images: {
       main:    perfume?.images?.main    || null,
@@ -366,6 +367,31 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                   formData.isBestSeller ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Special Offer Toggle */}
+          <div className="flex items-center gap-4 p-4 bg-rose-50 border border-rose-200 rounded-lg col-span-1 md:col-span-2">
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-rose-900">🏷️ Special Offer</p>
+              <p className="text-xs text-rose-700 mt-0.5">
+                Mark this perfume as special offer so customers can filter it and see a special offer badge.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateField("isSpecialOffer", !formData.isSpecialOffer)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.isSpecialOffer ? "bg-rose-500" : "bg-gray-300"
+              }`}
+              role="switch"
+              aria-checked={formData.isSpecialOffer}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  formData.isSpecialOffer ? "translate-x-5" : "translate-x-0"
                 }`}
               />
             </button>

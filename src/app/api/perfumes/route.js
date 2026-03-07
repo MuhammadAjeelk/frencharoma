@@ -14,6 +14,7 @@ export async function GET(request) {
     const tag         = searchParams.get("tag");
     const edition     = searchParams.get("edition");
     const bestSeller  = searchParams.get("bestSeller");
+    const specialOffer = searchParams.get("specialOffer");
     const sort        = searchParams.get("sort") || "newest";
     const limit       = parseInt(searchParams.get("limit") || "20");
     const page        = parseInt(searchParams.get("page")  || "1");
@@ -54,6 +55,15 @@ export async function GET(request) {
 
     if (bestSeller === "true") {
       conditions.push({ isBestSeller: true });
+    }
+
+    if (specialOffer === "true") {
+      conditions.push({
+        $or: [
+          { isSpecialOffer: true },
+          { tags: { $in: [/special\s*-?\s*offer/i] } },
+        ],
+      });
     }
 
     const query = { $and: conditions };
@@ -143,7 +153,7 @@ export async function GET(request) {
           $project: {
             name: 1, slug: 1, brand: 1, brands: 1, gender: 1,
             scentFamily: 1, tags: 1, images: 1, editions: 1,
-            description: 1, notes: 1, status: 1, isBestSeller: 1,
+            description: 1, notes: 1, status: 1, isBestSeller: 1, isSpecialOffer: 1,
             discountPercent: 1,
           },
         },
@@ -183,7 +193,7 @@ export async function GET(request) {
         .skip(skip)
         .limit(limit)
         .select(
-          "name slug brand brands gender scentFamily tags images editions description notes status isBestSeller discountPercent"
+          "name slug brand brands gender scentFamily tags images editions description notes status isBestSeller isSpecialOffer discountPercent"
         )
         .lean(),
       Perfume.countDocuments(query),

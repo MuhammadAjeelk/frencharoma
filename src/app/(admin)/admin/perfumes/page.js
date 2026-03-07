@@ -317,6 +317,11 @@ export default function PerfumesListPage() {
                                   ⭐ Best Seller
                                 </span>
                               )}
+                              {perfume.isSpecialOffer && (
+                                <span className="text-xs bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full font-semibold">
+                                  🏷️ Special Offer
+                                </span>
+                              )}
                             </div>
                             {brandLabel && (
                               <p className="text-sm text-gray-500">

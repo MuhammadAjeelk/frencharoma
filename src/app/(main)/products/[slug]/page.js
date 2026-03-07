@@ -187,6 +187,10 @@ export default function ProductDetailPage() {
 
   const shortDesc     = perfume?.description?.slice(0, 200) || "";
   const needsReadMore = (perfume?.description?.length || 0) > 200;
+  const hasSpecialOffer = Boolean(
+    perfume?.isSpecialOffer ||
+      (perfume?.tags || []).some((t) => /special\s*-?\s*offer/i.test(t))
+  );
 
   // ── Cart / Buy Now ─────────────────────────────────────────────────────
   const handleAddToCart = () => {
@@ -362,6 +366,14 @@ export default function ProductDetailPage() {
                 </span>
               )}
               </h1>
+
+            {hasSpecialOffer && (
+              <div className="mb-2">
+                <span className="inline-flex items-center gap-1 text-xs font-bold bg-rose-100 text-rose-700 px-3 py-1 rounded-full uppercase tracking-wide border border-rose-200">
+                  🏷️ Special Offer
+                </span>
+              </div>
+            )}
 
             {/* Inspired by */}
             {brandLabel && (

@@ -80,7 +80,7 @@ export async function GET(request) {
 
     const perfumes = await Perfume.find(query)
       .sort({ updatedAt: -1 })
-      .select("name brand brands slug status isBestSeller editions images updatedAt")
+      .select("name brand brands slug status isBestSeller isSpecialOffer editions images updatedAt")
       .lean();
 
     return NextResponse.json({

@@ -22,6 +22,7 @@ export default function ProductCard({
   href,
   hasSale = false,
   discountPercent = 0,
+  isSpecialOffer = false,
   tags = [],
   rating = 0,
   onQuickView,
@@ -48,6 +49,12 @@ export default function ProductCard({
       {!hasDiscount && hasSale && originalPrice && (
         <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 bg-[#1a1a2e] text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
           Multiple Editions
+        </div>
+      )}
+      {/* Special offer badge */}
+      {isSpecialOffer && (
+        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 bg-rose-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
+          Special Offer
         </div>
       )}
 

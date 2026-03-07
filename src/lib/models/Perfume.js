@@ -135,6 +135,10 @@ const PerfumeSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isSpecialOffer: {
+      type: Boolean,
+      default: false,
+    },
     discountPercent: {
       type: Number,
       default: 0,
@@ -223,6 +227,23 @@ PerfumeSchema.pre("validate", function () {
 PerfumeSchema.index({ name: "text", brand: "text", brands: "text", tags: "text" });
 PerfumeSchema.index({ status: 1 });
 
-const Perfume = mongoose.models.Perfume || mongoose.model("Perfume", PerfumeSchema);
+let Perfume;
+
+if (mongoose.models.Perfume) {
+  Perfume = mongoose.models.Perfume;
+
+  // In dev, an older cached model can miss newly added fields.
+  // Ensure special-offer schema path exists so updates are not silently dropped.
+  if (!Perfume.schema.path("isSpecialOffer")) {
+    Perfume.schema.add({
+      isSpecialOffer: {
+        type: Boolean,
+        default: false,
+      },
+    });
+  }
+} else {
+  Perfume = mongoose.model("Perfume", PerfumeSchema);
+}
 
 export default Perfume;

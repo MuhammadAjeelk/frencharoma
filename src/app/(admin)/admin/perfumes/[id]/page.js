@@ -72,6 +72,16 @@ export default async function PerfumeDetailPage({ params }) {
               >
                 {perfume.status}
               </span>
+              {perfume.isBestSeller && (
+                <span className="px-2 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-800">
+                  ⭐ Best Seller
+                </span>
+              )}
+              {perfume.isSpecialOffer && (
+                <span className="px-2 py-1 text-xs font-medium rounded-full bg-rose-100 text-rose-800">
+                  🏷️ Special Offer
+                </span>
+              )}
             </div>
             {((Array.isArray(perfume.brands) && perfume.brands.length > 0) ||
               perfume.brand) && (

@@ -283,6 +283,9 @@ export default function BestSellers() {
                   const brandLabel = Array.isArray(perfume.brands)
                     ? perfume.brands.join(", ")
                     : perfume.brand || "";
+                  const hasSpecialOfferTag = (perfume.tags || []).some((t) =>
+                    /special\s*-?\s*offer/i.test(t)
+                  );
                   return (
                     <div
                       key={`${currentIndex}-${index}`}
@@ -306,6 +309,7 @@ export default function BestSellers() {
                         originalPrice={range && range.max !== range.min ? range.max : undefined}
                         hasSale={range ? range.max !== range.min : false}
                         discountPercent={perfume.discountPercent || 0}
+                        isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
                         tags={perfume.tags || []}
                         href={`/products/${perfume.slug}`}
                         rating={0}

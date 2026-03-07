@@ -264,17 +264,18 @@ function ShopAllContent() {
   const [loading,     setLoading]     = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Filters — initialise bestSeller from URL ?bestSeller=true
+  // Filters — initialise from URL
   const [gender,      setGender]      = useState("all");
   const [edition,     setEdition]     = useState("all");
   const [season,      setSeason]      = useState("all");
   const [brand,       setBrand]       = useState("");
   const [bestSeller,  setBestSeller]  = useState(() => searchParams.get("bestSeller") === "true");
+  const [specialOffer, setSpecialOffer] = useState(() => searchParams.get("specialOffer") === "true");
 
-  // Keep bestSeller in sync whenever the URL ?bestSeller param changes
-  // (e.g. user clicks "BEST-SELLING" in the header while already on this page)
+  // Keep URL-driven filters in sync whenever query params change
   useEffect(() => {
     setBestSeller(searchParams.get("bestSeller") === "true");
+    setSpecialOffer(searchParams.get("specialOffer") === "true");
   }, [searchParams]);
   const [sort,        setSort]        = useState("newest");
 
@@ -294,7 +295,7 @@ function ShopAllContent() {
 
   // Derived
   const hasMore           = !loading && perfumes.length < total;
-  const hasActiveFilters  = gender !== "all" || edition !== "all" || season !== "all" || brand.trim() || bestSeller;
+  const hasActiveFilters  = gender !== "all" || edition !== "all" || season !== "all" || brand.trim() || bestSeller || specialOffer;
   const hasControlChanges = hasActiveFilters || sort !== "newest";
   const getOptionLabel = (options, value) => options.find((o) => o.value === value)?.label || value;
   const activeFilterChips = [
@@ -323,6 +324,11 @@ function ShopAllContent() {
       label: "Best Sellers",
       clear: () => setBestSeller(false),
     },
+    specialOffer && {
+      key: "specialOffer",
+      label: "Special Offer",
+      clear: () => setSpecialOffer(false),
+    },
     sort !== "newest" && {
       key: "sort",
       label: `Sort: ${getOptionLabel(SORT_OPTIONS, sort)}`,
@@ -338,11 +344,12 @@ function ShopAllContent() {
     if (season !== "all")    p.set("tag",        season);
     if (debouncedBrand)      p.set("search",     debouncedBrand);
     if (bestSeller)          p.set("bestSeller", "true");
+    if (specialOffer)        p.set("specialOffer", "true");
     p.set("sort",  sort);
     p.set("limit", PAGE_SIZE.toString());
     p.set("page",  pageNum.toString());
     return `/api/perfumes?${p.toString()}`;
-  }, [gender, edition, season, debouncedBrand, bestSeller, sort]);
+  }, [gender, edition, season, debouncedBrand, bestSeller, specialOffer, sort]);
 
   // ── Fetch page 1 whenever filters change ────────────────────────────────
   useEffect(() => {
@@ -400,6 +407,7 @@ function ShopAllContent() {
     setSeason("all");
     setBrand("");
     setBestSeller(false);
+    setSpecialOffer(false);
     setSort("newest");
   };
 
@@ -422,7 +430,13 @@ function ShopAllContent() {
                 <span className="text-gray-900 font-medium">Best Sellers</span>
               </>
             )}
-            {!bestSeller && hasControlChanges && (
+            {specialOffer && (
+              <>
+                <span>/</span>
+                <span className="text-gray-900 font-medium">Special Offer</span>
+              </>
+            )}
+            {!bestSeller && !specialOffer && hasControlChanges && (
               <>
                 <span>/</span>
                 <span className="text-gray-900 font-medium">Refined</span>
@@ -482,6 +496,18 @@ function ShopAllContent() {
                 }`}
               >
                 ⭐ Best Sellers
+              </button>
+
+              {/* Special Offer toggle */}
+              <button
+                onClick={() => setSpecialOffer((s) => !s)}
+                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
+                  specialOffer
+                    ? "border-rose-600 bg-rose-600 text-white shadow-sm"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-rose-500 hover:text-rose-700 hover:shadow-sm"
+                }`}
+              >
+                🏷️ Special Offer
               </button>
 
               {/* Brand search */}
@@ -620,6 +646,9 @@ function ShopAllContent() {
                 const brandLabel = Array.isArray(perfume.brands) && perfume.brands.length > 0
                   ? perfume.brands.join(", ")
                   : perfume.brand || "";
+                const hasSpecialOfferTag = (perfume.tags || []).some((t) =>
+                  /special\s*-?\s*offer/i.test(t)
+                );
                 return (
                   <ProductCard
                     key={perfume._id}
@@ -630,6 +659,7 @@ function ShopAllContent() {
                     originalPrice={range && range.max !== range.min ? range.max : undefined}
                     hasSale={range ? range.max !== range.min : false}
                     discountPercent={perfume.discountPercent || 0}
+                    isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
                     tags={perfume.tags || []}
                     href={`/products/${perfume.slug}`}
                     rating={0}
