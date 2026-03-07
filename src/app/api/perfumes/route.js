@@ -26,6 +26,7 @@ export async function GET(request) {
       conditions.push({
         $or: [
           { name:        { $regex: search, $options: "i" } },
+          { impressionName: { $regex: search, $options: "i" } },
           { brand:       { $regex: search, $options: "i" } },
           { brands:      { $in: [searchRegex] } },
           { tags:        { $in: [searchRegex] } },
@@ -153,7 +154,7 @@ export async function GET(request) {
           $project: {
             name: 1, slug: 1, brand: 1, brands: 1, gender: 1,
             scentFamily: 1, tags: 1, images: 1, editions: 1,
-            description: 1, notes: 1, status: 1, isBestSeller: 1, isSpecialOffer: 1,
+            description: 1, impressionName: 1, notes: 1, status: 1, isBestSeller: 1, isSpecialOffer: 1,
             discountPercent: 1,
           },
         },
@@ -193,7 +194,7 @@ export async function GET(request) {
         .skip(skip)
         .limit(limit)
         .select(
-          "name slug brand brands gender scentFamily tags images editions description notes status isBestSeller isSpecialOffer discountPercent"
+          "name slug brand brands gender scentFamily tags images editions description impressionName notes status isBestSeller isSpecialOffer discountPercent"
         )
         .lean(),
       Perfume.countDocuments(query),

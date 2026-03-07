@@ -10,6 +10,7 @@ export default function PerfumesListPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("updated-desc");
   const [brandFilter, setBrandFilter] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
   const { success, error } = useToast();
@@ -39,6 +40,7 @@ export default function PerfumesListPage() {
       const params = new URLSearchParams();
       if (search) params.set("search", search);
       if (statusFilter !== "all") params.set("status", statusFilter);
+      if (sortOrder) params.set("sort", sortOrder);
       if (brandFilter.length > 0) {
         params.set("brand", brandFilter.join(","));
       }
@@ -60,7 +62,7 @@ export default function PerfumesListPage() {
 
   useEffect(() => {
     fetchPerfumes();
-  }, [statusFilter, brandFilter]);
+  }, [statusFilter, brandFilter, sortOrder]);
 
   useEffect(() => {
     let isActive = true;
@@ -208,6 +210,18 @@ export default function PerfumesListPage() {
             <option value="archived">Archived</option>
           </select>
 
+          {/* Sort */}
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+          >
+            <option value="updated-desc">Latest Updated</option>
+            <option value="name-asc">Name (A - Z)</option>
+            <option value="name-desc">Name (Z - A)</option>
+            <option value="updated-asc">Oldest Updated</option>
+          </select>
+
           {/* Brand Filter */}
           <div className="min-w-[220px] flex-1 sm:flex-none">
             <TagInput
@@ -326,6 +340,11 @@ export default function PerfumesListPage() {
                             {brandLabel && (
                               <p className="text-sm text-gray-500">
                                 {brandLabel}
+                              </p>
+                            )}
+                            {perfume.impressionName && (
+                              <p className="text-xs text-gray-500 mt-0.5">
+                                Impression: <span className="font-medium text-gray-700">{perfume.impressionName}</span>
                               </p>
                             )}
                           </div>

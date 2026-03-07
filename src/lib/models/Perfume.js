@@ -61,6 +61,12 @@ const EditionSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    impressionName: {
+      type: String,
+      trim: true,
+      default: "",
+      maxlength: [200, "Impression name cannot exceed 200 characters"],
+    },
     variants: {
       type: [VariantSchema],
       default: [],
@@ -233,12 +239,22 @@ if (mongoose.models.Perfume) {
   Perfume = mongoose.models.Perfume;
 
   // In dev, an older cached model can miss newly added fields.
-  // Ensure special-offer schema path exists so updates are not silently dropped.
+  // Ensure schema paths exist so updates are not silently dropped.
   if (!Perfume.schema.path("isSpecialOffer")) {
     Perfume.schema.add({
       isSpecialOffer: {
         type: Boolean,
         default: false,
+      },
+    });
+  }
+  if (!Perfume.schema.path("impressionName")) {
+    Perfume.schema.add({
+      impressionName: {
+        type: String,
+        trim: true,
+        default: "",
+        maxlength: [200, "Impression name cannot exceed 200 characters"],
       },
     });
   }

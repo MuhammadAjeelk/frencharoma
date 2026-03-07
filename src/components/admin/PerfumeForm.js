@@ -60,6 +60,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
         : perfume?.brand
         ? [perfume.brand]
         : [],
+    impressionName: perfume?.impressionName || "",
     description: perfume?.description || "",
     notes: {
       top: perfume?.notes?.top || [],
@@ -282,6 +283,20 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
               onChange={(brands) => updateField("brands", brands)}
               suggestions={brandOptions}
               placeholder="Select or add brands..."
+            />
+          </div>
+
+          {/* Impression Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Impression Name
+            </label>
+            <input
+              type="text"
+              value={formData.impressionName}
+              onChange={(e) => updateField("impressionName", e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+              placeholder="e.g., Impression of Aventus"
             />
           </div>
 

@@ -92,6 +92,11 @@ export default async function PerfumeDetailPage({ params }) {
                   : perfume.brand}
               </p>
             )}
+            {perfume.impressionName && (
+              <p className="text-gray-500 text-sm mt-1">
+                Impression: <span className="font-medium text-gray-700">{perfume.impressionName}</span>
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -385,6 +390,12 @@ export default async function PerfumeDetailPage({ params }) {
                 <dt className="text-sm text-gray-500">Scent Family</dt>
                 <dd className="text-sm text-gray-900">
                   {perfume.scentFamily || "Not specified"}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-gray-500">Impression Name</dt>
+                <dd className="text-sm text-gray-900">
+                  {perfume.impressionName || "Not specified"}
                 </dd>
               </div>
               <div>

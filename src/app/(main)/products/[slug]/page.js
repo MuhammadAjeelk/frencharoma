@@ -382,6 +382,12 @@ export default function ProductDetailPage() {
               </p>
             )}
 
+            {perfume.impressionName && (
+              <p className="text-sm text-gray-600 mb-1">
+                Impression: <span className="font-semibold text-gray-800">{perfume.impressionName}</span>
+              </p>
+            )}
+
             {/* Scent family / concentration */}
                 {perfume.scentFamily && (
               <p className="text-sm text-gray-600 mb-3">

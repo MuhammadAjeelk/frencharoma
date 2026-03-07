@@ -37,6 +37,7 @@ export async function GET(request) {
     const search = searchParams.get("search");
     const status = searchParams.get("status");
     const brand = searchParams.get("brand");
+    const sort = searchParams.get("sort") || "updated-desc";
 
     const conditions = [];
 
@@ -45,6 +46,7 @@ export async function GET(request) {
       conditions.push({
         $or: [
         { name: { $regex: search, $options: "i" } },
+        { impressionName: { $regex: search, $options: "i" } },
         { brand: { $regex: search, $options: "i" } },
         { brands: { $in: [searchRegex] } },
         { tags: { $in: [searchRegex] } },
@@ -77,11 +79,20 @@ export async function GET(request) {
     }
 
     const query = conditions.length > 0 ? { $and: conditions } : {};
+    let sortObj = { updatedAt: -1 };
+    if (sort === "name-asc") sortObj = { name: 1 };
+    else if (sort === "name-desc") sortObj = { name: -1 };
+    else if (sort === "updated-asc") sortObj = { updatedAt: 1 };
 
-    const perfumes = await Perfume.find(query)
-      .sort({ updatedAt: -1 })
-      .select("name brand brands slug status isBestSeller isSpecialOffer editions images updatedAt")
-      .lean();
+    let perfumesQuery = Perfume.find(query)
+      .sort(sortObj)
+      .select("name impressionName brand brands slug status isBestSeller isSpecialOffer editions images updatedAt");
+
+    if (sort === "name-asc" || sort === "name-desc") {
+      perfumesQuery = perfumesQuery.collation({ locale: "en", strength: 2 });
+    }
+
+    const perfumes = await perfumesQuery.lean();
 
     return NextResponse.json({
       perfumes: perfumes.map((p) => ({
