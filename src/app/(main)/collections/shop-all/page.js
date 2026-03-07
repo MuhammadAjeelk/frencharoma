@@ -41,9 +41,11 @@ const EDITION_OPTIONS = [
 ];
 
 const SEASON_OPTIONS = [
-  { value: "all",           label: "All"              },
-  { value: "spring-summer", label: "Spring & Summer"  },
-  { value: "autumn-winter", label: "Autumn & Winter"  },
+  { value: "spring",      label: "Spring"      },
+  { value: "summer",      label: "Summer"      },
+  { value: "autumn",      label: "Autumn"      },
+  { value: "winter",      label: "Winter"      },
+  { value: "all-seasons", label: "All Seasons" },
 ];
 
 const SORT_OPTIONS = [
@@ -107,6 +109,70 @@ function FilterDropdown({ label, options, value, onChange }) {
               {opt.label}
             </button>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MultiSelectDropdown({ label, options, values, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const isActive = values.length > 0;
+  const toggleValue = (value) => {
+    if (values.includes(value)) {
+      onChange(values.filter((v) => v !== value));
+    } else {
+      onChange([...values, value]);
+    }
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
+          isActive
+            ? "border-black bg-black text-white shadow-sm"
+            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black hover:shadow-sm"
+        }`}
+      >
+        <span>{label}</span>
+        {isActive && <span className="opacity-75">: {values.length} selected</span>}
+        <svg
+          className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-30 min-w-[180px] py-1 overflow-hidden">
+          {options.map((opt) => {
+            const active = values.includes(opt.value);
+            return (
+              <button
+                key={opt.value}
+                onClick={() => toggleValue(opt.value)}
+                className={`w-full text-left px-4 py-2.5 text-xs transition-colors hover:bg-gray-50 flex items-center justify-between ${
+                  active ? "font-semibold text-black bg-gray-50" : "text-gray-600"
+                }`}
+              >
+                <span>{opt.label}</span>
+                {active && <span>✓</span>}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
@@ -267,7 +333,7 @@ function ShopAllContent() {
   // Filters — initialise from URL
   const [gender,      setGender]      = useState("all");
   const [edition,     setEdition]     = useState("all");
-  const [season,      setSeason]      = useState("all");
+  const [seasons,     setSeasons]     = useState([]);
   const [brand,       setBrand]       = useState("");
   const [bestSeller,  setBestSeller]  = useState(() => searchParams.get("bestSeller") === "true");
   const [specialOffer, setSpecialOffer] = useState(() => searchParams.get("specialOffer") === "true");
@@ -295,7 +361,7 @@ function ShopAllContent() {
 
   // Derived
   const hasMore           = !loading && perfumes.length < total;
-  const hasActiveFilters  = gender !== "all" || edition !== "all" || season !== "all" || brand.trim() || bestSeller || specialOffer;
+  const hasActiveFilters  = gender !== "all" || edition !== "all" || seasons.length > 0 || brand.trim() || bestSeller || specialOffer;
   const hasControlChanges = hasActiveFilters || sort !== "newest";
   const getOptionLabel = (options, value) => options.find((o) => o.value === value)?.label || value;
   const activeFilterChips = [
@@ -309,11 +375,11 @@ function ShopAllContent() {
       label: `Category: ${getOptionLabel(EDITION_OPTIONS, edition)}`,
       clear: () => setEdition("all"),
     },
-    season !== "all" && {
-      key: "season",
-      label: `Season: ${getOptionLabel(SEASON_OPTIONS, season)}`,
-      clear: () => setSeason("all"),
-    },
+    ...seasons.map((seasonValue) => ({
+      key: `season-${seasonValue}`,
+      label: `Season: ${getOptionLabel(SEASON_OPTIONS, seasonValue)}`,
+      clear: () => setSeasons((prev) => prev.filter((v) => v !== seasonValue)),
+    })),
     brand.trim() && {
       key: "brand",
       label: `Brand: ${brand.trim()}`,
@@ -341,7 +407,7 @@ function ShopAllContent() {
     const p = new URLSearchParams();
     if (gender !== "all")    p.set("gender",     gender);
     if (edition !== "all")   p.set("edition",    edition);
-    if (season !== "all")    p.set("tag",        season);
+    if (seasons.length > 0)  p.set("tags",       seasons.join(","));
     if (debouncedBrand)      p.set("search",     debouncedBrand);
     if (bestSeller)          p.set("bestSeller", "true");
     if (specialOffer)        p.set("specialOffer", "true");
@@ -349,7 +415,7 @@ function ShopAllContent() {
     p.set("limit", PAGE_SIZE.toString());
     p.set("page",  pageNum.toString());
     return `/api/perfumes?${p.toString()}`;
-  }, [gender, edition, season, debouncedBrand, bestSeller, specialOffer, sort]);
+  }, [gender, edition, seasons, debouncedBrand, bestSeller, specialOffer, sort]);
 
   // ── Fetch page 1 whenever filters change ────────────────────────────────
   useEffect(() => {
@@ -404,7 +470,7 @@ function ShopAllContent() {
   const clearFilters = () => {
     setGender("all");
     setEdition("all");
-    setSeason("all");
+    setSeasons([]);
     setBrand("");
     setBestSeller(false);
     setSpecialOffer(false);
@@ -479,11 +545,11 @@ function ShopAllContent() {
               />
 
               {/* Season */}
-              <FilterDropdown
+              <MultiSelectDropdown
                 label="Season"
                 options={SEASON_OPTIONS}
-                value={season}
-                onChange={setSeason}
+                values={seasons}
+                onChange={setSeasons}
               />
 
               {/* Best Sellers toggle */}

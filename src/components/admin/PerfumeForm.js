@@ -10,8 +10,6 @@ import EditionManager from "./EditionManager";
 const SIZES = ["5ml", "30ml", "50ml", "100ml"];
 
 const SEASON_TAGS = [
-  { value: "spring-summer", label: "🌸 Spring & Summer" },
-  { value: "autumn-winter", label: "🍂 Autumn & Winter" },
   { value: "spring",        label: "🌱 Spring"          },
   { value: "summer",        label: "☀️ Summer"           },
   { value: "autumn",        label: "🍁 Autumn"           },
@@ -19,6 +17,21 @@ const SEASON_TAGS = [
   { value: "all-seasons",   label: "🌍 All Seasons"      },
 ];
 const SEASON_TAG_VALUES = SEASON_TAGS.map((t) => t.value);
+const LEGACY_SEASON_TAG_MAP = {
+  "spring-summer": ["spring", "summer"],
+  "autumn-winter": ["autumn", "winter"],
+};
+const LEGACY_SEASON_TAG_VALUES = Object.keys(LEGACY_SEASON_TAG_MAP);
+
+function normalizeSeasonTags(tags = []) {
+  return Array.from(
+    new Set(
+      tags
+        .flatMap((tag) => LEGACY_SEASON_TAG_MAP[tag] || [tag])
+        .filter((tag) => SEASON_TAG_VALUES.includes(tag))
+    )
+  );
+}
 
 const GENDERS = [
   { value: "", label: "Select Gender" },
@@ -47,8 +60,10 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
 
   // Split existing tags → season tags vs custom tags
   const existingTags        = perfume?.tags || [];
-  const existingSeasonTags  = existingTags.filter((t) => SEASON_TAG_VALUES.includes(t));
-  const existingCustomTags  = existingTags.filter((t) => !SEASON_TAG_VALUES.includes(t));
+  const existingSeasonTags  = normalizeSeasonTags(existingTags);
+  const existingCustomTags  = existingTags.filter(
+    (t) => !SEASON_TAG_VALUES.includes(t) && !LEGACY_SEASON_TAG_VALUES.includes(t)
+  );
 
   // Form state
   const [formData, setFormData] = useState({

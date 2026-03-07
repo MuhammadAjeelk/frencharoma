@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Perfume from "@/lib/models/Perfume";
 
+const escapeRegExp = (value) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // GET /api/perfumes - Public list of active perfumes with optional filters
 export async function GET(request) {
   try {
@@ -12,6 +15,7 @@ export async function GET(request) {
     const gender      = searchParams.get("gender");
     const scentFamily = searchParams.get("scentFamily");
     const tag         = searchParams.get("tag");
+    const tagsParam   = searchParams.get("tags");
     const edition     = searchParams.get("edition");
     const bestSeller  = searchParams.get("bestSeller");
     const specialOffer = searchParams.get("specialOffer");
@@ -43,7 +47,22 @@ export async function GET(request) {
       conditions.push({ scentFamily: { $regex: scentFamily, $options: "i" } });
     }
 
-    if (tag && tag !== "all") {
+    if (tagsParam) {
+      const tagValues = tagsParam
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      if (tagValues.length > 0) {
+        conditions.push({
+          tags: {
+            $in: tagValues.map(
+              (value) => new RegExp(`^${escapeRegExp(value)}$`, "i")
+            ),
+          },
+        });
+      }
+    } else if (tag && tag !== "all") {
       conditions.push({ tags: { $in: [new RegExp(tag, "i")] } });
     }
 
