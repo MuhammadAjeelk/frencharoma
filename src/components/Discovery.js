@@ -17,8 +17,8 @@ export default function Discovery() {
         title="Discovery Box"
         description="Buy any 5 tester Perfumes of your choice on 25% discount."
         imageUrl="https://www.linea-debella.com/cdn/shop/files/DIVE-INTO-LUXURY.jpg?v=1755525359&width=3000"
-        buttonText="Shop Now"
-        buttonLink="/collections/shop-all"
+        buttonText="Build Your Box"
+        buttonLink="/collections/discovery-box"
       />
     </div>
   );

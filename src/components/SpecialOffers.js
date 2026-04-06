@@ -18,7 +18,7 @@ export default function SpecialOffers() {
         description="Get UPTO 50% Discount on limited Stock."
         imageUrl="https://www.linea-debella.com/cdn/shop/files/DIVE-INTO-LUXURY.jpg?v=1755525359&width=3000"
         buttonText="Shop Now"
-        buttonLink="/collections/shop-all"
+        buttonLink="/collections/shop-all?specialOffer=true"
       />
     </div>
   );

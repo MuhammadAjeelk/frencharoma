@@ -5,51 +5,54 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCollectionOpen, setIsCollectionOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileSubOpen, setMobileSubOpen] = useState(null);
+  const [brands, setBrands] = useState([]);
   const accountRef = useRef(null);
   const { user, logout, isAdmin, loading } = useAuth();
   const { itemCount } = useCart();
+  const { itemCount: wishlistCount } = useWishlist();
+
+  // Fetch brands for the dropdown
+  useEffect(() => {
+    fetch("/api/brands")
+      .then((r) => r.json())
+      .then((data) => setBrands(data.brands || []))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      // Show navbar at the top
       if (currentScrollY < 10) {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY) {
-        // Scrolling down - hide navbar
         setIsVisible(false);
       } else {
-        // Scrolling up - show navbar
         setIsVisible(true);
       }
-
       setLastScrollY(currentScrollY);
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // Close account dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (accountRef.current && !accountRef.current.contains(event.target)) {
         setIsAccountOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -59,49 +62,24 @@ export default function Header() {
     setIsAccountOpen(false);
   };
 
+  const shopSubmenu = [
+    { name: "Shop All", href: "/collections/shop-all" },
+    { name: "For Men", href: "/collections/shop-all?gender=men" },
+    { name: "For Women", href: "/collections/shop-all?gender=women" },
+    { name: "Unisex", href: "/collections/shop-all?gender=unisex" },
+    { divider: true },
+    { name: "Luxury Edition", href: "/collections/shop-all?edition=luxury" },
+    { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
+    { name: "Classic Edition", href: "/collections/shop-all?edition=classic" },
+  ];
+
   const menuItems = [
-    { name: "BEST-SELLING", href: "/collections/shop-all?bestSeller=true" },
-    { name: "SHOP ALL", href: "/collections/shop-all" },
-    {
-      name: "COLLECTION",
-      href: "#",
-      submenu: [
-        {
-          name: "ARABIAN PRIDE",
-          href: "/collections/arabian-pride-collection",
-        },
-        { name: "LUXURY EDITION", href: "/collections/luxury-edition" },
-        { name: "GRANDEUR", href: "/collections/grandeur" },
-        { name: "BEAUTIFUL", href: "/collections/beautiful" },
-        { name: "PHANTOM", href: "/collections/phanton" },
-        { name: "HIGHLAND", href: "/collections/highland" },
-        { name: "VELVET", href: "/collections/velvet-collection" },
-        { name: "NATURE", href: "/collections/nature-collectio" },
-        {
-          name: "LINEA DE BELLA COLLECTION",
-          href: "/collections/linea-de-bella-collection",
-        },
-        { name: "ELENIS", href: "/collections/elenis" },
-        { name: "HIGHPOINT", href: "/collections/highpoint" },
-        { name: "LDB COLLECTION", href: "/collections/ldb-collection" },
-        { name: "LABRORATORY", href: "/collections/laboratory-collection" },
-        { name: "NOSTALGIA", href: "/collections/nostalgia-collection" },
-        { name: "DIVINA", href: "/collections/divina" },
-        { name: "ORCHID", href: "/collections/orchid" },
-        { name: "CAVALIER", href: "/collections/cavalier" },
-        { name: "ROTANA", href: "/collections/rotana" },
-        { name: "OXFORD LEATHER", href: "/collections/oxford-collection" },
-        { name: "LARANZA", href: "/collections/laranza" },
-        { name: "HAIR MIST", href: "/collections/hair-mist" },
-        {
-          name: "ARABIAN OUD PERFUMES",
-          href: "/collections/arabian-oud-perfumes",
-        },
-      ],
-    },
-    { name: "NEW ARRIVALS", href: "/collections/new-arrivals" },
-    { name: "BRANDS", href: "/collections/top-brands" },
-    { name: "GIFT SETS", href: "/collections/gift-sets" },
+    { name: "SHOP", href: "#", submenu: shopSubmenu },
+    { name: "BEST SELLERS", href: "/collections/shop-all?bestSeller=true" },
+    { name: "SHOP BY BRAND", href: "#", brandDropdown: true },
+    { name: "BUNDLE OFFERS", href: "/collections/shop-all?bundle=true" },
+    { name: "SPECIAL OFFERS", href: "/collections/shop-all?specialOffer=true" },
+    { name: "DISCOVERY BOX", href: "/collections/discovery-box" },
     { name: "BLOGS", href: "/blogs/blog" },
   ];
 
@@ -111,57 +89,40 @@ export default function Header() {
         className={`header sticky top-0 z-50 border-b border-gray-200 transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
-        style={{ backgroundColor: "var(--primary)", cursor: "default" }}
+        style={{ backgroundColor: "var(--primary)" }}
       >
-        <div className="max-w-7xl mx-auto px-4" style={{ cursor: "default" }}>
+        <div className="max-w-7xl mx-auto px-4">
           {/* Top Section */}
-          <div
-            className="flex items-center justify-between py-4"
-            style={{ cursor: "default" }}
-          >
-            {/* Left Side - Search Input */}
-            <div
-              className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible"
-              style={{ cursor: "default" }}
-            >
+          <div className="flex items-center justify-between py-4">
+            {/* Left — Search */}
+            <div className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible">
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden p-2 focus:outline-none cursor-pointer"
+                className="lg:hidden p-2 focus:outline-none"
                 aria-label="Menu"
               >
                 <img src="/icons/menu.svg" alt="Menu" className="w-5 h-5" />
               </button>
 
-              {/* Search - Animated Expand */}
-              <div
-                className="hidden lg:block relative overflow-visible"
-                style={{ cursor: "default" }}
-              >
+              {/* Desktop Search */}
+              <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity whitespace-nowrap ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
                 >
-                  <img
-                    src="/icons/search.svg"
-                    alt="Search"
-                    className="w-5 h-5"
-                  />
-                  <span className="text-sm font-medium uppercase tracking-wide">
-                    Search
-                  </span>
+                  <img src="/icons/search.svg" alt="Search" className="w-5 h-5" />
+                  <span className="text-sm font-medium uppercase tracking-wide">Search</span>
                 </button>
                 {isSearchExpanded && (
                   <form
-                    action="/search"
+                    action="/collections/shop-all"
                     method="get"
                     className="absolute left-0 top-0 z-10"
-                    style={{
-                      animation: "fadeInSlide 0.3s ease-in-out",
-                    }}
+                    style={{ animation: "fadeInSlide 0.3s ease-in-out" }}
                     onSubmit={(e) => {
                       if (!searchQuery.trim()) {
                         e.preventDefault();
@@ -172,44 +133,28 @@ export default function Header() {
                     <div className="relative">
                       <input
                         type="search"
-                        name="q"
+                        name="search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search"
-                        className="w-64 px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-md focus:outline-none bg-white text-sm transition-all duration-300"
+                        placeholder="Search perfumes..."
+                        className="w-64 px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-md focus:outline-none bg-white text-sm"
                         autoFocus
-                        onBlur={(e) => {
-                          // Close if empty after a short delay
+                        onBlur={() => {
                           setTimeout(() => {
-                            if (!e.target.value.trim()) {
-                              setIsSearchExpanded(false);
-                            }
+                            if (!searchQuery.trim()) setIsSearchExpanded(false);
                           }, 200);
                         }}
                       />
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <Image
-                          src="/icons/search.svg"
-                          alt="Search"
-                          width={20}
-                          height={20}
-                          className="w-5 h-5"
-                        />
+                        <Image src="/icons/search.svg" alt="Search" width={20} height={20} className="w-5 h-5" />
                       </div>
                       <button
                         type="button"
-                        onClick={() => {
-                          setIsSearchExpanded(false);
-                          setSearchQuery("");
-                        }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity cursor-pointer"
+                        onClick={() => { setIsSearchExpanded(false); setSearchQuery(""); }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:opacity-70"
                         aria-label="Close search"
                       >
-                        <img
-                          src="/icons/close.svg"
-                          alt="Close"
-                          className="w-4 h-4"
-                        />
+                        <img src="/icons/close.svg" alt="Close" className="w-4 h-4" />
                       </button>
                     </div>
                   </form>
@@ -219,127 +164,91 @@ export default function Header() {
               {/* Mobile Search Button */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
+                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none hover:opacity-70"
                 aria-label="Search"
               >
-                <Image
-                  src="/icons/search.svg"
-                  alt="Search"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
-                />
+                <Image src="/icons/search.svg" alt="Search" width={20} height={20} className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Logo - Center - Hide on mobile when search is open */}
-            <div
-              className={`flex-1 flex justify-center ${
-                isSearchOpen ? "lg:flex hidden" : "flex"
-              }`}
-            >
-              {" "}
+            {/* Logo — Center */}
+            <div className={`flex-1 flex justify-center ${isSearchOpen ? "lg:flex hidden" : "flex"}`}>
               <Link href="/">
-                <div className="flex items-center">
-                  <Image
-                    src="/logo.png"
-                    alt="Frencharomas | French Perfumes"
-                    width={120}
-                    height={45}
-                    className="h-auto w-auto max-w-[120px] "
-                    priority
-                  />
-                </div>
+                <Image
+                  src="/logo.png"
+                  alt="French Aromas"
+                  width={120}
+                  height={45}
+                  className="h-auto w-auto max-w-[120px]"
+                  priority
+                />
               </Link>
             </div>
 
-            {/* Right Icons - Account and Cart */}
-            <div
-              className="flex items-center gap-4 flex-1 justify-end lg:flex-none"
-              style={{ cursor: "default" }}
-            >
-              {/* Account Icon with Dropdown */}
+            {/* Right — Wishlist, Account, Cart */}
+            <div className="flex items-center gap-3 flex-1 justify-end lg:flex-none">
+              {/* Wishlist */}
+              <Link
+                href="/wishlist"
+                className="hidden lg:block relative focus:outline-none hover:opacity-70 transition-opacity"
+                aria-label="Wishlist"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {wishlistCount > 99 ? "99+" : wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Account */}
               <div className="hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
+                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity"
                   aria-label="Account"
                 >
-                  <img
-                    src="/icons/account.svg"
-                    alt="Account"
-                    className="w-5 h-5"
-                  />
+                  <img src="/icons/account.svg" alt="Account" className="w-5 h-5" />
                 </button>
-
-                {/* Account Dropdown */}
                 {isAccountOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md py-2 z-50 animate-fadeIn">
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-gray-500">
-                        Loading...
-                      </div>
+                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
                     ) : user ? (
                       <>
                         <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {user.name || user.email}
-                          </p>
-                          <p className="text-xs text-gray-500 truncate">
-                            {user.email}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900 truncate">{user.name || user.email}</p>
+                          <p className="text-xs text-gray-500 truncate">{user.email}</p>
                         </div>
                         {isAdmin && (
-                          <Link
-                            href="/admin"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            onClick={() => setIsAccountOpen(false)}
-                          >
+                          <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
                             Admin Panel
                           </Link>
                         )}
-                        <Link
-                          href="/account"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          onClick={() => setIsAccountOpen(false)}
-                        >
+                        <Link href="/account" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
                           My Account
                         </Link>
-                        <Link
-                          href="/account/orders"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          onClick={() => setIsAccountOpen(false)}
-                        >
+                        <Link href="/account/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
                           My Orders
                         </Link>
-                        <Link
-                          href="/track-order"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          onClick={() => setIsAccountOpen(false)}
-                        >
+                        <Link href="/track-order" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
                           Track Order
                         </Link>
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors"
-                        >
+                        <Link href="/wishlist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                          Wishlist
+                        </Link>
+                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
                           Log Out
                         </button>
                       </>
                     ) : (
                       <>
-                        <Link
-                          href="/account/login"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          onClick={() => setIsAccountOpen(false)}
-                        >
+                        <Link href="/account/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
                           Log In
                         </Link>
-                        <Link
-                          href="/account/signup"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          onClick={() => setIsAccountOpen(false)}
-                        >
+                        <Link href="/account/signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
                           Sign Up
                         </Link>
                       </>
@@ -348,12 +257,8 @@ export default function Header() {
                 )}
               </div>
 
-              {/* Cart Icon */}
-              <Link
-                href="/cart"
-                className="focus:outline-none relative hover:opacity-70 transition-opacity cursor-pointer"
-                aria-label="Cart"
-              >
+              {/* Cart */}
+              <Link href="/cart" className="focus:outline-none relative hover:opacity-70 transition-opacity" aria-label="Cart">
                 <img src="/icons/cart.svg" alt="Cart" className="w-11 h-11" />
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
@@ -364,59 +269,75 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Desktop Navigation Menu */}
-          <nav
-            className="hidden lg:flex items-center justify-center py-4 border-t border-gray-200"
-            style={{ cursor: "default" }}
-          >
-            <ul
-              className="flex items-center gap-8"
-              style={{ cursor: "default" }}
-            >
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center justify-center py-3 border-t border-gray-200">
+            <ul className="flex items-center gap-6">
               {menuItems.map((item, index) => (
                 <li
                   key={index}
                   className="relative group"
-                  style={{ cursor: "default" }}
+                  onMouseEnter={() => (item.submenu || item.brandDropdown) && setOpenDropdown(index)}
+                  onMouseLeave={() => setOpenDropdown(null)}
                 >
                   {item.submenu ? (
-                    <div
-                      className="relative group"
-                      style={{ cursor: "default" }}
-                    >
-                      <button
-                        onMouseEnter={() => setIsCollectionOpen(true)}
-                        onMouseLeave={() => setIsCollectionOpen(false)}
-                        className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity cursor-pointer"
-                      >
+                    <>
+                      <button className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity">
                         {item.name}
-                        <img
-                          src="/icons/caret.svg"
-                          alt=""
-                          className="w-3 h-3"
-                        />
+                        <img src="/icons/caret.svg" alt="" className="w-3 h-3" />
                       </button>
-                      <div
-                        className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 shadow-lg rounded-md py-2 max-h-96 overflow-y-auto z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
-                        onMouseEnter={() => setIsCollectionOpen(true)}
-                        onMouseLeave={() => setIsCollectionOpen(false)}
-                        style={{ cursor: "default" }}
-                      >
-                        {item.submenu.map((subItem, subIndex) => (
-                          <Link
-                            key={subIndex}
-                            href={subItem.href}
-                            className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors cursor-pointer"
-                          >
-                            {subItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
+                      {openDropdown === index && (
+                        <div className="absolute top-full left-0 mt-0 w-56 bg-white border border-gray-200 shadow-lg rounded-md py-2 z-50 animate-fadeIn">
+                          {item.submenu.map((sub, si) =>
+                            sub.divider ? (
+                              <div key={si} className="my-1 border-t border-gray-100" />
+                            ) : (
+                              <Link
+                                key={si}
+                                href={sub.href}
+                                className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+                                onClick={() => setOpenDropdown(null)}
+                              >
+                                {sub.name}
+                              </Link>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </>
+                  ) : item.brandDropdown ? (
+                    <>
+                      <button className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity">
+                        {item.name}
+                        <img src="/icons/caret.svg" alt="" className="w-3 h-3" />
+                      </button>
+                      {openDropdown === index && (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[480px] bg-white border border-gray-200 shadow-lg rounded-md py-3 z-50 animate-fadeIn">
+                          <div className="px-4 pb-2 border-b border-gray-100 mb-2">
+                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Browse by Brand (A–Z)</p>
+                          </div>
+                          <div className="grid grid-cols-3 gap-x-2 max-h-80 overflow-y-auto px-2">
+                            {brands.length > 0 ? (
+                              brands.map((b) => (
+                                <Link
+                                  key={b}
+                                  href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
+                                  className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded transition-colors truncate"
+                                  onClick={() => setOpenDropdown(null)}
+                                >
+                                  {b}
+                                </Link>
+                              ))
+                            ) : (
+                              <p className="col-span-3 px-3 py-2 text-sm text-gray-400">Loading brands...</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <Link
                       href={item.href}
-                      className="block py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity cursor-pointer"
+                      className="block py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity"
                     >
                       {item.name}
                     </Link>
@@ -431,75 +352,81 @@ export default function Header() {
       {/* Mobile Menu Drawer */}
       {isMenuOpen && (
         <>
-          <div
-            className="fixed inset-0 bg-transparent z-40 lg:hidden"
-            onClick={() => setIsMenuOpen(false)}
-          />
+          <div className="fixed inset-0 bg-black/30 z-40 lg:hidden" onClick={() => setIsMenuOpen(false)} />
           <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-white z-50 transform transition-transform lg:hidden overflow-y-auto shadow-lg">
             <div className="p-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold">Menu</h2>
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="p-2 focus:outline-none cursor-pointer"
-                  aria-label="Close menu"
-                >
-                  <Image
-                    src="/icons/close.svg"
-                    alt="Close"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
+                <button onClick={() => setIsMenuOpen(false)} className="p-2 focus:outline-none" aria-label="Close menu">
+                  <Image src="/icons/close.svg" alt="Close" width={20} height={20} className="w-5 h-5" />
                 </button>
               </div>
 
               <nav>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   {menuItems.map((item, index) => (
                     <li key={index}>
                       {item.submenu ? (
                         <div>
                           <button
-                            onClick={() =>
-                              setIsCollectionOpen(!isCollectionOpen)
-                            }
-                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide cursor-pointer"
+                            onClick={() => setMobileSubOpen(mobileSubOpen === index ? null : index)}
+                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
                           >
                             {item.name}
                             <Image
-                              src="/icons/caret.svg"
-                              alt=""
-                              width={16}
-                              height={16}
-                              className={`w-4 h-4 transition-transform ${
-                                isCollectionOpen ? "rotate-180" : ""
-                              }`}
+                              src="/icons/caret.svg" alt="" width={16} height={16}
+                              className={`w-4 h-4 transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
                             />
                           </button>
-                          {isCollectionOpen && (
-                            <ul className="pl-4 space-y-1 mt-2">
-                              {item.submenu.map((subItem, subIndex) => (
-                                <li key={subIndex}>
+                          {mobileSubOpen === index && (
+                            <ul className="pl-4 space-y-0.5 mt-1 mb-2">
+                              {item.submenu.filter((s) => !s.divider).map((sub, si) => (
+                                <li key={si}>
                                   <Link
-                                    href={subItem.href}
-                                    className="block py-2 text-sm hover:opacity-70 transition-opacity cursor-pointer"
-                                    onClick={() => {
-                                      setIsCollectionOpen(false);
-                                      setIsMenuOpen(false);
-                                    }}
+                                    href={sub.href}
+                                    className="block py-2 text-sm hover:opacity-70 transition-opacity"
+                                    onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
                                   >
-                                    {subItem.name}
+                                    {sub.name}
                                   </Link>
                                 </li>
                               ))}
                             </ul>
                           )}
                         </div>
+                      ) : item.brandDropdown ? (
+                        <div>
+                          <button
+                            onClick={() => setMobileSubOpen(mobileSubOpen === index ? null : index)}
+                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
+                          >
+                            {item.name}
+                            <Image
+                              src="/icons/caret.svg" alt="" width={16} height={16}
+                              className={`w-4 h-4 transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
+                            />
+                          </button>
+                          {mobileSubOpen === index && (
+                            <ul className="pl-4 space-y-0.5 mt-1 mb-2 max-h-64 overflow-y-auto">
+                              {brands.map((b) => (
+                                <li key={b}>
+                                  <Link
+                                    href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
+                                    className="block py-1.5 text-sm hover:opacity-70 transition-opacity"
+                                    onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                                  >
+                                    {b}
+                                  </Link>
+                                </li>
+                              ))}
+                              {brands.length === 0 && <li className="py-2 text-sm text-gray-400">Loading...</li>}
+                            </ul>
+                          )}
+                        </div>
                       ) : (
                         <Link
                           href={item.href}
-                          className="block py-3 text-sm font-medium uppercase tracking-wide cursor-pointer"
+                          className="block py-3 text-sm font-medium uppercase tracking-wide"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.name}
@@ -510,116 +437,50 @@ export default function Header() {
                 </ul>
               </nav>
 
-              <div className="mt-8 pt-8 border-t border-gray-200">
+              {/* Mobile Account Section */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <Link
+                  href="/wishlist"
+                  className="flex items-center gap-2 py-3 text-sm font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
+                </Link>
+
                 {loading ? (
                   <div className="py-3 text-sm text-gray-500">Loading...</div>
                 ) : user ? (
                   <>
                     <div className="py-3 border-b border-gray-100 mb-2">
-                      <p className="text-sm font-medium text-gray-900">
-                        {user.name || user.email}
-                      </p>
+                      <p className="text-sm font-medium text-gray-900">{user.name || user.email}</p>
                       <p className="text-xs text-gray-500">{user.email}</p>
                     </div>
                     {isAdmin && (
-                      <Link
-                        href="/admin"
-                        className="flex items-center gap-2 py-3 text-sm font-medium text-gray-900 cursor-pointer"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
+                      <Link href="/admin" className="flex items-center gap-2 py-3 text-sm font-medium text-gray-900" onClick={() => setIsMenuOpen(false)}>
                         Admin Panel
                       </Link>
                     )}
-                    <Link
-                      href="/account"
-                      className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Image
-                        src="/icons/account.svg"
-                        alt="Account"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
+                    <Link href="/account" className="flex items-center gap-2 py-3 text-sm font-medium" onClick={() => setIsMenuOpen(false)}>
+                      <Image src="/icons/account.svg" alt="Account" width={20} height={20} className="w-5 h-5" />
                       My Account
                     </Link>
                     <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center gap-2 py-3 text-sm font-medium text-red-600 cursor-pointer"
+                      onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                      className="flex items-center gap-2 py-3 text-sm font-medium text-red-600"
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        />
-                      </svg>
                       Log Out
                     </button>
                   </>
                 ) : (
                   <>
-                    <Link
-                      href="/account/login"
-                      className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Image
-                        src="/icons/account.svg"
-                        alt="Account"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
+                    <Link href="/account/login" className="flex items-center gap-2 py-3 text-sm font-medium" onClick={() => setIsMenuOpen(false)}>
+                      <Image src="/icons/account.svg" alt="Account" width={20} height={20} className="w-5 h-5" />
                       Log In
                     </Link>
-                    <Link
-                      href="/account/signup"
-                      className="flex items-center gap-2 py-3 text-sm font-medium cursor-pointer"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                        />
-                      </svg>
+                    <Link href="/account/signup" className="flex items-center gap-2 py-3 text-sm font-medium" onClick={() => setIsMenuOpen(false)}>
                       Sign Up
                     </Link>
                   </>
@@ -630,104 +491,29 @@ export default function Header() {
         </>
       )}
 
-      {/* Search Modal - Mobile Full Screen */}
+      {/* Mobile Search Modal */}
       {isSearchOpen && (
         <>
-          <div
-            className="fixed inset-0 bg-black z-40 lg:hidden"
-            onClick={() => setIsSearchOpen(false)}
-          />
+          <div className="fixed inset-0 bg-black z-40 lg:hidden" onClick={() => setIsSearchOpen(false)} />
           <div className="fixed inset-0 z-50 lg:hidden flex flex-col">
-            {/* Search Modal Content */}
             <div className="bg-white w-full h-full flex flex-col border-t border-gray-300">
-              {/* Header with Title and Close Button */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h2 className="text-lg font-bold text-gray-900">Search</h2>
-                <button
-                  onClick={() => setIsSearchOpen(false)}
-                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity cursor-pointer"
-                  aria-label="Close search"
-                >
-                  <Image
-                    src="/icons/close.svg"
-                    alt="Close"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
+                <button onClick={() => setIsSearchOpen(false)} className="p-2 focus:outline-none hover:opacity-70" aria-label="Close search">
+                  <Image src="/icons/close.svg" alt="Close" width={20} height={20} className="w-5 h-5" />
                 </button>
               </div>
-
-              {/* Search Input */}
               <div className="flex-1 p-4">
-                <form action="/search" method="get" className="relative">
+                <form action="/collections/shop-all" method="get" className="relative">
                   <input
                     type="search"
-                    name="q"
-                    placeholder="Search..."
+                    name="search"
+                    placeholder="Search perfumes..."
                     className="w-full px-4 py-3 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 text-base"
                     autoFocus
                   />
-                  <button
-                    type="submit"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
-                    aria-label="Search"
-                  >
-                    <Image
-                      src="/icons/search.svg"
-                      alt="Search"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                    />
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop Search Modal */}
-          <div className="hidden lg:block">
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => setIsSearchOpen(false)}
-            />
-            <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
-              <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Search</h2>
-                  <button
-                    onClick={() => setIsSearchOpen(false)}
-                    className="p-2 focus:outline-none cursor-pointer"
-                    aria-label="Close search"
-                  >
-                    <Image
-                      src="/icons/close.svg"
-                      alt="Close"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                    />
-                  </button>
-                </div>
-                <form action="/search" method="get" className="relative">
-                  <input
-                    type="search"
-                    name="q"
-                    placeholder="Search..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    autoFocus
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
-                    aria-label="Search"
-                  >
-                    <img
-                      src="/icons/search.svg"
-                      alt="Search"
-                      className="w-5 h-5"
-                    />
+                  <button type="submit" className="absolute left-3 top-1/2 -translate-y-1/2 p-2" aria-label="Search">
+                    <Image src="/icons/search.svg" alt="Search" width={20} height={20} className="w-5 h-5" />
                   </button>
                 </form>
               </div>

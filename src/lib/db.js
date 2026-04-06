@@ -27,11 +27,30 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 7000,
+      connectTimeoutMS: 7000,
+      socketTimeoutMS: 15000,
+      maxPoolSize: 10,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = (async () => {
+      const maxAttempts = 3;
+      let lastError;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          return await mongoose.connect(MONGODB_URI, opts);
+        } catch (error) {
+          lastError = error;
+          if (attempt < maxAttempts) {
+            const delay = attempt * 700;
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+        }
+      }
+
+      throw lastError;
+    })();
   }
 
   try {

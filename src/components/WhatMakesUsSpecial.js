@@ -11,8 +11,7 @@ export default function WhatMakesUsSpecial() {
     {
       title: "AFFORDABLE LUXURY",
       description: "Offering Luxury & Premium Perfumes at Affordable Price",
-      image:
-        "https://www.linea-debella.com/cdn/shop/files/icon-affordable-luxury.png?v=1754059967&width=200",
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-affordable-luxury.png?v=1754059967&width=200",
       details: `Experience the finest luxury fragrances without breaking the bank. We believe everyone deserves access to premium perfumes crafted with the highest quality ingredients.
 
 Our collection features:
@@ -20,130 +19,122 @@ Our collection features:
 • Long-lasting scents that rival high-end brands
 • Carefully curated selection of unique notes
 • Affordable pricing without compromising quality
-• Regular discounts and special offers
-
-We source our fragrances from trusted suppliers and ensure each bottle meets our strict quality standards. Whether you're looking for a signature scent or exploring new fragrances, we make luxury accessible to all.`,
+• Regular discounts and special offers`,
     },
     {
       title: "SAFE & SECURE PAYMENT",
       description: "High-Level 100% Safe & Secure Payment",
-      image:
-        "https://www.linea-debella.com/cdn/shop/files/icon-safe-srecure-paymentt.png?v=1754060148&width=200",
-      details: `Your security is our top priority. We use industry-leading encryption and security measures to protect your personal and payment information.
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-safe-srecure-paymentt.png?v=1754060148&width=200",
+      details: `Your security is our top priority. We use industry-leading encryption and security measures.
 
 Payment Security Features:
 • SSL encrypted transactions
-• PCI DSS compliant payment processing
+• PCI DSS compliant processing
 • Multiple secure payment options
-• No storage of sensitive card information
-• Secure checkout process
+• Cash on Delivery available
 
-Accepted Payment Methods:
-• Credit & Debit Cards (Visa, Mastercard, Amex)
-• PayPal
-• Bank Transfer
-• Cash on Delivery (select regions)
-
-Your payment information is processed securely through trusted payment gateways. We never store your full card details, ensuring maximum protection for your financial data.`,
+Accepted: Visa, Mastercard, JazzCash, EasyPaisa, Bank Transfer, COD`,
     },
     {
-      title: "FAST SHIPPING WORLDWIDE",
-      description: "Fast Shipping Worldwide via Top Courier Partner",
-      image:
-        "https://www.linea-debella.com/cdn/shop/files/icon-fast-shipping-wordwide.png?v=1754060113&width=200",
-      details: `We deliver your favorite fragrances quickly and safely to your doorstep, no matter where you are in the world.
+      title: "FAST SHIPPING",
+      description: "Fast Shipping Across Pakistan via Top Couriers",
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-fast-shipping-wordwide.png?v=1754060113&width=200",
+      details: `We deliver quickly and safely to your doorstep across Pakistan.
 
-Shipping Options:
-• Express Shipping: 2-5 business days
-• Standard Shipping: 5-10 business days
-• International Shipping: 10-15 business days
-• Free shipping on orders over PKR 200
-
-Our Shipping Partners:
-• DHL Express
-• FedEx
-• Local courier services
-• Tracked delivery for all orders
-
-We carefully package each order to ensure your perfumes arrive in perfect condition. All shipments are fully insured and tracked, so you can monitor your order every step of the way.`,
+• Express Shipping: 2-3 business days
+• Standard Shipping: 3-5 business days
+• Free shipping on orders over PKR 7,000
+• Fully tracked & insured shipments`,
     },
     {
       title: "24/7 SUPPORT",
       description: "24/7 Customer Support via Chat, Call & Email",
-      image:
-        "https://www.linea-debella.com/cdn/shop/files/icon-24-7-support.png?v=1754060130&width=200",
-      details: `Our dedicated customer support team is available around the clock to assist you with any questions or concerns.
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-24-7-support.png?v=1754060130&width=200",
+      details: `Our dedicated team is available around the clock.
 
-How to Reach Us:
-• Live Chat: Available 24/7 on our website
-• Phone: +971 XX XXX XXXX (24/7)
-• Email: support@frencharomas.com
-• WhatsApp: Available for instant messaging
+How to reach us:
+• WhatsApp: +971581031864
+• Email: divinaperfume@gmail.com
+• Live Chat on website
+• Phone support during business hours`,
+    },
+    {
+      title: "ORIGINAL FRENCH OILS",
+      description: "100% Original French Perfume Oils in Every Bottle",
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-affordable-luxury.png?v=1754059967&width=200",
+      details: `We source only the finest French perfume oils for our impression fragrances.
 
-We're Here to Help With:
-• Product inquiries and recommendations
-• Order tracking and status updates
-• Returns and exchanges
-• Fragrance consultation
-• Technical support
-• General questions
+• Imported directly from France
+• Premium-grade essential oils
+• Up to 35% perfume oil concentration
+• 12-16 hours longevity on skin
+• Same scent DNA as the originals`,
+    },
+    {
+      title: "HANDMADE WITH CARE",
+      description: "Each Bottle is Individually Crafted & Quality Checked",
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-safe-srecure-paymentt.png?v=1754060148&width=200",
+      details: `Every bottle goes through rigorous quality control.
 
-Our friendly and knowledgeable team is committed to providing exceptional service and ensuring your complete satisfaction. Don't hesitate to reach out - we're always here to help!`,
+• Handcrafted in small batches
+• Individual quality inspection
+• Precision filling & sealing
+• Batch number tracking
+• Elegantly packaged for gifting`,
+    },
+    {
+      title: "EASY RETURNS",
+      description: "Hassle-Free 7-Day Return Policy on Unopened Products",
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-fast-shipping-wordwide.png?v=1754060113&width=200",
+      details: `Shop with confidence — if you're not satisfied, we make returns easy.
+
+• 7-day return window
+• Unopened products eligible for full refund
+• Free return shipping on defective items
+• Quick refund processing (3-5 days)`,
+    },
+    {
+      title: "FREE SAMPLE GIFT",
+      description: "A Complimentary 5ml Tester in Every Order",
+      image: "https://www.linea-debella.com/cdn/shop/files/icon-24-7-support.png?v=1754060130&width=200",
+      details: `Every order comes with a surprise tester — our way of saying thank you!
+
+• Choose your free 5ml sample at checkout
+• Discover new scents with every order
+• Premium glass vial packaging
+• Try before you buy your next bottle`,
     },
   ];
 
   return (
     <div className="py-12 md:py-16 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Title */}
-        <h2
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12"
-          style={{ color: "#1a1a2e" }}
-        >
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12" style={{ color: "#1a1a2e" }}>
           WHAT MAKE US SPECIAL?
         </h2>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
               onClick={() => setOpenModalIndex(index)}
-              className="group relative bg-white rounded-xl p-4 md:p-6 hover:shadow-lg transition-all duration-300 text-center cursor-pointer"
+              className="group relative bg-white rounded-xl p-4 md:p-6 hover:shadow-lg transition-all duration-300 text-center cursor-pointer border border-gray-100"
             >
-              {/* Icon Image */}
               <div className="flex justify-center mb-3 md:mb-4">
                 <div className="relative w-12 h-12 md:w-16 md:h-16">
-                  <Image
-                    src={feature.image}
-                    alt={feature.title}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 640px) 48px, 64px"
-                  />
+                  <Image src={feature.image} alt={feature.title} fill className="object-contain" sizes="64px" />
                 </div>
               </div>
-
-              {/* Title */}
-              <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 uppercase">
-                {feature.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                {feature.description}
-              </p>
-
-              {/* Click indicator */}
-              <p className="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                Click for more info
+              <h3 className="text-xs md:text-sm font-bold text-gray-900 mb-2 md:mb-3 uppercase">{feature.title}</h3>
+              <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed">{feature.description}</p>
+              <p className="text-[10px] text-gray-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                Tap for details
               </p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Modal */}
       {openModalIndex !== null && (
         <UniversalModal
           isOpen={openModalIndex !== null}

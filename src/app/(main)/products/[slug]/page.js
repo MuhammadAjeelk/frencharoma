@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import UniversalModal from "@/components/UniversalModal";
 
 // ── Helper: lowest price across editions ───────────────────────────────────
@@ -81,6 +82,7 @@ export default function ProductDetailPage() {
   const slug    = params?.slug;
   const router  = useRouter();
   const { addItem } = useCart();
+  const { isInWishlist, toggleItem } = useWishlist();
 
   const [perfume,         setPerfume]         = useState(null);
   const [loading,         setLoading]         = useState(true);
@@ -95,6 +97,17 @@ export default function ProductDetailPage() {
   const [relatedPerfumes, setRelatedPerfumes] = useState([]);
   const [descExpanded,    setDescExpanded]    = useState(false);
   const [selectedSample,  setSelectedSample]  = useState("");
+
+  // Reviews
+  const [reviews,         setReviews]         = useState([]);
+  const [avgRating,       setAvgRating]       = useState(0);
+  const [reviewTotal,     setReviewTotal]     = useState(0);
+  const [showReviewForm,  setShowReviewForm]  = useState(false);
+  const [reviewForm,      setReviewForm]      = useState({ name: "", rating: 5, title: "", body: "" });
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+
+  // FAQ toggle
+  const [openFaq,         setOpenFaq]         = useState(null);
 
   // Side modal state
   const [sideModal, setSideModal] = useState({ open: false, heading: "", content: null });
@@ -145,6 +158,47 @@ export default function ProductDetailPage() {
     };
     run();
   }, [perfume]);
+
+  // ── Fetch reviews ───────────────────────────────────────────────────
+  useEffect(() => {
+    if (!slug) return;
+    fetch(`/api/reviews?slug=${slug}`)
+      .then((r) => r.json())
+      .then((data) => {
+        setReviews(data.reviews || []);
+        setAvgRating(data.avgRating || 0);
+        setReviewTotal(data.total || 0);
+      })
+      .catch(() => {});
+  }, [slug]);
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!perfume || reviewSubmitting) return;
+    setReviewSubmitting(true);
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          perfumeId: perfume._id,
+          perfumeSlug: perfume.slug,
+          name: reviewForm.name,
+          rating: reviewForm.rating,
+          title: reviewForm.title,
+          body: reviewForm.body,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setReviews((prev) => [data.review, ...prev]);
+        setReviewTotal((t) => t + 1);
+        setShowReviewForm(false);
+        setReviewForm({ name: "", rating: 5, title: "", body: "" });
+      }
+    } catch {}
+    setReviewSubmitting(false);
+  };
 
   // ── Edition change ─────────────────────────────────────────────────────
   const handleEditionChange = (ed) => {
@@ -264,14 +318,14 @@ export default function ProductDetailPage() {
 
       {/* ── Main Product Section ─────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 items-start">
 
-          {/* ───── LEFT: Image Gallery ───── */}
-          <div className="flex gap-3">
+          {/* ───── LEFT: Image Gallery (sticky on desktop) ───── */}
+          <div className="flex gap-3 lg:sticky lg:top-4 lg:self-start">
 
             {/* Thumbnail strip – desktop only */}
             {displayImages.length > 1 && (
-              <div className="hidden lg:flex flex-col gap-2 w-[68px] flex-shrink-0" style={{ maxHeight: "560px", overflowY: "auto" }}>
+              <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0" style={{ maxHeight: "560px", overflowY: "auto" }}>
                 {displayImages.map((img, idx) => (
                   <button
                     key={idx}
@@ -390,10 +444,18 @@ export default function ProductDetailPage() {
 
             {/* Scent family / concentration */}
                 {perfume.scentFamily && (
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-gray-600 mb-1">
                 Concentration: <span className="font-semibold">{perfume.scentFamily}</span>
                 </p>
               )}
+
+            {/* Globally Admired */}
+            <p className="text-sm text-gray-600 mb-3">
+              Globally Admired:{" "}
+              <span className="font-bold text-gray-900">
+                {Math.min(100, Math.max(60, Number(perfume.globalAdmirePercent) || 60))}%
+              </span>
+            </p>
 
             {/* Season Tags */}
             {(() => {
@@ -620,7 +682,7 @@ export default function ProductDetailPage() {
                 <button
               disabled={!inStock || !selectedVariant}
               onClick={handleBuyNow}
-              className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest uppercase transition-all mb-5 border-2 ${
+              className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest uppercase transition-all mb-3 border-2 ${
                 inStock && selectedVariant
                   ? "border-black text-black hover:bg-black hover:text-white"
                   : "border-gray-200 text-gray-300 cursor-not-allowed"
@@ -628,6 +690,35 @@ export default function ProductDetailPage() {
                 >
                   Buy Now
                 </button>
+
+            {/* ── Wishlist ── */}
+            <button
+              onClick={() =>
+                toggleItem({
+                  slug: perfume.slug,
+                  name: perfume.name,
+                  brand: brandLabel,
+                  image: perfume.images?.main || "",
+                  price: getLowestPrice(perfume.editions) || 0,
+                })
+              }
+              className={`w-full py-3 rounded-xl font-semibold text-sm tracking-wide transition-all mb-5 border flex items-center justify-center gap-2 ${
+                isInWishlist(perfume.slug)
+                  ? "border-red-300 text-red-600 bg-red-50"
+                  : "border-gray-300 text-gray-600 hover:border-black hover:text-black"
+              }`}
+            >
+              <svg
+                className={`w-4 h-4 ${isInWishlist(perfume.slug) ? "fill-red-500 text-red-500" : ""}`}
+                fill={isInWishlist(perfume.slug) ? "currentColor" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              {isInWishlist(perfume.slug) ? "In Your Wishlist" : "Add to Wishlist"}
+            </button>
 
             {/* ── Short description ── */}
             {perfume.description && (
@@ -840,9 +931,12 @@ export default function ProductDetailPage() {
           ═══════════════════════════════════════════════════════ */}
           {relatedPerfumes.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 pb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-center uppercase tracking-wide mb-8" style={{ color: "#1a1a2e" }}>
-            You May Also Like
+          <h2 className="text-2xl md:text-3xl font-bold text-center uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
+            You May Also Like...
               </h2>
+          <p className="text-sm text-center text-gray-500 mb-8">
+            Which perfumes according to scent notes
+          </p>
          
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
                 {relatedPerfumes.map((rp) => {
@@ -906,6 +1000,199 @@ export default function ProductDetailPage() {
             </div>
           )}
 
+
+      {/* ═══════════════════════════════════════════════════════
+           FREQUENTLY ASKED QUESTIONS
+          ═══════════════════════════════════════════════════════ */}
+      <div className="bg-white py-12 px-4 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-xl sm:text-2xl font-bold text-center uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
+            Frequently Asked Questions (FAQs)
+          </h2>
+          <p className="text-sm text-center text-gray-500 mb-8">Common questions about our impression perfumes</p>
+
+          <div className="space-y-0 border border-gray-200 rounded-xl overflow-hidden">
+            {[
+              {
+                q: "Why is the impression perfume so affordable compared to the original?",
+                a: "Our perfumes skip expensive branding & marketing costs. You only pay for the fragrance itself — crafted with the same French perfume oils used by the originals.",
+              },
+              {
+                q: "Is it also cheaper than other locally made impressions?",
+                a: "Yes — we source directly from French oil suppliers and operate with minimal overhead, making our pricing the most competitive without sacrificing quality.",
+              },
+              {
+                q: "How long does the fragrance last?",
+                a: "With up to 35% perfume oil concentration, our fragrances typically last 12-16 hours on skin — outperforming most department store alternatives.",
+              },
+              {
+                q: "Can I return the perfume if I don't like it?",
+                a: "We accept returns within 7 days of delivery if the product is unopened and in its original packaging. See our return policy for details.",
+              },
+              {
+                q: "Do you offer free shipping?",
+                a: "Yes! Free shipping on all orders above PKR 7,000. Standard delivery takes 3-5 working days across Pakistan.",
+              },
+            ].map((faq, i) => (
+              <div key={i} className={i > 0 ? "border-t border-gray-200" : ""}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between py-4 px-5 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-sm font-semibold text-gray-800 pr-4">{faq.q}</span>
+                  <svg
+                    className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openFaq === i && (
+                  <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed animate-fadeIn">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
+           CUSTOMER REVIEWS
+          ═══════════════════════════════════════════════════════ */}
+      <div className="max-w-5xl mx-auto px-4 py-12">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
+              Customer Reviews
+            </h2>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <svg
+                    key={star}
+                    className={`w-4 h-4 ${star <= Math.round(avgRating) ? "text-yellow-400 fill-yellow-400" : "text-gray-200 fill-gray-200"}`}
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <span className="text-sm text-gray-600">
+                {avgRating > 0 ? `${avgRating} out of 5` : "No reviews yet"} ({reviewTotal} review{reviewTotal !== 1 ? "s" : ""})
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowReviewForm(!showReviewForm)}
+            className="px-5 py-2.5 border-2 border-black text-black rounded-lg font-semibold text-sm hover:bg-black hover:text-white transition-colors"
+          >
+            Write a Review
+          </button>
+        </div>
+
+        {/* Review Form */}
+        {showReviewForm && (
+          <form onSubmit={handleReviewSubmit} className="mb-8 bg-gray-50 rounded-xl p-5 border border-gray-200 animate-fadeIn">
+            <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide mb-4">Write Your Review</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <input
+                type="text"
+                placeholder="Your Name *"
+                value={reviewForm.name}
+                onChange={(e) => setReviewForm((f) => ({ ...f, name: e.target.value }))}
+                required
+                className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-black"
+              />
+              <input
+                type="text"
+                placeholder="Review Title (optional)"
+                value={reviewForm.title}
+                onChange={(e) => setReviewForm((f) => ({ ...f, title: e.target.value }))}
+                className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-black"
+              />
+            </div>
+            <div className="mb-4">
+              <p className="text-xs font-semibold text-gray-700 mb-2">Rating *</p>
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setReviewForm((f) => ({ ...f, rating: star }))}
+                    className="focus:outline-none"
+                  >
+                    <svg
+                      className={`w-6 h-6 transition-colors ${star <= reviewForm.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <textarea
+              placeholder="Share your experience with this fragrance..."
+              value={reviewForm.body}
+              onChange={(e) => setReviewForm((f) => ({ ...f, body: e.target.value }))}
+              rows={4}
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-black mb-4 resize-none"
+            />
+            <div className="flex gap-3">
+              <button type="button" onClick={() => setShowReviewForm(false)} className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+                Cancel
+              </button>
+              <button type="submit" disabled={reviewSubmitting || !reviewForm.name} className="px-5 py-2.5 bg-black text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-40">
+                {reviewSubmitting ? "Submitting..." : "Submit Review"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Reviews List */}
+        {reviews.length > 0 ? (
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <div key={review._id} className="border border-gray-200 rounded-xl p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-gray-900">{review.name}</span>
+                      {review.isVerifiedPurchase && (
+                        <span className="text-[10px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                          Verified
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <svg
+                          key={star}
+                          className={`w-3.5 h-3.5 ${star <= review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200 fill-gray-200"}`}
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-400 shrink-0">
+                    {new Date(review.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                  </span>
+                </div>
+                {review.title && <p className="text-sm font-semibold text-gray-800 mb-1">{review.title}</p>}
+                {review.body && <p className="text-sm text-gray-600 leading-relaxed">{review.body}</p>}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10 border border-dashed border-gray-200 rounded-xl">
+            <p className="text-sm text-gray-400">No reviews yet. Be the first to share your experience!</p>
+          </div>
+        )}
+      </div>
 
       {/* ── Side Modal ── */}
       <UniversalModal

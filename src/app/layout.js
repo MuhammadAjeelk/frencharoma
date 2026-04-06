@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Linea De Bella | Divina Perfumes",
-  description: "Premium perfumes and fragrances",
+  title: "French Aromas | Premium Impression Perfumes",
+  description:
+    "Shop luxury impression perfumes crafted with original French perfume oils. Free shipping on orders above PKR 7,000.",
+  keywords: "perfume, impression perfume, French aromas, luxury fragrance, affordable perfume",
 };
 
 export default function RootLayout({ children }) {
@@ -27,9 +30,11 @@ export default function RootLayout({ children }) {
       >
         <AuthProvider>
           <CartProvider>
-            <ToastProvider>
-              {children}
-            </ToastProvider>
+            <WishlistProvider>
+              <ToastProvider>
+                {children}
+              </ToastProvider>
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>

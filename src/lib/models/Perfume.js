@@ -104,6 +104,12 @@ const PerfumeSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    impressionName: {
+      type: String,
+      trim: true,
+      default: "",
+      maxlength: [200, "Impression name cannot exceed 200 characters"],
+    },
     notes: {
       top: {
         type: [String],

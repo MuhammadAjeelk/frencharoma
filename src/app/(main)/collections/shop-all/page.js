@@ -337,7 +337,7 @@ function ShopAllContent() {
   const [gender,      setGender]      = useState("all");
   const [edition,     setEdition]     = useState("all");
   const [seasons,     setSeasons]     = useState([]);
-  const [brand,       setBrand]       = useState("");
+  const [brand,       setBrand]       = useState(() => searchParams.get("search") || "");
   const [bestSeller,  setBestSeller]  = useState(() => searchParams.get("bestSeller") === "true");
   const [specialOffer, setSpecialOffer] = useState(() => searchParams.get("specialOffer") === "true");
 
@@ -719,6 +719,8 @@ function ShopAllContent() {
                     name={perfume.name}
                     brand={brandLabel}
                     image={perfume.images?.main || ""}
+                    impressionName={perfume.impressionName || ""}
+                    slug={perfume.slug}
                     salePrice={range ? range.min : 0}
                     originalPrice={range && range.max !== range.min ? range.max : undefined}
                     hasSale={range ? range.max !== range.min : false}

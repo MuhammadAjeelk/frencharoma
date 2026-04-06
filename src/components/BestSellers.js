@@ -6,7 +6,6 @@ import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
 import { useCart } from "@/context/CartContext";
 
-// Get price range across all enabled editions/variants
 function getPriceRange(editions) {
   let min = Infinity;
   let max = -Infinity;
@@ -22,7 +21,6 @@ function getPriceRange(editions) {
   return { min, max };
 }
 
-// Quick view modal content (same as shop-all)
 function QuickViewContent({ perfume, onClose }) {
   const { addItem } = useCart();
   const enabledEditions = (perfume.editions || []).filter((e) => e.enabled);
@@ -41,9 +39,7 @@ function QuickViewContent({ perfume, onClose }) {
   };
 
   const image = perfume?.images?.main || null;
-  const brandLabel = Array.isArray(perfume.brands)
-    ? perfume.brands.join(", ")
-    : perfume.brand || "";
+  const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
 
   return (
     <div>
@@ -52,23 +48,8 @@ function QuickViewContent({ perfume, onClose }) {
           <Image src={image} alt={perfume.name} fill className="object-contain p-4" sizes="500px" />
         </div>
       )}
-      {brandLabel && (
-        <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">{brandLabel}</p>
-      )}
+      {brandLabel && <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">{brandLabel}</p>}
       <h2 className="text-lg font-bold text-gray-900 mb-3">{perfume.name}</h2>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {perfume.gender && (
-          <span className="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-700 capitalize">{perfume.gender}</span>
-        )}
-        {perfume.scentFamily && (
-          <span className="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-700">{perfume.scentFamily}</span>
-        )}
-      </div>
-
-      {perfume.description && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3">{perfume.description}</p>
-      )}
 
       {enabledEditions.length > 0 && (
         <div className="mb-4">
@@ -116,23 +97,6 @@ function QuickViewContent({ perfume, onClose }) {
         <p className="text-xl font-bold text-gray-900 mb-4">PKR {selectedVariant.price.toLocaleString()}</p>
       )}
 
-      {(perfume.notes?.top?.length > 0 || perfume.notes?.middle?.length > 0 || perfume.notes?.base?.length > 0) && (
-        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Scent Notes</p>
-          <div className="space-y-1">
-            {perfume.notes?.top?.length > 0 && (
-              <p className="text-xs text-gray-600"><span className="font-medium">Top:</span> {perfume.notes.top.join(", ")}</p>
-            )}
-            {perfume.notes?.middle?.length > 0 && (
-              <p className="text-xs text-gray-600"><span className="font-medium">Heart:</span> {perfume.notes.middle.join(", ")}</p>
-            )}
-            {perfume.notes?.base?.length > 0 && (
-              <p className="text-xs text-gray-600"><span className="font-medium">Base:</span> {perfume.notes.base.join(", ")}</p>
-            )}
-          </div>
-        </div>
-      )}
-
       <div className="flex flex-col gap-2">
         <button
           className="w-full bg-black text-white py-3 rounded font-semibold text-sm hover:bg-gray-800 transition-colors disabled:opacity-40"
@@ -152,7 +116,7 @@ function QuickViewContent({ perfume, onClose }) {
             setTimeout(() => setAdded(false), 2000);
           }}
         >
-          {added ? "✓ Added to Cart!" : "Add to Cart"}
+          {added ? "Added to Cart!" : "Add to Cart"}
         </button>
         <a
           href={`/products/${perfume.slug}`}
@@ -168,15 +132,12 @@ function QuickViewContent({ perfume, onClose }) {
 
 export default function BestSellers() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(3);
   const [perfumes, setPerfumes] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Quick view modal
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPerfume, setSelectedPerfume] = useState(null);
 
-  // Fetch best sellers from DB
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
@@ -192,10 +153,9 @@ export default function BestSellers() {
     fetchBestSellers();
   }, []);
 
-  // Responsive visible count
   useEffect(() => {
     const update = () => {
-      if (window.innerWidth >= 1024) setVisibleCount(4);
+      if (window.innerWidth >= 1024) setVisibleCount(3);
       else if (window.innerWidth >= 640) setVisibleCount(2);
       else setVisibleCount(1);
     };
@@ -204,10 +164,7 @@ export default function BestSellers() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Duplicate for infinite carousel
-  const products = perfumes.length > 0
-    ? [...perfumes, ...perfumes, ...perfumes]
-    : [];
+  const products = perfumes.length > 0 ? [...perfumes, ...perfumes, ...perfumes] : [];
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => {
@@ -225,7 +182,6 @@ export default function BestSellers() {
 
   const visibleItems = products.slice(currentIndex, currentIndex + visibleCount);
 
-  // Loading skeleton
   if (loading) {
     return (
       <div className="py-8 md:py-12 px-4 bg-white">
@@ -233,8 +189,8 @@ export default function BestSellers() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8" style={{ color: "#1a1a2e" }}>
             BEST-SELLERS
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(3)].map((_, i) => (
               <div key={i} className="border border-gray-200 rounded-lg overflow-hidden animate-pulse">
                 <div className="aspect-square bg-gray-100" />
                 <div className="p-4 space-y-2">
@@ -250,23 +206,17 @@ export default function BestSellers() {
     );
   }
 
-  // No best sellers set yet
   if (perfumes.length === 0) return null;
 
   return (
     <>
       <div className="py-8 md:py-12 px-4 bg-white relative overflow-visible">
         <div className="max-w-7xl mx-auto overflow-visible">
-          <h2
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8"
-            style={{ color: "#1a1a2e" }}
-          >
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8" style={{ color: "#1a1a2e" }}>
             BEST-SELLERS
           </h2>
 
-          {/* Carousel */}
           <div className="relative mb-6 md:mb-8 overflow-visible">
-            {/* Prev Arrow */}
             <button
               onClick={handlePrevious}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 md:p-2 rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
@@ -275,17 +225,12 @@ export default function BestSellers() {
               <Image src="/icons/arrow-left.svg" alt="Previous" width={20} height={20} className="w-5 h-5 md:w-6 md:h-6" />
             </button>
 
-            {/* Cards */}
             <div className="min-w-0 pl-12 sm:pl-14 md:pl-16 pr-12 sm:pr-14 md:pr-16">
               <div className="flex gap-3 md:gap-4">
                 {visibleItems.map((perfume, index) => {
                   const range = getPriceRange(perfume.editions);
-                  const brandLabel = Array.isArray(perfume.brands)
-                    ? perfume.brands.join(", ")
-                    : perfume.brand || "";
-                  const hasSpecialOfferTag = (perfume.tags || []).some((t) =>
-                    /special\s*-?\s*offer/i.test(t)
-                  );
+                  const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
+                  const hasSpecialOfferTag = (perfume.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
                   return (
                     <div
                       key={`${currentIndex}-${index}`}
@@ -295,16 +240,15 @@ export default function BestSellers() {
                           visibleCount === 1
                             ? "100%"
                             : visibleCount === 2
-                            ? "calc((100% - 12px) / 2 - 12px)"
-                            : visibleCount === 4
-                            ? "calc((100% - 36px) / 4 - 10px)"
-                            : "calc((100% - 24px) / 3 - 10px)",
+                            ? "calc((100% - 12px) / 2)"
+                            : "calc((100% - 24px) / 3)",
                       }}
                     >
                       <ProductCard
                         name={perfume.name}
                         brand={brandLabel}
                         image={perfume.images?.main || ""}
+                        impressionName={perfume.impressionName || ""}
                         salePrice={range ? range.min : 0}
                         originalPrice={range && range.max !== range.min ? range.max : undefined}
                         hasSale={range ? range.max !== range.min : false}
@@ -324,7 +268,6 @@ export default function BestSellers() {
               </div>
             </div>
 
-            {/* Next Arrow */}
             <button
               onClick={handleNext}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-1.5 md:p-2 rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
@@ -334,8 +277,12 @@ export default function BestSellers() {
             </button>
           </div>
 
-          {/* View All */}
-          <div className="flex justify-center">
+          {/* Count + View All */}
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-semibold text-gray-800">{Math.min(visibleCount, perfumes.length)}</span> of{" "}
+              <span className="font-semibold text-gray-800">{perfumes.length}</span> products
+            </p>
             <a
               href="/collections/shop-all?bestSeller=true"
               className="bg-black text-white px-6 md:px-8 py-2.5 md:py-3 rounded hover:bg-gray-800 transition-colors font-semibold text-sm md:text-base"
@@ -346,15 +293,8 @@ export default function BestSellers() {
         </div>
       </div>
 
-      {/* Quick View Modal */}
-      <UniversalModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        heading={selectedPerfume?.name || ""}
-      >
-        {selectedPerfume && (
-          <QuickViewContent perfume={selectedPerfume} onClose={() => setModalOpen(false)} />
-        )}
+      <UniversalModal isOpen={modalOpen} onClose={() => setModalOpen(false)} heading={selectedPerfume?.name || ""}>
+        {selectedPerfume && <QuickViewContent perfume={selectedPerfume} onClose={() => setModalOpen(false)} />}
       </UniversalModal>
     </>
   );

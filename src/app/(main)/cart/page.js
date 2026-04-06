@@ -5,11 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function CartPage() {
-  const { items, itemCount, subtotal, removeItem, updateQuantity, hydrated } =
+  const { items, itemCount, subtotal, total: cartTotal, bundle, removeItem, updateQuantity, hydrated } =
     useCart();
 
-  const SHIPPING = itemCount > 0 ? 200 : 0;
-  const total = subtotal + SHIPPING;
+  const FREE_SHIPPING_THRESHOLD = 7000;
+  const SHIPPING = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : itemCount > 0 ? 200 : 0;
+  const total = cartTotal + SHIPPING;
 
   if (!hydrated) {
     return (
@@ -164,16 +165,50 @@ export default function CartPage() {
                     <span>Subtotal ({itemCount} item{itemCount !== 1 ? "s" : ""})</span>
                     <span className="font-medium text-gray-900">PKR {subtotal.toLocaleString()}</span>
                   </div>
+
+                  {bundle.savings > 0 && (
+                    <div>
+                      <div className="flex justify-between text-green-700">
+                        <span className="font-medium">Bundle Discount</span>
+                        <span className="font-semibold">-PKR {bundle.savings.toLocaleString()}</span>
+                      </div>
+                      <div className="mt-1 space-y-0.5">
+                        {bundle.breakdown.map((b) => (
+                          <p key={b.id} className="text-[10px] text-green-600 truncate">
+                            {b.name}: {b.discount}% off (-PKR {b.saving.toLocaleString()})
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
-                    <span className="font-medium text-gray-900">PKR {SHIPPING.toLocaleString()}</span>
+                    <span className={`font-medium ${SHIPPING === 0 && itemCount > 0 ? "text-green-700" : "text-gray-900"}`}>
+                      {SHIPPING === 0 && itemCount > 0 ? "FREE" : `PKR ${SHIPPING.toLocaleString()}`}
+                    </span>
                   </div>
+
+                  {subtotal > 0 && subtotal < FREE_SHIPPING_THRESHOLD && (
+                    <p className="text-[10px] text-gray-400">
+                      Spend PKR {(FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString()} more for free shipping
+                    </p>
+                  )}
+
                   <div className="h-px bg-gray-100 my-2" />
                   <div className="flex justify-between text-base font-bold text-gray-900">
                     <span>Total</span>
                     <span>PKR {total.toLocaleString()}</span>
                   </div>
                 </div>
+
+                {items.length >= 2 && bundle.savings === 0 && (
+                  <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p className="text-xs text-amber-800 font-medium">
+                      Add more perfumes to unlock bundle discounts: Buy 2 (10-15% off), Buy 3+ (up to 20% off)!
+                    </p>
+                  </div>
+                )}
 
                 <Link
                   href="/checkout"
