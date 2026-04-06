@@ -25,17 +25,16 @@ export default function ShopByCategory() {
   ];
 
   return (
-    <div className="py-8 md:py-12 px-4 bg-white">
+    <div className="py-12 md:py-16 px-4 bg-[#faf8f5]">
       <div className="max-w-7xl mx-auto">
-        {/* Title */}
-        <h2
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8"
-          style={{ color: "#1a1a2e" }}
-        >
+        <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
+          Choose Your Tier
+        </p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
           SHOP BY CATEGORY
         </h2>
+        <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-8 md:mb-10" />
 
-        {/* Category Cards */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto">
           {categories.map((category, index) => (
             <ShopCard

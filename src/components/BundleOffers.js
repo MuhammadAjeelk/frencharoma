@@ -33,26 +33,25 @@ export default function BundleOffers() {
   ];
 
   return (
-    <div className="py-12 md:py-16 px-4 bg-white">
+    <div className="py-12 md:py-16 px-4 bg-[#faf8f5]">
       <div className="max-w-7xl mx-auto">
-        {/* Title */}
-        <h2
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12"
-          style={{ color: "#1a1a2e" }}
-        >
+        <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
+          Save More, Smell Better
+        </p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
           BUNDLE OFFERS
         </h2>
+        <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-10 md:mb-12" />
 
-        {/* Bundle Offers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
           {offers.map((offer, index) => (
             <Link
               key={index}
               href={offer.href}
-              className="group relative border-1 border-gray-200 rounded-xl overflow-hidden bg-white hover:border-gray-300 hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+              className="group relative rounded-xl overflow-hidden bg-white hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-[#e8e4df]"
             >
               {/* Discount Badge */}
-              <div className="absolute top-2 md:top-4 right-2 md:right-4 z-10 bg-red-600 text-white text-sm md:text-lg font-bold px-3 md:px-4 py-1.5 md:py-2 rounded-full shadow-lg">
+              <div className="absolute top-3 md:top-4 right-3 md:right-4 z-10 bg-[#1a1a2e] text-white text-sm md:text-base font-bold px-3.5 md:px-4 py-1.5 md:py-2 rounded-lg shadow-lg">
                 Up to {offer.discount}
               </div>
 
@@ -62,29 +61,27 @@ export default function BundleOffers() {
                   src={offer.image}
                   alt={offer.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
 
               {/* Content */}
-              <div className="p-4 md:p-6 flex flex-col flex-grow">
-                {/* Header */}
-                <div className="mb-3 md:mb-4 pb-3 md:pb-4 border-b border-gray-200">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 underline">
+              <div className="p-5 md:p-7 flex flex-col grow">
+                <div className="mb-4 pb-4 border-b border-[#f0ece7]">
+                  <h3 className="text-xl md:text-2xl font-bold text-[#1a1a2e]">
                     {offer.title}
                   </h3>
                 </div>
 
-                {/* Offer Details */}
-                <ul className="space-y-2 md:space-y-3 flex-grow">
+                <ul className="space-y-2.5 md:space-y-3 grow">
                   {offer.items.map((item, itemIndex) => (
                     <li
                       key={itemIndex}
-                      className="flex items-start gap-2 md:gap-3 text-sm md:text-base text-gray-700"
+                      className="flex items-start gap-3 text-[13px] md:text-sm text-[#4a4540] shrink-0"
                     >
                       <svg
-                        className="w-4 h-4 md:w-5 md:h-5 text-gray-400 mt-0.5 flex-shrink-0"
+                        className="w-4 h-4 text-[#b8964e] mt-0.5 shrink-0"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -101,8 +98,7 @@ export default function BundleOffers() {
                   ))}
                 </ul>
 
-                {/* CTA Button - Always at bottom */}
-                <button className="mt-4 md:mt-6 w-full bg-black text-white py-2.5 md:py-3 px-4 md:px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200 text-sm md:text-base">
+                <button className="mt-5 md:mt-7 w-full bg-[#1a1a2e] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#2d2d44] transition-colors duration-200 text-sm tracking-wide uppercase">
                   Shop Now
                 </button>
               </div>

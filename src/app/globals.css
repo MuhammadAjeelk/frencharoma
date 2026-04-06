@@ -2,14 +2,20 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --primary: #f3f3f3;
+  --foreground: #111111;
+  --primary: #faf8f5;
+  --accent: #1a1a2e;
+  --accent-gold: #b8964e;
+  --muted: #6b6560;
+  --border: #e8e4df;
+  --surface: #f7f5f2;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -17,71 +23,77 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;
-    --foreground: #171717;
-    --primary: #f3f3f3;
+    --foreground: #111111;
+    --primary: #faf8f5;
   }
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
 }
-button {
-  cursor: pointer;
+
+button { cursor: pointer; }
+::selection { background: #1a1a2e; color: #fff; }
+
+/* Smooth transitions globally */
+*, *::before, *::after {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+img { image-rendering: -webkit-optimize-contrast; }
+
+/* Luxury gold accent bar - reusable */
+.accent-bar::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-gold);
+  margin: 12px auto 0;
 }
 
 @keyframes fadeInSlide {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @keyframes counter-scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(50vw);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50vw); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-in-out;
-}
+.animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+.animate-fadeInUp { animation: fadeInUp 0.4s ease-out; }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
+.animate-spin { animation: spin 1s linear infinite; }
 
 @keyframes jiggle {
   0%,  100% { transform: translateX(0); }
@@ -95,29 +107,18 @@ button {
   64%        { transform: translateX(2px); }
   72%        { transform: translateX(0); }
 }
-
-.animate-jiggle {
-  animation: jiggle 3s ease-in-out infinite;
-}
+.animate-jiggle { animation: jiggle 3s ease-in-out infinite; }
 
 /* Thin scrollbar for sticky containers */
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-}
-.scrollbar-thin:hover {
-  scrollbar-color: rgba(0,0,0,0.15) transparent;
-}
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 4px;
-}
-.scrollbar-thin:hover::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.15);
+.scrollbar-thin { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.scrollbar-thin:hover { scrollbar-color: rgba(0,0,0,0.12) transparent; }
+.scrollbar-thin::-webkit-scrollbar { width: 3px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.scrollbar-thin:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
+
+/* Focus ring utility */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -78,15 +78,15 @@ function FilterDropdown({ label, options, value, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
+        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
           isActive
-            ? "border-black bg-black text-white shadow-sm"
-            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black hover:shadow-sm"
+            ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
+            : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
         }`}
       >
         <span>{label}</span>
         {isActive && (
-          <span className="opacity-75">: {selected?.label}</span>
+          <span className="opacity-80">: {selected?.label}</span>
         )}
         <svg
           className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
@@ -97,15 +97,15 @@ function FilterDropdown({ label, options, value, onChange }) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-30 min-w-[180px] py-1 overflow-hidden">
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-30 min-w-[180px] py-1.5 overflow-hidden">
           {options.map((opt) => (
             <button
               key={opt.value}
               onClick={() => { onChange(opt.value); setOpen(false); }}
-              className={`w-full text-left px-4 py-2.5 text-xs transition-colors hover:bg-gray-50 ${
+              className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] ${
                 value === opt.value
-                  ? "font-semibold text-black bg-gray-50"
-                  : "text-gray-600"
+                  ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]"
+                  : "text-[#6b6560]"
               }`}
             >
               {opt.label}
@@ -142,14 +142,14 @@ function MultiSelectDropdown({ label, options, values, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
+        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
           isActive
-            ? "border-black bg-black text-white shadow-sm"
-            : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black hover:shadow-sm"
+            ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
+            : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
         }`}
       >
         <span>{label}</span>
-        {isActive && <span className="opacity-75">: {values.length} selected</span>}
+        {isActive && <span className="opacity-80">: {values.length} selected</span>}
         <svg
           className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -159,19 +159,23 @@ function MultiSelectDropdown({ label, options, values, onChange }) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-30 min-w-[180px] py-1 overflow-hidden">
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-30 min-w-[180px] py-1.5 overflow-hidden">
           {options.map((opt) => {
             const active = values.includes(opt.value);
             return (
               <button
                 key={opt.value}
                 onClick={() => toggleValue(opt.value)}
-                className={`w-full text-left px-4 py-2.5 text-xs transition-colors hover:bg-gray-50 flex items-center justify-between ${
-                  active ? "font-semibold text-black bg-gray-50" : "text-gray-600"
+                className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] flex items-center justify-between ${
+                  active ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]" : "text-[#6b6560]"
                 }`}
               >
                 <span>{opt.label}</span>
-                {active && <span>✓</span>}
+                {active && (
+                  <svg className="w-3.5 h-3.5 text-[#b8964e]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
               </button>
             );
           })}
@@ -478,52 +482,53 @@ function ShopAllContent() {
   // ────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-[#f8f5ef] via-white to-white">
+      <div className="min-h-screen bg-linear-to-b from-[#f8f5ef] via-white to-white">
 
         {/* ── Page Header ── */}
-        <div className="relative py-10 md:py-14 text-center overflow-hidden bg-[#f3efe8] border-b border-black/5">
-          <div className="absolute -left-16 -top-16 w-56 h-56 bg-[#d8c7ae]/35 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -right-12 bottom-0 w-64 h-64 bg-[#eadbc6]/40 rounded-full blur-3xl pointer-events-none" />
-          <nav className="relative flex justify-center items-center gap-2 text-xs text-gray-500 mb-3">
-            <Link href="/" className="hover:text-gray-800 transition-colors">Home</Link>
-            <span>/</span>
-            <Link href="/collections/shop-all" className="hover:text-gray-800 transition-colors">Shop</Link>
+        <div className="relative py-12 md:py-16 text-center overflow-hidden bg-linear-to-b from-[#f3efe8] to-[#f7f5f2] border-b border-[#e8e4df]">
+          <div className="absolute -left-16 -top-16 w-56 h-56 bg-[#d8c7ae]/25 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -right-12 bottom-0 w-64 h-64 bg-[#eadbc6]/30 rounded-full blur-3xl pointer-events-none" />
+          <nav className="relative flex justify-center items-center gap-2 text-[11px] text-[#8a847e] mb-4 uppercase tracking-widest">
+            <Link href="/" className="hover:text-[#1f1a16] transition-colors">Home</Link>
+            <span className="text-[#ccc8c2]">/</span>
+            <Link href="/collections/shop-all" className="hover:text-[#1f1a16] transition-colors">Shop</Link>
             {bestSeller && (
               <>
-                <span>/</span>
-                <span className="text-gray-900 font-medium">Best Sellers</span>
+                <span className="text-[#ccc8c2]">/</span>
+                <span className="text-[#1f1a16] font-semibold">Best Sellers</span>
               </>
             )}
             {specialOffer && (
               <>
-                <span>/</span>
-                <span className="text-gray-900 font-medium">Special Offer</span>
+                <span className="text-[#ccc8c2]">/</span>
+                <span className="text-[#1f1a16] font-semibold">Special Offer</span>
               </>
             )}
             {!bestSeller && !specialOffer && hasControlChanges && (
               <>
-                <span>/</span>
-                <span className="text-gray-900 font-medium">Refined</span>
+                <span className="text-[#ccc8c2]">/</span>
+                <span className="text-[#1f1a16] font-semibold">Refined</span>
               </>
             )}
           </nav>
-          <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wide text-[#1f1a16]">
+          <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-[0.04em] text-[#1a1a2e]">
             All Perfumes
           </h1>
-          <p className="relative mt-3 text-sm md:text-base text-[#5f5a54]">
+          <div className="relative mt-2 w-10 h-[2px] bg-[#b8964e] mx-auto" />
+          <p className="relative mt-3 text-sm md:text-base text-[#6b6560] tracking-wide">
             Discover signature impressions curated by mood, season and style.
           </p>
         </div>
 
         {/* ── Sticky Filter Bar ── */}
-        <div className="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-3">
-            <div className="rounded-2xl border border-gray-200 bg-white p-3 md:p-4 shadow-[0_8px_28px_rgba(15,23,42,0.06)]">
+        <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-[#e8e4df]/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <div className="rounded-xl border border-[#e8e4df] bg-white p-3 md:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
               <div className="flex flex-wrap items-center gap-2.5">
 
               {/* Label */}
-              <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.16em] mr-1 shrink-0">
-                Filters:
+              <span className="text-[10px] font-bold text-[#b8964e] uppercase tracking-[0.18em] mr-1 shrink-0">
+                Filters
               </span>
 
               {/* Gender */}
@@ -553,25 +558,25 @@ function ShopAllContent() {
               {/* Best Sellers toggle */}
               <button
                 onClick={() => setBestSeller((b) => !b)}
-                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
                   bestSeller
-                    ? "border-black bg-black text-white shadow-sm"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-black hover:text-black hover:shadow-sm"
+                    ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
+                    : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
                 }`}
               >
-                ⭐ Best Sellers
+                Best Sellers
               </button>
 
               {/* Special Offer toggle */}
               <button
                 onClick={() => setSpecialOffer((s) => !s)}
-                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border rounded-full transition-all select-none ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
                   specialOffer
-                    ? "border-rose-600 bg-rose-600 text-white shadow-sm"
-                    : "border-gray-300 bg-white text-gray-700 hover:border-rose-500 hover:text-rose-700 hover:shadow-sm"
+                    ? "border-[#c2185b] bg-[#c2185b] text-white"
+                    : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#c2185b] hover:text-[#c2185b]"
                 }`}
               >
-                🏷️ Special Offer
+                Special Offer
               </button>
 
               {/* Brand search */}
@@ -581,8 +586,8 @@ function ShopAllContent() {
                   placeholder="Brand..."
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  className={`w-full pl-8 pr-7 py-2 text-xs font-medium border rounded-full focus:outline-none transition-colors ${
-                    brand ? "border-black text-black" : "border-gray-300 text-gray-700 hover:border-gray-400 focus:border-black"
+                  className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
+                    brand ? "border-[#1a1a2e] text-[#1f1a16]" : "border-[#e8e4df] text-[#4a4540] hover:border-[#ccc8c2] focus:border-[#1a1a2e]"
                   }`}
                 />
                 <svg className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -607,10 +612,10 @@ function ShopAllContent() {
               <button
                 onClick={clearFilters}
                 disabled={!hasControlChanges}
-                className={`text-xs px-3 py-2 rounded-full border transition-colors shrink-0 font-semibold ${
+                className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
                   hasControlChanges
-                    ? "border-gray-400 text-gray-700 hover:border-black hover:text-black"
-                    : "border-gray-200 text-gray-300 cursor-default"
+                    ? "border-[#ccc8c2] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
+                    : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
                 }`}
               >
                 Reset
@@ -618,15 +623,17 @@ function ShopAllContent() {
               </div>
 
               {activeFilterChips.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 pt-3 border-t border-[#f0ece7] flex flex-wrap gap-2">
                   {activeFilterChips.map((chip) => (
                     <button
                       key={chip.key}
                       onClick={chip.clear}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs border border-gray-300 bg-[#faf8f4] text-gray-700 hover:border-black hover:text-black transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] transition-all duration-200"
                     >
                       <span>{chip.label}</span>
-                      <span className="text-gray-400">✕</span>
+                      <svg className="w-3 h-3 text-[#a09890]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
                     </button>
                   ))}
                 </div>
@@ -636,32 +643,33 @@ function ShopAllContent() {
         </div>
 
         {/* ── Content ── */}
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
           {/* Sort + Count Row */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-            <p className="text-sm text-gray-600">
+          <div className="flex items-center justify-between gap-3 mb-7">
+            <p className="text-[13px] text-[#6b6560]">
               {loading
-                ? <span className="inline-block w-16 h-4 bg-gray-100 rounded animate-pulse" />
+                ? <span className="inline-block w-16 h-4 bg-[#f0ece7] rounded animate-pulse" />
                 : (
                   <>
-                    Showing <span className="font-semibold text-gray-900">{perfumes.length.toLocaleString()}</span> of{" "}
-                    <span className="font-semibold text-gray-900">{total.toLocaleString()}</span> products
+                    Showing <span className="font-semibold text-[#1f1a16]">{perfumes.length.toLocaleString()}</span> of{" "}
+                    <span className="font-semibold text-[#1f1a16]">{total.toLocaleString()}</span> products
                   </>
                 )
               }
             </p>
-            <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 w-fit shadow-sm">
-              <span className="text-xs text-gray-500">Sort by</span>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-                className="text-xs border border-gray-300 rounded-full px-3 py-1.5 focus:outline-none focus:border-black bg-white cursor-pointer font-medium"
-            >
-              {SORT_OPTIONS.map((o) => (
+            <div className="flex items-center gap-2.5">
+              <span className="text-[11px] font-medium text-[#8a847e] uppercase tracking-wide hidden sm:inline">Sort by</span>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="text-[12px] border border-[#e8e4df] rounded-lg px-3 py-2 focus:outline-none focus:border-[#1a1a2e] bg-white cursor-pointer font-medium text-[#1f1a16] appearance-none pr-8"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b6560'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', backgroundSize: '14px' }}
+              >
+                {SORT_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -704,7 +712,7 @@ function ShopAllContent() {
 
           {/* ── Product Grid ── */}
           {!loading && perfumes.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
               {perfumes.map((perfume) => {
                 const range      = getPriceRange(perfume.editions);
                 const brandLabel = Array.isArray(perfume.brands) && perfume.brands.length > 0
@@ -773,7 +781,7 @@ function ShopAllContent() {
 
 function ShopAllFallback() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f8f5ef] via-white to-white">
+    <div className="min-h-screen bg-linear-to-b from-[#f8f5ef] via-white to-white">
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="h-8 w-48 bg-gray-100 rounded animate-pulse mb-8" />
         <div className="h-16 w-full bg-gray-100 rounded-2xl animate-pulse mb-8" />

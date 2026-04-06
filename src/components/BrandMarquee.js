@@ -17,12 +17,16 @@ export default function BrandMarquee() {
   if (brands.length === 0) return null;
 
   return (
-    <div className="py-8 md:py-12 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8" style={{ color: "#1a1a2e" }}>
+    <div className="py-10 md:py-14 px-4 bg-white border-b border-[#f0ece7]">
+      <div className="max-w-7xl mx-auto mb-8">
+        <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
+          Inspired Collections
+        </p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight">
           SHOP BY BRAND
         </h2>
-        <p className="text-sm text-center text-gray-500 mb-6 -mt-4">
+        <div className="mt-3 w-10 h-[2px] bg-[#b8964e] mx-auto" />
+        <p className="text-[13px] text-center text-[#8a847e] mt-4 max-w-md mx-auto">
           Browse inspired-by brands. Click any brand to explore its collection.
         </p>
       </div>
@@ -31,9 +35,9 @@ export default function BrandMarquee() {
           <Link
             key={index}
             href={`/collections/shop-all?search=${encodeURIComponent(brand)}`}
-            className="shrink-0 mx-3 sm:mx-5 flex items-center justify-center h-16 sm:h-20 px-5 sm:px-8 rounded-lg border border-gray-200 bg-white hover:border-black hover:shadow-md transition-all duration-200 group"
+            className="shrink-0 mx-2 sm:mx-3 flex items-center justify-center h-12 sm:h-14 px-5 sm:px-7 rounded-lg border border-[#e8e4df] bg-white hover:border-[#b8964e] hover:shadow-[0_4px_16px_rgba(184,150,78,0.08)] transition-all duration-200 group"
           >
-            <span className="text-sm sm:text-base font-semibold text-gray-700 group-hover:text-black whitespace-nowrap tracking-wide uppercase">
+            <span className="text-[12px] sm:text-[13px] font-semibold text-[#4a4540] group-hover:text-[#b8964e] whitespace-nowrap tracking-[0.06em] uppercase transition-colors">
               {brand}
             </span>
           </Link>

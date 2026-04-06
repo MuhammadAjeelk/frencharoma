@@ -42,7 +42,7 @@ const VariantSchema = new mongoose.Schema(
       },
     },
   },
-  { _id: true }
+  { _id: true },
 );
 
 const EditionSchema = new mongoose.Schema(
@@ -72,7 +72,7 @@ const EditionSchema = new mongoose.Schema(
       default: [],
     },
   },
-  { _id: true }
+  { _id: true },
 );
 
 const PerfumeSchema = new mongoose.Schema(
@@ -154,7 +154,7 @@ const PerfumeSchema = new mongoose.Schema(
     discountPercent: {
       type: Number,
       default: 0,
-      min: [0,  "Discount cannot be negative"],
+      min: [0, "Discount cannot be negative"],
       max: [99, "Discount cannot exceed 99%"],
     },
     globalAdmirePercent: {
@@ -184,7 +184,7 @@ const PerfumeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Generate slug from name if not provided
@@ -205,7 +205,7 @@ PerfumeSchema.pre("validate", function () {
   if (this.status === "active" && enabledEditions.length === 0) {
     this.invalidate(
       "editions",
-      "Active perfumes must have at least one enabled edition"
+      "Active perfumes must have at least one enabled edition",
     );
   }
 
@@ -216,7 +216,7 @@ PerfumeSchema.pre("validate", function () {
     if (activeVariants.length === 0) {
       this.invalidate(
         "editions",
-        `Enabled edition "${edition.key}" must have at least one active variant`
+        `Enabled edition "${edition.key}" must have at least one active variant`,
       );
       continue;
     }
@@ -226,7 +226,7 @@ PerfumeSchema.pre("validate", function () {
     if (sizes.length !== uniqueSizes.size) {
       this.invalidate(
         "editions",
-        `Edition "${edition.key}" cannot have duplicate sizes`
+        `Edition "${edition.key}" cannot have duplicate sizes`,
       );
     }
 
@@ -234,7 +234,7 @@ PerfumeSchema.pre("validate", function () {
       if (variant.price <= 0) {
         this.invalidate(
           "editions",
-          `Active variant ${variant.size} in edition "${edition.key}" must have a price greater than 0`
+          `Active variant ${variant.size} in edition "${edition.key}" must have a price greater than 0`,
         );
       }
     }
@@ -242,7 +242,12 @@ PerfumeSchema.pre("validate", function () {
 });
 
 // Index for searching
-PerfumeSchema.index({ name: "text", brand: "text", brands: "text", tags: "text" });
+PerfumeSchema.index({
+  name: "text",
+  brand: "text",
+  brands: "text",
+  tags: "text",
+});
 PerfumeSchema.index({ status: 1 });
 
 let Perfume;

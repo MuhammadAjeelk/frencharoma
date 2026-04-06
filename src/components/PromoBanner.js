@@ -12,7 +12,6 @@ export default function PromoBanner({
 }) {
   return (
     <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:aspect-[21/9] overflow-hidden">
-      {/* Background Image */}
       <Image
         src={imageUrl}
         alt={title}
@@ -22,30 +21,26 @@ export default function PromoBanner({
         priority
       />
 
-      {/* Text Overlay - Left Aligned */}
-      <div className="absolute inset-0 flex flex-col items-start justify-center z-10 px-3 sm:px-4 md:px-12 lg:px-20 py-3 sm:py-0">
-        {/* Title */}
-        <h2 className="text-base sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-1 sm:mb-2 md:mb-4 drop-shadow-lg">
-          <span
-            className="text-white underline"
-            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
-          >
+      <div className="absolute inset-0 bg-linear-to-r from-black/40 via-black/20 to-transparent" />
+
+      <div className="absolute inset-0 flex flex-col items-start justify-center z-10 px-4 sm:px-6 md:px-12 lg:px-20 py-3 sm:py-0">
+        <h2 className="text-base sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-1.5 sm:mb-2 md:mb-4">
+          <span className="text-white" style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.3)" }}>
             {title}
           </span>
         </h2>
+        <div className="w-8 sm:w-10 h-[2px] bg-[#b8964e] mb-2 sm:mb-3 md:mb-5" />
 
-        {/* Description */}
         <p
-          className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white font-medium max-w-[180px] sm:max-w-xs md:max-w-lg lg:max-w-2xl mb-1.5 sm:mb-3 md:mb-6 drop-shadow-lg leading-tight sm:leading-normal"
-          style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
+          className="text-xs sm:text-sm md:text-base lg:text-lg text-white/90 font-medium max-w-[180px] sm:max-w-xs md:max-w-lg lg:max-w-2xl mb-2 sm:mb-4 md:mb-6 leading-snug sm:leading-normal"
+          style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.3)" }}
         >
           {description}
         </p>
 
-        {/* Shop Now Button */}
         <Link
           href={buttonLink}
-          className="bg-black text-white px-3 sm:px-4 md:px-8 py-1.5 sm:py-2 md:py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200 shadow-lg text-xs sm:text-sm md:text-base"
+          className="bg-white text-[#1a1a2e] px-4 sm:px-5 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-lg font-semibold hover:bg-[#1a1a2e] hover:text-white transition-all duration-300 shadow-lg text-[11px] sm:text-xs md:text-sm tracking-wide uppercase"
         >
           {buttonText}
         </Link>

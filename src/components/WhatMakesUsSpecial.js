@@ -107,29 +107,31 @@ How to reach us:
   ];
 
   return (
-    <div className="py-12 md:py-16 px-4">
+    <div className="py-14 md:py-20 px-4 bg-[#faf8f5]">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12" style={{ color: "#1a1a2e" }}>
-          WHAT MAKE US SPECIAL?
+        <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
+          Why Choose Us
+        </p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
+          WHAT MAKES US SPECIAL?
         </h2>
+        <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-10 md:mb-14" />
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 lg:gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
               onClick={() => setOpenModalIndex(index)}
-              className="group relative bg-white rounded-xl p-4 md:p-6 hover:shadow-lg transition-all duration-300 text-center cursor-pointer border border-gray-100"
+              className="group relative bg-white rounded-xl p-5 md:p-6 hover:shadow-[0_8px_30px_rgba(0,0,0,0.05)] transition-all duration-300 text-center cursor-pointer border border-[#e8e4df] hover:border-[#b8964e]/30"
             >
-              <div className="flex justify-center mb-3 md:mb-4">
-                <div className="relative w-12 h-12 md:w-16 md:h-16">
-                  <Image src={feature.image} alt={feature.title} fill className="object-contain" sizes="64px" />
+              <div className="flex justify-center mb-4">
+                <div className="relative w-12 h-12 md:w-14 md:h-14 p-2 bg-[#faf8f5] rounded-xl group-hover:bg-[#f3efe8] transition-colors">
+                  <Image src={feature.image} alt={feature.title} fill className="object-contain p-1" sizes="56px" />
                 </div>
               </div>
-              <h3 className="text-xs md:text-sm font-bold text-gray-900 mb-2 md:mb-3 uppercase">{feature.title}</h3>
-              <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed">{feature.description}</p>
-              <p className="text-[10px] text-gray-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                Tap for details
-              </p>
+              <h3 className="text-[11px] md:text-xs font-bold text-[#1a1a2e] mb-2 uppercase tracking-[0.06em]">{feature.title}</h3>
+              <p className="text-[10px] md:text-[11px] text-[#8a847e] leading-relaxed">{feature.description}</p>
+              <div className="mt-3 w-0 group-hover:w-6 h-[1.5px] bg-[#b8964e] mx-auto transition-all duration-300" />
             </div>
           ))}
         </div>

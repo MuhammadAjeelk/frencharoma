@@ -67,7 +67,7 @@ export default function HeroCarousel() {
                 <div className="w-[40%] flex justify-end">
                   <Link
                     href={slide.href}
-                    className="bg-primary text-black px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-2.5 lg:px-8 lg:py-3 rounded-md text-[10px] sm:text-xs md:text-sm uppercase tracking-wide hover:bg-gray-100 transition-colors shadow-lg font-semibold"
+                    className="bg-white text-[#1a1a2e] px-4 py-2 sm:px-5 sm:py-2.5 md:px-8 md:py-3 lg:px-10 lg:py-3.5 rounded-lg text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.14em] hover:bg-[#1a1a2e] hover:text-white transition-all duration-300 shadow-lg font-semibold border border-white/20"
                   >
                     SHOP NOW
                   </Link>
@@ -79,30 +79,30 @@ export default function HeroCarousel() {
       </div>
 
       {/* Controls */}
-      <div className="bg-white py-3 sm:py-4 md:py-6">
-        <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8">
-          <button onClick={prevSlide} className="text-black hover:text-gray-600 transition-colors" aria-label="Previous slide">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+      <div className="bg-white py-4 sm:py-5 md:py-6">
+        <div className="flex items-center justify-center gap-5 sm:gap-7 lg:gap-10">
+          <button onClick={prevSlide} className="text-[#1a1a2e] hover:text-[#b8964e] transition-colors p-1" aria-label="Previous slide">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`transition-all duration-300 ${
+                className={`transition-all duration-300 rounded-full ${
                   index === currentSlide
-                    ? "w-2 h-2 bg-black rounded-full"
-                    : "w-2 h-2 border-2 border-black rounded-full bg-transparent hover:bg-gray-200"
+                    ? "w-6 h-1.5 bg-[#1a1a2e]"
+                    : "w-1.5 h-1.5 bg-[#ccc8c2] hover:bg-[#8a847e]"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
-          <button onClick={nextSlide} className="text-black hover:text-gray-600 transition-colors" aria-label="Next slide">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <button onClick={nextSlide} className="text-[#1a1a2e] hover:text-[#b8964e] transition-colors p-1" aria-label="Next slide">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>

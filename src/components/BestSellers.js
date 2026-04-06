@@ -210,16 +210,20 @@ export default function BestSellers() {
 
   return (
     <>
-      <div className="py-8 md:py-12 px-4 bg-white relative overflow-visible">
+      <div className="py-12 md:py-16 px-4 bg-white relative overflow-visible">
         <div className="max-w-7xl mx-auto overflow-visible">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8" style={{ color: "#1a1a2e" }}>
-            BEST-SELLERS
+          <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
+            Customer Favourites
+          </p>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
+            BEST SELLERS
           </h2>
+          <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-8 md:mb-10" />
 
           <div className="relative mb-6 md:mb-8 overflow-visible">
             <button
               onClick={handlePrevious}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 md:p-2 rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm hover:border-[#b8964e] hover:shadow-md transition-all duration-200"
               aria-label="Previous products"
             >
               <Image src="/icons/arrow-left.svg" alt="Previous" width={20} height={20} className="w-5 h-5 md:w-6 md:h-6" />
@@ -270,7 +274,7 @@ export default function BestSellers() {
 
             <button
               onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-1.5 md:p-2 rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm hover:border-[#b8964e] hover:shadow-md transition-all duration-200"
               aria-label="Next products"
             >
               <Image src="/icons/arrow-right.svg" alt="Next" width={20} height={20} className="w-5 h-5 md:w-6 md:h-6" />
@@ -278,16 +282,16 @@ export default function BestSellers() {
           </div>
 
           {/* Count + View All */}
-          <div className="flex flex-col items-center gap-3">
-            <p className="text-sm text-gray-500">
-              Showing <span className="font-semibold text-gray-800">{Math.min(visibleCount, perfumes.length)}</span> of{" "}
-              <span className="font-semibold text-gray-800">{perfumes.length}</span> products
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-[13px] text-[#8a847e]">
+              Showing <span className="font-semibold text-[#1f1a16]">{Math.min(visibleCount, perfumes.length)}</span> of{" "}
+              <span className="font-semibold text-[#1f1a16]">{perfumes.length}</span> products
             </p>
             <a
               href="/collections/shop-all?bestSeller=true"
-              className="bg-black text-white px-6 md:px-8 py-2.5 md:py-3 rounded hover:bg-gray-800 transition-colors font-semibold text-sm md:text-base"
+              className="bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg hover:bg-[#2d2d44] transition-colors font-semibold text-sm tracking-wide uppercase"
             >
-              View all
+              View All
             </a>
           </div>
         </div>

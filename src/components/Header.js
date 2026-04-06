@@ -86,14 +86,13 @@ export default function Header() {
   return (
     <>
       <header
-        className={`header sticky top-0 z-50 border-b border-gray-200 transition-transform duration-300 ease-in-out ${
+        className={`header sticky top-0 z-50 border-b border-[#e8e4df] bg-[#faf8f5] transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
-        style={{ backgroundColor: "var(--primary)" }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-3 lg:py-4">
             {/* Left — Search */}
             <div className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible">
               {/* Mobile Menu Button */}
@@ -115,7 +114,7 @@ export default function Header() {
                   aria-label="Search"
                 >
                   <img src="/icons/search.svg" alt="Search" className="w-5 h-5" />
-                  <span className="text-sm font-medium uppercase tracking-wide">Search</span>
+                  <span className="text-[13px] font-medium uppercase tracking-[0.12em]">Search</span>
                 </button>
                 {isSearchExpanded && (
                   <form
@@ -137,7 +136,7 @@ export default function Header() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search perfumes..."
-                        className="w-64 px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-md focus:outline-none bg-white text-sm"
+                        className="w-64 px-4 py-2.5 pl-10 pr-10 border border-[#e8e4df] rounded-lg focus:outline-none focus:border-[#1a1a2e] bg-white text-[13px]"
                         autoFocus
                         onBlur={() => {
                           setTimeout(() => {
@@ -213,7 +212,7 @@ export default function Header() {
                   <img src="/icons/account.svg" alt="Account" className="w-5 h-5" />
                 </button>
                 {isAccountOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md py-2 z-50 animate-fadeIn">
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
                     {loading ? (
                       <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
                     ) : user ? (
@@ -270,8 +269,8 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center py-3 border-t border-gray-200">
-            <ul className="flex items-center gap-6">
+          <nav className="hidden lg:flex items-center justify-center py-2.5 border-t border-[#e8e4df]/70">
+            <ul className="flex items-center gap-7">
               {menuItems.map((item, index) => (
                 <li
                   key={index}
@@ -281,20 +280,20 @@ export default function Header() {
                 >
                   {item.submenu ? (
                     <>
-                      <button className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity">
+                      <button className="flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200">
                         {item.name}
-                        <img src="/icons/caret.svg" alt="" className="w-3 h-3" />
+                        <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                       </button>
                       {openDropdown === index && (
-                        <div className="absolute top-full left-0 mt-0 w-56 bg-white border border-gray-200 shadow-lg rounded-md py-2 z-50 animate-fadeIn">
+                        <div className="absolute top-full left-0 mt-0 w-56 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
                           {item.submenu.map((sub, si) =>
                             sub.divider ? (
-                              <div key={si} className="my-1 border-t border-gray-100" />
+                              <div key={si} className="my-1.5 border-t border-[#f0ece7]" />
                             ) : (
                               <Link
                                 key={si}
                                 href={sub.href}
-                                className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+                                className="block px-5 py-2.5 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] transition-colors"
                                 onClick={() => setOpenDropdown(null)}
                               >
                                 {sub.name}
@@ -306,29 +305,29 @@ export default function Header() {
                     </>
                   ) : item.brandDropdown ? (
                     <>
-                      <button className="flex items-center gap-1 py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity">
+                      <button className="flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200">
                         {item.name}
-                        <img src="/icons/caret.svg" alt="" className="w-3 h-3" />
+                        <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                       </button>
                       {openDropdown === index && (
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[480px] bg-white border border-gray-200 shadow-lg rounded-md py-3 z-50 animate-fadeIn">
-                          <div className="px-4 pb-2 border-b border-gray-100 mb-2">
-                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Browse by Brand (A–Z)</p>
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[500px] bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-4 z-50 animate-fadeIn">
+                          <div className="px-5 pb-3 border-b border-[#f0ece7] mb-3">
+                            <p className="text-[11px] font-semibold text-[#b8964e] uppercase tracking-[0.16em]">Browse by Brand (A–Z)</p>
                           </div>
-                          <div className="grid grid-cols-3 gap-x-2 max-h-80 overflow-y-auto px-2">
+                          <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-auto scrollbar-thin px-3">
                             {brands.length > 0 ? (
                               brands.map((b) => (
                                 <Link
                                   key={b}
                                   href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                                  className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded transition-colors truncate"
+                                  className="block px-3 py-2 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors truncate"
                                   onClick={() => setOpenDropdown(null)}
                                 >
                                   {b}
                                 </Link>
                               ))
                             ) : (
-                              <p className="col-span-3 px-3 py-2 text-sm text-gray-400">Loading brands...</p>
+                              <p className="col-span-3 px-3 py-2 text-[13px] text-[#a09890]">Loading brands...</p>
                             )}
                           </div>
                         </div>
@@ -337,7 +336,7 @@ export default function Header() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="block py-2 text-sm font-medium uppercase tracking-wide hover:opacity-70 transition-opacity"
+                      className="block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200"
                     >
                       {item.name}
                     </Link>

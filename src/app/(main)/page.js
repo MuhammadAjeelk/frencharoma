@@ -10,22 +10,15 @@ import WhatMakesUsSpecial from "@/components/WhatMakesUsSpecial";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <HeroCarousel />
-
       <BrandMarquee />
-
       <ShopByGender />
-
       <ShopByCategory />
-
       <BestSellers />
-
       <BundleOffers />
-
       <SpecialOffers />
       <Discovery />
-
       <WhatMakesUsSpecial />
     </div>
   );
