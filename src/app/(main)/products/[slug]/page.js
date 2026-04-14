@@ -205,34 +205,33 @@ export default function ProductDetailPage() {
     setSelectedEdition(ed);
     const firstV = (ed.variants || []).filter((v) => v.isActive)[0];
     setSelectedVariant(firstV || null);
-    // If edition has variant-specific image, show it
-    const edImg = firstV?.images?.main;
-    if (edImg) {
-      const imgs = buildDisplayImages(perfume, ed);
-      const idx  = imgs.indexOf(edImg);
-      setActiveImgIndex(idx >= 0 ? idx : 0);
-    } else {
-      setActiveImgIndex(0);
-    }
+    setActiveImgIndex(0);
   };
 
-  // ── Build display images ───────────────────────────────────────────────
-  const buildDisplayImages = (p, ed) => {
+  // ── Build display images (product-level only: main + gallery) ──────────
+  // Variant images are intentionally excluded from the strip — they are
+  // often the same photo as the product main and cause duplicate thumbnails.
+  const buildDisplayImages = (p) => {
     if (!p) return [];
     const imgs = [];
     if (p.images?.main) imgs.push(p.images.main);
-    if (p.images?.gallery) for (const i of p.images.gallery) if (!imgs.includes(i)) imgs.push(i);
-    if (ed) {
-      for (const v of ed.variants || []) {
-        if (v.images?.main && !imgs.includes(v.images.main)) imgs.push(v.images.main);
-        for (const g of v.images?.gallery || []) if (!imgs.includes(g)) imgs.push(g);
-      }
+    for (const i of p.images?.gallery || []) {
+      if (!imgs.includes(i)) imgs.push(i);
     }
     return imgs;
   };
 
-  const displayImages  = buildDisplayImages(perfume, selectedEdition);
-  const currentImage   = displayImages[Math.min(activeImgIndex, displayImages.length - 1)] || null;
+  const displayImages = buildDisplayImages(perfume);
+
+  // If the selected variant has its own image and the user hasn't manually
+  // navigated away from slot 0, surface the variant image as the main display.
+  const variantOverrideImage = activeImgIndex === 0
+    ? (selectedVariant?.images?.main || null)
+    : null;
+  const currentImage =
+    variantOverrideImage ||
+    displayImages[Math.min(activeImgIndex, displayImages.length - 1)] ||
+    null;
   const enabledEditions = (perfume?.editions || []).filter((e) => e.enabled);
   const inStock        = !!(selectedVariant && selectedVariant.stock > 0 && selectedVariant.isActive);
   const brandLabel     = perfume
