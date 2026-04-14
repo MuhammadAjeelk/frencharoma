@@ -324,7 +324,7 @@ export default function ProductDetailPage() {
 
             {/* Thumbnail strip – desktop only, shown even for single image */}
             {displayImages.length > 0 && (
-              <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0" style={{ maxHeight: "560px", overflowY: "auto" }}>
+              <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0 overflow-y-auto self-stretch">
                 {displayImages.map((img, idx) => (
                   <button
                     key={idx}
