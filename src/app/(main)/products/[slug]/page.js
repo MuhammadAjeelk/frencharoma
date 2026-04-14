@@ -320,11 +320,11 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 items-start">
 
           {/* ───── LEFT: Image Gallery (sticky on desktop) ───── */}
-          <div className="flex gap-3 lg:sticky lg:top-[120px] lg:self-start">
+          <div className="flex gap-3 lg:sticky lg:top-[120px] lg:self-start lg:max-h-[calc(100vh-136px)]">
 
             {/* Thumbnail strip – desktop only, shown even for single image */}
             {displayImages.length > 0 && (
-              <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0 overflow-y-auto self-stretch">
+              <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0 overflow-y-auto self-stretch lg:max-h-[calc(100vh-136px)]">
                 {displayImages.map((img, idx) => (
                   <button
                     key={idx}
@@ -348,7 +348,7 @@ export default function ProductDetailPage() {
             )}
 
             {/* Main image + nav arrows */}
-            <div className="flex-1 relative rounded-xl overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5]">
+            <div className="flex-1 relative rounded-xl overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5] lg:max-h-[calc(100vh-136px)]">
               {currentImage ? (
                   <Image
                   src={currentImage}
