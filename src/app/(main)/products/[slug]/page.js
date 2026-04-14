@@ -348,7 +348,7 @@ export default function ProductDetailPage() {
             )}
 
             {/* Main image + nav arrows */}
-            <div className="flex-1 relative rounded-xl overflow-hidden bg-gray-50 w-full" style={{ aspectRatio: "2 / 3" }}>
+            <div className="flex-1 relative rounded-xl overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5]">
               {currentImage ? (
                   <Image
                   src={currentImage}
