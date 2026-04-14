@@ -320,7 +320,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 items-start">
 
           {/* ───── LEFT: Image Gallery (sticky on desktop) ───── */}
-          <div className="flex gap-3 lg:sticky lg:top-4 lg:self-start">
+          <div className="flex gap-3 lg:sticky lg:top-[120px] lg:self-start">
 
             {/* Thumbnail strip – desktop only, shown even for single image */}
             {displayImages.length > 0 && (
