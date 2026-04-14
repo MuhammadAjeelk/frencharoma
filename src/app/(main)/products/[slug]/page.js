@@ -322,8 +322,8 @@ export default function ProductDetailPage() {
           {/* ───── LEFT: Image Gallery (sticky on desktop) ───── */}
           <div className="flex gap-3 lg:sticky lg:top-4 lg:self-start">
 
-            {/* Thumbnail strip – desktop only */}
-            {displayImages.length > 1 && (
+            {/* Thumbnail strip – desktop only, shown even for single image */}
+            {displayImages.length > 0 && (
               <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0" style={{ maxHeight: "560px", overflowY: "auto" }}>
                 {displayImages.map((img, idx) => (
                   <button
