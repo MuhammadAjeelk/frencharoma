@@ -15,14 +15,17 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "Perfume not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      perfume: {
-        ...perfume,
-        _id: perfume._id.toString(),
-        createdAt: perfume.createdAt.toISOString(),
-        updatedAt: perfume.updatedAt.toISOString(),
+    return NextResponse.json(
+      {
+        perfume: {
+          ...perfume,
+          _id: perfume._id.toString(),
+          createdAt: perfume.createdAt.toISOString(),
+          updatedAt: perfume.updatedAt.toISOString(),
+        },
       },
-    });
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch (error) {
     console.error("Public get perfume error:", error);
     return NextResponse.json(

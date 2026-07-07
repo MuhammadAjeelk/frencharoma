@@ -3,6 +3,8 @@ import Link from "next/link";
 import connectDB from "@/lib/db";
 import Perfume from "@/lib/models/Perfume";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "View Perfume | Admin Panel",
 };

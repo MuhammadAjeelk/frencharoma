@@ -6,21 +6,6 @@ import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
 import { useCart } from "@/context/CartContext";
 
-function getPriceRange(editions) {
-  let min = Infinity;
-  let max = -Infinity;
-  for (const ed of editions || []) {
-    if (!ed.enabled) continue;
-    for (const v of ed.variants || []) {
-      if (!v.isActive) continue;
-      if (v.price < min) min = v.price;
-      if (v.price > max) max = v.price;
-    }
-  }
-  if (min === Infinity) return null;
-  return { min, max };
-}
-
 function QuickViewContent({ perfume, onClose }) {
   const { addItem } = useCart();
   const enabledEditions = (perfume.editions || []).filter((e) => e.enabled);
@@ -232,7 +217,6 @@ export default function BestSellers() {
             <div className="min-w-0 pl-12 sm:pl-14 md:pl-16 pr-12 sm:pr-14 md:pr-16">
               <div className="flex gap-3 md:gap-4">
                 {visibleItems.map((perfume, index) => {
-                  const range = getPriceRange(perfume.editions);
                   const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
                   const hasSpecialOfferTag = (perfume.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
                   return (
@@ -253,9 +237,9 @@ export default function BestSellers() {
                         brand={brandLabel}
                         image={perfume.images?.main || ""}
                         impressionName={perfume.impressionName || ""}
-                        salePrice={range ? range.min : 0}
-                        originalPrice={range && range.max !== range.min ? range.max : undefined}
-                        hasSale={range ? range.max !== range.min : false}
+                        slug={perfume.slug}
+                        perfumeId={perfume._id}
+                        editions={perfume.editions || []}
                         discountPercent={perfume.discountPercent || 0}
                         globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
                         isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}

@@ -190,12 +190,15 @@ export async function GET(request) {
         globalAdmirePercent: p.globalAdmirePercent ?? 60,
       }));
 
-      return NextResponse.json({
-        perfumes: serialized,
-        total:    totalCount,
-        page,
-        pages:    Math.ceil(totalCount / limit),
-      });
+      return NextResponse.json(
+        {
+          perfumes: serialized,
+          total:    totalCount,
+          page,
+          pages:    Math.ceil(totalCount / limit),
+        },
+        { headers: { "Cache-Control": "no-store" } }
+      );
     }
 
     // ── Standard sort ─────────────────────────────────────────────────────
@@ -228,12 +231,15 @@ export async function GET(request) {
       globalAdmirePercent: p.globalAdmirePercent ?? 60,
     }));
 
-    return NextResponse.json({
-      perfumes: serialized,
-      total,
-      page,
-      pages: Math.ceil(total / limit),
-    });
+    return NextResponse.json(
+      {
+        perfumes: serialized,
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+      },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch (error) {
     console.error("Public list perfumes error:", error);
     return NextResponse.json(

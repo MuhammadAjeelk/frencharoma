@@ -7,18 +7,7 @@ import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import UniversalModal from "@/components/UniversalModal";
-
-// ── Helper: lowest price across editions ───────────────────────────────────
-function getLowestPrice(editions) {
-  let lowest = Infinity;
-  for (const ed of editions || []) {
-    if (!ed.enabled) continue;
-    for (const v of ed.variants || []) {
-      if (v.isActive && v.price < lowest) lowest = v.price;
-    }
-  }
-  return lowest === Infinity ? null : lowest;
-}
+import { getLowestPrice } from "@/lib/pricing";
 
 
 // ── Notes Pyramid ──────────────────────────────────────────────────────────
@@ -129,8 +118,9 @@ export default function ProductDetailPage() {
           if (enabled.length > 0) {
             const firstEd = enabled[0];
             setSelectedEdition(firstEd);
-            const firstV = (firstEd.variants || []).filter((v) => v.isActive)[0];
-            setSelectedVariant(firstV || null);
+            const actives = (firstEd.variants || []).filter((v) => v.isActive);
+            const firstV = actives.find((v) => v.size !== "5ml") || actives[0] || null;
+            setSelectedVariant(firstV);
           }
           setActiveImgIndex(0);
         }
@@ -203,35 +193,30 @@ export default function ProductDetailPage() {
   // ── Edition change ─────────────────────────────────────────────────────
   const handleEditionChange = (ed) => {
     setSelectedEdition(ed);
-    const firstV = (ed.variants || []).filter((v) => v.isActive)[0];
-    setSelectedVariant(firstV || null);
+    const actives = (ed.variants || []).filter((v) => v.isActive);
+    setSelectedVariant(actives.find((v) => v.size !== "5ml") || actives[0] || null);
     setActiveImgIndex(0);
   };
 
-  // ── Build display images (product-level only: main + gallery) ──────────
-  // Variant images are intentionally excluded from the strip — they are
-  // often the same photo as the product main and cause duplicate thumbnails.
-  const buildDisplayImages = (p) => {
-    if (!p) return [];
+  // ── Build display images (main + gallery) from an images object ────────
+  const buildImageList = (imgObj) => {
     const imgs = [];
-    if (p.images?.main) imgs.push(p.images.main);
-    for (const i of p.images?.gallery || []) {
+    if (imgObj?.main) imgs.push(imgObj.main);
+    for (const i of imgObj?.gallery || []) {
       if (!imgs.includes(i)) imgs.push(i);
     }
     return imgs;
   };
 
-  const displayImages = buildDisplayImages(perfume);
+  // When the selected variant has its own photos, the whole gallery (main +
+  // thumbnails) reflects that variant. Otherwise fall back to the product's
+  // default images.
+  const variantImages = buildImageList(selectedVariant?.images);
+  const displayImages =
+    variantImages.length > 0 ? variantImages : buildImageList(perfume?.images);
 
-  // If the selected variant has its own image and the user hasn't manually
-  // navigated away from slot 0, surface the variant image as the main display.
-  const variantOverrideImage = activeImgIndex === 0
-    ? (selectedVariant?.images?.main || null)
-    : null;
   const currentImage =
-    variantOverrideImage ||
-    displayImages[Math.min(activeImgIndex, displayImages.length - 1)] ||
-    null;
+    displayImages[Math.min(activeImgIndex, displayImages.length - 1)] || null;
   const enabledEditions = (perfume?.editions || []).filter((e) => e.enabled);
   const inStock        = !!(selectedVariant && selectedVariant.stock > 0 && selectedVariant.isActive);
   const brandLabel     = perfume
@@ -493,8 +478,12 @@ export default function ProductDetailPage() {
 
                 <div className="flex flex-wrap gap-2 mb-2">
                   {enabledEditions.map((ed) => {
-                    const variants  = (ed.variants || []).filter((v) => v.isActive);
-                    const minPrice  = variants.reduce((m, v) => (v.price < m ? v.price : m), Infinity);
+                    const activeVariants = (ed.variants || []).filter((v) => v.isActive);
+                    // Price the actual bottle: exclude the 5ml tester unless it's
+                    // the only size available for this edition.
+                    const fullSize  = activeVariants.filter((v) => v.size !== "5ml");
+                    const priced    = fullSize.length > 0 ? fullSize : activeVariants;
+                    const minPrice  = priced.reduce((m, v) => (v.price < m ? v.price : m), Infinity);
                     const disc      = perfume.discountPercent || 0;
                     const dispPrice = disc > 0 && minPrice < Infinity
                       ? Math.round(minPrice * (1 - disc / 100))
@@ -546,7 +535,7 @@ export default function ProductDetailPage() {
                       .map((v) => (
                         <button
                           key={v.size}
-                          onClick={() => setSelectedVariant(v)}
+                          onClick={() => { setSelectedVariant(v); setActiveImgIndex(0); }}
                         disabled={v.stock === 0}
                         className={`px-5 py-2 rounded-full border-2 text-sm font-bold transition-all ${
                             selectedVariant?.size === v.size

@@ -253,8 +253,8 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
       }
 
       success(isEdit ? "Perfume updated successfully" : "Perfume created successfully");
-      router.push("/admin/perfumes");
       router.refresh();
+      router.push("/admin/perfumes");
     } catch (err) {
       error(err.message);
     } finally {

@@ -10,21 +10,6 @@ import { useCart } from "@/context/CartContext";
 
 const PAGE_SIZE = 20;
 
-// ── Helpers ────────────────────────────────────────────────────────────────
-function getPriceRange(editions) {
-  let min = Infinity, max = -Infinity;
-  for (const ed of editions || []) {
-    if (!ed.enabled) continue;
-    for (const v of ed.variants || []) {
-      if (!v.isActive) continue;
-      if (v.price < min) min = v.price;
-      if (v.price > max) max = v.price;
-    }
-  }
-  if (min === Infinity) return null;
-  return { min, max };
-}
-
 // ── Filter options ─────────────────────────────────────────────────────────
 const GENDER_OPTIONS = [
   { value: "all",    label: "All"      },
@@ -714,7 +699,6 @@ function ShopAllContent() {
           {!loading && perfumes.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
               {perfumes.map((perfume) => {
-                const range      = getPriceRange(perfume.editions);
                 const brandLabel = Array.isArray(perfume.brands) && perfume.brands.length > 0
                   ? perfume.brands.join(", ")
                   : perfume.brand || "";
@@ -729,9 +713,8 @@ function ShopAllContent() {
                     image={perfume.images?.main || ""}
                     impressionName={perfume.impressionName || ""}
                     slug={perfume.slug}
-                    salePrice={range ? range.min : 0}
-                    originalPrice={range && range.max !== range.min ? range.max : undefined}
-                    hasSale={range ? range.max !== range.min : false}
+                    perfumeId={perfume._id}
+                    editions={perfume.editions || []}
                     discountPercent={perfume.discountPercent || 0}
                     globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
                     isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}

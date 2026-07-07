@@ -4,6 +4,8 @@ import connectDB from "@/lib/db";
 import Perfume from "@/lib/models/Perfume";
 import PerfumeForm from "@/components/admin/PerfumeForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Edit Perfume | Admin Panel",
 };

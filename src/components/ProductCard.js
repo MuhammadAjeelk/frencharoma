@@ -1,8 +1,11 @@
 "use client";
 
+import { useState, useRef, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
+import { useCart } from "@/context/CartContext";
+import { getFullSizeVariants } from "@/lib/pricing";
 
 const SEASON_LABELS = {
   "spring-summer": "Spring & Summer",
@@ -14,16 +17,17 @@ const SEASON_LABELS = {
   "all-seasons": "All Seasons",
 };
 
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+
 export default function ProductCard({
   name,
   brand,
   image,
   impressionName,
-  originalPrice,
-  salePrice,
   href,
   slug,
-  hasSale = false,
+  perfumeId,
+  editions = [],
   discountPercent = 0,
   isSpecialOffer = false,
   globalAdmirePercent = 60,
@@ -31,16 +35,58 @@ export default function ProductCard({
   onQuickView,
 }) {
   const { isInWishlist, toggleItem } = useWishlist();
+  const { addItem } = useCart();
 
   const brandLabel = Array.isArray(brand) ? brand.join(", ") : brand;
   const seasonTags = (tags || []).filter((t) => SEASON_LABELS[t]);
   const productSlug = slug || (href ? href.replace("/products/", "") : "");
   const wishlisted = isInWishlist(productSlug);
 
-  const hasDiscount = discountPercent > 0 && salePrice > 0;
-  const discountedMin = hasDiscount ? Math.round(salePrice * (1 - discountPercent / 100)) : salePrice;
-  const discountedMax =
-    hasDiscount && originalPrice ? Math.round(originalPrice * (1 - discountPercent / 100)) : originalPrice;
+  // ── Full-size variants (5ml tester excluded) ──────────────────────────────
+  const variants = useMemo(() => getFullSizeVariants(editions), [editions]);
+  const multiEdition = useMemo(
+    () => new Set(variants.map((v) => v.editionKey)).size > 1,
+    [variants]
+  );
+
+  const disc = Number(discountPercent) || 0;
+  const finalOf = (price) => (disc > 0 ? Math.round(price * (1 - disc / 100)) : price);
+  const variantLabel = (v) =>
+    (multiEdition ? `${cap(v.editionKey)} · ` : "") + v.size;
+
+  // Default to first in-stock variant, else the first one.
+  const [selected, setSelected] = useState(
+    () => variants.find((v) => v.stock > 0) || variants[0] || null
+  );
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [added, setAdded] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close the dropdown on outside click.
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const onDown = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [dropdownOpen]);
+
+  const priceRange = useMemo(() => {
+    if (variants.length === 0) return null;
+    let min = Infinity;
+    let max = -Infinity;
+    for (const v of variants) {
+      if (v.price < min) min = v.price;
+      if (v.price > max) max = v.price;
+    }
+    return { min, max };
+  }, [variants]);
+  const isRange = priceRange && priceRange.max !== priceRange.min;
+
+  const inStock = !!(selected && selected.stock > 0);
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
@@ -50,20 +96,37 @@ export default function ProductCard({
       name,
       brand: brandLabel,
       image,
-      price: salePrice,
+      price: selected ? finalOf(selected.price) : 0,
     });
+  };
+
+  const handleAddToCart = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    if (!selected || !inStock) return;
+    addItem({
+      perfumeId,
+      slug: productSlug,
+      name,
+      image: image || "",
+      edition: selected.editionKey || "",
+      size: selected.size,
+      price: finalOf(selected.price),
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
   };
 
   return (
     <div className="group relative border border-[#e8e4df] rounded-xl overflow-hidden bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col">
       {/* Badges - stacked top-left */}
       <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5">
-        {hasDiscount && (
+        {disc > 0 && (
           <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
-            -{discountPercent}% OFF
+            -{disc}% OFF
           </span>
         )}
-        {!hasDiscount && hasSale && originalPrice && (
+        {disc === 0 && isRange && (
           <span className="bg-[#b8964e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
             Multiple Editions
           </span>
@@ -92,16 +155,107 @@ export default function ProductCard({
         </svg>
       </button>
 
-      {/* Product Image */}
-      <Link href={href || "#"} className="block relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-        />
-      </Link>
+      {/* Product Image + hover size/edition selector overlay */}
+      <div className="relative w-full aspect-[6.818/7.5] bg-[#f7f5f2]">
+        <Link href={href || "#"} className="block relative w-full h-full overflow-hidden">
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
+        </Link>
+
+        {/* Selector floats over the bottom of the image — revealed on hover
+            (desktop), always shown on touch. Does not affect card height. */}
+        {variants.length > 0 && (
+          <div
+            ref={dropdownRef}
+            className="absolute inset-x-2 bottom-2 z-20 transition-all duration-200 sm:opacity-0 sm:translate-y-1 sm:pointer-events-none sm:group-hover:opacity-100 sm:group-hover:translate-y-0 sm:group-hover:pointer-events-auto sm:group-focus-within:opacity-100 sm:group-focus-within:translate-y-0 sm:group-focus-within:pointer-events-auto"
+          >
+            <button
+              type="button"
+              onClick={() => variants.length > 1 && setDropdownOpen((o) => !o)}
+              className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-left bg-white/95 backdrop-blur-sm border border-white/70 shadow-md transition-colors ${
+                variants.length > 1 ? "hover:bg-white cursor-pointer" : "cursor-default"
+              }`}
+              aria-haspopup={variants.length > 1 ? "listbox" : undefined}
+              aria-expanded={variants.length > 1 ? dropdownOpen : undefined}
+            >
+              <span className="text-[11px] sm:text-xs font-semibold text-[#1f1a16] truncate">
+                {selected ? variantLabel(selected) : "Select size"}
+              </span>
+              <span className="flex items-center gap-1.5 shrink-0">
+                {selected && (
+                  <span className="text-[11px] sm:text-xs font-bold text-[#1f1a16]">
+                    Rs. {finalOf(selected.price).toLocaleString()}
+                  </span>
+                )}
+                {variants.length > 1 && (
+                  <svg
+                    className={`w-3.5 h-3.5 text-[#8a847e] transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </span>
+            </button>
+
+            {dropdownOpen && variants.length > 1 && (
+              <ul
+                role="listbox"
+                className="absolute z-30 left-0 right-0 bottom-full mb-1 bg-white border border-[#e8e4df] rounded-lg shadow-xl overflow-hidden max-h-52 overflow-y-auto"
+              >
+                {variants.map((v, i) => {
+                  const isSel = selected === v || (selected?.editionKey === v.editionKey && selected?.size === v.size);
+                  const oos = v.stock <= 0;
+                  return (
+                    <li key={`${v.editionKey}-${v.size}-${i}`} role="option" aria-selected={isSel}>
+                      <button
+                        type="button"
+                        disabled={oos}
+                        onClick={() => {
+                          if (oos) return;
+                          setSelected(v);
+                          setDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between gap-2 px-3 py-2 text-left transition-colors ${
+                          oos
+                            ? "text-[#c4bfb9] cursor-not-allowed"
+                            : isSel
+                            ? "bg-[#faf7f0] text-[#1f1a16]"
+                            : "text-[#3a352f] hover:bg-[#f7f5f2]"
+                        }`}
+                      >
+                        <span className="flex items-center gap-1.5 text-[11px] sm:text-xs font-medium truncate">
+                          {isSel && !oos && (
+                            <svg className="w-3 h-3 text-[#b8964e] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                          <span className="truncate">
+                            {variantLabel(v)}
+                            {disc > 0 && <span className="ml-1 text-[#b8964e] font-semibold">{disc}%</span>}
+                            {oos && <span className="ml-1 italic">· Sold out</span>}
+                          </span>
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-semibold shrink-0">
+                          Rs. {finalOf(v.price).toLocaleString()}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Product Details */}
       <div className="p-3 sm:p-4 flex flex-col flex-1">
@@ -150,35 +304,22 @@ export default function ProductCard({
           </div>
         </div>
 
-        {/* Price */}
-        <div className="flex flex-col gap-0.5 mb-2 sm:mb-3">
-          {hasDiscount ? (
+        {/* ── Price ── */}
+        <div className="flex items-baseline gap-2 flex-wrap mb-2 sm:mb-3">
+          {selected ? (
             <>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm sm:text-[15px] font-bold text-[#1f1a16]">
-                  PKR {discountedMin.toLocaleString()}
-                  {hasSale && discountedMax && discountedMax !== discountedMin && (
-                    <> – {discountedMax.toLocaleString()}</>
-                  )}
-                </span>
-              </div>
-              <span className="text-[11px] text-[#a09890] line-through">
-                PKR {salePrice.toLocaleString()}
-                {hasSale && originalPrice && originalPrice !== salePrice && (
-                  <> – {originalPrice.toLocaleString()}</>
-                )}
+              <span className="text-sm sm:text-[15px] font-bold text-[#1f1a16]">
+                {isRange && <span className="font-normal text-[#8a847e] text-[11px]">from </span>}
+                PKR {finalOf(selected.price).toLocaleString()}
               </span>
+              {disc > 0 && (
+                <span className="text-[11px] text-[#a09890] line-through">
+                  PKR {selected.price.toLocaleString()}
+                </span>
+              )}
             </>
-          ) : hasSale && originalPrice ? (
-            <span className="text-sm sm:text-[15px] font-bold text-[#1f1a16]">
-              PKR {salePrice.toLocaleString()}{" "}
-              <span className="font-normal text-[#a09890] text-[11px]">–</span>{" "}
-              {originalPrice.toLocaleString()}
-            </span>
           ) : (
-            <span className="text-sm sm:text-[15px] font-bold text-[#1f1a16]">
-              PKR {salePrice.toLocaleString()}
-            </span>
+            <span className="text-sm text-[#a09890]">Unavailable</span>
           )}
         </div>
 
@@ -187,10 +328,15 @@ export default function ProductCard({
         {/* Buttons */}
         <div className="flex gap-2">
           <button
-            onClick={onQuickView}
-            className="flex-1 bg-[#1a1a2e] text-white py-2 sm:py-2.5 px-3 rounded-lg hover:bg-[#2d2d44] transition-colors duration-200 text-[11px] sm:text-xs font-semibold tracking-wide uppercase"
+            onClick={handleAddToCart}
+            disabled={!inStock}
+            className={`flex-1 py-2 sm:py-2.5 px-3 rounded-lg transition-colors duration-200 text-[11px] sm:text-xs font-semibold tracking-wide uppercase ${
+              inStock
+                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+            }`}
           >
-            Add to Cart
+            {added ? "Added ✓" : !selected ? "Unavailable" : !inStock ? "Sold Out" : "Add to Cart"}
           </button>
           {onQuickView && (
             <button
