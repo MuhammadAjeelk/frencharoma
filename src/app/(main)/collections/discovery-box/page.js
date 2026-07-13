@@ -30,6 +30,12 @@ function get5mlImage(p) {
   return match?.variant?.images?.main || p?.images?.main || "";
 }
 
+// A tester is only pickable while its 5ml variant has stock.
+function is5mlInStock(p) {
+  const match = get5mlVariant(p?.editions);
+  return (match?.variant?.stock ?? 0) > 0;
+}
+
 // ── Empty slot placeholder ─────────────────────────────────────────────────
 function EmptySlot({ index, isSwapMode, onClick }) {
   return (
@@ -120,13 +126,13 @@ export default function DiscoveryBoxPage() {
       .then((r) => r.json())
       .then((data) => {
         const all = data.perfumes || [];
-        // Prefer perfumes with 5ml variants; fall back to all active
-        const with5ml = all.filter((p) =>
-          (p.editions || []).some(
-            (ed) => ed.enabled && (ed.variants || []).some((v) => v.isActive && v.size === "5ml")
-          )
-        );
-        setPerfumes(with5ml.length > 0 ? with5ml : all);
+        // Only perfumes that actually offer a 5ml tester belong in the box.
+        // Sold-out 5ml still show (marked "Sold out"); perfumes with no 5ml
+        // variant at all are never listed. Available testers sort first so
+        // shoppers see what they can actually pick.
+        const testers = all.filter((p) => get5mlVariant(p.editions));
+        testers.sort((a, b) => Number(is5mlInStock(b)) - Number(is5mlInStock(a)));
+        setPerfumes(testers);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -140,6 +146,9 @@ export default function DiscoveryBoxPage() {
       if (swapCandidate === perfumeId) setSwapCandidate(null);
       return;
     }
+    // Sold-out testers are visible but cannot be put in the box
+    const perfume = perfumes.find((p) => p._id === perfumeId);
+    if (perfume && !is5mlInStock(perfume)) return;
     // If this is the current swap candidate, cancel
     if (swapCandidate === perfumeId) {
       setSwapCandidate(null);
@@ -153,7 +162,7 @@ export default function DiscoveryBoxPage() {
     }
     // Box full → enter swap mode
     setSwapCandidate(perfumeId);
-  }, [selected, swapCandidate]);
+  }, [selected, swapCandidate, perfumes]);
 
   const handleSlotAction = useCallback((index) => {
     if (swapCandidate) {
@@ -410,39 +419,50 @@ export default function DiscoveryBoxPage() {
               const isSwapTarget = swapCandidate === p._id;
               const discountedPrice = price ? Math.round(price * (1 - DISCOUNT_PERCENT / 100)) : null;
               const selectionIndex = selected.indexOf(p._id);
+              const soldOut = !is5mlInStock(p);
 
               return (
                 <div
                   key={p._id}
                   onClick={() => handlePerfumeClick(p._id)}
-                  className={`relative rounded-xl border-2 overflow-hidden bg-white cursor-pointer transition-all duration-200 flex flex-col group
-                    ${isSwapTarget
-                      ? "border-amber-500 shadow-lg ring-2 ring-amber-300 scale-[1.02]"
+                  aria-disabled={soldOut || undefined}
+                  className={`relative rounded-xl border-2 overflow-hidden bg-white transition-all duration-200 flex flex-col group
+                    ${soldOut
+                      ? "border-gray-200 opacity-60 cursor-not-allowed"
+                      : isSwapTarget
+                      ? "border-amber-500 shadow-lg ring-2 ring-amber-300 scale-[1.02] cursor-pointer"
                       : isSelected
-                      ? "border-[#b8964e] shadow-md"
+                      ? "border-[#b8964e] shadow-md cursor-pointer"
                       : isSwapMode
-                      ? "border-gray-200 hover:border-amber-400 hover:shadow-sm opacity-80 hover:opacity-100"
+                      ? "border-gray-200 hover:border-amber-400 hover:shadow-sm opacity-80 hover:opacity-100 cursor-pointer"
                       : isBoxComplete
-                      ? "border-gray-200 opacity-60 hover:opacity-80 hover:border-amber-400"
-                      : "border-gray-200 hover:border-[#b8964e] hover:shadow-sm"
+                      ? "border-gray-200 opacity-60 hover:opacity-80 hover:border-amber-400 cursor-pointer"
+                      : "border-gray-200 hover:border-[#b8964e] hover:shadow-sm cursor-pointer"
                     }`}
                 >
+                  {/* Sold-out badge */}
+                  {soldOut && (
+                    <div className="absolute top-2 left-2 z-10 bg-gray-800/90 text-white rounded-full px-2 py-0.5 text-[10px] font-bold shadow uppercase tracking-wide">
+                      Sold out
+                    </div>
+                  )}
+
                   {/* Selection number badge */}
-                  {isSelected && (
+                  {isSelected && !soldOut && (
                     <div className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
                       {selectionIndex + 1}
                     </div>
                   )}
 
                   {/* Swap target badge */}
-                  {isSwapTarget && (
+                  {isSwapTarget && !soldOut && (
                     <div className="absolute top-2 left-2 z-10 bg-amber-500 text-white rounded-full px-2 py-0.5 text-[10px] font-bold shadow">
                       New
                     </div>
                   )}
 
                   {/* Add/remove hint on hover */}
-                  {!isSelected && !isSwapMode && !isBoxComplete && (
+                  {!isSelected && !isSwapMode && !isBoxComplete && !soldOut && (
                     <div className="absolute inset-0 bg-[#1a1a2e]/0 group-hover:bg-[#1a1a2e]/5 transition-colors z-0 pointer-events-none" />
                   )}
 
