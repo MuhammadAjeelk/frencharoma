@@ -536,12 +536,12 @@ export default function ProductDetailPage() {
                         <button
                           key={v.size}
                           onClick={() => { setSelectedVariant(v); setActiveImgIndex(0); }}
-                        disabled={v.stock === 0}
+                        title={v.stock === 0 ? `${v.size} — out of stock` : undefined}
                         className={`px-5 py-2 rounded-full border-2 text-sm font-bold transition-all ${
                             selectedVariant?.size === v.size
                             ? "bg-black text-white border-black shadow"
                               : v.stock === 0
-                              ? "border-gray-200 text-gray-300 cursor-not-allowed bg-gray-50"
+                              ? "border-gray-200 text-gray-400 bg-gray-50 line-through hover:border-gray-400"
                               : "border-gray-300 text-gray-700 hover:border-black hover:bg-gray-50"
                           }`}
                       >

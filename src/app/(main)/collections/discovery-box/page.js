@@ -23,6 +23,13 @@ function getPerfumePrice(p) {
   return match?.variant?.price ?? null;
 }
 
+// The Discovery Box sells the 5ml tester, so show that variant's own photo
+// when it has one; otherwise fall back to the product's default image.
+function get5mlImage(p) {
+  const match = get5mlVariant(p?.editions);
+  return match?.variant?.images?.main || p?.images?.main || "";
+}
+
 // ── Empty slot placeholder ─────────────────────────────────────────────────
 function EmptySlot({ index, isSwapMode, onClick }) {
   return (
@@ -55,9 +62,9 @@ function FilledSlot({ perfume, index, isSwapMode, onRemove, onSwap }) {
         }`}
       onClick={isSwapMode ? onSwap : undefined}
     >
-      {perfume.images?.main ? (
+      {get5mlImage(perfume) ? (
         <Image
-          src={perfume.images.main}
+          src={get5mlImage(perfume)}
           alt={perfume.name}
           fill
           className="object-cover"
@@ -178,7 +185,7 @@ export default function DiscoveryBoxPage() {
         perfumeId: p._id,
         slug: p.slug,
         name: p.name,
-        image: p.images?.main || "",
+        image: get5mlImage(p),
         edition: match?.edition?.key || "classic",
         size: "5ml",
         price: finalPrice,
@@ -441,9 +448,9 @@ export default function DiscoveryBoxPage() {
 
                   {/* Image */}
                   <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
-                    {p.images?.main ? (
+                    {get5mlImage(p) ? (
                       <Image
-                        src={p.images.main}
+                        src={get5mlImage(p)}
                         alt={p.name}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -518,8 +525,8 @@ export default function DiscoveryBoxPage() {
               <div className="hidden sm:flex gap-1.5">
                 {slots.map((p, i) => (
                   <div key={i} className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 shrink-0">
-                    {p?.images?.main ? (
-                      <Image src={p.images.main} alt={p?.name || ""} width={32} height={32} className="w-full h-full object-cover" />
+                    {get5mlImage(p) ? (
+                      <Image src={get5mlImage(p)} alt={p?.name || ""} width={32} height={32} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-white/10" />
                     )}
