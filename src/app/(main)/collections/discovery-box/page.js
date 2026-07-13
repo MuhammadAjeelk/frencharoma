@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
@@ -34,6 +34,42 @@ function get5mlImage(p) {
 function is5mlInStock(p) {
   const match = get5mlVariant(p?.editions);
   return (match?.variant?.stock ?? 0) > 0;
+}
+
+// ── Search / filter options ────────────────────────────────────────────────
+const GENDER_OPTIONS = [
+  { value: "all", label: "All Genders" },
+  { value: "men", label: "For Men" },
+  { value: "women", label: "For Women" },
+  { value: "unisex", label: "Unisex" },
+];
+
+const SEASON_OPTIONS = [
+  { value: "all", label: "All Seasons" },
+  { value: "spring", label: "Spring" },
+  { value: "summer", label: "Summer" },
+  { value: "autumn", label: "Autumn" },
+  { value: "winter", label: "Winter" },
+];
+
+function matchesQuery(p, q) {
+  const term = q.trim().toLowerCase();
+  if (!term) return true;
+  const hay = [p.name, p.impressionName, p.brand, ...(p.brands || [])]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return hay.includes(term);
+}
+
+// Perfumes tagged for a combined or all-season range also match the individual season.
+function matchesSeason(p, season) {
+  if (season === "all") return true;
+  const tags = p.tags || [];
+  if (tags.includes("all-seasons") || tags.includes(season)) return true;
+  if (season === "spring" || season === "summer") return tags.includes("spring-summer");
+  if (season === "autumn" || season === "winter") return tags.includes("autumn-winter");
+  return false;
 }
 
 // ── Empty slot placeholder ─────────────────────────────────────────────────
@@ -119,6 +155,36 @@ export default function DiscoveryBoxPage() {
   const [selected, setSelected] = useState([]); // array of perfume IDs, max BOX_SIZE
   const [swapCandidate, setSwapCandidate] = useState(null); // ID of new perfume to swap in
   const [addedToCart, setAddedToCart] = useState(false);
+
+  // ── Search / filters ─────────────────────────────────────────────────────
+  const [query, setQuery] = useState("");
+  const [gender, setGender] = useState("all");
+  const [season, setSeason] = useState("all");
+  const [onlyInStock, setOnlyInStock] = useState(false);
+
+  const hasActiveFilters =
+    query.trim() !== "" || gender !== "all" || season !== "all" || onlyInStock;
+
+  const resetFilters = () => {
+    setQuery("");
+    setGender("all");
+    setSeason("all");
+    setOnlyInStock(false);
+  };
+
+  // Filtering only changes what's visible — `perfumes` stays the source of
+  // truth for slots and selection, so a picked tester survives a filter change.
+  const visiblePerfumes = useMemo(
+    () =>
+      perfumes.filter(
+        (p) =>
+          matchesQuery(p, query) &&
+          (gender === "all" || p.gender === gender) &&
+          matchesSeason(p, season) &&
+          (!onlyInStock || is5mlInStock(p))
+      ),
+    [perfumes, query, gender, season, onlyInStock]
+  );
 
   // Fetch available perfumes
   useEffect(() => {
@@ -364,13 +430,17 @@ export default function DiscoveryBoxPage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
 
         {/* Section heading */}
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-base font-bold text-[#1a1a2e] uppercase tracking-wide">
               Choose Your Fragrances
             </h2>
             <p className="text-xs text-gray-400 mt-0.5">
-              {loading ? "Loading…" : `${perfumes.length} fragrances available`}
+              {loading
+                ? "Loading…"
+                : hasActiveFilters
+                ? `${visiblePerfumes.length} of ${perfumes.length} testers`
+                : `${perfumes.length} testers available`}
             </p>
           </div>
           {selected.length > 0 && !isBoxComplete && (
@@ -379,6 +449,84 @@ export default function DiscoveryBoxPage() {
             </span>
           )}
         </div>
+
+        {/* ── Search + Filters ── */}
+        {!loading && perfumes.length > 0 && (
+          <div className="mb-6 flex flex-col lg:flex-row lg:items-center gap-2.5">
+            {/* Search */}
+            <div className="relative flex-1 min-w-0">
+              <svg
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+              </svg>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search fragrance, brand or impression…"
+                className="w-full pl-9 pr-9 py-2.5 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] placeholder:text-gray-400 focus:outline-none focus:border-[#b8964e] transition-colors"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-gray-400 hover:text-[#1a1a2e] hover:bg-gray-100 transition-colors text-sm leading-none"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+
+            {/* Gender */}
+            <select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              aria-label="Filter by gender"
+              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors"
+            >
+              {GENDER_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+
+            {/* Season */}
+            <select
+              value={season}
+              onChange={(e) => setSeason(e.target.value)}
+              aria-label="Filter by season"
+              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors"
+            >
+              {SEASON_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+
+            {/* In-stock only */}
+            <button
+              onClick={() => setOnlyInStock((v) => !v)}
+              aria-pressed={onlyInStock}
+              className={`py-2.5 px-4 rounded-lg border text-sm font-semibold whitespace-nowrap transition-colors ${
+                onlyInStock
+                  ? "bg-[#1a1a2e] text-white border-[#1a1a2e]"
+                  : "bg-white text-[#6b6560] border-[#e8e4df] hover:border-[#1a1a2e]"
+              }`}
+            >
+              In stock only
+            </button>
+
+            {/* Reset */}
+            {hasActiveFilters && (
+              <button
+                onClick={resetFilters}
+                className="py-2.5 px-4 rounded-lg border border-[#e8e4df] bg-white text-sm font-semibold text-[#6b6560] hover:border-[#1a1a2e] hover:text-[#1a1a2e] whitespace-nowrap transition-colors"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Loading skeleton */}
         {loading && (
@@ -410,10 +558,25 @@ export default function DiscoveryBoxPage() {
           </div>
         )}
 
+        {/* No search/filter matches */}
+        {!loading && perfumes.length > 0 && visiblePerfumes.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-3xl mb-3">🔍</div>
+            <h3 className="text-base font-semibold text-gray-700 mb-1">No testers match your search</h3>
+            <p className="text-sm text-gray-400 mb-5">Try a different name, brand or filter.</p>
+            <button
+              onClick={resetFilters}
+              className="inline-block bg-[#1a1a2e] text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#b8964e] transition-colors"
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+
         {/* Perfume cards */}
-        {!loading && perfumes.length > 0 && (
+        {!loading && visiblePerfumes.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {perfumes.map((p) => {
+            {visiblePerfumes.map((p) => {
               const price = getPerfumePrice(p);
               const isSelected = selected.includes(p._id);
               const isSwapTarget = swapCandidate === p._id;
