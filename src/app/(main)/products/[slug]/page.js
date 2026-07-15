@@ -339,7 +339,7 @@ export default function ProductDetailPage() {
                   src={currentImage}
                     alt={perfume.name}
                     fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="(max-width: 1024px) 100vw, 45vw"
                     priority
                   />
