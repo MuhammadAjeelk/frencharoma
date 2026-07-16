@@ -3,10 +3,9 @@
 import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
-import { useCart } from "@/context/CartContext";
+import QuickAddModal from "@/components/QuickAddModal";
 
 const PAGE_SIZE = 20;
 
@@ -170,145 +169,6 @@ function MultiSelectDropdown({ label, options, values, onChange }) {
   );
 }
 
-// ── Quick view modal content ───────────────────────────────────────────────
-function QuickViewContent({ perfume, onClose }) {
-  const { addItem } = useCart();
-  const [selectedEdition, setSelectedEdition] = useState(null);
-  const [selectedVariant, setSelectedVariant] = useState(null);
-  const [added, setAdded] = useState(false);
-
-  const enabledEditions = (perfume.editions || []).filter((e) => e.enabled);
-
-  useEffect(() => {
-    if (enabledEditions.length > 0) {
-      const first = enabledEditions[0];
-      setSelectedEdition(first);
-      setSelectedVariant((first.variants || []).filter((v) => v.isActive)[0] || null);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [perfume]);
-
-  const handleEditionChange = (edition) => {
-    setSelectedEdition(edition);
-    setSelectedVariant((edition.variants || []).filter((v) => v.isActive)[0] || null);
-  };
-
-  const image      = perfume?.images?.main || null;
-  const brandLabel = Array.isArray(perfume.brands)
-    ? perfume.brands.join(", ")
-    : perfume.brand || "";
-
-  return (
-    <div>
-      {image && (
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4 bg-gray-50">
-          <Image src={image} alt={perfume.name} fill className="object-cover" sizes="480px" />
-        </div>
-      )}
-
-      {brandLabel && (
-        <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">{brandLabel}</p>
-      )}
-      <h2 className="text-lg font-bold text-gray-900 mb-3">{perfume.name}</h2>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {perfume.gender    && <span className="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-700 capitalize">{perfume.gender}</span>}
-        {perfume.scentFamily && <span className="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-700">{perfume.scentFamily}</span>}
-      </div>
-
-      {perfume.description && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3">{perfume.description}</p>
-      )}
-
-      {enabledEditions.length > 0 && (
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Edition</p>
-          <div className="flex flex-wrap gap-2">
-            {enabledEditions.map((ed) => (
-              <button
-                key={ed.key}
-                onClick={() => handleEditionChange(ed)}
-                className={`px-3 py-1.5 text-xs font-medium rounded border transition-colors capitalize ${
-                  selectedEdition?.key === ed.key
-                    ? "bg-black text-white border-black"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-black"
-                }`}
-              >
-                {ed.key}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {selectedEdition && (
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Size</p>
-          <div className="flex flex-wrap gap-2">
-            {(selectedEdition.variants || []).filter((v) => v.isActive).map((v) => (
-                <button
-                  key={v.size}
-                  onClick={() => setSelectedVariant(v)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded border transition-colors ${
-                    selectedVariant?.size === v.size
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-black"
-                  }`}
-                >
-                  {v.size}
-                </button>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {selectedVariant && (
-        <p className="text-xl font-bold text-gray-900 mb-4">PKR {selectedVariant.price.toLocaleString()}</p>
-      )}
-
-      {(perfume.notes?.top?.length > 0 || perfume.notes?.middle?.length > 0 || perfume.notes?.base?.length > 0) && (
-        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Scent Notes</p>
-          <div className="space-y-1">
-            {perfume.notes?.top?.length    > 0 && <p className="text-xs text-gray-600"><span className="font-medium">Top:</span> {perfume.notes.top.join(", ")}</p>}
-            {perfume.notes?.middle?.length > 0 && <p className="text-xs text-gray-600"><span className="font-medium">Heart:</span> {perfume.notes.middle.join(", ")}</p>}
-            {perfume.notes?.base?.length   > 0 && <p className="text-xs text-gray-600"><span className="font-medium">Base:</span> {perfume.notes.base.join(", ")}</p>}
-          </div>
-        </div>
-      )}
-
-      <div className="flex flex-col gap-2">
-        <button
-          disabled={!selectedVariant}
-          onClick={() => {
-            if (!selectedVariant) return;
-            addItem({
-              perfumeId: perfume._id,
-              slug:      perfume.slug,
-              name:      perfume.name,
-              image:     perfume.images?.main || "",
-              edition:   selectedEdition?.key || "",
-              size:      selectedVariant.size,
-              price:     selectedVariant.price,
-            });
-            setAdded(true);
-            setTimeout(() => setAdded(false), 2000);
-          }}
-          className="w-full bg-black text-white py-3 rounded font-semibold text-sm hover:bg-gray-800 transition-colors disabled:opacity-40"
-        >
-          {added ? "✓ Added to Cart!" : "Add to Cart"}
-        </button>
-        <Link
-          href={`/products/${perfume.slug}`}
-          onClick={onClose}
-          className="w-full text-center border border-black text-black py-3 rounded font-semibold text-sm hover:bg-black hover:text-white transition-colors"
-        >
-          View Full Details
-        </Link>
-      </div>
-    </div>
-  );
-}
 
 // ── Main Page ──────────────────────────────────────────────────────────────
 function ShopAllContent() {
@@ -752,7 +612,8 @@ function ShopAllContent() {
         heading={selectedPerfume?.name || ""}
       >
         {selectedPerfume && (
-          <QuickViewContent
+          <QuickAddModal
+            key={selectedPerfume._id}
             perfume={selectedPerfume}
             onClose={() => setModalOpen(false)}
           />

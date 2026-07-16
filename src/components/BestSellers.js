@@ -4,116 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
-import { useCart } from "@/context/CartContext";
-
-function QuickViewContent({ perfume, onClose }) {
-  const { addItem } = useCart();
-  const enabledEditions = (perfume.editions || []).filter((e) => e.enabled);
-  const firstEdition = enabledEditions[0] || null;
-  const firstVariant = firstEdition
-    ? (firstEdition.variants || []).filter((v) => v.isActive)[0] || null
-    : null;
-
-  const [selectedEdition, setSelectedEdition] = useState(firstEdition);
-  const [selectedVariant, setSelectedVariant] = useState(firstVariant);
-  const [added, setAdded] = useState(false);
-
-  const handleEditionChange = (edition) => {
-    setSelectedEdition(edition);
-    setSelectedVariant((edition.variants || []).filter((v) => v.isActive)[0] || null);
-  };
-
-  const image = perfume?.images?.main || null;
-  const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
-
-  return (
-    <div>
-      {image && (
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4 bg-white">
-          <Image src={image} alt={perfume.name} fill className="object-contain p-4" sizes="500px" />
-        </div>
-      )}
-      {brandLabel && <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">{brandLabel}</p>}
-      <h2 className="text-lg font-bold text-gray-900 mb-3">{perfume.name}</h2>
-
-      {enabledEditions.length > 0 && (
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Edition</p>
-          <div className="flex gap-2">
-            {enabledEditions.map((ed) => (
-              <button
-                key={ed.key}
-                onClick={() => handleEditionChange(ed)}
-                className={`px-3 py-1.5 text-xs font-medium rounded border transition-colors capitalize ${
-                  selectedEdition?.key === ed.key
-                    ? "bg-black text-white border-black"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-black"
-                }`}
-              >
-                {ed.key}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {selectedEdition && (
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Size</p>
-          <div className="flex flex-wrap gap-2">
-            {(selectedEdition.variants || []).filter((v) => v.isActive).map((v) => (
-              <button
-                key={v.size}
-                onClick={() => setSelectedVariant(v)}
-                className={`px-3 py-1.5 text-xs font-medium rounded border transition-colors ${
-                  selectedVariant?.size === v.size
-                    ? "bg-black text-white border-black"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-black"
-                }`}
-              >
-                {v.size}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {selectedVariant && (
-        <p className="text-xl font-bold text-gray-900 mb-4">PKR {selectedVariant.price.toLocaleString()}</p>
-      )}
-
-      <div className="flex flex-col gap-2">
-        <button
-          className="w-full bg-black text-white py-3 rounded font-semibold text-sm hover:bg-gray-800 transition-colors disabled:opacity-40"
-          disabled={!selectedVariant}
-          onClick={() => {
-            if (!selectedVariant) return;
-            addItem({
-              perfumeId: perfume._id,
-              slug: perfume.slug,
-              name: perfume.name,
-              image: perfume.images?.main || "",
-              edition: selectedEdition?.key || "",
-              size: selectedVariant.size,
-              price: selectedVariant.price,
-            });
-            setAdded(true);
-            setTimeout(() => setAdded(false), 2000);
-          }}
-        >
-          {added ? "Added to Cart!" : "Add to Cart"}
-        </button>
-        <a
-          href={`/products/${perfume.slug}`}
-          onClick={onClose}
-          className="w-full text-center border border-black text-black py-3 rounded font-semibold text-sm hover:bg-black hover:text-white transition-colors"
-        >
-          View Full Details
-        </a>
-      </div>
-    </div>
-  );
-}
+import QuickAddModal from "./QuickAddModal";
 
 export default function BestSellers() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -282,7 +173,7 @@ export default function BestSellers() {
       </div>
 
       <UniversalModal isOpen={modalOpen} onClose={() => setModalOpen(false)} heading={selectedPerfume?.name || ""}>
-        {selectedPerfume && <QuickViewContent perfume={selectedPerfume} onClose={() => setModalOpen(false)} />}
+        {selectedPerfume && <QuickAddModal key={selectedPerfume._id} perfume={selectedPerfume} onClose={() => setModalOpen(false)} />}
       </UniversalModal>
     </>
   );
