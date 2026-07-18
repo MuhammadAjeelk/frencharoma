@@ -308,13 +308,13 @@ export default function ProductDetailPage() {
           <div className="flex flex-col gap-3 lg:sticky lg:top-6 lg:self-start">
 
             {/* Main image + nav arrows */}
-            <div className="relative rounded-xl overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5]">
+            <div className="group relative overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5]">
               {currentImage ? (
                   <Image
                   src={currentImage}
                     alt={perfume.name}
                     fill
-                  className="object-contain"
+                  className="object-contain transition-transform duration-500 ease-out group-hover:scale-105"
                   sizes="(max-width: 1024px) 100vw, 45vw"
                     priority
                   />
@@ -333,7 +333,7 @@ export default function ProductDetailPage() {
                 <>
                   <button
                     onClick={() => setActiveImgIndex((i) => (i - 1 + displayImages.length) % displayImages.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center hover:bg-white transition-colors"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center hover:bg-white transition-all duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                     aria-label="Previous image"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -342,7 +342,7 @@ export default function ProductDetailPage() {
                   </button>
                   <button
                     onClick={() => setActiveImgIndex((i) => (i + 1) % displayImages.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center hover:bg-white transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center hover:bg-white transition-all duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                     aria-label="Next image"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -353,25 +353,25 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            {/* Thumbnail row — below the main image (horizontal, scrolls) */}
+            {/* Thumbnail row — below the main image, flush-left, images fill fully */}
             {displayImages.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {displayImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImgIndex(idx)}
-                    className={`shrink-0 w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-lg overflow-hidden border-2 transition-colors bg-white ${
+                    className={`shrink-0 w-16 sm:w-[76px] aspect-[6.818/7.5] overflow-hidden bg-gray-50 transition-opacity duration-200 ${
                       activeImgIndex === idx
-                        ? "border-black shadow-sm"
-                        : "border-gray-200 hover:border-gray-400"
+                        ? "opacity-100"
+                        : "opacity-50 hover:opacity-100"
                     }`}
                   >
                     <Image
                       src={img}
                       alt={`View ${idx + 1}`}
-                      width={68}
-                      height={68}
-                      className="w-full h-full object-contain p-1"
+                      width={76}
+                      height={84}
+                      className="w-full h-full object-cover"
                     />
                   </button>
                 ))}

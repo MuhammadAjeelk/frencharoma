@@ -156,7 +156,7 @@ export default function Header() {
                   alt="French Aromas"
                   width={120}
                   height={45}
-                  className="h-auto w-auto max-w-[120px]"
+                  className="h-auto w-auto max-w-[120px] mix-blend-multiply"
                   priority
                 />
               </Link>
