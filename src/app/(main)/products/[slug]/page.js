@@ -314,7 +314,7 @@ export default function ProductDetailPage() {
                   src={currentImage}
                     alt={perfume.name}
                     fill
-                  className="object-contain transition-transform duration-500 ease-out group-hover:scale-105"
+                  className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                   sizes="(max-width: 1024px) 100vw, 45vw"
                     priority
                   />
