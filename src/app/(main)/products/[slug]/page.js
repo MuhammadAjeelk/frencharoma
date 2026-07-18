@@ -305,35 +305,10 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 items-start">
 
           {/* ───── LEFT: Image Gallery (sticky on desktop) ───── */}
-          <div className="flex gap-3 lg:sticky lg:top-[120px] lg:self-start lg:max-h-[calc(100vh-136px)]">
-
-            {/* Thumbnail strip – desktop only, shown even for single image */}
-            {displayImages.length > 0 && (
-              <div className="hidden lg:flex flex-col gap-2 w-[68px] shrink-0 overflow-y-auto self-stretch lg:max-h-[calc(100vh-136px)]">
-                {displayImages.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImgIndex(idx)}
-                    className={`w-full aspect-square rounded-lg overflow-hidden border-2 transition-colors bg-white ${
-                      activeImgIndex === idx
-                        ? "border-black shadow-sm"
-                        : "border-gray-200 hover:border-gray-400"
-                    }`}
-                  >
-                    <Image
-                      src={img}
-                      alt={`View ${idx + 1}`}
-                      width={68}
-                      height={68}
-                      className="w-full h-full object-contain p-1"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="flex flex-col gap-3 lg:sticky lg:top-6 lg:self-start">
 
             {/* Main image + nav arrows */}
-            <div className="flex-1 relative rounded-xl overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5] lg:max-h-[calc(100vh-136px)]">
+            <div className="relative rounded-xl overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5]">
               {currentImage ? (
                   <Image
                   src={currentImage}
@@ -376,21 +351,33 @@ export default function ProductDetailPage() {
                   </button>
                 </>
               )}
+            </div>
 
-              {/* Mobile dot indicators */}
-              {displayImages.length > 1 && (
-                <div className="lg:hidden absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-                  {displayImages.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveImgIndex(i)}
-                      className={`w-2 h-2 rounded-full transition-colors ${i === activeImgIndex ? "bg-black" : "bg-gray-300"}`}
+            {/* Thumbnail row — below the main image (horizontal, scrolls) */}
+            {displayImages.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {displayImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImgIndex(idx)}
+                    className={`shrink-0 w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-lg overflow-hidden border-2 transition-colors bg-white ${
+                      activeImgIndex === idx
+                        ? "border-black shadow-sm"
+                        : "border-gray-200 hover:border-gray-400"
+                    }`}
+                  >
+                    <Image
+                      src={img}
+                      alt={`View ${idx + 1}`}
+                      width={68}
+                      height={68}
+                      className="w-full h-full object-contain p-1"
                     />
-                  ))}
-                </div>
-              )}
-            </div>
-            </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* ───── RIGHT: Product Info ───── */}
             <div className="flex flex-col">

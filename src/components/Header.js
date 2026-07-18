@@ -12,8 +12,6 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileSubOpen, setMobileSubOpen] = useState(null);
@@ -30,22 +28,6 @@ export default function Header() {
       .then((data) => setBrands(data.brands || []))
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY < 10) {
-        setIsVisible(true);
-      } else if (currentScrollY > lastScrollY) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,11 +67,7 @@ export default function Header() {
 
   return (
     <>
-      <header
-        className={`header sticky top-0 z-50 border-b border-[#e8e4df] bg-[#faf8f5] transition-transform duration-300 ease-in-out ${
-          isVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
+      <header className="header relative z-50 border-b border-[#e8e4df] bg-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
           <div className="flex items-center justify-between py-3 lg:py-4">
