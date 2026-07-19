@@ -5,16 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
-import { getFullSizeVariants } from "@/lib/pricing";
+import { getSellableEditions, getCardEdition, getBestFor } from "@/lib/pricing";
+import { genderMeta } from "@/lib/gender";
 
-const SEASON_LABELS = {
-  "spring-summer": "Spring & Summer",
-  "autumn-winter": "Autumn & Winter",
-  spring: "Spring",
-  summer: "Summer",
-  autumn: "Autumn",
-  winter: "Winter",
-  "all-seasons": "All Seasons",
+// Edition banner styling — Luxury = gold, Premium = silver, Classic = neutral.
+const EDITION_STYLE = {
+  luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]", text: "text-[#3a2c08]" },
+  premium: { label: "Premium Edition", bar: "bg-gradient-to-r from-[#b6b6bb] to-[#e4e4e8]", text: "text-[#2b2b2b]" },
+  classic: { label: "Classic Edition", bar: "bg-gradient-to-r from-[#d8cbb8] to-[#efe7d8]", text: "text-[#3a352f]" },
 };
 
 export default function ProductCard({
@@ -30,56 +28,60 @@ export default function ProductCard({
   isSpecialOffer = false,
   globalAdmirePercent = 60,
   tags = [],
+  gender = "",
+  avgRating = 0,
+  reviewCount = 0,
   onQuickView,
 }) {
   const { isInWishlist, toggleItem } = useWishlist();
   const { addItem } = useCart();
 
   const brandLabel = Array.isArray(brand) ? brand.join(", ") : brand;
-  const seasonTags = (tags || []).filter((t) => SEASON_LABELS[t]);
   const productSlug = slug || (href ? href.replace("/products/", "") : "");
   const wishlisted = isInWishlist(productSlug);
-
-  // ── Full-size variants (5ml tester excluded) ──────────────────────────────
-  const variants = useMemo(() => getFullSizeVariants(editions), [editions]);
-
-  // Bottle size tag shown on the image corner (like the Discovery Box's 5ml tag).
-  const sizeLabel = useMemo(() => {
-    const order = { "5ml": 5, "30ml": 30, "50ml": 50, "100ml": 100 };
-    const sizes = [...new Set(variants.map((v) => v.size))].sort(
-      (a, b) => (order[a] || 0) - (order[b] || 0)
-    );
-    if (sizes.length === 0) return null;
-    if (sizes.length <= 2) return sizes.join(" · ");
-    return `${sizes[0]} · +${sizes.length - 1}`;
-  }, [variants]);
+  const gm = genderMeta(gender);
+  const bestFor = getBestFor(tags);
+  const admire = Math.min(100, Math.max(60, Number(globalAdmirePercent) || 60));
 
   const disc = Number(discountPercent) || 0;
-  const finalOf = (price) => (disc > 0 ? Math.round(price * (1 - disc / 100)) : price);
+  const finalOf = (p) => (disc > 0 ? Math.round(p * (1 - disc / 100)) : p);
 
-  const priceRange = useMemo(() => {
-    if (variants.length === 0) return null;
-    let min = Infinity;
-    let max = -Infinity;
-    for (const v of variants) {
-      if (v.price < min) min = v.price;
-      if (v.price > max) max = v.price;
-    }
-    return { min, max };
-  }, [variants]);
-  const isRange = priceRange && priceRange.max !== priceRange.min;
+  const sellable = useMemo(() => getSellableEditions(editions), [editions]);
+  const cardEdition = useMemo(() => getCardEdition(editions), [editions]);
+  const sizeLabel = cardEdition?.variant?.size || "50ml";
+  const headlinePrice = cardEdition ? cardEdition.variant.price : null;
+  const hasChoice = sellable.length > 1;
 
-  // Representative variant for a single-option card: cheapest in-stock, else first.
-  const singleVariant = useMemo(
-    () => variants.find((v) => v.stock > 0) || variants[0] || null,
-    [variants]
-  );
-  // "Choice" = more than one full-size option → Add to Cart opens the picker.
-  const hasChoice = variants.length > 1;
-  const dispPrice = isRange ? priceRange.min : singleVariant?.price;
-  const singleInStock = !!(singleVariant && singleVariant.stock > 0);
-
+  const [hovered, setHovered] = useState(false);
+  const [showBanners, setShowBanners] = useState(false);
   const [added, setAdded] = useState(false);
+
+  const addEdition = (entry) => {
+    if (!entry) return;
+    addItem({
+      perfumeId,
+      slug: productSlug,
+      name,
+      image: image || "",
+      edition: entry.key,
+      size: entry.variant.size,
+      price: finalOf(entry.variant.price),
+    });
+    setShowBanners(false);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1800);
+  };
+
+  const handleCta = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    if (!cardEdition) return;
+    if (hasChoice) {
+      setShowBanners((v) => !v);
+      return;
+    }
+    addEdition(sellable[0]);
+  };
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
@@ -89,56 +91,25 @@ export default function ProductCard({
       name,
       brand: brandLabel,
       image,
-      price: dispPrice ? finalOf(dispPrice) : 0,
+      price: headlinePrice != null ? finalOf(headlinePrice) : 0,
     });
   };
-
-  // Add to Cart: if the perfume offers a real choice of edition/size, open the
-  // picker popup; otherwise add the single variant straight to the cart.
-  const handleCta = (e) => {
-    e?.preventDefault();
-    e?.stopPropagation();
-    if (hasChoice && onQuickView) {
-      onQuickView();
-      return;
-    }
-    if (!singleVariant || !singleInStock) return;
-    addItem({
-      perfumeId,
-      slug: productSlug,
-      name,
-      image: image || "",
-      edition: singleVariant.editionKey || "",
-      size: singleVariant.size,
-      price: finalOf(singleVariant.price),
-    });
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  };
-
-  const ctaDisabled = hasChoice ? false : !singleInStock;
-  const ctaLabel = hasChoice
-    ? "Add to Cart"
-    : added
-    ? "Added ✓"
-    : !singleVariant
-    ? "Unavailable"
-    : !singleInStock
-    ? "Sold Out"
-    : "Add to Cart";
 
   return (
-    <div className="group relative border border-[#e8e4df] rounded-xl overflow-hidden bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col">
-      {/* Badges - stacked top-left */}
-      <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5">
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => { setHovered(false); setShowBanners(false); }}
+      className="group relative rounded-xl overflow-hidden bg-white border flex flex-col transition-all duration-300"
+      style={{
+        borderColor: hovered && gm ? gm.hex : "#e8e4df",
+        boxShadow: hovered ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
+      }}
+    >
+      {/* Badges - top-left */}
+      <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
         {disc > 0 && (
           <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
             -{disc}% OFF
-          </span>
-        )}
-        {disc === 0 && isRange && (
-          <span className="bg-[#b8964e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
-            Multiple Editions
           </span>
         )}
         {isSpecialOffer && (
@@ -148,10 +119,10 @@ export default function ProductCard({
         )}
       </div>
 
-      {/* Wishlist heart - always top-right */}
+      {/* Wishlist heart - top-right */}
       <button
         onClick={handleWishlistToggle}
-        className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+        className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
         aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
       >
         <svg
@@ -166,116 +137,140 @@ export default function ProductCard({
       </button>
 
       {/* Product Image */}
-      <Link href={href || "#"} className="block relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-        />
-        {/* Bottle size tag */}
-        {sizeLabel && (
-          <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm">
-            {sizeLabel}
-          </span>
-        )}
-      </Link>
+      <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
+        <Link href={href || "#"} className="block w-full h-full">
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
+        </Link>
 
-      {/* Product Details */}
-      <div className="p-3 sm:p-4 flex flex-col flex-1">
-        {brandLabel && (
-          <p className="text-[10px] sm:text-[11px] font-semibold text-[#b8964e] uppercase tracking-widest mb-1">
-            {brandLabel}
-          </p>
+        {/* Quick View — appears on hover */}
+        {onQuickView && (
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickView(); }}
+            className="absolute left-1/2 -translate-x-1/2 bottom-3 z-10 flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Quick View
+          </button>
         )}
 
+        {/* Size pill (like the 5ml tester pill) */}
+        <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm">
+          {sizeLabel}
+        </span>
+      </div>
+
+      {/* Details */}
+      <div className="p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]">
         <Link href={href || "#"}>
-          <h3 className="text-xs sm:text-[13px] font-semibold text-[#1f1a16] mb-0.5 line-clamp-2 hover:text-[#b8964e] transition-colors leading-snug">
+          <h3 className="text-sm font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 hover:text-[#b8964e] transition-colors">
             {name}
+            {gm && <span className={`font-semibold ${gm.text}`}> – {gm.label}</span>}
           </h3>
         </Link>
 
-        {impressionName && (
-          <p className="text-[10px] sm:text-[11px] text-[#8a847e] mb-1 italic line-clamp-1">
-            Inspired by {impressionName}
-          </p>
-        )}
-
-        {seasonTags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-1.5">
-            {seasonTags.map((tag) => (
-              <span
-                key={tag}
-                className="text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#f7f5f2] text-[#6b6560] border border-[#e8e4df] uppercase tracking-wide"
-              >
-                {SEASON_LABELS[tag]}
+        <div className="space-y-1 text-[11px] sm:text-xs text-[#4a4540]">
+          {impressionName && (
+            <p className="line-clamp-1">Inspired by: <span className="font-semibold text-[#1f1a16]">{impressionName}</span></p>
+          )}
+          {brandLabel && (
+            <p className="line-clamp-1">Brand: <span className="font-semibold text-[#1f1a16]">{brandLabel}</span></p>
+          )}
+          {bestFor && (
+            <p className="flex items-center gap-1.5">
+              Best For:
+              <span className="inline-block px-2 py-0.5 rounded-full bg-white text-[#3a352f] text-[10px] font-semibold border border-[#e8e4df]">
+                {bestFor}
               </span>
-            ))}
-          </div>
-        )}
-
-        <div className="mb-1.5 sm:mb-2">
-          <p className="text-[9px] sm:text-[10px] text-[#8a847e] mb-1">
-            Admired by <span className="font-semibold text-[#6b6560]">{Math.min(100, Math.max(60, Number(globalAdmirePercent) || 60))}%</span> globally
-          </p>
-          <div className="flex items-center gap-1.5">
-            <div className="flex-1 h-1 bg-[#f0ece7] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#b8964e] rounded-full transition-all duration-500"
-                style={{ width: `${Math.min(100, Math.max(60, Number(globalAdmirePercent) || 60))}%` }}
-              />
-            </div>
+            </p>
+          )}
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <span>Globally Admired by: <span className="font-bold text-[#1f1a16]">{admire}%</span></span>
+            {reviewCount > 0 ? (
+              <span className="flex items-center gap-1 font-bold text-[#1f1a16] shrink-0">
+                <svg className="w-3.5 h-3.5 text-[#e0a800] fill-[#e0a800]" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                {avgRating}/5
+              </span>
+            ) : (
+              <span className="px-1.5 py-0.5 rounded-full bg-[#eaf5ec] text-[#2e7d32] text-[9px] font-bold uppercase tracking-wide shrink-0">
+                New
+              </span>
+            )}
           </div>
         </div>
 
-        {/* ── Price ── */}
-        <div className="flex items-baseline gap-2 flex-wrap mb-2 sm:mb-3">
-          {dispPrice != null ? (
+        {/* Gender-coloured divider */}
+        <div
+          className="h-[3px] rounded-full my-2.5"
+          style={{ backgroundColor: gm ? gm.hex : "#d9d3cb" }}
+        />
+
+        {/* Price */}
+        <div className="flex items-baseline gap-2 flex-wrap mb-2.5">
+          {headlinePrice != null ? (
             <>
-              <span className="text-sm sm:text-[15px] font-bold text-[#1f1a16]">
-                {isRange && <span className="font-normal text-[#8a847e] text-[11px]">from </span>}
-                PKR {finalOf(dispPrice).toLocaleString()}
-              </span>
               {disc > 0 && (
-                <span className="text-[11px] text-[#a09890] line-through">
-                  PKR {dispPrice.toLocaleString()}
+                <span className="text-[12px] text-[#a09890] line-through">
+                  PKR {headlinePrice.toLocaleString()}
                 </span>
               )}
+              <span className="text-base font-extrabold text-[#1f1a16]">
+                PKR {finalOf(headlinePrice).toLocaleString()}
+              </span>
             </>
           ) : (
             <span className="text-sm text-[#a09890]">Unavailable</span>
           )}
         </div>
 
-        <div className="flex-1" />
+        <div className="mt-auto">
+          {/* Inline edition banners */}
+          {showBanners && hasChoice && (
+            <div className="flex flex-col gap-1.5 mb-2">
+              {sellable.map((e) => {
+                const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
+                return (
+                  <button
+                    key={e.key}
+                    onClick={(ev) => { ev.preventDefault(); ev.stopPropagation(); addEdition(e); }}
+                    className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2 ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
+                  >
+                    <span className="text-[11px] font-bold">
+                      {st.label} <span className="font-medium opacity-80">({e.variant.size})</span>
+                    </span>
+                    <span className="text-[11px] font-bold flex items-center gap-1.5">
+                      {disc > 0 && (
+                        <span className="line-through opacity-60 font-medium">Rs.{e.variant.price.toLocaleString()}</span>
+                      )}
+                      Rs.{finalOf(e.variant.price).toLocaleString()}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-        {/* Buttons */}
-        <div className="flex gap-2">
           <button
             onClick={handleCta}
-            disabled={ctaDisabled}
-            className={`flex-1 py-2 sm:py-2.5 px-3 rounded-lg transition-colors duration-200 text-[11px] sm:text-xs font-semibold tracking-wide uppercase ${
-              ctaDisabled
-                ? "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
-                : "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+            disabled={!cardEdition}
+            className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+              cardEdition
+                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
             }`}
           >
-            {ctaLabel}
+            {added ? "Added ✓" : "Add to Cart"}
           </button>
-          {onQuickView && (
-            <button
-              onClick={onQuickView}
-              className="px-2.5 sm:px-3 py-2 border border-[#e8e4df] rounded-lg hover:border-[#1a1a2e] hover:bg-[#faf8f5] transition-all duration-200 text-[#6b6560] hover:text-[#1a1a2e]"
-              aria-label="Quick view"
-              title="Quick View"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </button>
-          )}
         </div>
       </div>
     </div>

@@ -43,3 +43,41 @@ export function getLowestPrice(editions) {
   const range = getPriceRange(editions);
   return range ? range.min : null;
 }
+
+// Fixed display order for editions (Luxury on top / gold, then Premium / silver).
+export const EDITION_ORDER = ["luxury", "premium", "classic"];
+
+// Enabled editions that have at least one active full-size variant, each with a
+// representative variant (prefer 50ml, else cheapest full-size) and its price.
+// Returned in EDITION_ORDER so banners render Luxury-first.
+export function getSellableEditions(editions) {
+  const out = [];
+  for (const ed of editions || []) {
+    if (!ed.enabled) continue;
+    const full = (ed.variants || []).filter((v) => v.isActive && v.size !== TESTER_SIZE);
+    if (full.length === 0) continue;
+    const variant =
+      full.find((v) => v.size === "50ml") ||
+      full.reduce((m, v) => (v.price < m.price ? v : m), full[0]);
+    out.push({ key: ed.key, variant });
+  }
+  out.sort((a, b) => EDITION_ORDER.indexOf(a.key) - EDITION_ORDER.indexOf(b.key));
+  return out;
+}
+
+// Card headline edition: Premium's price by default, else Luxury, else the first
+// sellable edition. Returns { key, variant } or null.
+export function getCardEdition(editions) {
+  const eds = getSellableEditions(editions);
+  if (eds.length === 0) return null;
+  return eds.find((e) => e.key === "premium") || eds.find((e) => e.key === "luxury") || eds[0];
+}
+
+// Single "Best For" season label derived from tags.
+export function getBestFor(tags) {
+  const t = tags || [];
+  if (t.includes("all-seasons")) return "All Seasons";
+  if (t.includes("spring-summer") || t.includes("spring") || t.includes("summer")) return "Spring & Summer";
+  if (t.includes("autumn-winter") || t.includes("autumn") || t.includes("winter")) return "Autumn & Winter";
+  return null;
+}

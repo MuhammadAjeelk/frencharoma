@@ -1,9 +1,31 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Perfume from "@/lib/models/Perfume";
+import Review from "@/lib/models/Review";
 
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// Attach avgRating + reviewCount to each serialized perfume, aggregated from the
+// Reviews collection. Perfumes with no reviews get avgRating 0 / reviewCount 0
+// (the card shows a "New" tag in that case).
+async function attachRatings(serialized) {
+  const ids = serialized.map((p) => p._id).filter(Boolean);
+  if (ids.length === 0) return serialized;
+  const stats = await Review.aggregate([
+    { $match: { perfumeSlug: { $in: serialized.map((p) => p.slug) } } },
+    { $group: { _id: "$perfumeSlug", avg: { $avg: "$rating" }, count: { $sum: 1 } } },
+  ]);
+  const bySlug = new Map(stats.map((s) => [s._id, s]));
+  return serialized.map((p) => {
+    const s = bySlug.get(p.slug);
+    return {
+      ...p,
+      avgRating: s ? Math.round(s.avg * 10) / 10 : 0,
+      reviewCount: s ? s.count : 0,
+    };
+  });
+}
 
 // GET /api/perfumes - Public list of active perfumes with optional filters
 export async function GET(request) {
@@ -184,11 +206,11 @@ export async function GET(request) {
         Perfume.countDocuments(query),
       ]);
 
-      const serialized = perfumesAgg.map((p) => ({
+      const serialized = await attachRatings(perfumesAgg.map((p) => ({
         ...p,
         _id: p._id.toString(),
         globalAdmirePercent: p.globalAdmirePercent ?? 60,
-      }));
+      })));
 
       return NextResponse.json(
         {
@@ -225,11 +247,11 @@ export async function GET(request) {
       Perfume.countDocuments(query),
     ]);
 
-    const serialized = perfumes.map((p) => ({
+    const serialized = await attachRatings(perfumes.map((p) => ({
       ...p,
       _id: p._id.toString(),
       globalAdmirePercent: p.globalAdmirePercent ?? 60,
-    }));
+    })));
 
     return NextResponse.json(
       {

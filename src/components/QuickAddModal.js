@@ -2,176 +2,211 @@
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { getSellableEditions, getCardEdition, getBestFor } from "@/lib/pricing";
+import { genderMeta } from "@/lib/gender";
 
-const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+const EDITION_STYLE = {
+  luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]", text: "text-[#3a2c08]" },
+  premium: { label: "Premium Edition", bar: "bg-gradient-to-r from-[#b6b6bb] to-[#e4e4e8]", text: "text-[#2b2b2b]" },
+  classic: { label: "Classic Edition", bar: "bg-gradient-to-r from-[#d8cbb8] to-[#efe7d8]", text: "text-[#3a352f]" },
+};
 
-// Editions (enabled) with their active full-size variants — the 5ml tester is
-// excluded here (it's sold via the Discovery Box). If a perfume is tester-only,
-// fall back to whatever active variants it has so it can still be added.
-function fullSizeEditions(perfume) {
-  const enabled = (perfume?.editions || []).filter((e) => e.enabled);
-  const full = enabled
-    .map((e) => ({ ...e, variants: (e.variants || []).filter((v) => v.isActive && v.size !== "5ml") }))
-    .filter((e) => e.variants.length > 0);
-  if (full.length > 0) return full;
-  return enabled
-    .map((e) => ({ ...e, variants: (e.variants || []).filter((v) => v.isActive) }))
-    .filter((e) => e.variants.length > 0);
+function buildImages(perfume) {
+  const imgs = [];
+  if (perfume?.images?.main) imgs.push(perfume.images.main);
+  for (const i of perfume?.images?.gallery || []) if (!imgs.includes(i)) imgs.push(i);
+  return imgs;
 }
 
-// Content for the "choose edition + size" popup shown when Add to Cart is
-// clicked on a card that has more than one option. Rendered inside UniversalModal.
+// Quick View window — a compact preview opened from a card's "Quick View" button.
 export default function QuickAddModal({ perfume, onClose }) {
   const { addItem } = useCart();
-  const editions = useMemo(() => fullSizeEditions(perfume), [perfume]);
 
-  // Parents mount this with key={perfume._id}, so lazy init is enough — no effect.
-  const [selectedEdition, setSelectedEdition] = useState(() => editions[0] || null);
-  const [selectedVariant, setSelectedVariant] = useState(() => {
-    const first = editions[0];
-    return first ? first.variants.find((v) => v.stock > 0) || first.variants[0] : null;
-  });
-  const [added, setAdded] = useState(false);
+  const images = useMemo(() => buildImages(perfume), [perfume]);
+  const sellable = useMemo(() => getSellableEditions(perfume?.editions), [perfume]);
+  const cardEdition = useMemo(() => getCardEdition(perfume?.editions), [perfume]);
+  const gm = genderMeta(perfume?.gender);
+  const bestFor = getBestFor(perfume?.tags);
+  const admire = Math.min(100, Math.max(60, Number(perfume?.globalAdmirePercent) || 60));
+  const reviewCount = perfume?.reviewCount || 0;
+  const avgRating = perfume?.avgRating || 0;
 
   const disc = Number(perfume?.discountPercent) || 0;
-  const finalOf = (price) => (disc > 0 ? Math.round(price * (1 - disc / 100)) : price);
+  const finalOf = (p) => (disc > 0 ? Math.round(p * (1 - disc / 100)) : p);
+  const headlinePrice = cardEdition ? cardEdition.variant.price : null;
+  const hasChoice = sellable.length > 1;
 
-  const brandLabel = Array.isArray(perfume.brands) && perfume.brands.length > 0
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [showBanners, setShowBanners] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [descOpen, setDescOpen] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(false);
+
+  const brandLabel = Array.isArray(perfume?.brands) && perfume.brands.length > 0
     ? perfume.brands.join(", ")
-    : perfume.brand || "";
-  const image = selectedVariant?.images?.main || perfume?.images?.main || null;
-  const inStock = !!(selectedVariant && selectedVariant.stock > 0);
-  const multiEdition = editions.length > 1;
+    : perfume?.brand || "";
 
-  const handleEditionChange = (ed) => {
-    setSelectedEdition(ed);
-    setSelectedVariant(ed.variants.find((v) => v.stock > 0) || ed.variants[0] || null);
-  };
-
-  const handleAdd = () => {
-    if (!selectedVariant || !inStock) return;
+  const addEdition = (entry) => {
+    if (!entry) return;
     addItem({
       perfumeId: perfume._id,
       slug: perfume.slug,
       name: perfume.name,
-      image: image || "",
-      edition: selectedEdition?.key || "",
-      size: selectedVariant.size,
-      price: finalOf(selectedVariant.price),
+      image: perfume.images?.main || "",
+      edition: entry.key,
+      size: entry.variant.size,
+      price: finalOf(entry.variant.price),
     });
+    setShowBanners(false);
     setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
+    setTimeout(() => setAdded(false), 1800);
   };
+
+  const handleCta = () => {
+    if (!cardEdition) return;
+    if (hasChoice) { setShowBanners((v) => !v); return; }
+    addEdition(sellable[0]);
+  };
+
+  const notes = perfume?.notes || {};
+  const hasNotes = (notes.top?.length || 0) + (notes.middle?.length || 0) + (notes.base?.length || 0) > 0;
 
   return (
     <div>
-      {image && (
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4 bg-gray-50">
-          <Image src={image} alt={perfume.name} fill className="object-contain p-3" sizes="480px" />
-        </div>
-      )}
-
-      {brandLabel && (
-        <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Inspired by {brandLabel}</p>
-      )}
-
-      {perfume.impressionName && (
-        <p className="text-sm text-gray-600 mb-3">
-          Impression: <span className="font-semibold text-gray-800">{perfume.impressionName}</span>
-        </p>
-      )}
-
-      {/* Edition */}
-      {multiEdition && (
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Choose Edition</p>
-          <div className="flex flex-wrap gap-2">
-            {editions.map((ed) => {
-              const min = ed.variants.reduce((m, v) => (v.price < m ? v.price : m), Infinity);
-              return (
-                <button
-                  key={ed.key}
-                  onClick={() => handleEditionChange(ed)}
-                  className={`flex flex-col items-start px-3 py-2 text-xs font-medium rounded-lg border transition-colors capitalize ${
-                    selectedEdition?.key === ed.key
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-black"
-                  }`}
-                >
-                  <span className="font-bold">{ed.key}</span>
-                  {min < Infinity && (
-                    <span className={selectedEdition?.key === ed.key ? "text-gray-300" : "text-gray-500"}>
-                      from Rs. {finalOf(min).toLocaleString()}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Size */}
-      {selectedEdition && (
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Choose Size</p>
-          <div className="flex flex-wrap gap-2">
-            {selectedEdition.variants.map((v) => {
-              const oos = v.stock <= 0;
-              const isSel = selectedVariant?.size === v.size;
-              return (
-                <button
-                  key={v.size}
-                  disabled={oos}
-                  onClick={() => setSelectedVariant(v)}
-                  className={`px-4 py-2 text-sm font-semibold rounded-lg border-2 transition-colors ${
-                    isSel
-                      ? "bg-black text-white border-black"
-                      : oos
-                      ? "border-gray-200 text-gray-300 bg-gray-50 line-through cursor-not-allowed"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-black"
-                  }`}
-                >
-                  {v.size}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Price */}
-      {selectedVariant && (
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-xl font-bold text-gray-900">PKR {finalOf(selectedVariant.price).toLocaleString()}</span>
-          {disc > 0 && (
+      {/* Image with hover arrows */}
+      {images.length > 0 && (
+        <div className="group relative w-full aspect-square overflow-hidden bg-gray-50 mb-4">
+          <Image src={images[activeIdx]} alt={perfume.name} fill className="object-contain" sizes="500px" />
+          {images.length > 1 && (
             <>
-              <span className="text-sm text-gray-400 line-through">PKR {selectedVariant.price.toLocaleString()}</span>
-              <span className="text-[11px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">-{disc}%</span>
+              <button
+                onClick={() => setActiveIdx((i) => (i - 1 + images.length) % images.length)}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Previous image"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <button
+                onClick={() => setActiveIdx((i) => (i + 1) % images.length)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Next image"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </button>
             </>
           )}
         </div>
       )}
 
-      <div className="flex flex-col gap-2">
+      {/* Name + gender */}
+      <h2 className="text-lg font-bold text-[#1f1a16] mb-2">
+        {perfume.name}
+        {gm && <span className={`font-semibold ${gm.text}`}> – {gm.label}</span>}
+      </h2>
+
+      <div className="space-y-1 text-sm text-[#4a4540]">
+        {perfume.impressionName && <p>Inspired by: <span className="font-semibold text-[#1f1a16]">{perfume.impressionName}</span></p>}
+        {brandLabel && <p>Brand: <span className="font-semibold text-[#1f1a16]">{brandLabel}</span></p>}
+        {bestFor && (
+          <p className="flex items-center gap-2">
+            Best For:
+            <span className="inline-block px-2.5 py-0.5 rounded-full bg-gray-100 text-[#3a352f] text-xs font-semibold border border-[#e8e4df]">{bestFor}</span>
+          </p>
+        )}
+        <div className="flex items-center justify-between gap-2 pt-0.5">
+          <span>Globally Admired by: <span className="font-bold text-[#1f1a16]">{admire}%</span></span>
+          {reviewCount > 0 ? (
+            <span className="flex items-center gap-1 font-bold text-[#1f1a16]">
+              <svg className="w-4 h-4 text-[#e0a800] fill-[#e0a800]" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              {avgRating}/5
+            </span>
+          ) : (
+            <span className="px-2 py-0.5 rounded-full bg-[#eaf5ec] text-[#2e7d32] text-[10px] font-bold uppercase tracking-wide">New</span>
+          )}
+        </div>
+      </div>
+
+      {/* Gender divider */}
+      <div className="h-[3px] rounded-full my-3" style={{ backgroundColor: gm ? gm.hex : "#d9d3cb" }} />
+
+      {/* Price */}
+      {headlinePrice != null && (
+        <div className="flex items-baseline gap-2 mb-3">
+          {disc > 0 && <span className="text-sm text-[#a09890] line-through">PKR {headlinePrice.toLocaleString()}</span>}
+          <span className="text-xl font-extrabold text-[#1f1a16]">PKR {finalOf(headlinePrice).toLocaleString()}</span>
+        </div>
+      )}
+
+      {/* Add to cart + edition banners */}
+      <div className="mb-4">
+        {showBanners && hasChoice && (
+          <div className="flex flex-col gap-1.5 mb-2">
+            {sellable.map((e) => {
+              const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
+              return (
+                <button
+                  key={e.key}
+                  onClick={() => addEdition(e)}
+                  className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
+                >
+                  <span className="text-xs font-bold">{st.label} <span className="font-medium opacity-80">({e.variant.size})</span></span>
+                  <span className="text-xs font-bold flex items-center gap-1.5">
+                    {disc > 0 && <span className="line-through opacity-60 font-medium">Rs.{e.variant.price.toLocaleString()}</span>}
+                    Rs.{finalOf(e.variant.price).toLocaleString()}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
         <button
-          disabled={!inStock}
-          onClick={handleAdd}
+          onClick={handleCta}
+          disabled={!cardEdition}
           className={`w-full py-3 rounded-lg font-semibold text-sm tracking-wide uppercase transition-colors ${
-            inStock ? "bg-black text-white hover:bg-gray-800" : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            cardEdition ? "bg-black text-white hover:bg-gray-800" : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >
-          {added ? "Added to Cart ✓" : !selectedVariant ? "Select a Size" : !inStock ? "Out of Stock" : "Add to Cart"}
+          {added ? "Added to Cart ✓" : "Add to Cart"}
         </button>
-        <a
-          href={`/products/${perfume.slug}`}
-          onClick={onClose}
-          className="w-full text-center border border-black text-black py-3 rounded-lg font-semibold text-sm hover:bg-black hover:text-white transition-colors"
-        >
-          View Full Details
-        </a>
       </div>
+
+      {/* Description */}
+      {perfume.description && (
+        <div className="border-t border-[#e8e4df]">
+          <button onClick={() => setDescOpen((o) => !o)} className="w-full flex items-center justify-between py-3 text-left">
+            <span className="text-sm font-semibold text-[#1f1a16] uppercase tracking-wide">Description</span>
+            <span className={`text-gray-400 transition-transform ${descOpen ? "rotate-180" : ""}`}>▾</span>
+          </button>
+          {descOpen && <p className="text-sm text-[#4a4540] leading-relaxed pb-3">{perfume.description}</p>}
+        </div>
+      )}
+
+      {/* Scent Profile */}
+      {hasNotes && (
+        <div className="border-t border-[#e8e4df]">
+          <button onClick={() => setNotesOpen((o) => !o)} className="w-full flex items-center justify-between py-3 text-left">
+            <span className="text-sm font-semibold text-[#1f1a16] uppercase tracking-wide">Scent Profile</span>
+            <span className={`text-gray-400 transition-transform ${notesOpen ? "rotate-180" : ""}`}>▾</span>
+          </button>
+          {notesOpen && (
+            <div className="space-y-1.5 text-sm text-[#4a4540] pb-3">
+              {notes.top?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Top:</span> {notes.top.join(", ")}</p>}
+              {notes.middle?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Heart:</span> {notes.middle.join(", ")}</p>}
+              {notes.base?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Base:</span> {notes.base.join(", ")}</p>}
+            </div>
+          )}
+        </div>
+      )}
+
+      <Link
+        href={`/products/${perfume.slug}`}
+        onClick={onClose}
+        className="mt-4 block w-full text-center border border-black text-black py-3 rounded-lg font-semibold text-sm hover:bg-black hover:text-white transition-colors"
+      >
+        View Full Details
+      </Link>
     </div>
   );
 }
