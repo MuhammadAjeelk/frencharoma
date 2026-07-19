@@ -225,7 +225,7 @@ export default function ProductCard({
       {/* Details */}
       <div className="p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]">
         <Link href={href || "#"}>
-          <h3 className="text-sm font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
+          <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
             {name}
             {gm && (
               <>
