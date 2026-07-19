@@ -231,6 +231,7 @@ export async function GET(request) {
     else if (sort === "oldest")       sortObj = { createdAt:  1 };
     else if (sort === "name-asc")     sortObj = { name:  1 };
     else if (sort === "name-desc")    sortObj = { name: -1 };
+    else if (sort === "discount-desc") sortObj = { discountPercent: -1, createdAt: -1 };
     // Best sellers FIRST (does not filter out non-best-sellers)
     else if (sort === "best-sellers") sortObj = { isBestSeller: -1, createdAt: -1 };
     else                              sortObj = { globalAdmirePercent: -1, createdAt: -1 };

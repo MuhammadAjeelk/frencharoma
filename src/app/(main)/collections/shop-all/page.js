@@ -40,6 +40,7 @@ const SORT_OPTIONS = [
   { value: "name-desc",  label: "Alphabetically (Z – A)" },
   { value: "price-asc",  label: "Price (Low – High)"     },
   { value: "price-desc", label: "Price (High – Low)"     },
+  { value: "discount-desc", label: "Discount (High – Low)" },
 ];
 
 // ── Reusable filter dropdown ───────────────────────────────────────────────

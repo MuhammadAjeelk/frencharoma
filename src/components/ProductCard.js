@@ -37,7 +37,6 @@ export default function ProductCard({
   perfumeId,
   editions = [],
   discountPercent = 0,
-  isSpecialOffer = false,
   isBestSeller = false,
   globalAdmirePercent = 60,
   tags = [],
@@ -139,11 +138,6 @@ export default function ProductCard({
         {disc > 0 && (
           <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
             -{disc}% OFF
-          </span>
-        )}
-        {isSpecialOffer && (
-          <span className="bg-[#c2185b] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
-            Special Offer
           </span>
         )}
       </div>
