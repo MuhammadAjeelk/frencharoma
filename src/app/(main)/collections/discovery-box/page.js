@@ -10,6 +10,13 @@ import QuickAddModal from "@/components/QuickAddModal";
 
 const BOX_SIZE = 5;
 const DISCOUNT_PERCENT = 25;
+const MAX_TESTERS = 30; // safety cap — up to 6 boxes
+
+const chunk = (arr, n) => {
+  const out = [];
+  for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
+  return out;
+};
 
 function get5mlVariant(editions) {
   for (const ed of editions || []) {
@@ -76,76 +83,37 @@ function matchesSeason(p, season) {
 }
 
 // ── Empty slot placeholder ─────────────────────────────────────────────────
-function EmptySlot({ index, isSwapMode, onClick }) {
+function EmptySlot({ index }) {
   return (
-    <button
-      onClick={onClick}
-      className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all duration-200 w-full aspect-square bg-white
-        ${isSwapMode
-          ? "border-amber-400 bg-amber-50 animate-pulse cursor-pointer shadow-md"
-          : "border-gray-300 cursor-default"
-        }`}
-    >
-      <span className={`text-2xl font-bold mb-0.5 ${isSwapMode ? "text-amber-500" : "text-gray-300"}`}>
-        {isSwapMode ? "↓" : index + 1}
-      </span>
-      <span className={`text-[10px] font-medium ${isSwapMode ? "text-amber-500" : "text-gray-300"}`}>
-        {isSwapMode ? "Place here" : "Empty"}
-      </span>
-    </button>
+    <div className="w-11 h-11 rounded-md border border-dashed border-gray-300 bg-white flex items-center justify-center shrink-0">
+      <span className="text-xs font-bold text-gray-300">{index + 1}</span>
+    </div>
   );
 }
 
-// ── Filled slot ────────────────────────────────────────────────────────────
-function FilledSlot({ perfume, index, isSwapMode, onRemove, onSwap }) {
+// ── Filled slot — click to scroll to the card, × to remove ──────────────────
+function FilledSlot({ perfume, onRemove, onScrollTo, tone = "active" }) {
+  const border = tone === "done" ? "border-green-300" : "border-[#b8964e]";
   return (
-    <div
-      className={`relative rounded-xl border-2 overflow-hidden w-full aspect-square transition-all duration-200 cursor-pointer group
-        ${isSwapMode
-          ? "border-amber-400 shadow-lg ring-2 ring-amber-300"
-          : "border-[#b8964e] shadow-sm"
-        }`}
-      onClick={isSwapMode ? onSwap : undefined}
+    <button
+      type="button"
+      onClick={onScrollTo}
+      title={perfume.name}
+      className={`relative w-11 h-11 rounded-md overflow-hidden border ${border} group shrink-0`}
     >
       {get5mlImage(perfume) ? (
-        <Image
-          src={get5mlImage(perfume)}
-          alt={perfume.name}
-          fill
-          className="object-cover"
-          sizes="80px"
-        />
+        <Image src={get5mlImage(perfume)} alt={perfume.name} fill className="object-cover" sizes="44px" />
       ) : (
-        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-          <span className="text-gray-300 text-xs text-center px-1 leading-tight">{perfume.name}</span>
-        </div>
+        <div className="w-full h-full bg-gray-100" />
       )}
-
-      {/* Overlay on swap mode */}
-      {isSwapMode && (
-        <div className="absolute inset-0 bg-amber-400/20 flex items-center justify-center">
-          <span className="text-[10px] font-bold text-amber-800 bg-amber-100/90 px-1.5 py-0.5 rounded-full">
-            Replace
-          </span>
-        </div>
-      )}
-
-      {/* Remove button (normal mode) */}
-      {!isSwapMode && (
-        <button
-          onClick={(e) => { e.stopPropagation(); onRemove(index); }}
-          className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/70 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold leading-none z-10"
-          aria-label="Remove"
-        >
-          ×
-        </button>
-      )}
-
-      {/* Slot number badge */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1 pb-0.5 pt-2">
-        <p className="text-[9px] text-white font-medium truncate leading-tight">{perfume.name}</p>
-      </div>
-    </div>
+      <span
+        onClick={(e) => { e.stopPropagation(); onRemove(); }}
+        className="absolute top-0 right-0 w-4 h-4 bg-black/70 text-white rounded-bl flex items-center justify-center text-[11px] leading-none opacity-0 group-hover:opacity-100 transition-opacity"
+        aria-label="Remove"
+      >
+        ×
+      </span>
+    </button>
   );
 }
 
@@ -155,9 +123,9 @@ export default function DiscoveryBoxPage() {
 
   const [perfumes, setPerfumes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState([]); // array of perfume IDs, max BOX_SIZE
-  const [swapCandidate, setSwapCandidate] = useState(null); // ID of new perfume to swap in
+  const [selected, setSelected] = useState([]); // flat list of picked IDs, grouped into boxes of 5
   const [addedToCart, setAddedToCart] = useState(false);
+  const [checkoutPromptOpen, setCheckoutPromptOpen] = useState(false);
   const [modalPerfume, setModalPerfume] = useState(null); // Quick View target
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -209,54 +177,46 @@ export default function DiscoveryBoxPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ── Selection logic ──────────────────────────────────────────────────────
+  const perfumeById = useCallback(
+    (id) => perfumes.find((p) => p._id === id) || null,
+    [perfumes]
+  );
+
+  // ── Selection logic — pick/unpick; picks auto-group into boxes of 5 ───────
   const handlePerfumeClick = useCallback((perfumeId) => {
-    // Already selected → deselect
-    if (selected.includes(perfumeId)) {
-      setSelected((prev) => prev.filter((id) => id !== perfumeId));
-      if (swapCandidate === perfumeId) setSwapCandidate(null);
-      return;
-    }
-    // Sold-out testers are visible but cannot be put in the box
-    const perfume = perfumes.find((p) => p._id === perfumeId);
-    if (perfume && !is5mlInStock(perfume)) return;
-    // If this is the current swap candidate, cancel
-    if (swapCandidate === perfumeId) {
-      setSwapCandidate(null);
-      return;
-    }
-    // Box has room → add
-    if (selected.length < BOX_SIZE) {
-      setSelected((prev) => [...prev, perfumeId]);
-      setSwapCandidate(null);
-      return;
-    }
-    // Box full → enter swap mode
-    setSwapCandidate(perfumeId);
-  }, [selected, swapCandidate, perfumes]);
+    setSelected((prev) => {
+      if (prev.includes(perfumeId)) return prev.filter((id) => id !== perfumeId);
+      const perfume = perfumes.find((p) => p._id === perfumeId);
+      if (perfume && !is5mlInStock(perfume)) return prev; // sold out — not pickable
+      if (prev.length >= MAX_TESTERS) return prev; // safety cap
+      return [...prev, perfumeId];
+    });
+  }, [perfumes]);
 
-  const handleSlotAction = useCallback((index) => {
-    if (swapCandidate) {
-      // Replace the perfume at this index
-      setSelected((prev) => {
-        const next = [...prev];
-        next[index] = swapCandidate;
-        return next;
-      });
-      setSwapCandidate(null);
-    } else {
-      // Remove
-      setSelected((prev) => prev.filter((_, i) => i !== index));
-    }
-  }, [swapCandidate]);
+  const removeTester = useCallback((perfumeId) => {
+    setSelected((prev) => prev.filter((id) => id !== perfumeId));
+  }, []);
 
-  const cancelSwap = () => setSwapCandidate(null);
+  const scrollToPerfume = useCallback((perfumeId) => {
+    const el = document.getElementById(`disc-card-${perfumeId}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
 
-  // ── Add to cart ──────────────────────────────────────────────────────────
-  const handleAddToCart = () => {
-    if (selected.length !== BOX_SIZE) return;
-    for (const id of selected) {
-      const p = perfumes.find((pf) => pf._id === id);
+  // ── Boxes (groups of 5) ──────────────────────────────────────────────────
+  const packs = chunk(selected, BOX_SIZE);
+  const completePacks = packs.filter((pk) => pk.length === BOX_SIZE);
+  const completeCount = completePacks.length;
+  const boxedIds = completePacks.flat();
+  const activePackIds =
+    selected.length % BOX_SIZE === 0 ? [] : packs[packs.length - 1] || [];
+  const activeCount = activePackIds.length;
+  const hasPartial = activeCount > 0;
+  const canCheckout = completeCount >= 1;
+
+  // ── Checkout — only complete boxes are charged (25% off) ──────────────────
+  const commitBoxes = () => {
+    for (const id of boxedIds) {
+      const p = perfumeById(id);
       if (!p) continue;
       const match = get5mlVariant(p.editions);
       const basePrice = match?.variant?.price ?? getPerfumePrice(p) ?? 0;
@@ -272,28 +232,30 @@ export default function DiscoveryBoxPage() {
         isDiscoveryBox: true,
       });
     }
+    setSelected(activePackIds); // keep the half-filled box for later
+    setCheckoutPromptOpen(false);
     setAddedToCart(true);
-    setSelected([]);
-    setSwapCandidate(null);
     setTimeout(() => setAddedToCart(false), 3000);
   };
 
-  // ── Pricing ──────────────────────────────────────────────────────────────
-  const totalOriginal = selected.reduce((sum, id) => {
-    const p = perfumes.find((pf) => pf._id === id);
-    return sum + (getPerfumePrice(p) || 0);
-  }, 0);
+  const handleCheckout = () => {
+    if (!canCheckout) return;
+    if (hasPartial) { setCheckoutPromptOpen(true); return; }
+    commitBoxes();
+  };
+
+  // ── Pricing (complete boxes only) ─────────────────────────────────────────
+  const totalOriginal = boxedIds.reduce(
+    (sum, id) => sum + (getPerfumePrice(perfumeById(id)) || 0),
+    0
+  );
   const totalDiscounted = Math.round(totalOriginal * (1 - DISCOUNT_PERCENT / 100));
   const savings = totalOriginal - totalDiscounted;
 
-  const isBoxComplete = selected.length === BOX_SIZE;
-  const isSwapMode = swapCandidate !== null;
-  const swapPerfume = isSwapMode ? perfumes.find((p) => p._id === swapCandidate) : null;
-
-  // ── Slot data ─────────────────────────────────────────────────────────────
+  // Active box slots (the box currently being filled)
   const slots = Array.from({ length: BOX_SIZE }, (_, i) => {
-    const id = selected[i];
-    return id ? perfumes.find((p) => p._id === id) || null : null;
+    const id = activePackIds[i];
+    return id ? perfumeById(id) : null;
   });
 
   return (
@@ -326,9 +288,9 @@ export default function DiscoveryBoxPage() {
         {/* Step guide */}
         <div className="flex items-center justify-center gap-6 mt-6 flex-wrap">
           {[
-            { n: "1", label: "Browse & select 5" },
-            { n: "2", label: "Swap any time" },
-            { n: "3", label: "Add box to cart" },
+            { n: "1", label: "Pick 5 to fill a box" },
+            { n: "2", label: "Add as many boxes as you like" },
+            { n: "3", label: "Checkout your boxes" },
           ].map((s) => (
             <div key={s.n} className="flex items-center gap-2 text-xs text-white/50">
               <span className="w-5 h-5 rounded-full bg-[#b8964e]/30 text-[#b8964e] flex items-center justify-center font-bold text-[10px]">
@@ -341,91 +303,85 @@ export default function DiscoveryBoxPage() {
       </div>
 
       {/* ── Sticky box builder ───────────────────────────────────────────── */}
-      <div className={`sticky top-0 z-30 border-b shadow-sm transition-colors duration-300 ${
-        isSwapMode
-          ? "bg-amber-50 border-amber-300"
-          : isBoxComplete
-          ? "bg-green-50 border-green-200"
-          : "bg-white border-gray-200"
-      }`}>
+      <div className="sticky top-0 z-30 border-b border-gray-200 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
-
-          {/* Swap mode banner */}
-          {isSwapMode && (
-            <div className="flex items-center justify-between mb-2 bg-amber-100 rounded-lg px-3 py-2">
-              <div className="flex items-center gap-2">
-                <span className="text-amber-600 text-sm">
-                  🔄 Tap a box below to replace it with&nbsp;
-                  <strong className="text-amber-800">{swapPerfume?.name}</strong>
-                </span>
-              </div>
-              <button
-                onClick={cancelSwap}
-                className="text-xs text-amber-700 font-semibold border border-amber-400 rounded-full px-2.5 py-0.5 hover:bg-amber-200 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-
           <div className="flex items-center gap-3">
-            {/* 5 slots */}
-            <div className="flex gap-2 flex-1 min-w-0">
-              {slots.map((perfume, i) =>
-                perfume ? (
-                  <div key={i} className="w-[60px] sm:w-[72px] shrink-0">
-                    <FilledSlot
-                      perfume={perfume}
-                      index={i}
-                      isSwapMode={isSwapMode}
-                      onRemove={handleSlotAction}
-                      onSwap={() => handleSlotAction(i)}
-                    />
+            {/* Completed boxes + the box being filled (scrolls sideways) */}
+            <div className="flex items-stretch gap-3 flex-1 min-w-0 overflow-x-auto scrollbar-thin pb-1">
+              {/* Completed boxes */}
+              {completePacks.map((pack, bi) => (
+                <div key={bi} className="shrink-0 rounded-xl border-2 border-green-300 bg-green-50/70 p-1.5">
+                  <div className="flex items-center justify-between gap-2 mb-1 px-0.5">
+                    <span className="text-[10px] font-bold text-green-700 whitespace-nowrap">Box {bi + 1} ✓</span>
+                    <span className="text-[9px] font-semibold text-green-600 whitespace-nowrap">{DISCOUNT_PERCENT}% off</span>
                   </div>
-                ) : (
-                  <div key={i} className="w-[60px] sm:w-[72px] shrink-0">
-                    <EmptySlot
-                      index={i}
-                      isSwapMode={isSwapMode}
-                      onClick={isSwapMode ? () => handleSlotAction(i) : undefined}
-                    />
+                  <div className="flex gap-1">
+                    {pack.map((id) => {
+                      const p = perfumeById(id);
+                      return p ? (
+                        <FilledSlot
+                          key={id}
+                          perfume={p}
+                          tone="done"
+                          onRemove={() => removeTester(id)}
+                          onScrollTo={() => scrollToPerfume(id)}
+                        />
+                      ) : null;
+                    })}
                   </div>
-                )
-              )}
+                </div>
+              ))}
+
+              {/* Box currently being filled */}
+              <div className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/50 bg-[#fbf8f1] p-1.5">
+                <div className="flex items-center justify-between gap-2 mb-1 px-0.5">
+                  <span className="text-[10px] font-bold text-[#b8964e] whitespace-nowrap">Box {completeCount + 1}</span>
+                  <span className="text-[9px] font-semibold text-gray-400 whitespace-nowrap">{activeCount}/{BOX_SIZE}</span>
+                </div>
+                <div className="flex gap-1">
+                  {slots.map((perfume, i) =>
+                    perfume ? (
+                      <FilledSlot
+                        key={i}
+                        perfume={perfume}
+                        onRemove={() => removeTester(perfume._id)}
+                        onScrollTo={() => scrollToPerfume(perfume._id)}
+                      />
+                    ) : (
+                      <EmptySlot key={i} index={i} />
+                    )
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Progress + CTA */}
-            <div className="flex flex-col items-end gap-1.5 shrink-0">
-              {/* Progress pills */}
-              <div className="flex gap-1">
-                {Array.from({ length: BOX_SIZE }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`h-1.5 w-5 rounded-full transition-colors duration-200 ${
-                      i < selected.length
-                        ? isBoxComplete ? "bg-green-500" : "bg-[#b8964e]"
-                        : "bg-gray-200"
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <p className={`text-xs font-semibold ${
-                isBoxComplete ? "text-green-700" : "text-gray-500"
-              }`}>
-                {isBoxComplete
-                  ? `Box ready! ${DISCOUNT_PERCENT}% off`
-                  : `${selected.length}/${BOX_SIZE} selected`}
+            <div className="flex flex-col items-end gap-1 shrink-0">
+              <p className="text-xs font-semibold text-gray-600 whitespace-nowrap">
+                {completeCount > 0
+                  ? `${completeCount} box${completeCount > 1 ? "es" : ""} ready`
+                  : `${activeCount}/${BOX_SIZE} in this box`}
               </p>
-
-              {isBoxComplete && (
-                <button
-                  onClick={handleAddToCart}
-                  className="mt-0.5 px-4 py-2 bg-[#1a1a2e] text-white text-xs font-bold rounded-lg hover:bg-[#b8964e] transition-colors whitespace-nowrap"
-                >
-                  {addedToCart ? "✓ Added!" : "Add Box to Cart →"}
-                </button>
+              {hasPartial && (
+                <p className="text-[11px] text-[#b8964e] font-medium whitespace-nowrap">
+                  {BOX_SIZE - activeCount} more to fill Box {completeCount + 1}
+                </p>
               )}
+              <button
+                onClick={handleCheckout}
+                disabled={!canCheckout}
+                className={`mt-0.5 px-4 py-2 text-xs font-bold rounded-lg transition-colors whitespace-nowrap ${
+                  canCheckout
+                    ? "bg-[#1a1a2e] text-white hover:bg-[#b8964e]"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                {addedToCart
+                  ? "✓ Added!"
+                  : canCheckout
+                  ? `Add ${completeCount} Box${completeCount > 1 ? "es" : ""} to Cart →`
+                  : "Pick 5 to build a box"}
+              </button>
             </div>
           </div>
         </div>
@@ -448,9 +404,9 @@ export default function DiscoveryBoxPage() {
                 : `${perfumes.length} testers available`}
             </p>
           </div>
-          {selected.length > 0 && !isBoxComplete && (
+          {hasPartial && (
             <span className="text-xs text-[#b8964e] font-semibold">
-              {BOX_SIZE - selected.length} more to go
+              {BOX_SIZE - activeCount} more to fill Box {completeCount + 1}
             </span>
           )}
         </div>
@@ -582,52 +538,60 @@ export default function DiscoveryBoxPage() {
         {!loading && visiblePerfumes.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {visiblePerfumes.map((p) => (
-              <ProductCard
-                key={p._id}
-                name={p.name}
-                brand={p.brands?.[0] || p.brand}
-                image={get5mlImage(p)}
-                impressionName={p.impressionName}
-                href={`/products/${p.slug}`}
-                slug={p.slug}
-                perfumeId={p._id}
-                gender={p.gender}
-                tags={p.tags}
-                globalAdmirePercent={p.globalAdmirePercent}
-                discountPercent={DISCOUNT_PERCENT}
-                isBestSeller={Boolean(p.isBestSeller)}
-                onQuickView={() => { setModalPerfume(p); setModalOpen(true); }}
-                boxMode
-                boxPrice={getPerfumePrice(p)}
-                boxSelected={selected.includes(p._id)}
-                boxSwapTarget={swapCandidate === p._id}
-                boxSoldOut={!is5mlInStock(p)}
-                onAddToBox={() => handlePerfumeClick(p._id)}
-              />
+              <div key={p._id} id={`disc-card-${p._id}`} className="scroll-mt-40">
+                <ProductCard
+                  name={p.name}
+                  brand={p.brands?.[0] || p.brand}
+                  image={get5mlImage(p)}
+                  impressionName={p.impressionName}
+                  href={`/products/${p.slug}`}
+                  slug={p.slug}
+                  perfumeId={p._id}
+                  gender={p.gender}
+                  tags={p.tags}
+                  globalAdmirePercent={p.globalAdmirePercent}
+                  discountPercent={DISCOUNT_PERCENT}
+                  isBestSeller={Boolean(p.isBestSeller)}
+                  onQuickView={() => { setModalPerfume(p); setModalOpen(true); }}
+                  boxMode
+                  boxPrice={getPerfumePrice(p)}
+                  boxSelected={selected.includes(p._id)}
+                  boxSoldOut={!is5mlInStock(p)}
+                  onAddToBox={() => handlePerfumeClick(p._id)}
+                />
+              </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* ── Sticky bottom summary (shown when box is complete) ────────────── */}
-      {isBoxComplete && (
+      {/* ── Sticky bottom summary (shown when ≥1 box is complete) ─────────── */}
+      {completeCount >= 1 && (
         <div className="sticky bottom-0 z-30 bg-[#1a1a2e] border-t border-white/10 shadow-2xl">
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 min-w-0">
               <div className="hidden sm:flex gap-1.5">
-                {slots.map((p, i) => (
-                  <div key={i} className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 shrink-0">
-                    {get5mlImage(p) ? (
-                      <Image src={get5mlImage(p)} alt={p?.name || ""} width={32} height={32} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full bg-white/10" />
-                    )}
+                {boxedIds.slice(0, 10).map((id, i) => {
+                  const p = perfumeById(id);
+                  return (
+                    <div key={i} className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 shrink-0">
+                      {get5mlImage(p) ? (
+                        <Image src={get5mlImage(p)} alt={p?.name || ""} width={32} height={32} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-white/10" />
+                      )}
+                    </div>
+                  );
+                })}
+                {boxedIds.length > 10 && (
+                  <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-white/70 text-[10px] font-bold shrink-0">
+                    +{boxedIds.length - 10}
                   </div>
-                ))}
+                )}
               </div>
-              <div>
-                <p className="text-white text-sm font-bold">
-                  {BOX_SIZE} × 5ml Discovery Box
+              <div className="min-w-0">
+                <p className="text-white text-sm font-bold truncate">
+                  {completeCount} Discovery Box{completeCount > 1 ? "es" : ""} · {boxedIds.length} × 5ml
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-white/40 text-xs line-through">PKR {totalOriginal.toLocaleString()}</span>
@@ -639,14 +603,48 @@ export default function DiscoveryBoxPage() {
               </div>
             </div>
             <button
-              onClick={handleAddToCart}
+              onClick={handleCheckout}
               className="px-6 py-3 bg-[#b8964e] text-white font-bold text-sm rounded-xl hover:bg-[#a07c3e] transition-colors whitespace-nowrap shadow-lg"
             >
-              {addedToCart ? "✓ Added to Cart!" : "Add Box to Cart →"}
+              {addedToCart
+                ? "✓ Added to Cart!"
+                : `Add ${completeCount} Box${completeCount > 1 ? "es" : ""} to Cart →`}
             </button>
           </div>
         </div>
       )}
+
+      {/* ── Checkout prompt when a box is half-filled ─────────────────────── */}
+      <UniversalModal
+        isOpen={checkoutPromptOpen}
+        onClose={() => setCheckoutPromptOpen(false)}
+        heading="Finish your last box?"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-[#4a4540] leading-relaxed">
+            You have <strong className="text-[#1f1a16]">{completeCount} complete box{completeCount > 1 ? "es" : ""}</strong> ready
+            ({DISCOUNT_PERCENT}% off), plus a box that&apos;s only <strong className="text-[#1f1a16]">{activeCount}/{BOX_SIZE}</strong> filled.
+          </p>
+          <p className="text-sm text-[#4a4540] leading-relaxed">
+            Check out the completed box{completeCount > 1 ? "es" : ""} now, or keep building to finish the last one?
+            The {activeCount} tester{activeCount > 1 ? "s" : ""} in the unfinished box will stay in your builder.
+          </p>
+          <div className="flex flex-col gap-2 pt-1">
+            <button
+              onClick={commitBoxes}
+              className="w-full py-3 rounded-lg bg-[#1a1a2e] text-white font-semibold text-sm hover:bg-[#b8964e] transition-colors"
+            >
+              Checkout {completeCount} completed box{completeCount > 1 ? "es" : ""} →
+            </button>
+            <button
+              onClick={() => setCheckoutPromptOpen(false)}
+              className="w-full py-3 rounded-lg border border-[#e8e4df] text-[#1f1a16] font-semibold text-sm hover:bg-[#faf8f5] transition-colors"
+            >
+              Keep building — finish this box
+            </button>
+          </div>
+        </div>
+      </UniversalModal>
 
       {/* ── Quick View Modal (box-aware: 5ml + Add to Box) ────────────────── */}
       <UniversalModal
