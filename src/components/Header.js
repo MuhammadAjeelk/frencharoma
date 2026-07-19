@@ -272,12 +272,12 @@ export default function Header() {
                         <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                       </button>
                       {openDropdown === index && (
-                        <div className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-3 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}>
+                        <div className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}>
                           {/* Left: sections */}
                           <div className={families.length > 0 ? "w-1/2 border-r border-[#f0ece7]" : "w-full"}>
                             {item.submenu.map((sub, si) =>
                               sub.heading ? (
-                                <p key={si} className="px-5 pt-2.5 pb-1 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
+                                <p key={si} className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
                                   {sub.heading}
                                 </p>
                               ) : (
@@ -285,15 +285,20 @@ export default function Header() {
                                   key={si}
                                   href={sub.href}
                                   onClick={() => setOpenDropdown(null)}
-                                  className={`block transition-colors hover:bg-[#faf8f5] ${
+                                  className={`group flex items-center transition-colors hover:bg-[#faf8f5] ${
                                     sub.accent
-                                      ? "px-5 py-2 text-[13px] font-bold uppercase tracking-wide text-[#b8964e] hover:text-[#a07f3c]"
+                                      ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e] hover:text-[#0f0f24]"
                                       : sub.standalone
-                                      ? "px-5 pt-3 pb-1.5 text-[13px] font-semibold text-[#1f1a16] hover:text-[#b8964e]"
-                                      : "pl-8 pr-5 py-1.5 text-[13px] text-[#4a4540] hover:text-[#1a1a2e]"
+                                      ? "px-5 pt-2 pb-1 text-[13px] font-semibold text-[#1f1a16] hover:text-[#b8964e]"
+                                      : "pl-8 pr-5 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e]"
                                   }`}
                                 >
-                                  {sub.name}
+                                  {!sub.accent && !sub.standalone && (
+                                    <span className="mr-2 text-[#b8964e]">•</span>
+                                  )}
+                                  <span className="group-hover:underline underline-offset-4 decoration-1">
+                                    {sub.name}
+                                  </span>
                                 </Link>
                               )
                             )}
@@ -302,7 +307,7 @@ export default function Header() {
                           {/* Right: fragrance families */}
                           {families.length > 0 && (
                             <div className="w-1/2 flex flex-col">
-                              <p className="px-5 pt-2.5 pb-1 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
+                              <p className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
                                 Shop by Fragrance Family
                               </p>
                               <div className="overflow-y-auto scrollbar-thin max-h-72 px-1">
@@ -311,9 +316,12 @@ export default function Header() {
                                     key={f}
                                     href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
                                     onClick={() => setOpenDropdown(null)}
-                                    className="block pl-4 pr-4 py-1.5 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors truncate"
+                                    className="group flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
                                   >
-                                    {f}
+                                    <span className="mr-2 text-[#b8964e]">•</span>
+                                    <span className="truncate group-hover:underline underline-offset-4 decoration-1">
+                                      {f}
+                                    </span>
                                   </Link>
                                 ))}
                               </div>
@@ -410,16 +418,21 @@ export default function Header() {
                                   <li key={si}>
                                     <Link
                                       href={sub.href}
-                                      className={`block py-2 text-sm hover:opacity-70 transition-opacity ${
+                                      className={`group flex items-center py-2 text-sm transition-opacity hover:opacity-70 ${
                                         sub.accent
-                                          ? "font-bold text-[#b8964e] uppercase tracking-wide"
+                                          ? "font-bold text-[#1a1a2e] uppercase tracking-wide"
                                           : sub.standalone
                                           ? "font-semibold"
                                           : "pl-3"
                                       }`}
                                       onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
                                     >
-                                      {sub.name}
+                                      {!sub.accent && !sub.standalone && (
+                                        <span className="mr-2 text-[#b8964e]">•</span>
+                                      )}
+                                      <span className="group-hover:underline underline-offset-4 decoration-1">
+                                        {sub.name}
+                                      </span>
                                     </Link>
                                   </li>
                                 )
@@ -435,10 +448,13 @@ export default function Header() {
                                         <li key={f}>
                                           <Link
                                             href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
-                                            className="block py-2 pl-3 text-sm hover:opacity-70 transition-opacity"
+                                            className="group flex items-center py-2 pl-3 text-sm transition-opacity hover:opacity-70"
                                             onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
                                           >
-                                            {f}
+                                            <span className="mr-2 text-[#b8964e]">•</span>
+                                            <span className="group-hover:underline underline-offset-4 decoration-1">
+                                              {f}
+                                            </span>
                                           </Link>
                                         </li>
                                       ))}
