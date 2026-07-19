@@ -219,13 +219,13 @@ export default function ProductCard({
 
         {/* Best Seller pill — bottom-left */}
         {isBestSeller && (
-          <span className="absolute bottom-2 left-2 z-10 bg-[#1a1a2e]/95 text-white rounded-full px-2.5 py-0.5 text-[10px] font-bold shadow-sm">
+          <span className="absolute bottom-2 left-2 z-10 bg-[#1a1a2e] text-[#e0c07a] rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] shadow-md transition-opacity duration-200 group-hover:opacity-0">
             Best Seller
           </span>
         )}
 
         {/* Size pill (like the 5ml tester pill) */}
-        <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm">
+        <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
           {sizeLabel}
         </span>
       </div>
