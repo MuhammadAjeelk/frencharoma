@@ -293,10 +293,10 @@ export default function ProductCard({
           )}
         </div>
 
-        <div className="mt-auto">
-          {/* Inline edition banners */}
+        <div className="mt-auto relative">
+          {/* Edition banners — float above the button so the card keeps its height */}
           {showBanners && hasChoice && (
-            <div className="flex flex-col gap-1.5 mb-2">
+            <div className="absolute bottom-full left-0 right-0 mb-2 z-30 flex flex-col gap-1.5 drop-shadow-xl">
               {sellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
                 return (
