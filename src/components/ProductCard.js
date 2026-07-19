@@ -174,7 +174,7 @@ export default function ProductCard({
                 e.stopPropagation();
                 onQuickView();
               }}
-              className="qv-vibrate flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
+              className="card-vibrate flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -315,7 +315,7 @@ export default function ProductCard({
             disabled={!cardEdition}
             className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
               cardEdition
-                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44] hover-vibrate"
+                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44] card-vibrate"
                 : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
             }`}
           >
