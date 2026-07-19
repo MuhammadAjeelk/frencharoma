@@ -259,12 +259,12 @@ export default function ProductCard({
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
-                <span className="text-[15px] font-normal text-[#a09890] line-through decoration-1">
-                  PKR {headlinePrice.toLocaleString()}
+                <span className="text-[15px] font-normal text-[#a09890] strike-diagonal">
+                  PKR-{headlinePrice.toLocaleString()}
                 </span>
               )}
               <span className="text-[15px] font-semibold text-[#1f1a16]">
-                PKR {finalOf(headlinePrice).toLocaleString()}
+                PKR-{finalOf(headlinePrice).toLocaleString()}
               </span>
             </>
           ) : (
