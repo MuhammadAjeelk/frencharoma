@@ -114,7 +114,7 @@ export default function ProductCard({
         setHovered(false);
         setShowBanners(false);
       }}
-      className="group relative rounded-xl overflow-hidden bg-white border-2 flex flex-col transition-all duration-300"
+      className="group relative rounded-xl overflow-hidden bg-white border-[3px] flex flex-col transition-all duration-300"
       style={{
         borderColor: hovered && gm ? gm.hex : "#e8e4df",
         boxShadow: hovered ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
