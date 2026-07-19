@@ -95,7 +95,7 @@ function DiscoveryBoxCard({ box, removeItem }) {
     <div className="py-6">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-[#1a1a2e]">🎁 Discovery Box</span>
+          <span className="text-sm font-bold text-[#1a1a2e]">🎁 Discovery Box {box.number}</span>
           <span className="text-xs text-gray-500">{box.items.length} × 5ml · 25% off</span>
         </div>
         <button
@@ -110,12 +110,15 @@ function DiscoveryBoxCard({ box, removeItem }) {
       </div>
       <div className="rounded-xl border border-[#e8dcbf] bg-[#fbf8f1] p-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {box.items.map((i) => (
+          {box.items.map((i, idx) => (
             <div key={i.id} className="flex items-center gap-2.5 bg-white rounded-lg border border-gray-100 p-1.5">
               <Link href={`/products/${i.slug}`} className="relative w-12 h-12 rounded-md overflow-hidden bg-gray-50 shrink-0">
                 {i.image ? (
                   <Image src={i.image} alt={i.name} fill className="object-cover" sizes="48px" />
                 ) : null}
+                <span className="absolute top-0 left-0 w-4 h-4 bg-[#b8964e] text-white rounded-br flex items-center justify-center text-[10px] font-bold leading-none">
+                  {idx + 1}
+                </span>
               </Link>
               <div className="min-w-0 flex-1">
                 <Link href={`/products/${i.slug}`}>
@@ -147,13 +150,15 @@ export default function CartPage() {
   // original order and render everything else as a normal line.
   const cartGroups = [];
   const boxSlot = new Map();
+  let boxNo = 0;
   for (const item of items) {
     if (item.isDiscoveryBox && item.boxId) {
       if (boxSlot.has(item.boxId)) {
         cartGroups[boxSlot.get(item.boxId)].items.push(item);
       } else {
+        boxNo += 1;
         boxSlot.set(item.boxId, cartGroups.length);
-        cartGroups.push({ type: "box", boxId: item.boxId, items: [item] });
+        cartGroups.push({ type: "box", boxId: item.boxId, number: boxNo, items: [item] });
       }
     } else {
       cartGroups.push({ type: "item", item });
