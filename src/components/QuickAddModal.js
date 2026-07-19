@@ -160,7 +160,7 @@ export default function QuickAddModal({ perfume, onClose }) {
           onClick={handleCta}
           disabled={!cardEdition}
           className={`w-full py-3 rounded-lg font-semibold text-sm tracking-wide uppercase transition-colors ${
-            cardEdition ? "bg-black text-white hover:bg-gray-800 hover-vibrate vibrate-onshow" : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            cardEdition ? "bg-black text-white hover:bg-gray-800 hover-vibrate" : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >
           {added ? "Added to Cart ✓" : "Add to Cart"}

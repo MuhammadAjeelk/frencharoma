@@ -151,7 +151,10 @@ img { image-rendering: -webkit-optimize-contrast; }
 .hover-vibrate:hover {
   animation: cart-vibrate 0.25s ease-in-out 8;
 }
-/* Auto-vibrate ~1.5s when it appears (e.g. Quick View open) */
-.vibrate-onshow {
-  animation: cart-vibrate 0.25s ease-in-out 6;
+
+/* Quick View button vibrates ~1.5s when it appears on card hover.
+   It sits inside a separately-centered wrapper, so the shake transform
+   doesn't fight the centering. */
+.group:hover .qv-vibrate {
+  animation: cart-vibrate 0.3s ease-in-out 1;
 }
