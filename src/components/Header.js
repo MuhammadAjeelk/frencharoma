@@ -285,7 +285,7 @@ export default function Header() {
                                   key={si}
                                   href={sub.href}
                                   onClick={() => setOpenDropdown(null)}
-                                  className={`group flex items-center transition-colors hover:bg-[#faf8f5] ${
+                                  className={`group/link flex items-center transition-colors hover:bg-[#faf8f5] ${
                                     sub.accent
                                       ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e] hover:text-[#0f0f24]"
                                       : sub.standalone
@@ -296,7 +296,7 @@ export default function Header() {
                                   {!sub.accent && !sub.standalone && (
                                     <span className="mr-2 text-[#b8964e]">•</span>
                                   )}
-                                  <span className="group-hover:underline underline-offset-4 decoration-1">
+                                  <span className="group-hover/link:underline underline-offset-4 decoration-1">
                                     {sub.name}
                                   </span>
                                 </Link>
@@ -316,10 +316,10 @@ export default function Header() {
                                     key={f}
                                     href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
                                     onClick={() => setOpenDropdown(null)}
-                                    className="group flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
+                                    className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
                                   >
                                     <span className="mr-2 text-[#b8964e]">•</span>
-                                    <span className="truncate group-hover:underline underline-offset-4 decoration-1">
+                                    <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
                                       {f}
                                     </span>
                                   </Link>
@@ -418,7 +418,7 @@ export default function Header() {
                                   <li key={si}>
                                     <Link
                                       href={sub.href}
-                                      className={`group flex items-center py-2 text-sm transition-opacity hover:opacity-70 ${
+                                      className={`group/link flex items-center py-2 text-sm transition-opacity hover:opacity-70 ${
                                         sub.accent
                                           ? "font-bold text-[#1a1a2e] uppercase tracking-wide"
                                           : sub.standalone
@@ -430,7 +430,7 @@ export default function Header() {
                                       {!sub.accent && !sub.standalone && (
                                         <span className="mr-2 text-[#b8964e]">•</span>
                                       )}
-                                      <span className="group-hover:underline underline-offset-4 decoration-1">
+                                      <span className="group-hover/link:underline underline-offset-4 decoration-1">
                                         {sub.name}
                                       </span>
                                     </Link>
@@ -448,11 +448,11 @@ export default function Header() {
                                         <li key={f}>
                                           <Link
                                             href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
-                                            className="group flex items-center py-2 pl-3 text-sm transition-opacity hover:opacity-70"
+                                            className="group/link flex items-center py-2 pl-3 text-sm transition-opacity hover:opacity-70"
                                             onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
                                           >
                                             <span className="mr-2 text-[#b8964e]">•</span>
-                                            <span className="group-hover:underline underline-offset-4 decoration-1">
+                                            <span className="group-hover/link:underline underline-offset-4 decoration-1">
                                               {f}
                                             </span>
                                           </Link>
