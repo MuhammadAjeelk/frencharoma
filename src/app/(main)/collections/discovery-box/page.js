@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ProductCard";
+import UniversalModal from "@/components/UniversalModal";
+import QuickAddModal from "@/components/QuickAddModal";
 
 const BOX_SIZE = 5;
 const DISCOUNT_PERCENT = 25;
@@ -156,6 +158,8 @@ export default function DiscoveryBoxPage() {
   const [selected, setSelected] = useState([]); // array of perfume IDs, max BOX_SIZE
   const [swapCandidate, setSwapCandidate] = useState(null); // ID of new perfume to swap in
   const [addedToCart, setAddedToCart] = useState(false);
+  const [modalPerfume, setModalPerfume] = useState(null); // Quick View target
+  const [modalOpen, setModalOpen] = useState(false);
 
   // ── Search / filters ─────────────────────────────────────────────────────
   const [query, setQuery] = useState("");
@@ -531,7 +535,7 @@ export default function DiscoveryBoxPage() {
 
         {/* Loading skeleton */}
         {loading && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {[...Array(10)].map((_, i) => (
               <div key={i} className="rounded-xl border border-gray-200 overflow-hidden animate-pulse">
                 <div className="aspect-[6.818/7.5] bg-gray-100" />
@@ -576,7 +580,7 @@ export default function DiscoveryBoxPage() {
 
         {/* Perfume cards */}
         {!loading && visiblePerfumes.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {visiblePerfumes.map((p) => (
               <ProductCard
                 key={p._id}
@@ -591,10 +595,11 @@ export default function DiscoveryBoxPage() {
                 tags={p.tags}
                 globalAdmirePercent={p.globalAdmirePercent}
                 discountPercent={DISCOUNT_PERCENT}
+                isBestSeller={Boolean(p.isBestSeller)}
+                onQuickView={() => { setModalPerfume(p); setModalOpen(true); }}
                 boxMode
                 boxPrice={getPerfumePrice(p)}
                 boxSelected={selected.includes(p._id)}
-                boxSelectionIndex={selected.indexOf(p._id)}
                 boxSwapTarget={swapCandidate === p._id}
                 boxSoldOut={!is5mlInStock(p)}
                 onAddToBox={() => handlePerfumeClick(p._id)}
@@ -642,6 +647,28 @@ export default function DiscoveryBoxPage() {
           </div>
         </div>
       )}
+
+      {/* ── Quick View Modal (box-aware: 5ml + Add to Box) ────────────────── */}
+      <UniversalModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        heading={modalPerfume?.name || ""}
+      >
+        {modalPerfume && (
+          <QuickAddModal
+            key={modalPerfume._id}
+            perfume={modalPerfume}
+            onClose={() => setModalOpen(false)}
+            boxMode
+            boxImage={get5mlImage(modalPerfume)}
+            boxPrice={getPerfumePrice(modalPerfume)}
+            boxDiscountPercent={DISCOUNT_PERCENT}
+            boxSelected={selected.includes(modalPerfume._id)}
+            boxSoldOut={!is5mlInStock(modalPerfume)}
+            onAddToBox={() => handlePerfumeClick(modalPerfume._id)}
+          />
+        )}
+      </UniversalModal>
     </div>
   );
 }

@@ -21,20 +21,36 @@ function buildImages(perfume) {
 }
 
 // Quick View window — a compact preview opened from a card's "Quick View" button.
-export default function QuickAddModal({ perfume, onClose }) {
+// In box mode it previews the 5ml tester and swaps "Add to Cart" for "Add to Box".
+export default function QuickAddModal({
+  perfume,
+  onClose,
+  boxMode = false,
+  boxImage = "",
+  boxPrice = null,
+  boxDiscountPercent = 25,
+  boxSelected = false,
+  boxSoldOut = false,
+  onAddToBox,
+}) {
   const { addItem } = useCart();
 
-  const images = useMemo(() => buildImages(perfume), [perfume]);
+  const images = useMemo(
+    () => (boxMode ? (boxImage ? [boxImage] : buildImages(perfume)) : buildImages(perfume)),
+    [perfume, boxMode, boxImage]
+  );
   const sellable = useMemo(() => getSellableEditions(perfume?.editions), [perfume]);
   const cardEdition = useMemo(() => getCardEdition(perfume?.editions), [perfume]);
   const gm = genderMeta(perfume?.gender);
   const bestFor = getBestFor(perfume?.tags);
   const admire = Math.min(100, Math.max(60, Number(perfume?.globalAdmirePercent) || 60));
 
-  const disc = Number(perfume?.discountPercent) || 0;
+  const disc = boxMode
+    ? Number(boxDiscountPercent) || 0
+    : Number(perfume?.discountPercent) || 0;
   const finalOf = (p) => (disc > 0 ? Math.round(p * (1 - disc / 100)) : p);
-  const headlinePrice = cardEdition ? cardEdition.variant.price : null;
-  const hasChoice = sellable.length > 1;
+  const headlinePrice = boxMode ? boxPrice : cardEdition ? cardEdition.variant.price : null;
+  const hasChoice = !boxMode && sellable.length > 1;
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [showBanners, setShowBanners] = useState(false);
@@ -63,6 +79,10 @@ export default function QuickAddModal({ perfume, onClose }) {
   };
 
   const handleCta = () => {
+    if (boxMode) {
+      if (!boxSoldOut) onAddToBox?.();
+      return;
+    }
     if (!cardEdition) return;
     if (hasChoice) { setShowBanners((v) => !v); return; }
     addEdition(sellable[0]);
@@ -158,12 +178,28 @@ export default function QuickAddModal({ perfume, onClose }) {
         )}
         <button
           onClick={handleCta}
-          disabled={!cardEdition}
+          disabled={boxMode ? boxSoldOut : !cardEdition}
           className={`w-full py-3 rounded-lg font-semibold text-sm tracking-wide uppercase transition-colors ${
-            cardEdition ? "bg-black text-white hover:bg-gray-800 hover-vibrate" : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            boxMode
+              ? boxSoldOut
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : boxSelected
+                ? "bg-[#efe9db] text-[#8a6f2e] hover:bg-[#e7dfcb]"
+                : "bg-black text-white hover:bg-gray-800 hover-vibrate"
+              : cardEdition
+              ? "bg-black text-white hover:bg-gray-800 hover-vibrate"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >
-          {added ? "Added to Cart ✓" : "Add to Cart"}
+          {boxMode
+            ? boxSoldOut
+              ? "Sold Out"
+              : boxSelected
+              ? "✓ In Box — Remove"
+              : "Add to Box"
+            : added
+            ? "Added to Cart ✓"
+            : "Add to Cart"}
         </button>
       </div>
 

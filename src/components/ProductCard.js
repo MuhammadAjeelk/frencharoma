@@ -49,7 +49,6 @@ export default function ProductCard({
   boxMode = false,
   boxPrice = null,
   boxSelected = false,
-  boxSelectionIndex = 0,
   boxSwapTarget = false,
   boxSoldOut = false,
   onAddToBox,
@@ -135,14 +134,6 @@ export default function ProductCard({
     });
   };
 
-  const boxBorderColor = boxSwapTarget
-    ? "#f59e0b"
-    : boxSelected
-    ? "#b8964e"
-    : hovered && gm
-    ? gm.hex
-    : "#e8e4df";
-
   return (
     <div
       onMouseEnter={() => {
@@ -158,37 +149,24 @@ export default function ProductCard({
         boxMode && boxSoldOut ? "opacity-60" : ""
       }`}
       style={{
-        borderColor: boxMode ? boxBorderColor : hovered && gm ? gm.hex : "#e8e4df",
+        borderColor: hovered && gm ? gm.hex : "#e8e4df",
         boxShadow: hovered && !(boxMode && boxSoldOut) ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
       }}
     >
       {/* Badges - top-left */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
-        {boxMode ? (
-          boxSoldOut ? (
-            <span className="bg-gray-800/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow">
-              Sold out
-            </span>
-          ) : boxSwapTarget ? (
-            <span className="bg-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
-              New
-            </span>
-          ) : boxSelected ? (
-            <span className="w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
-              {boxSelectionIndex + 1}
-            </span>
-          ) : null
-        ) : (
-          disc > 0 && (
-            <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
-              -{disc}% OFF
-            </span>
-          )
-        )}
+        {boxMode && boxSoldOut ? (
+          <span className="bg-gray-800/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
+            Sold out
+          </span>
+        ) : disc > 0 ? (
+          <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
+            -{disc}% OFF
+          </span>
+        ) : null}
       </div>
 
-      {/* Wishlist heart - top-right (not in box mode) */}
-      {!boxMode && (
+      {/* Wishlist heart - top-right */}
       <button
         onClick={handleWishlistToggle}
         className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
@@ -208,7 +186,6 @@ export default function ProductCard({
           />
         </svg>
       </button>
-      )}
 
       {/* Product Image */}
       <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
