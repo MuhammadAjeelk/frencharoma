@@ -206,10 +206,13 @@ export default function ProductCard({
       {/* Details */}
       <div className="p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]">
         <Link href={href || "#"}>
-          <h3 className="text-sm font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center hover:text-[#b8964e] transition-colors">
+          <h3 className="text-sm font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
             {name}
             {gm && (
-              <span className={`font-semibold ${gm.text}`}> – {gm.label}</span>
+              <>
+                {" – "}
+                <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+              </>
             )}
           </h3>
         </Link>
@@ -256,11 +259,11 @@ export default function ProductCard({
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
-                <span className="text-[12px] text-[#a09890] line-through">
+                <span className="text-[15px] font-normal text-[#a09890] line-through decoration-1">
                   PKR {headlinePrice.toLocaleString()}
                 </span>
               )}
-              <span className="text-base font-extrabold text-[#1f1a16]">
+              <span className="text-[15px] font-semibold text-[#1f1a16]">
                 PKR {finalOf(headlinePrice).toLocaleString()}
               </span>
             </>

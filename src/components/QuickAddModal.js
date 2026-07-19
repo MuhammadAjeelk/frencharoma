@@ -101,7 +101,12 @@ export default function QuickAddModal({ perfume, onClose }) {
       {/* Name + gender */}
       <h2 className="text-lg font-bold text-[#1f1a16] mb-2">
         {perfume.name}
-        {gm && <span className={`font-semibold ${gm.text}`}> – {gm.label}</span>}
+        {gm && (
+          <>
+            {" – "}
+            <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+          </>
+        )}
       </h2>
 
       <div className="space-y-1 text-sm text-[#4a4540]">
