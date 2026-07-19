@@ -48,10 +48,10 @@ function is5mlInStock(p) {
 
 // ── Search / filter options ────────────────────────────────────────────────
 const GENDER_OPTIONS = [
-  { value: "all", label: "All Genders" },
+  { value: "all", label: " For All" },
   { value: "men", label: "For Men" },
   { value: "women", label: "For Women" },
-  { value: "unisex", label: "Unisex" },
+  { value: "unisex", label: "For Unisex" },
 ];
 
 const SEASON_OPTIONS = [
@@ -77,8 +77,10 @@ function matchesSeason(p, season) {
   if (season === "all") return true;
   const tags = p.tags || [];
   if (tags.includes("all-seasons") || tags.includes(season)) return true;
-  if (season === "spring" || season === "summer") return tags.includes("spring-summer");
-  if (season === "autumn" || season === "winter") return tags.includes("autumn-winter");
+  if (season === "spring" || season === "summer")
+    return tags.includes("spring-summer");
+  if (season === "autumn" || season === "winter")
+    return tags.includes("autumn-winter");
   return false;
 }
 
@@ -102,12 +104,21 @@ function FilledSlot({ perfume, onRemove, onScrollTo, tone = "active" }) {
       className={`relative w-11 h-11 rounded-md overflow-hidden border ${border} group shrink-0`}
     >
       {get5mlImage(perfume) ? (
-        <Image src={get5mlImage(perfume)} alt={perfume.name} fill className="object-cover" sizes="44px" />
+        <Image
+          src={get5mlImage(perfume)}
+          alt={perfume.name}
+          fill
+          className="object-cover"
+          sizes="44px"
+        />
       ) : (
         <div className="w-full h-full bg-gray-100" />
       )}
       <span
-        onClick={(e) => { e.stopPropagation(); onRemove(); }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
         className="absolute top-0 right-0 w-4 h-4 bg-red-500 hover:bg-red-600 text-white rounded-bl flex items-center justify-center text-[11px] leading-none opacity-0 group-hover:opacity-100 transition-opacity"
         aria-label="Remove"
       >
@@ -154,9 +165,9 @@ export default function DiscoveryBoxPage() {
           matchesQuery(p, query) &&
           (gender === "all" || p.gender === gender) &&
           matchesSeason(p, season) &&
-          (!onlyInStock || is5mlInStock(p))
+          (!onlyInStock || is5mlInStock(p)),
       ),
-    [perfumes, query, gender, season, onlyInStock]
+    [perfumes, query, gender, season, onlyInStock],
   );
 
   // Fetch available perfumes
@@ -170,10 +181,14 @@ export default function DiscoveryBoxPage() {
         // variant at all are never listed. Available testers sort first so
         // shoppers see what they can actually pick.
         const testers = all.filter((p) => get5mlVariant(p.editions));
-        testers.sort((a, b) => Number(is5mlInStock(b)) - Number(is5mlInStock(a)));
+        testers.sort(
+          (a, b) => Number(is5mlInStock(b)) - Number(is5mlInStock(a)),
+        );
         setPerfumes(testers);
         // Drop any restored picks that are no longer available testers
-        setSelected((prev) => prev.filter((id) => testers.some((t) => t._id === id)));
+        setSelected((prev) =>
+          prev.filter((id) => testers.some((t) => t._id === id)),
+        );
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -185,7 +200,8 @@ export default function DiscoveryBoxPage() {
       const raw = localStorage.getItem("fa_discovery_selected");
       if (raw) {
         const arr = JSON.parse(raw);
-        if (Array.isArray(arr)) setSelected(arr.filter((x) => typeof x === "string"));
+        if (Array.isArray(arr))
+          setSelected(arr.filter((x) => typeof x === "string"));
       }
     } catch {}
   }, []);
@@ -199,19 +215,23 @@ export default function DiscoveryBoxPage() {
 
   const perfumeById = useCallback(
     (id) => perfumes.find((p) => p._id === id) || null,
-    [perfumes]
+    [perfumes],
   );
 
   // ── Selection logic — pick/unpick; picks auto-group into boxes of 5 ───────
-  const handlePerfumeClick = useCallback((perfumeId) => {
-    setSelected((prev) => {
-      if (prev.includes(perfumeId)) return prev.filter((id) => id !== perfumeId);
-      const perfume = perfumes.find((p) => p._id === perfumeId);
-      if (perfume && !is5mlInStock(perfume)) return prev; // sold out — not pickable
-      if (prev.length >= MAX_TESTERS) return prev; // safety cap
-      return [...prev, perfumeId];
-    });
-  }, [perfumes]);
+  const handlePerfumeClick = useCallback(
+    (perfumeId) => {
+      setSelected((prev) => {
+        if (prev.includes(perfumeId))
+          return prev.filter((id) => id !== perfumeId);
+        const perfume = perfumes.find((p) => p._id === perfumeId);
+        if (perfume && !is5mlInStock(perfume)) return prev; // sold out — not pickable
+        if (prev.length >= MAX_TESTERS) return prev; // safety cap
+        return [...prev, perfumeId];
+      });
+    },
+    [perfumes],
+  );
 
   const removeTester = useCallback((perfumeId) => {
     setSelected((prev) => prev.filter((id) => id !== perfumeId));
@@ -265,16 +285,21 @@ export default function DiscoveryBoxPage() {
 
   const handleCheckout = () => {
     if (!canCheckout) return;
-    if (hasPartial) { setCheckoutPromptOpen(true); return; }
+    if (hasPartial) {
+      setCheckoutPromptOpen(true);
+      return;
+    }
     commitBoxes();
   };
 
   // ── Pricing (complete boxes only) ─────────────────────────────────────────
   const totalOriginal = boxedIds.reduce(
     (sum, id) => sum + (getPerfumePrice(perfumeById(id)) || 0),
-    0
+    0,
   );
-  const totalDiscounted = Math.round(totalOriginal * (1 - DISCOUNT_PERCENT / 100));
+  const totalDiscounted = Math.round(
+    totalOriginal * (1 - DISCOUNT_PERCENT / 100),
+  );
   const savings = totalOriginal - totalDiscounted;
 
   // Active box slots (the box currently being filled)
@@ -285,7 +310,6 @@ export default function DiscoveryBoxPage() {
 
   return (
     <div className="min-h-screen bg-[#faf8f5]">
-
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <div className="bg-[#1a1a2e] text-white py-10 md:py-14 text-center relative overflow-hidden">
         {/* Decorative circles */}
@@ -294,20 +318,26 @@ export default function DiscoveryBoxPage() {
           <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-[#b8964e]/10" />
         </div>
         <nav className="flex justify-center items-center gap-2 text-xs text-white/40 mb-3">
-          <Link href="/" className="hover:text-white/70">Home</Link>
+          <Link href="/" className="hover:text-white/70">
+            Home
+          </Link>
           <span>/</span>
           <span className="text-white/60">Discovery Box</span>
         </nav>
         <div className="inline-flex items-center gap-2 bg-[#b8964e]/20 border border-[#b8964e]/40 rounded-full px-4 py-1 mb-4">
-          <span className="text-[#b8964e] text-xs font-semibold uppercase tracking-widest">Limited Offer</span>
+          <span className="text-[#b8964e] text-xs font-semibold uppercase tracking-widest">
+            Limited Offer
+          </span>
         </div>
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-3">
           Discovery Box
         </h1>
         <p className="text-white/60 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
           Build your personal tester kit. Choose exactly&nbsp;
-          <strong className="text-[#b8964e]">5 fragrances</strong> in 5ml bottles and get&nbsp;
-          <strong className="text-[#b8964e]">{DISCOUNT_PERCENT}% off</strong> — explore before you commit.
+          <strong className="text-[#b8964e]">5 fragrances</strong> in 5ml
+          bottles and get&nbsp;
+          <strong className="text-[#b8964e]">{DISCOUNT_PERCENT}% off</strong> —
+          explore before you commit.
         </p>
 
         {/* Step guide */}
@@ -317,7 +347,10 @@ export default function DiscoveryBoxPage() {
             { n: "2", label: "Add as many boxes as you like" },
             { n: "3", label: "Checkout your boxes" },
           ].map((s) => (
-            <div key={s.n} className="flex items-center gap-2 text-xs text-white/50">
+            <div
+              key={s.n}
+              className="flex items-center gap-2 text-xs text-white/50"
+            >
               <span className="w-5 h-5 rounded-full bg-[#b8964e]/30 text-[#b8964e] flex items-center justify-center font-bold text-[10px]">
                 {s.n}
               </span>
@@ -335,10 +368,17 @@ export default function DiscoveryBoxPage() {
             <div className="flex items-stretch gap-3 flex-1 min-w-0 overflow-x-auto scrollbar-thin pb-1">
               {/* Completed boxes */}
               {completePacks.map((pack, bi) => (
-                <div key={bi} className="shrink-0 rounded-xl border-2 border-green-300 bg-green-50/70 p-1.5">
+                <div
+                  key={bi}
+                  className="shrink-0 rounded-xl border-2 border-green-300 bg-green-50/70 p-1.5"
+                >
                   <div className="flex items-center justify-between gap-2 mb-1 px-0.5">
-                    <span className="text-[10px] font-bold text-green-700 whitespace-nowrap">Box {bi + 1} ✓</span>
-                    <span className="text-[9px] font-semibold text-green-600 whitespace-nowrap">{DISCOUNT_PERCENT}% off</span>
+                    <span className="text-[10px] font-bold text-green-700 whitespace-nowrap">
+                      Box {bi + 1} ✓
+                    </span>
+                    <span className="text-[9px] font-semibold text-green-600 whitespace-nowrap">
+                      {DISCOUNT_PERCENT}% off
+                    </span>
                   </div>
                   <div className="flex gap-1">
                     {pack.map((id) => {
@@ -360,8 +400,12 @@ export default function DiscoveryBoxPage() {
               {/* Box currently being filled */}
               <div className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/50 bg-[#fbf8f1] p-1.5">
                 <div className="flex items-center justify-between gap-2 mb-1 px-0.5">
-                  <span className="text-[10px] font-bold text-[#b8964e] whitespace-nowrap">Box {completeCount + 1}</span>
-                  <span className="text-[9px] font-semibold text-gray-400 whitespace-nowrap">{activeCount}/{BOX_SIZE}</span>
+                  <span className="text-[10px] font-bold text-[#b8964e] whitespace-nowrap">
+                    Box {completeCount + 1}
+                  </span>
+                  <span className="text-[9px] font-semibold text-gray-400 whitespace-nowrap">
+                    {activeCount}/{BOX_SIZE}
+                  </span>
                 </div>
                 <div className="flex gap-1">
                   {slots.map((perfume, i) =>
@@ -374,7 +418,7 @@ export default function DiscoveryBoxPage() {
                       />
                     ) : (
                       <EmptySlot key={i} index={i} />
-                    )
+                    ),
                   )}
                 </div>
               </div>
@@ -404,8 +448,8 @@ export default function DiscoveryBoxPage() {
                 {addedToCart
                   ? "✓ Added!"
                   : canCheckout
-                  ? `Add ${completeCount} Box${completeCount > 1 ? "es" : ""} to Cart →`
-                  : "Pick 5 to build a box"}
+                    ? `Add ${completeCount} Box${completeCount > 1 ? "es" : ""} to Cart →`
+                    : "Pick 5 to build a box"}
               </button>
             </div>
           </div>
@@ -414,7 +458,6 @@ export default function DiscoveryBoxPage() {
 
       {/* ── Grid ─────────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-
         {/* Section heading */}
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -425,8 +468,8 @@ export default function DiscoveryBoxPage() {
               {loading
                 ? "Loading…"
                 : hasActiveFilters
-                ? `${visiblePerfumes.length} of ${perfumes.length} testers`
-                : `${perfumes.length} testers available`}
+                  ? `${visiblePerfumes.length} of ${perfumes.length} testers`
+                  : `${perfumes.length} testers available`}
             </p>
           </div>
           {hasPartial && (
@@ -443,9 +486,16 @@ export default function DiscoveryBoxPage() {
             <div className="relative flex-1 min-w-0">
               <svg
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+                />
               </svg>
               <input
                 type="text"
@@ -470,10 +520,12 @@ export default function DiscoveryBoxPage() {
               value={gender}
               onChange={(e) => setGender(e.target.value)}
               aria-label="Filter by gender"
-              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors"
+              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors hover:underline underline-offset-4 decoration-1"
             >
               {GENDER_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
               ))}
             </select>
 
@@ -482,10 +534,12 @@ export default function DiscoveryBoxPage() {
               value={season}
               onChange={(e) => setSeason(e.target.value)}
               aria-label="Filter by season"
-              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors"
+              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors hover:underline underline-offset-4 decoration-1"
             >
               {SEASON_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
               ))}
             </select>
 
@@ -493,7 +547,7 @@ export default function DiscoveryBoxPage() {
             <button
               onClick={() => setOnlyInStock((v) => !v)}
               aria-pressed={onlyInStock}
-              className={`py-2.5 px-4 rounded-lg border text-sm font-semibold whitespace-nowrap transition-colors ${
+              className={`py-2.5 px-4 rounded-lg border text-sm font-semibold whitespace-nowrap transition-colors hover:underline underline-offset-4 decoration-1 ${
                 onlyInStock
                   ? "bg-[#1a1a2e] text-white border-[#1a1a2e]"
                   : "bg-white text-[#6b6560] border-[#e8e4df] hover:border-[#1a1a2e]"
@@ -506,7 +560,7 @@ export default function DiscoveryBoxPage() {
             {hasActiveFilters && (
               <button
                 onClick={resetFilters}
-                className="py-2.5 px-4 rounded-lg border border-[#e8e4df] bg-white text-sm font-semibold text-[#6b6560] hover:border-[#1a1a2e] hover:text-[#1a1a2e] whitespace-nowrap transition-colors"
+                className="py-2.5 px-4 rounded-lg border border-[#e8e4df] bg-white text-sm font-semibold text-[#6b6560] hover:border-[#1a1a2e] hover:text-[#1a1a2e] whitespace-nowrap transition-colors hover:underline underline-offset-4 decoration-1"
               >
                 Reset
               </button>
@@ -518,7 +572,10 @@ export default function DiscoveryBoxPage() {
         {loading && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {[...Array(10)].map((_, i) => (
-              <div key={i} className="rounded-xl border border-gray-200 overflow-hidden animate-pulse">
+              <div
+                key={i}
+                className="rounded-xl border border-gray-200 overflow-hidden animate-pulse"
+              >
                 <div className="aspect-[6.818/7.5] bg-gray-100" />
                 <div className="p-3 space-y-2">
                   <div className="h-3 bg-gray-100 rounded w-3/4" />
@@ -533,8 +590,12 @@ export default function DiscoveryBoxPage() {
         {!loading && perfumes.length === 0 && (
           <div className="text-center py-20">
             <div className="text-4xl mb-4">🎁</div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">No testers available yet</h3>
-            <p className="text-sm text-gray-400 mb-6">We're stocking up. Check back soon!</p>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              No testers available yet
+            </h3>
+            <p className="text-sm text-gray-400 mb-6">
+              We're stocking up. Check back soon!
+            </p>
             <Link
               href="/collections/shop-all"
               className="inline-block bg-[#1a1a2e] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#b8964e] transition-colors"
@@ -548,8 +609,12 @@ export default function DiscoveryBoxPage() {
         {!loading && perfumes.length > 0 && visiblePerfumes.length === 0 && (
           <div className="text-center py-16">
             <div className="text-3xl mb-3">🔍</div>
-            <h3 className="text-base font-semibold text-gray-700 mb-1">No testers match your search</h3>
-            <p className="text-sm text-gray-400 mb-5">Try a different name, brand or filter.</p>
+            <h3 className="text-base font-semibold text-gray-700 mb-1">
+              No testers match your search
+            </h3>
+            <p className="text-sm text-gray-400 mb-5">
+              Try a different name, brand or filter.
+            </p>
             <button
               onClick={resetFilters}
               className="inline-block bg-[#1a1a2e] text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#b8964e] transition-colors"
@@ -563,7 +628,11 @@ export default function DiscoveryBoxPage() {
         {!loading && visiblePerfumes.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {visiblePerfumes.map((p) => (
-              <div key={p._id} id={`disc-card-${p._id}`} className="scroll-mt-40">
+              <div
+                key={p._id}
+                id={`disc-card-${p._id}`}
+                className="scroll-mt-40"
+              >
                 <ProductCard
                   name={p.name}
                   brand={p.brands?.[0] || p.brand}
@@ -577,7 +646,10 @@ export default function DiscoveryBoxPage() {
                   globalAdmirePercent={p.globalAdmirePercent}
                   discountPercent={DISCOUNT_PERCENT}
                   isBestSeller={Boolean(p.isBestSeller)}
-                  onQuickView={() => { setModalPerfume(p); setModalOpen(true); }}
+                  onQuickView={() => {
+                    setModalPerfume(p);
+                    setModalOpen(true);
+                  }}
                   boxMode
                   boxPrice={getPerfumePrice(p)}
                   boxSelected={selected.includes(p._id)}
@@ -600,9 +672,18 @@ export default function DiscoveryBoxPage() {
                 {boxedIds.slice(0, 10).map((id, i) => {
                   const p = perfumeById(id);
                   return (
-                    <div key={i} className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 shrink-0">
+                    <div
+                      key={i}
+                      className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 shrink-0"
+                    >
                       {get5mlImage(p) ? (
-                        <Image src={get5mlImage(p)} alt={p?.name || ""} width={32} height={32} className="w-full h-full object-cover" />
+                        <Image
+                          src={get5mlImage(p)}
+                          alt={p?.name || ""}
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <div className="w-full h-full bg-white/10" />
                       )}
@@ -617,11 +698,16 @@ export default function DiscoveryBoxPage() {
               </div>
               <div className="min-w-0">
                 <p className="text-white text-sm font-bold truncate">
-                  {completeCount} Discovery Box{completeCount > 1 ? "es" : ""} · {boxedIds.length} × 5ml
+                  {completeCount} Discovery Box{completeCount > 1 ? "es" : ""} ·{" "}
+                  {boxedIds.length} × 5ml
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-white/40 text-xs line-through">PKR {totalOriginal.toLocaleString()}</span>
-                  <span className="text-[#b8964e] text-xs font-bold">PKR {totalDiscounted.toLocaleString()}</span>
+                  <span className="text-white/40 text-xs line-through">
+                    PKR {totalOriginal.toLocaleString()}
+                  </span>
+                  <span className="text-[#b8964e] text-xs font-bold">
+                    PKR {totalDiscounted.toLocaleString()}
+                  </span>
                   <span className="bg-[#b8964e]/20 text-[#b8964e] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                     Save PKR {savings.toLocaleString()}
                   </span>
@@ -648,19 +734,29 @@ export default function DiscoveryBoxPage() {
       >
         <div className="space-y-4">
           <p className="text-sm text-[#4a4540] leading-relaxed">
-            You have <strong className="text-[#1f1a16]">{completeCount} complete box{completeCount > 1 ? "es" : ""}</strong> ready
-            ({DISCOUNT_PERCENT}% off), plus a box that&apos;s only <strong className="text-[#1f1a16]">{activeCount}/{BOX_SIZE}</strong> filled.
+            You have{" "}
+            <strong className="text-[#1f1a16]">
+              {completeCount} complete box{completeCount > 1 ? "es" : ""}
+            </strong>{" "}
+            ready ({DISCOUNT_PERCENT}% off), plus a box that&apos;s only{" "}
+            <strong className="text-[#1f1a16]">
+              {activeCount}/{BOX_SIZE}
+            </strong>{" "}
+            filled.
           </p>
           <p className="text-sm text-[#4a4540] leading-relaxed">
-            Check out the completed box{completeCount > 1 ? "es" : ""} now, or keep building to finish the last one?
-            The {activeCount} tester{activeCount > 1 ? "s" : ""} in the unfinished box will stay in your builder.
+            Check out the completed box{completeCount > 1 ? "es" : ""} now, or
+            keep building to finish the last one? The {activeCount} tester
+            {activeCount > 1 ? "s" : ""} in the unfinished box will stay in your
+            builder.
           </p>
           <div className="flex flex-col gap-2 pt-1">
             <button
               onClick={commitBoxes}
               className="w-full py-3 rounded-lg bg-[#1a1a2e] text-white font-semibold text-sm hover:bg-[#b8964e] transition-colors"
             >
-              Checkout {completeCount} completed box{completeCount > 1 ? "es" : ""} →
+              Checkout {completeCount} completed box
+              {completeCount > 1 ? "es" : ""} →
             </button>
             <button
               onClick={() => setCheckoutPromptOpen(false)}
