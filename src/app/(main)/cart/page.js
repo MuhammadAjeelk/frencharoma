@@ -4,6 +4,137 @@ import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import Link from "next/link";
 
+// A single regular cart line (with quantity + remove).
+function CartItemRow({ item, updateQuantity, removeItem }) {
+  return (
+    <div className="flex gap-4 py-6">
+      {/* Image */}
+      <Link href={`/products/${item.slug}`} className="shrink-0">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
+          {item.image ? (
+            <Image src={item.image} alt={item.name} fill className="object-cover" sizes="112px" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-300">
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+          )}
+        </div>
+      </Link>
+
+      {/* Details */}
+      <div className="flex-1 min-w-0">
+        <Link href={`/products/${item.slug}`}>
+          <h3 className="font-semibold text-gray-900 text-sm sm:text-base hover:text-gray-600 transition-colors line-clamp-2">
+            {item.name}
+          </h3>
+        </Link>
+        <div className="flex flex-wrap gap-2 mt-1">
+          {item.edition && (
+            <span className="text-xs text-gray-500 capitalize bg-gray-100 px-2 py-0.5 rounded">
+              {item.edition}
+            </span>
+          )}
+          {item.size && (
+            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+              {item.size}
+            </span>
+          )}
+        </div>
+        <p className="text-sm font-bold text-gray-900 mt-2">
+          PKR {item.price.toLocaleString()}
+        </p>
+
+        <div className="flex items-center gap-4 mt-3">
+          <div className="flex items-center border border-gray-300 rounded">
+            <button
+              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+              className="px-2.5 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors text-lg leading-none"
+            >
+              −
+            </button>
+            <span className="px-3 py-1 text-sm font-medium min-w-[2rem] text-center border-x border-gray-300">
+              {item.quantity}
+            </span>
+            <button
+              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+              className="px-2.5 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors text-lg leading-none"
+            >
+              +
+            </button>
+          </div>
+
+          <button
+            onClick={() => removeItem(item.id)}
+            className="text-xs text-red-500 hover:text-red-700 transition-colors flex items-center gap-1"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Remove
+          </button>
+        </div>
+      </div>
+
+      {/* Line Total */}
+      <div className="hidden sm:block text-right shrink-0">
+        <p className="font-bold text-gray-900 text-sm">
+          PKR {(item.price * item.quantity).toLocaleString()}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// A Discovery Box shown as one combined line (its 5 testers grouped together).
+function DiscoveryBoxCard({ box, removeItem }) {
+  const total = box.items.reduce((s, i) => s + i.price * i.quantity, 0);
+  return (
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-bold text-[#1a1a2e]">🎁 Discovery Box</span>
+          <span className="text-xs text-gray-500">{box.items.length} × 5ml · 25% off</span>
+        </div>
+        <button
+          onClick={() => box.items.forEach((i) => removeItem(i.id))}
+          className="text-xs text-red-500 hover:text-red-700 transition-colors flex items-center gap-1"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Remove box
+        </button>
+      </div>
+      <div className="rounded-xl border border-[#e8dcbf] bg-[#fbf8f1] p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {box.items.map((i) => (
+            <div key={i.id} className="flex items-center gap-2.5 bg-white rounded-lg border border-gray-100 p-1.5">
+              <Link href={`/products/${i.slug}`} className="relative w-12 h-12 rounded-md overflow-hidden bg-gray-50 shrink-0">
+                {i.image ? (
+                  <Image src={i.image} alt={i.name} fill className="object-cover" sizes="48px" />
+                ) : null}
+              </Link>
+              <div className="min-w-0 flex-1">
+                <Link href={`/products/${i.slug}`}>
+                  <p className="text-xs font-semibold text-gray-900 truncate hover:text-gray-600 transition-colors">{i.name}</p>
+                </Link>
+                <p className="text-[11px] text-gray-500">5ml · PKR {i.price.toLocaleString()}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#e8dcbf]">
+          <span className="text-xs text-gray-500">Box total</span>
+          <span className="text-sm font-bold text-[#1a1a2e]">PKR {total.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CartPage() {
   const { items, itemCount, subtotal, total: cartTotal, bundle, removeItem, updateQuantity, hydrated } =
     useCart();
@@ -11,6 +142,23 @@ export default function CartPage() {
   const FREE_SHIPPING_THRESHOLD = 7000;
   const SHIPPING = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : itemCount > 0 ? 200 : 0;
   const total = cartTotal + SHIPPING;
+
+  // Group Discovery-Box testers (same boxId) into one combined card; keep the
+  // original order and render everything else as a normal line.
+  const cartGroups = [];
+  const boxSlot = new Map();
+  for (const item of items) {
+    if (item.isDiscoveryBox && item.boxId) {
+      if (boxSlot.has(item.boxId)) {
+        cartGroups[boxSlot.get(item.boxId)].items.push(item);
+      } else {
+        boxSlot.set(item.boxId, cartGroups.length);
+        cartGroups.push({ type: "box", boxId: item.boxId, items: [item] });
+      }
+    } else {
+      cartGroups.push({ type: "item", item });
+    }
+  }
 
   if (!hydrated) {
     return (
@@ -55,94 +203,18 @@ export default function CartPage() {
             {/* Cart Items */}
             <div className="flex-1">
               <div className="divide-y divide-gray-100">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 py-6">
-                    {/* Image */}
-                    <Link href={`/products/${item.slug}`} className="shrink-0">
-                      <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
-                        {item.image ? (
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                            sizes="112px"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-300">
-                            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-
-                    {/* Details */}
-                    <div className="flex-1 min-w-0">
-                      <Link href={`/products/${item.slug}`}>
-                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base hover:text-gray-600 transition-colors line-clamp-2">
-                          {item.name}
-                        </h3>
-                      </Link>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        {item.edition && (
-                          <span className="text-xs text-gray-500 capitalize bg-gray-100 px-2 py-0.5 rounded">
-                            {item.edition}
-                          </span>
-                        )}
-                        {item.size && (
-                          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                            {item.size}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-sm font-bold text-gray-900 mt-2">
-                        PKR {item.price.toLocaleString()}
-                      </p>
-
-                      <div className="flex items-center gap-4 mt-3">
-                        {/* Quantity */}
-                        <div className="flex items-center border border-gray-300 rounded">
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="px-2.5 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors text-lg leading-none"
-                          >
-                            −
-                          </button>
-                          <span className="px-3 py-1 text-sm font-medium min-w-[2rem] text-center border-x border-gray-300">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="px-2.5 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors text-lg leading-none"
-                          >
-                            +
-                          </button>
-                        </div>
-
-                        {/* Remove */}
-                        <button
-                          onClick={() => removeItem(item.id)}
-                          className="text-xs text-red-500 hover:text-red-700 transition-colors flex items-center gap-1"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Line Total */}
-                    <div className="hidden sm:block text-right shrink-0">
-                      <p className="font-bold text-gray-900 text-sm">
-                        PKR {(item.price * item.quantity).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                {cartGroups.map((g) =>
+                  g.type === "box" ? (
+                    <DiscoveryBoxCard key={g.boxId} box={g} removeItem={removeItem} />
+                  ) : (
+                    <CartItemRow
+                      key={g.item.id}
+                      item={g.item}
+                      updateQuantity={updateQuantity}
+                      removeItem={removeItem}
+                    />
+                  )
+                )}
               </div>
 
               <div className="mt-4 pt-4 border-t border-gray-100">

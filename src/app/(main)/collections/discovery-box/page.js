@@ -172,10 +172,30 @@ export default function DiscoveryBoxPage() {
         const testers = all.filter((p) => get5mlVariant(p.editions));
         testers.sort((a, b) => Number(is5mlInStock(b)) - Number(is5mlInStock(a)));
         setPerfumes(testers);
+        // Drop any restored picks that are no longer available testers
+        setSelected((prev) => prev.filter((id) => testers.some((t) => t._id === id)));
       })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  // Restore the in-progress selection from a previous visit
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("fa_discovery_selected");
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) setSelected(arr.filter((x) => typeof x === "string"));
+      }
+    } catch {}
+  }, []);
+
+  // Persist the selection so a refresh keeps the boxes being built
+  useEffect(() => {
+    try {
+      localStorage.setItem("fa_discovery_selected", JSON.stringify(selected));
+    } catch {}
+  }, [selected]);
 
   const perfumeById = useCallback(
     (id) => perfumes.find((p) => p._id === id) || null,
@@ -215,23 +235,28 @@ export default function DiscoveryBoxPage() {
 
   // ── Checkout — only complete boxes are charged (25% off) ──────────────────
   const commitBoxes = () => {
-    for (const id of boxedIds) {
-      const p = perfumeById(id);
-      if (!p) continue;
-      const match = get5mlVariant(p.editions);
-      const basePrice = match?.variant?.price ?? getPerfumePrice(p) ?? 0;
-      const finalPrice = Math.round(basePrice * (1 - DISCOUNT_PERCENT / 100));
-      addItem({
-        perfumeId: p._id,
-        slug: p.slug,
-        name: p.name,
-        image: get5mlImage(p),
-        edition: match?.edition?.key || "classic",
-        size: "5ml",
-        price: finalPrice,
-        isDiscoveryBox: true,
-      });
-    }
+    const stamp = Date.now();
+    completePacks.forEach((pack, bi) => {
+      const boxId = `${stamp}-${bi}`; // one id per box so the cart groups them
+      for (const id of pack) {
+        const p = perfumeById(id);
+        if (!p) continue;
+        const match = get5mlVariant(p.editions);
+        const basePrice = match?.variant?.price ?? getPerfumePrice(p) ?? 0;
+        const finalPrice = Math.round(basePrice * (1 - DISCOUNT_PERCENT / 100));
+        addItem({
+          perfumeId: p._id,
+          slug: p.slug,
+          name: p.name,
+          image: get5mlImage(p),
+          edition: match?.edition?.key || "classic",
+          size: "5ml",
+          price: finalPrice,
+          isDiscoveryBox: true,
+          boxId,
+        });
+      }
+    });
     setSelected(activePackIds); // keep the half-filled box for later
     setCheckoutPromptOpen(false);
     setAddedToCart(true);

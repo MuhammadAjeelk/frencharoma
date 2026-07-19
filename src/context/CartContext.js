@@ -51,7 +51,10 @@ export function CartProvider({ children }) {
   }, [items, hydrated]);
 
   const addItem = useCallback((item) => {
-    const id = `${item.perfumeId}-${item.edition || "default"}-${item.size || "default"}`;
+    // Discovery-box testers are keyed per box so each box stays a distinct group
+    const id = item.isDiscoveryBox && item.boxId
+      ? `box-${item.boxId}-${item.perfumeId}`
+      : `${item.perfumeId}-${item.edition || "default"}-${item.size || "default"}`;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === id);
       if (existing) {
