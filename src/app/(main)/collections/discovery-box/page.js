@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import ProductCard from "@/components/ProductCard";
 
 const BOX_SIZE = 5;
 const DISCOUNT_PERCENT = 25;
@@ -576,126 +577,29 @@ export default function DiscoveryBoxPage() {
         {/* Perfume cards */}
         {!loading && visiblePerfumes.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {visiblePerfumes.map((p) => {
-              const price = getPerfumePrice(p);
-              const isSelected = selected.includes(p._id);
-              const isSwapTarget = swapCandidate === p._id;
-              const discountedPrice = price ? Math.round(price * (1 - DISCOUNT_PERCENT / 100)) : null;
-              const selectionIndex = selected.indexOf(p._id);
-              const soldOut = !is5mlInStock(p);
-
-              return (
-                <div
-                  key={p._id}
-                  onClick={() => handlePerfumeClick(p._id)}
-                  aria-disabled={soldOut || undefined}
-                  className={`relative rounded-xl border-2 overflow-hidden bg-white transition-all duration-200 flex flex-col group
-                    ${soldOut
-                      ? "border-gray-200 opacity-60 cursor-not-allowed"
-                      : isSwapTarget
-                      ? "border-amber-500 shadow-lg ring-2 ring-amber-300 scale-[1.02] cursor-pointer"
-                      : isSelected
-                      ? "border-[#b8964e] shadow-md cursor-pointer"
-                      : isSwapMode
-                      ? "border-gray-200 hover:border-amber-400 hover:shadow-sm opacity-80 hover:opacity-100 cursor-pointer"
-                      : isBoxComplete
-                      ? "border-gray-200 opacity-60 hover:opacity-80 hover:border-amber-400 cursor-pointer"
-                      : "border-gray-200 hover:border-[#b8964e] hover:shadow-sm cursor-pointer"
-                    }`}
-                >
-                  {/* Sold-out badge */}
-                  {soldOut && (
-                    <div className="absolute top-2 left-2 z-10 bg-gray-800/90 text-white rounded-full px-2 py-0.5 text-[10px] font-bold shadow uppercase tracking-wide">
-                      Sold out
-                    </div>
-                  )}
-
-                  {/* Selection number badge */}
-                  {isSelected && !soldOut && (
-                    <div className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
-                      {selectionIndex + 1}
-                    </div>
-                  )}
-
-                  {/* Swap target badge */}
-                  {isSwapTarget && !soldOut && (
-                    <div className="absolute top-2 left-2 z-10 bg-amber-500 text-white rounded-full px-2 py-0.5 text-[10px] font-bold shadow">
-                      New
-                    </div>
-                  )}
-
-                  {/* Add/remove hint on hover */}
-                  {!isSelected && !isSwapMode && !isBoxComplete && !soldOut && (
-                    <div className="absolute inset-0 bg-[#1a1a2e]/0 group-hover:bg-[#1a1a2e]/5 transition-colors z-0 pointer-events-none" />
-                  )}
-
-                  {/* Image */}
-                  <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
-                    {get5mlImage(p) ? (
-                      <Image
-                        src={get5mlImage(p)}
-                        alt={p.name}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, 20vw"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <svg className="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </div>
-                    )}
-
-                    {/* Selected overlay */}
-                    {isSelected && (
-                      <div className="absolute inset-0 bg-[#b8964e]/10 pointer-events-none" />
-                    )}
-
-                    {/* 5ml badge */}
-                    <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-gray-600 shadow-sm">
-                      5ml
-                    </div>
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-3 flex flex-col flex-1">
-                    <p className="text-[11px] text-[#b8964e] font-semibold uppercase tracking-wide mb-0.5 truncate">
-                      {p.brands?.[0] || p.brand || "French Aromas"}
-                    </p>
-                    <h3 className="text-xs sm:text-sm font-semibold text-[#1a1a2e] mb-2 line-clamp-2 leading-tight">
-                      {p.name}
-                    </h3>
-                    <div className="flex-1" />
-                    {price ? (
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-gray-400 line-through">PKR {price.toLocaleString()}</span>
-                        <span className="text-xs font-bold text-[#1a1a2e]">PKR {discountedPrice?.toLocaleString()}</span>
-                      </div>
-                    ) : (
-                      <span className="text-[10px] text-gray-400">Price on selection</span>
-                    )}
-                  </div>
-
-                  {/* Bottom action strip */}
-                  <div className={`px-3 pb-3 transition-all duration-200 ${
-                    isSelected || isSwapTarget ? "block" : "hidden group-hover:block"
-                  }`}>
-                    <div className={`w-full py-1.5 rounded-lg text-center text-[11px] font-bold transition-colors ${
-                      isSwapTarget
-                        ? "bg-amber-500 text-white"
-                        : isSelected
-                        ? "bg-gray-100 text-gray-600"
-                        : "bg-[#1a1a2e] text-white"
-                    }`}>
-                      {isSwapTarget ? "Tap a box to place" : isSelected ? "✓ In your box — click to remove" : "+ Add to box"}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {visiblePerfumes.map((p) => (
+              <ProductCard
+                key={p._id}
+                name={p.name}
+                brand={p.brands?.[0] || p.brand}
+                image={get5mlImage(p)}
+                impressionName={p.impressionName}
+                href={`/products/${p.slug}`}
+                slug={p.slug}
+                perfumeId={p._id}
+                gender={p.gender}
+                tags={p.tags}
+                globalAdmirePercent={p.globalAdmirePercent}
+                discountPercent={DISCOUNT_PERCENT}
+                boxMode
+                boxPrice={getPerfumePrice(p)}
+                boxSelected={selected.includes(p._id)}
+                boxSelectionIndex={selected.indexOf(p._id)}
+                boxSwapTarget={swapCandidate === p._id}
+                boxSoldOut={!is5mlInStock(p)}
+                onAddToBox={() => handlePerfumeClick(p._id)}
+              />
+            ))}
           </div>
         )}
       </div>

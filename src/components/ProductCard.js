@@ -42,6 +42,17 @@ export default function ProductCard({
   tags = [],
   gender = "",
   onQuickView,
+  // ── Discovery Box mode ──────────────────────────────────────────────
+  // When boxMode is set, the card sells the 5ml tester: it shows boxPrice
+  // (with discountPercent applied), the CTA becomes "Add to Box", and the
+  // box selection state drives badges/border instead of the cart flow.
+  boxMode = false,
+  boxPrice = null,
+  boxSelected = false,
+  boxSelectionIndex = 0,
+  boxSwapTarget = false,
+  boxSoldOut = false,
+  onAddToBox,
 }) {
   const { isInWishlist, toggleItem } = useWishlist();
   const { addItem } = useCart();
@@ -58,9 +69,13 @@ export default function ProductCard({
 
   const sellable = useMemo(() => getSellableEditions(editions), [editions]);
   const cardEdition = useMemo(() => getCardEdition(editions), [editions]);
-  const sizeLabel = cardEdition?.variant?.size || "50ml";
-  const headlinePrice = cardEdition ? cardEdition.variant.price : null;
-  const hasChoice = sellable.length > 1;
+  const sizeLabel = boxMode ? "5ml" : cardEdition?.variant?.size || "50ml";
+  const headlinePrice = boxMode
+    ? boxPrice
+    : cardEdition
+    ? cardEdition.variant.price
+    : null;
+  const hasChoice = !boxMode && sellable.length > 1;
 
   const [hovered, setHovered] = useState(false);
   const [showBanners, setShowBanners] = useState(false);
@@ -96,6 +111,10 @@ export default function ProductCard({
   const handleCta = (e) => {
     e?.preventDefault();
     e?.stopPropagation();
+    if (boxMode) {
+      if (!boxSoldOut) onAddToBox?.();
+      return;
+    }
     if (!cardEdition) return;
     if (hasChoice) {
       setShowBanners((v) => !v);
@@ -116,6 +135,14 @@ export default function ProductCard({
     });
   };
 
+  const boxBorderColor = boxSwapTarget
+    ? "#f59e0b"
+    : boxSelected
+    ? "#b8964e"
+    : hovered && gm
+    ? gm.hex
+    : "#e8e4df";
+
   return (
     <div
       onMouseEnter={() => {
@@ -127,22 +154,41 @@ export default function ProductCard({
         setHovered(false);
         setShowBanners(false);
       }}
-      className="group relative rounded-xl overflow-hidden bg-white border-[2.5px] flex flex-col transition-all duration-300"
+      className={`group relative rounded-xl overflow-hidden bg-white border-[2.5px] flex flex-col transition-all duration-300 ${
+        boxMode && boxSoldOut ? "opacity-60" : ""
+      }`}
       style={{
-        borderColor: hovered && gm ? gm.hex : "#e8e4df",
-        boxShadow: hovered ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
+        borderColor: boxMode ? boxBorderColor : hovered && gm ? gm.hex : "#e8e4df",
+        boxShadow: hovered && !(boxMode && boxSoldOut) ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
       }}
     >
       {/* Badges - top-left */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
-        {disc > 0 && (
-          <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
-            -{disc}% OFF
-          </span>
+        {boxMode ? (
+          boxSoldOut ? (
+            <span className="bg-gray-800/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow">
+              Sold out
+            </span>
+          ) : boxSwapTarget ? (
+            <span className="bg-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
+              New
+            </span>
+          ) : boxSelected ? (
+            <span className="w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
+              {boxSelectionIndex + 1}
+            </span>
+          ) : null
+        ) : (
+          disc > 0 && (
+            <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
+              -{disc}% OFF
+            </span>
+          )
         )}
       </div>
 
-      {/* Wishlist heart - top-right */}
+      {/* Wishlist heart - top-right (not in box mode) */}
+      {!boxMode && (
       <button
         onClick={handleWishlistToggle}
         className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
@@ -162,6 +208,7 @@ export default function ProductCard({
           />
         </svg>
       </button>
+      )}
 
       {/* Product Image */}
       <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
@@ -329,19 +376,45 @@ export default function ProductCard({
             </div>
           )}
 
-          <button
-            ref={cartRef}
-            onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
-            onClick={handleCta}
-            disabled={!cardEdition}
-            className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
-              cardEdition
-                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
-                : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
-            }`}
-          >
-            {added ? "Added ✓" : "Add to Cart"}
-          </button>
+          {boxMode ? (
+            <button
+              ref={cartRef}
+              onMouseEnter={() => !boxSoldOut && vibrate(cartRef.current)}
+              onClick={handleCta}
+              disabled={boxSoldOut}
+              className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+                boxSoldOut
+                  ? "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+                  : boxSwapTarget
+                  ? "bg-amber-500 text-white hover:bg-amber-600"
+                  : boxSelected
+                  ? "bg-[#efe9db] text-[#8a6f2e] hover:bg-[#e7dfcb]"
+                  : "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+              }`}
+            >
+              {boxSoldOut
+                ? "Sold Out"
+                : boxSwapTarget
+                ? "Tap a box to place"
+                : boxSelected
+                ? "✓ In Box — Remove"
+                : "Add to Box"}
+            </button>
+          ) : (
+            <button
+              ref={cartRef}
+              onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
+              onClick={handleCta}
+              disabled={!cardEdition}
+              className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+                cardEdition
+                  ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                  : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+              }`}
+            >
+              {added ? "Added ✓" : "Add to Cart"}
+            </button>
+          )}
         </div>
       </div>
     </div>
