@@ -115,7 +115,7 @@ export default function QuickAddModal({ perfume, onClose }) {
         {bestFor && (
           <p className="flex items-center gap-2">
             Best For:
-            <span className="inline-block px-2.5 py-0.5 rounded-full bg-gray-100 text-[#3a352f] text-xs font-semibold border border-[#e8e4df]">{bestFor}</span>
+            <span className="inline-block px-3 py-1 rounded-full bg-[#f7efdd] text-[#8a6b1e] text-xs font-bold border border-[#e6d6ab]">{bestFor}</span>
           </p>
         )}
         <div className="pt-0.5">

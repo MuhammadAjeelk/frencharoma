@@ -254,7 +254,7 @@ export default function ProductCard({
           {bestFor && (
             <p className="flex items-center gap-1.5">
               Best For:
-              <span className="inline-block px-2 py-0.5 rounded-full bg-white text-[#3a352f] text-[10px] font-semibold border border-[#e8e4df]">
+              <span className="inline-block px-2.5 py-1 rounded-full bg-[#f7efdd] text-[#8a6b1e] text-[11px] font-bold border border-[#e6d6ab]">
                 {bestFor}
               </span>
             </p>
