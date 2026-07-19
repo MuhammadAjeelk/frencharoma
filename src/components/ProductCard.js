@@ -255,7 +255,7 @@ export default function ProductCard({
         />
 
         {/* Price */}
-        <div className="flex items-baseline justify-start gap-2 flex-wrap mb-2.5">
+        <div className="flex items-baseline justify-center gap-4 flex-wrap mb-2.5">
           {headlinePrice != null ? (
             <>
               {disc > 0 && (

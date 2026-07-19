@@ -134,7 +134,7 @@ img { image-rendering: -webkit-optimize-contrast; }
   right: -3%;
   top: 50%;
   height: 1.5px;
-  background: currentColor;
+  background: #e11d2b;
   transform: translateY(-50%) rotate(-8deg);
   transform-origin: center;
   pointer-events: none;
