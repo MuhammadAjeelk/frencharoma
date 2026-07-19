@@ -129,8 +129,8 @@ export default function QuickAddModal({ perfume, onClose }) {
       {/* Price */}
       {headlinePrice != null && (
         <div className="flex items-baseline gap-2 mb-3">
-          {disc > 0 && <span className="text-sm text-[#a09890] strike-diagonal">PKR-{headlinePrice.toLocaleString()}</span>}
-          <span className="text-xl font-extrabold text-[#1f1a16]">PKR-{finalOf(headlinePrice).toLocaleString()}</span>
+          {disc > 0 && <span className="text-sm text-[#a09890] strike-diagonal">Rs.{headlinePrice.toLocaleString()}</span>}
+          <span className="text-xl font-extrabold text-[#1f1a16]">Rs.{finalOf(headlinePrice).toLocaleString()}</span>
         </div>
       )}
 

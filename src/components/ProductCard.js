@@ -260,11 +260,11 @@ export default function ProductCard({
             <>
               {disc > 0 && (
                 <span className="text-[15px] font-normal text-[#a09890] strike-diagonal">
-                  PKR-{headlinePrice.toLocaleString()}
+                  Rs.{headlinePrice.toLocaleString()}
                 </span>
               )}
               <span className="text-[15px] font-semibold text-[#1f1a16]">
-                PKR-{finalOf(headlinePrice).toLocaleString()}
+                Rs.{finalOf(headlinePrice).toLocaleString()}
               </span>
             </>
           ) : (
