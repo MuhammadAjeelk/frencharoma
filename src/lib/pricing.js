@@ -6,6 +6,17 @@
 
 export const TESTER_SIZE = "5ml";
 
+// Format a number as "Rs. 2,680.00".
+export function formatRs(n) {
+  return (
+    "Rs. " +
+    Number(n || 0).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  );
+}
+
 // Flatten active variants across enabled editions, excluding the 5ml tester.
 // Each entry carries its editionKey so callers can label / add to cart.
 // If a perfume has ONLY 5ml variants (tester-only), fall back to those so it

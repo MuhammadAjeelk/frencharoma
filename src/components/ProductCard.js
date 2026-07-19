@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
-import { getSellableEditions, getCardEdition, getBestFor } from "@/lib/pricing";
+import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
 
 // Edition banner styling — Luxury = gold, Premium = silver, Classic = neutral.
@@ -260,11 +260,11 @@ export default function ProductCard({
             <>
               {disc > 0 && (
                 <span className="text-[15px] font-normal text-[#a09890] strike-diagonal">
-                  Rs.{headlinePrice.toLocaleString()}
+                  {formatRs(headlinePrice)}
                 </span>
               )}
               <span className="text-[15px] font-semibold text-[#1f1a16]">
-                Rs.{finalOf(headlinePrice).toLocaleString()}
+                {formatRs(finalOf(headlinePrice))}
               </span>
             </>
           ) : (
@@ -297,10 +297,10 @@ export default function ProductCard({
                     <span className="text-[11px] font-bold flex items-center gap-1.5">
                       {disc > 0 && (
                         <span className="line-through opacity-60 font-medium">
-                          Rs.{e.variant.price.toLocaleString()}
+                          {formatRs(e.variant.price)}
                         </span>
                       )}
-                      Rs.{finalOf(e.variant.price).toLocaleString()}
+                      {formatRs(finalOf(e.variant.price))}
                     </span>
                   </button>
                 );

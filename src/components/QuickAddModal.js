@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { getSellableEditions, getCardEdition, getBestFor } from "@/lib/pricing";
+import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
 
 const EDITION_STYLE = {
@@ -129,8 +129,8 @@ export default function QuickAddModal({ perfume, onClose }) {
       {/* Price */}
       {headlinePrice != null && (
         <div className="flex items-baseline gap-2 mb-3">
-          {disc > 0 && <span className="text-sm text-[#a09890] strike-diagonal">Rs.{headlinePrice.toLocaleString()}</span>}
-          <span className="text-xl font-extrabold text-[#1f1a16]">Rs.{finalOf(headlinePrice).toLocaleString()}</span>
+          {disc > 0 && <span className="text-sm text-[#a09890] strike-diagonal">{formatRs(headlinePrice)}</span>}
+          <span className="text-xl font-extrabold text-[#1f1a16]">{formatRs(finalOf(headlinePrice))}</span>
         </div>
       )}
 
@@ -148,8 +148,8 @@ export default function QuickAddModal({ perfume, onClose }) {
                 >
                   <span className="text-xs font-bold">{st.label} <span className="font-medium opacity-80">({e.variant.size})</span></span>
                   <span className="text-xs font-bold flex items-center gap-1.5">
-                    {disc > 0 && <span className="line-through opacity-60 font-medium">Rs.{e.variant.price.toLocaleString()}</span>}
-                    Rs.{finalOf(e.variant.price).toLocaleString()}
+                    {disc > 0 && <span className="line-through opacity-60 font-medium">{formatRs(e.variant.price)}</span>}
+                    {formatRs(finalOf(e.variant.price))}
                   </span>
                 </button>
               );
