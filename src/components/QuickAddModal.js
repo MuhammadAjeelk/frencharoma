@@ -77,8 +77,8 @@ export default function QuickAddModal({ perfume, onClose }) {
     <div>
       {/* Image with hover arrows */}
       {images.length > 0 && (
-        <div className="group relative w-full aspect-square overflow-hidden bg-gray-50 mb-4">
-          <Image src={images[activeIdx]} alt={perfume.name} fill className="object-contain" sizes="500px" />
+        <div className="group relative w-full aspect-[6.818/7.5] overflow-hidden bg-gray-50 mb-4">
+          <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="500px" />
           {images.length > 1 && (
             <>
               <button
