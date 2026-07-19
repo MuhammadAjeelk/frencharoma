@@ -193,7 +193,8 @@ export async function GET(request) {
             },
           },
         },
-        { $sort: { _hasPrice: -1, _sortPrice: sortDir, createdAt: -1, _id: 1 } },
+        // Tie-break equal prices by Globally Admired (desc), then recency
+        { $sort: { _hasPrice: -1, _sortPrice: sortDir, globalAdmirePercent: -1, createdAt: -1, _id: 1 } },
         { $skip: skip },
         { $limit: limit },
         {
@@ -236,7 +237,7 @@ export async function GET(request) {
     else if (sort === "oldest")       sortObj = { createdAt:  1 };
     else if (sort === "name-asc")     sortObj = { name:  1 };
     else if (sort === "name-desc")    sortObj = { name: -1 };
-    else if (sort === "discount-desc") sortObj = { discountPercent: -1, createdAt: -1 };
+    else if (sort === "discount-desc") sortObj = { discountPercent: -1, globalAdmirePercent: -1, createdAt: -1 };
     // Best sellers FIRST (does not filter out non-best-sellers)
     else if (sort === "best-sellers") sortObj = { isBestSeller: -1, createdAt: -1 };
     else                              sortObj = { globalAdmirePercent: -1, createdAt: -1 };
