@@ -108,7 +108,7 @@ function FilledSlot({ perfume, onRemove, onScrollTo, tone = "active" }) {
       )}
       <span
         onClick={(e) => { e.stopPropagation(); onRemove(); }}
-        className="absolute top-0 right-0 w-4 h-4 bg-black/70 text-white rounded-bl flex items-center justify-center text-[11px] leading-none opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-0 right-0 w-4 h-4 bg-red-500 hover:bg-red-600 text-white rounded-bl flex items-center justify-center text-[11px] leading-none opacity-0 group-hover:opacity-100 transition-opacity"
         aria-label="Remove"
       >
         ×
@@ -581,6 +581,7 @@ export default function DiscoveryBoxPage() {
                   boxMode
                   boxPrice={getPerfumePrice(p)}
                   boxSelected={selected.includes(p._id)}
+                  boxSelectionIndex={selected.indexOf(p._id)}
                   boxSoldOut={!is5mlInStock(p)}
                   onAddToBox={() => handlePerfumeClick(p._id)}
                 />

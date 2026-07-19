@@ -49,6 +49,7 @@ export default function ProductCard({
   boxMode = false,
   boxPrice = null,
   boxSelected = false,
+  boxSelectionIndex = 0,
   boxSwapTarget = false,
   boxSoldOut = false,
   onAddToBox,
@@ -156,6 +157,11 @@ export default function ProductCard({
     >
       {/* Badges - top-left */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
+        {boxMode && boxSelected && !boxSoldOut && (
+          <span className="w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
+            {boxSelectionIndex + 1}
+          </span>
+        )}
         {boxMode && boxSoldOut ? (
           <span className="bg-gray-800/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
             Sold out
