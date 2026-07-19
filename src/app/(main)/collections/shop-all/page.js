@@ -366,7 +366,7 @@ function ShopAllContent() {
         </div>
 
         {/* ── Sticky Filter Bar ── */}
-        <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-[#e8e4df]/80">
+        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#e8e4df]/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
             <div className="rounded-xl border border-[#e8e4df] bg-white p-3 md:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
               <div className="flex flex-wrap items-center gap-2.5">
