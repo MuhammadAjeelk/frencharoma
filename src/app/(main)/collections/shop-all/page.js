@@ -62,7 +62,7 @@ function FilterDropdown({ label, options, value, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
+        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
           isActive
             ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
             : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
@@ -94,7 +94,7 @@ function FilterDropdown({ label, options, value, onChange }) {
                 onChange(opt.value);
                 setOpen(false);
               }}
-              className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] ${
+              className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] hover:underline underline-offset-4 decoration-1 ${
                 value === opt.value
                   ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]"
                   : "text-[#6b6560]"
@@ -134,7 +134,7 @@ function MultiSelectDropdown({ label, options, values, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
+        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
           isActive
             ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
             : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
@@ -167,7 +167,7 @@ function MultiSelectDropdown({ label, options, values, onChange }) {
               <button
                 key={opt.value}
                 onClick={() => toggleValue(opt.value)}
-                className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] flex items-center justify-between ${
+                className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] hover:underline underline-offset-4 decoration-1 flex items-center justify-between ${
                   active
                     ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]"
                     : "text-[#6b6560]"
@@ -517,7 +517,7 @@ function ShopAllContent() {
                 {/* Best Sellers toggle */}
                 <button
                   onClick={() => setBestSeller((b) => !b)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
                     bestSeller
                       ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
                       : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
@@ -529,7 +529,7 @@ function ShopAllContent() {
                 {/* Special Offer toggle */}
                 <button
                   onClick={() => setSpecialOffer((s) => !s)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
                     specialOffer
                       ? "border-[#c2185b] bg-[#c2185b] text-white"
                       : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#c2185b] hover:text-[#c2185b]"
@@ -595,7 +595,7 @@ function ShopAllContent() {
                   disabled={!hasControlChanges}
                   className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
                     hasControlChanges
-                      ? "border-[#ccc8c2] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
+                      ? "border-[#ccc8c2] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1"
                       : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
                   }`}
                 >
@@ -609,7 +609,7 @@ function ShopAllContent() {
                     <button
                       key={chip.key}
                       onClick={chip.clear}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] transition-all duration-200"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1 transition-all duration-200"
                     >
                       <span>{chip.label}</span>
                       <svg
@@ -661,7 +661,7 @@ function ShopAllContent() {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="text-[12px] border border-[#e8e4df] rounded-lg px-3 py-2 focus:outline-none focus:border-[#1a1a2e] bg-white cursor-pointer font-medium text-[#1f1a16] appearance-none pr-8"
+                className="text-[12px] border border-[#e8e4df] rounded-lg px-3 py-2 focus:outline-none focus:border-[#1a1a2e] bg-white cursor-pointer font-medium text-[#1f1a16] appearance-none pr-8 hover:underline underline-offset-4 decoration-1"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b6560'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
