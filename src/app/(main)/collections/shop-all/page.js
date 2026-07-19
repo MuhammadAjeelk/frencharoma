@@ -34,7 +34,6 @@ const SEASON_OPTIONS = [
 
 const SORT_OPTIONS = [
   { value: "global-admire-desc", label: "Globally Admired (High – Low)" },
-  { value: "global-admire-asc",  label: "Globally Admired (Low – High)" },
   { value: "newest",     label: "All (Newest first)"      },
   { value: "name-asc",   label: "Alphabetically (A – Z)" },
   { value: "name-desc",  label: "Alphabetically (Z – A)" },
