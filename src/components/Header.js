@@ -341,16 +341,19 @@ export default function Header() {
                           <div className="px-5 pb-3 border-b border-[#f0ece7] mb-3">
                             <p className="text-[11px] font-semibold text-[#b8964e] uppercase tracking-[0.16em]">Browse by Brand (A–Z)</p>
                           </div>
-                          <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-auto scrollbar-thin px-3">
+                          <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-scroll scrollbar-always px-3">
                             {brands.length > 0 ? (
                               brands.map((b) => (
                                 <Link
                                   key={b}
                                   href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                                  className="block px-3 py-2 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors truncate"
+                                  className="group/link flex items-center px-3 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
                                   onClick={() => setOpenDropdown(null)}
                                 >
-                                  {b}
+                                  <span className="mr-2 text-[#b8964e]">•</span>
+                                  <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
+                                    {b}
+                                  </span>
                                 </Link>
                               ))
                             ) : (
