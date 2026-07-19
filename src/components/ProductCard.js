@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
@@ -66,6 +66,17 @@ export default function ProductCard({
   const [showBanners, setShowBanners] = useState(false);
   const [added, setAdded] = useState(false);
 
+  const qvRef = useRef(null);
+  const cartRef = useRef(null);
+
+  // Replay the shake animation on demand (remove class + reflow + re-add).
+  const vibrate = (el) => {
+    if (!el) return;
+    el.classList.remove("vibrating");
+    void el.offsetWidth;
+    el.classList.add("vibrating");
+  };
+
   const addEdition = (entry) => {
     if (!entry) return;
     addItem({
@@ -107,7 +118,11 @@ export default function ProductCard({
 
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => {
+        setHovered(true);
+        vibrate(qvRef.current);
+        vibrate(cartRef.current);
+      }}
       onMouseLeave={() => {
         setHovered(false);
         setShowBanners(false);
@@ -167,14 +182,16 @@ export default function ProductCard({
 
         {/* Quick View — appears on hover (wrapper centers, button vibrates) */}
         {onQuickView && (
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
+              ref={qvRef}
+              onMouseEnter={() => vibrate(qvRef.current)}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onQuickView();
               }}
-              className="card-vibrate flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
+              className="flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -311,11 +328,13 @@ export default function ProductCard({
           )}
 
           <button
+            ref={cartRef}
+            onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
             onClick={handleCta}
             disabled={!cardEdition}
             className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
               cardEdition
-                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44] card-vibrate"
+                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
                 : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
             }`}
           >
