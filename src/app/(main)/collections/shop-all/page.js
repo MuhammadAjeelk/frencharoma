@@ -18,18 +18,16 @@ const GENDER_OPTIONS = [
 ];
 
 const EDITION_OPTIONS = [
-  { value: "all", label: "All" },
-  { value: "luxury", label: "Luxury Edition" },
-  { value: "premium", label: "Premium Edition" },
-  { value: "classic", label: "Classic Edition" },
+  { value: "all", label: "All Editions" },
+  { value: "luxury", label: "Luxury Editions" },
+  { value: "premium", label: "Premium Editions" },
 ];
 
 const SEASON_OPTIONS = [
-  { value: "spring", label: "Spring" },
-  { value: "summer", label: "Summer" },
-  { value: "autumn", label: "Autumn" },
-  { value: "winter", label: "Winter" },
-  { value: "all-seasons", label: "All Seasons" },
+  { value: "all", label: "All" },
+  { value: "spring-summer", label: "Spring & Summer" },
+  { value: "autumn-winter", label: "Autumn & Winter" },
+  { value: "all-seasons", label: "All Seasons (Four Seasons)" },
 ];
 
 const SORT_OPTIONS = [
@@ -217,14 +215,9 @@ function ShopAllContent() {
   const [edition, setEdition] = useState(
     () => searchParams.get("edition") || "all",
   );
-  const [seasons, setSeasons] = useState(() => {
+  const [season, setSeason] = useState(() => {
     const t = searchParams.get("tags");
-    return t
-      ? t
-          .split(",")
-          .map((v) => v.trim())
-          .filter(Boolean)
-      : [];
+    return t ? t.split(",")[0].trim() : "all";
   });
   const [scentFamily, setScentFamily] = useState(
     () => searchParams.get("scentFamily") || "",
@@ -245,14 +238,7 @@ function ShopAllContent() {
     setGender(searchParams.get("gender") || "all");
     setEdition(searchParams.get("edition") || "all");
     const t = searchParams.get("tags");
-    setSeasons(
-      t
-        ? t
-            .split(",")
-            .map((v) => v.trim())
-            .filter(Boolean)
-        : [],
-    );
+    setSeason(t ? t.split(",")[0].trim() : "all");
     setScentFamily(searchParams.get("scentFamily") || "");
     setBestSeller(searchParams.get("bestSeller") === "true");
     setSpecialOffer(searchParams.get("specialOffer") === "true");
@@ -279,7 +265,7 @@ function ShopAllContent() {
   const hasActiveFilters =
     gender !== "all" ||
     edition !== "all" ||
-    seasons.length > 0 ||
+    season !== "all" ||
     brand.trim() ||
     bestSeller ||
     specialOffer ||
@@ -299,11 +285,11 @@ function ShopAllContent() {
       label: `Category: ${getOptionLabel(EDITION_OPTIONS, edition)}`,
       clear: () => setEdition("all"),
     },
-    ...seasons.map((seasonValue) => ({
-      key: `season-${seasonValue}`,
-      label: `Season: ${getOptionLabel(SEASON_OPTIONS, seasonValue)}`,
-      clear: () => setSeasons((prev) => prev.filter((v) => v !== seasonValue)),
-    })),
+    season !== "all" && {
+      key: "season",
+      label: `Season: ${getOptionLabel(SEASON_OPTIONS, season)}`,
+      clear: () => setSeason("all"),
+    },
     brand.trim() && {
       key: "brand",
       label: `Brand: ${brand.trim()}`,
@@ -337,7 +323,7 @@ function ShopAllContent() {
       const p = new URLSearchParams();
       if (gender !== "all") p.set("gender", gender);
       if (edition !== "all") p.set("edition", edition);
-      if (seasons.length > 0) p.set("tags", seasons.join(","));
+      if (season !== "all") p.set("tags", season);
       if (scentFamily) p.set("scentFamily", scentFamily);
       if (debouncedBrand) p.set("search", debouncedBrand);
       if (bestSeller) p.set("bestSeller", "true");
@@ -351,7 +337,7 @@ function ShopAllContent() {
     [
       gender,
       edition,
-      seasons,
+      season,
       scentFamily,
       debouncedBrand,
       bestSeller,
@@ -420,7 +406,7 @@ function ShopAllContent() {
   const clearFilters = () => {
     setGender("all");
     setEdition("all");
-    setSeasons([]);
+    setSeason("all");
     setBrand("");
     setBestSeller(false);
     setSpecialOffer(false);
@@ -507,11 +493,11 @@ function ShopAllContent() {
                 />
 
                 {/* Season */}
-                <MultiSelectDropdown
+                <FilterDropdown
                   label="Season"
                   options={SEASON_OPTIONS}
-                  values={seasons}
-                  onChange={setSeasons}
+                  value={season}
+                  onChange={setSeason}
                 />
 
                 {/* Best Sellers toggle */}
