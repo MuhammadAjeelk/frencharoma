@@ -134,6 +134,7 @@ export default function BestSellers() {
                         gender={perfume.gender || ""}
                         avgRating={perfume.avgRating || 0}
                         reviewCount={perfume.reviewCount || 0}
+                        isBestSeller={Boolean(perfume.isBestSeller)}
                         discountPercent={perfume.discountPercent || 0}
                         globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
                         isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
