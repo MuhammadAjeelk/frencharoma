@@ -313,7 +313,7 @@ export default function ProductCard({
             disabled={!cardEdition}
             className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
               cardEdition
-                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44] hover-vibrate"
                 : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
             }`}
           >
