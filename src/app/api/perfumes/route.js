@@ -41,6 +41,7 @@ export async function GET(request) {
     const edition     = searchParams.get("edition");
     const bestSeller  = searchParams.get("bestSeller");
     const specialOffer = searchParams.get("specialOffer");
+    const signature   = searchParams.get("signature");
     const sort        = searchParams.get("sort") || "global-admire-desc";
     const limit       = parseInt(searchParams.get("limit") || "20");
     const page        = parseInt(searchParams.get("page")  || "1");
@@ -97,6 +98,10 @@ export async function GET(request) {
 
     if (bestSeller === "true") {
       conditions.push({ isBestSeller: true });
+    }
+
+    if (signature === "true") {
+      conditions.push({ isSignature: true });
     }
 
     if (specialOffer === "true") {

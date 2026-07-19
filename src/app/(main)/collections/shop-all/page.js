@@ -183,17 +183,28 @@ function ShopAllContent() {
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Filters — initialise from URL
-  const [gender,      setGender]      = useState("all");
-  const [edition,     setEdition]     = useState("all");
-  const [seasons,     setSeasons]     = useState([]);
+  const [gender,      setGender]      = useState(() => searchParams.get("gender") || "all");
+  const [edition,     setEdition]     = useState(() => searchParams.get("edition") || "all");
+  const [seasons,     setSeasons]     = useState(() => {
+    const t = searchParams.get("tags");
+    return t ? t.split(",").map((v) => v.trim()).filter(Boolean) : [];
+  });
+  const [scentFamily, setScentFamily] = useState(() => searchParams.get("scentFamily") || "");
   const [brand,       setBrand]       = useState(() => searchParams.get("search") || "");
   const [bestSeller,  setBestSeller]  = useState(() => searchParams.get("bestSeller") === "true");
   const [specialOffer, setSpecialOffer] = useState(() => searchParams.get("specialOffer") === "true");
+  const [signature,   setSignature]   = useState(() => searchParams.get("signature") === "true");
 
-  // Keep URL-driven filters in sync whenever query params change
+  // Keep URL-driven filters in sync whenever query params change (e.g. Shop menu)
   useEffect(() => {
+    setGender(searchParams.get("gender") || "all");
+    setEdition(searchParams.get("edition") || "all");
+    const t = searchParams.get("tags");
+    setSeasons(t ? t.split(",").map((v) => v.trim()).filter(Boolean) : []);
+    setScentFamily(searchParams.get("scentFamily") || "");
     setBestSeller(searchParams.get("bestSeller") === "true");
     setSpecialOffer(searchParams.get("specialOffer") === "true");
+    setSignature(searchParams.get("signature") === "true");
   }, [searchParams]);
   const [sort,        setSort]        = useState(DEFAULT_SORT);
 
@@ -213,7 +224,7 @@ function ShopAllContent() {
 
   // Derived
   const hasMore           = !loading && perfumes.length < total;
-  const hasActiveFilters  = gender !== "all" || edition !== "all" || seasons.length > 0 || brand.trim() || bestSeller || specialOffer;
+  const hasActiveFilters  = gender !== "all" || edition !== "all" || seasons.length > 0 || brand.trim() || bestSeller || specialOffer || signature || scentFamily;
   const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
   const getOptionLabel = (options, value) => options.find((o) => o.value === value)?.label || value;
   const activeFilterChips = [
@@ -247,6 +258,16 @@ function ShopAllContent() {
       label: "Special Offer",
       clear: () => setSpecialOffer(false),
     },
+    signature && {
+      key: "signature",
+      label: "Signature Scent",
+      clear: () => setSignature(false),
+    },
+    scentFamily && {
+      key: "scentFamily",
+      label: `Family: ${scentFamily}`,
+      clear: () => setScentFamily(""),
+    },
   ].filter(Boolean);
 
   // ── Build fetch URL ──────────────────────────────────────────────────────
@@ -255,14 +276,16 @@ function ShopAllContent() {
     if (gender !== "all")    p.set("gender",     gender);
     if (edition !== "all")   p.set("edition",    edition);
     if (seasons.length > 0)  p.set("tags",       seasons.join(","));
+    if (scentFamily)         p.set("scentFamily", scentFamily);
     if (debouncedBrand)      p.set("search",     debouncedBrand);
     if (bestSeller)          p.set("bestSeller", "true");
     if (specialOffer)        p.set("specialOffer", "true");
+    if (signature)           p.set("signature", "true");
     p.set("sort",  sort);
     p.set("limit", PAGE_SIZE.toString());
     p.set("page",  pageNum.toString());
     return `/api/perfumes?${p.toString()}`;
-  }, [gender, edition, seasons, debouncedBrand, bestSeller, specialOffer, sort]);
+  }, [gender, edition, seasons, scentFamily, debouncedBrand, bestSeller, specialOffer, signature, sort]);
 
   // ── Fetch page 1 whenever filters change ────────────────────────────────
   useEffect(() => {
@@ -321,6 +344,8 @@ function ShopAllContent() {
     setBrand("");
     setBestSeller(false);
     setSpecialOffer(false);
+    setSignature(false);
+    setScentFamily("");
     setSort(DEFAULT_SORT);
   };
 

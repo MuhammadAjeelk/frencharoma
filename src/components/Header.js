@@ -16,6 +16,7 @@ export default function Header() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileSubOpen, setMobileSubOpen] = useState(null);
   const [brands, setBrands] = useState([]);
+  const [families, setFamilies] = useState([]);
   const accountRef = useRef(null);
   const { user, logout, isAdmin, loading } = useAuth();
   const { itemCount } = useCart();
@@ -26,6 +27,10 @@ export default function Header() {
     fetch("/api/brands")
       .then((r) => r.json())
       .then((data) => setBrands(data.brands || []))
+      .catch(() => {});
+    fetch("/api/scent-families")
+      .then((r) => r.json())
+      .then((data) => setFamilies(data.families || []))
       .catch(() => {});
   }, []);
 
@@ -45,14 +50,18 @@ export default function Header() {
   };
 
   const shopSubmenu = [
-    { name: "Shop All", href: "/collections/shop-all" },
+    { name: "Shop All", href: "/collections/shop-all", accent: true },
+    { heading: "Shop by Gender" },
     { name: "For Men", href: "/collections/shop-all?gender=men" },
     { name: "For Women", href: "/collections/shop-all?gender=women" },
-    { name: "Unisex", href: "/collections/shop-all?gender=unisex" },
-    { divider: true },
+    { name: "For Unisex", href: "/collections/shop-all?gender=unisex" },
+    { heading: "Shop by Category" },
     { name: "Luxury Edition", href: "/collections/shop-all?edition=luxury" },
     { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
-    { name: "Classic Edition", href: "/collections/shop-all?edition=classic" },
+    { heading: "Shop by Season" },
+    { name: "For Autumn & Winter", href: "/collections/shop-all?tags=autumn-winter" },
+    { name: "For Spring & Summer", href: "/collections/shop-all?tags=spring-summer" },
+    { name: "Signature Scent", href: "/collections/shop-all?signature=true", standalone: true },
   ];
 
   const menuItems = [
@@ -263,20 +272,52 @@ export default function Header() {
                         <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                       </button>
                       {openDropdown === index && (
-                        <div className="absolute top-full left-0 mt-0 w-56 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
-                          {item.submenu.map((sub, si) =>
-                            sub.divider ? (
-                              <div key={si} className="my-1.5 border-t border-[#f0ece7]" />
-                            ) : (
-                              <Link
-                                key={si}
-                                href={sub.href}
-                                className="block px-5 py-2.5 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] transition-colors"
-                                onClick={() => setOpenDropdown(null)}
-                              >
-                                {sub.name}
-                              </Link>
-                            )
+                        <div className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-3 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}>
+                          {/* Left: sections */}
+                          <div className={families.length > 0 ? "w-1/2 border-r border-[#f0ece7]" : "w-full"}>
+                            {item.submenu.map((sub, si) =>
+                              sub.heading ? (
+                                <p key={si} className="px-5 pt-2.5 pb-1 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
+                                  {sub.heading}
+                                </p>
+                              ) : (
+                                <Link
+                                  key={si}
+                                  href={sub.href}
+                                  onClick={() => setOpenDropdown(null)}
+                                  className={`block transition-colors hover:bg-[#faf8f5] ${
+                                    sub.accent
+                                      ? "px-5 py-2 text-[13px] font-bold uppercase tracking-wide text-[#b8964e] hover:text-[#a07f3c]"
+                                      : sub.standalone
+                                      ? "px-5 pt-3 pb-1.5 text-[13px] font-semibold text-[#1f1a16] hover:text-[#b8964e]"
+                                      : "pl-8 pr-5 py-1.5 text-[13px] text-[#4a4540] hover:text-[#1a1a2e]"
+                                  }`}
+                                >
+                                  {sub.name}
+                                </Link>
+                              )
+                            )}
+                          </div>
+
+                          {/* Right: fragrance families */}
+                          {families.length > 0 && (
+                            <div className="w-1/2 flex flex-col">
+                              <p className="px-5 pt-2.5 pb-1 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
+                                Shop by Fragrance Family
+                              </p>
+                              <div className="overflow-y-auto scrollbar-thin max-h-72 px-1">
+                                {families.map((f) => (
+                                  <Link
+                                    key={f}
+                                    href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
+                                    onClick={() => setOpenDropdown(null)}
+                                    className="block pl-4 pr-4 py-1.5 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors truncate"
+                                  >
+                                    {f}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
                           )}
                         </div>
                       )}
@@ -357,17 +398,54 @@ export default function Header() {
                           </button>
                           {mobileSubOpen === index && (
                             <ul className="pl-4 space-y-0.5 mt-1 mb-2">
-                              {item.submenu.filter((s) => !s.divider).map((sub, si) => (
-                                <li key={si}>
-                                  <Link
-                                    href={sub.href}
-                                    className="block py-2 text-sm hover:opacity-70 transition-opacity"
-                                    onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                              {item.submenu.map((sub, si) =>
+                                sub.heading ? (
+                                  <li
+                                    key={si}
+                                    className="pt-3 pb-0.5 text-[11px] font-bold uppercase tracking-wide text-gray-500"
                                   >
-                                    {sub.name}
-                                  </Link>
-                                </li>
-                              ))}
+                                    {sub.heading}
+                                  </li>
+                                ) : (
+                                  <li key={si}>
+                                    <Link
+                                      href={sub.href}
+                                      className={`block py-2 text-sm hover:opacity-70 transition-opacity ${
+                                        sub.accent
+                                          ? "font-bold text-[#b8964e] uppercase tracking-wide"
+                                          : sub.standalone
+                                          ? "font-semibold"
+                                          : "pl-3"
+                                      }`}
+                                      onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                                    >
+                                      {sub.name}
+                                    </Link>
+                                  </li>
+                                )
+                              )}
+                              {families.length > 0 && (
+                                <>
+                                  <li className="pt-3 pb-0.5 text-[11px] font-bold uppercase tracking-wide text-gray-500">
+                                    Shop by Fragrance Family
+                                  </li>
+                                  <li>
+                                    <ul className="max-h-56 overflow-y-auto">
+                                      {families.map((f) => (
+                                        <li key={f}>
+                                          <Link
+                                            href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
+                                            className="block py-2 pl-3 text-sm hover:opacity-70 transition-opacity"
+                                            onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                                          >
+                                            {f}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </li>
+                                </>
+                              )}
                             </ul>
                           )}
                         </div>

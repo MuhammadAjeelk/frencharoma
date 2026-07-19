@@ -89,6 +89,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     status:      perfume?.status       || "draft",
     isBestSeller:    perfume?.isBestSeller    || false,
     isSpecialOffer:  perfume?.isSpecialOffer  || false,
+    isSignature:     perfume?.isSignature     || false,
     discountPercent: perfume?.discountPercent ?? 0,
     globalAdmirePercent: perfume?.globalAdmirePercent ?? 60,
     images: {
@@ -442,6 +443,31 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                   formData.isSpecialOffer ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Signature Scent Toggle */}
+          <div className="flex items-center gap-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg col-span-1 md:col-span-2">
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-indigo-900">✒️ Signature Scent</p>
+              <p className="text-xs text-indigo-700 mt-0.5">
+                Mark this perfume as a Signature Scent — it will appear under the Signature Scent section in the Shop menu.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateField("isSignature", !formData.isSignature)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.isSignature ? "bg-indigo-500" : "bg-gray-300"
+              }`}
+              role="switch"
+              aria-checked={formData.isSignature}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  formData.isSignature ? "translate-x-5" : "translate-x-0"
                 }`}
               />
             </button>
