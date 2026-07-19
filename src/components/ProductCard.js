@@ -13,7 +13,7 @@ const EDITION_STYLE = {
   luxury: {
     label: "Luxury Edition",
     bar: "bg-[#c9a24a]",
-    text: "text-[#3a2c08]",
+    text: "text-[#141414]",
   },
   premium: {
     label: "Premium Edition",
