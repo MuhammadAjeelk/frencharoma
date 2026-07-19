@@ -145,9 +145,10 @@ export default function ProductCard({
         setHovered(false);
         setShowBanners(false);
       }}
+      onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
       className={`group relative rounded-xl overflow-hidden bg-white border-[2.5px] flex flex-col transition-all duration-300 ${
         boxMode && boxSoldOut ? "opacity-60" : ""
-      }`}
+      } ${boxMode && !boxSoldOut ? "cursor-pointer" : ""}`}
       style={{
         borderColor: hovered && gm ? gm.hex : "#e8e4df",
         boxShadow: hovered && !(boxMode && boxSoldOut) ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
@@ -190,10 +191,7 @@ export default function ProductCard({
       {/* Product Image */}
       <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
         {boxMode ? (
-          <div
-            onClick={() => { if (!boxSoldOut) onAddToBox?.(); }}
-            className={`block w-full h-full ${boxSoldOut ? "cursor-not-allowed" : "cursor-pointer"}`}
-          >
+          <div className="block w-full h-full">
             <Image
               src={image}
               alt={name}
@@ -266,10 +264,7 @@ export default function ProductCard({
       {/* Details */}
       <div className="p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]">
         {boxMode ? (
-          <h3
-            onClick={() => { if (!boxSoldOut) onAddToBox?.(); }}
-            className={`text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center ${boxSoldOut ? "cursor-not-allowed" : "cursor-pointer"}`}
-          >
+          <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
             {name}
             {gm && (
               <>
