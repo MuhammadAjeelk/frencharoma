@@ -149,5 +149,5 @@ img { image-rendering: -webkit-optimize-contrast; }
   80% { transform: translateX(1.5px); }
 }
 .hover-vibrate:hover {
-  animation: cart-vibrate 0.3s ease-in-out infinite;
+  animation: cart-vibrate 0.25s ease-in-out 8;
 }

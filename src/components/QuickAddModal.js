@@ -128,9 +128,9 @@ export default function QuickAddModal({ perfume, onClose }) {
 
       {/* Price */}
       {headlinePrice != null && (
-        <div className="flex items-baseline gap-2 mb-3">
-          {disc > 0 && <span className="text-sm text-[#a09890] strike-diagonal">{formatRs(headlinePrice)}</span>}
-          <span className="text-xl font-extrabold text-[#1f1a16]">{formatRs(finalOf(headlinePrice))}</span>
+        <div className="flex items-baseline justify-center gap-8 flex-wrap mb-3">
+          {disc > 0 && <span className="text-base font-normal text-[#a09890] strike-diagonal">{formatRs(headlinePrice)}</span>}
+          <span className="text-base font-semibold text-[#1f1a16]">{formatRs(finalOf(headlinePrice))}</span>
         </div>
       )}
 
