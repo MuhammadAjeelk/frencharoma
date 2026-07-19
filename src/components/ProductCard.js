@@ -219,8 +219,8 @@ export default function ProductCard({
 
         {/* Best Seller pill — bottom-left */}
         {isBestSeller && (
-          <span className="absolute bottom-2 left-2 z-10 bg-[#1a1a2e] text-[#e0c07a] rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] shadow-md transition-opacity duration-200 group-hover:opacity-0">
-            Best Seller
+          <span className="absolute bottom-2 left-2 z-10 bg-[#1a1a2e] text-[#e0c07a] rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md transition-opacity duration-200 group-hover:opacity-0">
+            Best Sellers
           </span>
         )}
 
