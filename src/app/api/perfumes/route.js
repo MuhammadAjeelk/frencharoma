@@ -229,17 +229,17 @@ export async function GET(request) {
       );
     }
 
-    // ── Standard sort ─────────────────────────────────────────────────────
+    // ── Standard sort — every sort ties-break by Globally Admired (desc) ───
     let sortObj = {};
     if      (sort === "global-admire-desc") sortObj = { globalAdmirePercent: -1, createdAt: -1 };
     else if (sort === "global-admire-asc")  sortObj = { globalAdmirePercent:  1, createdAt: -1 };
-    else if (sort === "newest")       sortObj = { createdAt: -1 };
-    else if (sort === "oldest")       sortObj = { createdAt:  1 };
-    else if (sort === "name-asc")     sortObj = { name:  1 };
-    else if (sort === "name-desc")    sortObj = { name: -1 };
+    else if (sort === "newest")       sortObj = { createdAt: -1, globalAdmirePercent: -1 };
+    else if (sort === "oldest")       sortObj = { createdAt:  1, globalAdmirePercent: -1 };
+    else if (sort === "name-asc")     sortObj = { name:  1, globalAdmirePercent: -1 };
+    else if (sort === "name-desc")    sortObj = { name: -1, globalAdmirePercent: -1 };
     else if (sort === "discount-desc") sortObj = { discountPercent: -1, globalAdmirePercent: -1, createdAt: -1 };
     // Best sellers FIRST (does not filter out non-best-sellers)
-    else if (sort === "best-sellers") sortObj = { isBestSeller: -1, createdAt: -1 };
+    else if (sort === "best-sellers") sortObj = { isBestSeller: -1, globalAdmirePercent: -1, createdAt: -1 };
     else                              sortObj = { globalAdmirePercent: -1, createdAt: -1 };
 
     const [perfumes, total] = await Promise.all([
