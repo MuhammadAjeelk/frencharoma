@@ -133,7 +133,7 @@ img { image-rendering: -webkit-optimize-contrast; }
   left: -3%;
   right: -3%;
   top: 50%;
-  height: 1.5px;
+  height: 1px;
   background: #e11d2b;
   transform: translateY(-50%) rotate(-8deg);
   transform-origin: center;
