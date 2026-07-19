@@ -189,15 +189,30 @@ export default function ProductCard({
 
       {/* Product Image */}
       <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
-        <Link href={href || "#"} className="block w-full h-full">
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
-        </Link>
+        {boxMode ? (
+          <div
+            onClick={() => { if (!boxSoldOut) onAddToBox?.(); }}
+            className={`block w-full h-full ${boxSoldOut ? "cursor-not-allowed" : "cursor-pointer"}`}
+          >
+            <Image
+              src={image}
+              alt={name}
+              fill
+              className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            />
+          </div>
+        ) : (
+          <Link href={href || "#"} className="block w-full h-full">
+            <Image
+              src={image}
+              alt={name}
+              fill
+              className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            />
+          </Link>
+        )}
 
         {/* Quick View — appears on hover (wrapper centers, button vibrates) */}
         {onQuickView && (
@@ -250,8 +265,11 @@ export default function ProductCard({
 
       {/* Details */}
       <div className="p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]">
-        <Link href={href || "#"}>
-          <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
+        {boxMode ? (
+          <h3
+            onClick={() => { if (!boxSoldOut) onAddToBox?.(); }}
+            className={`text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center ${boxSoldOut ? "cursor-not-allowed" : "cursor-pointer"}`}
+          >
             {name}
             {gm && (
               <>
@@ -260,7 +278,19 @@ export default function ProductCard({
               </>
             )}
           </h3>
-        </Link>
+        ) : (
+          <Link href={href || "#"}>
+            <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
+              {name}
+              {gm && (
+                <>
+                  {" – "}
+                  <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+                </>
+              )}
+            </h3>
+          </Link>
+        )}
 
         <div className="space-y-1 text-[11px] sm:text-xs text-[#4a4540]">
           {impressionName && (
