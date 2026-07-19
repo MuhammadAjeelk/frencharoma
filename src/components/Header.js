@@ -51,6 +51,7 @@ export default function Header() {
 
   const shopSubmenu = [
     { name: "Shop All", href: "/collections/shop-all", accent: true },
+    { name: "Signature Scents", href: "/collections/shop-all?signature=true", standalone: true },
     { heading: "Shop by Gender" },
     { name: "For Men", href: "/collections/shop-all?gender=men" },
     { name: "For Women", href: "/collections/shop-all?gender=women" },
@@ -61,7 +62,6 @@ export default function Header() {
     { heading: "Shop by Season" },
     { name: "For Autumn & Winter", href: "/collections/shop-all?tags=autumn-winter" },
     { name: "For Spring & Summer", href: "/collections/shop-all?tags=spring-summer" },
-    { name: "Signature Scent", href: "/collections/shop-all?signature=true", standalone: true },
   ];
 
   const menuItems = [
@@ -310,7 +310,7 @@ export default function Header() {
                               <p className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
                                 Shop by Fragrance Family
                               </p>
-                              <div className="overflow-y-auto scrollbar-thin max-h-72 px-1">
+                              <div className="overflow-y-scroll scrollbar-always max-h-72 px-1">
                                 {families.map((f) => (
                                   <Link
                                     key={f}

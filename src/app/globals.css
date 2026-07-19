@@ -117,6 +117,13 @@ img { image-rendering: -webkit-optimize-contrast; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
 .scrollbar-thin:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
 
+/* Always-visible scrollbar so users can tell a list is scrollable */
+.scrollbar-always { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.28) rgba(0,0,0,0.06); }
+.scrollbar-always::-webkit-scrollbar { width: 7px; }
+.scrollbar-always::-webkit-scrollbar-track { background: rgba(0,0,0,0.06); border-radius: 4px; }
+.scrollbar-always::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.28); border-radius: 4px; }
+.scrollbar-always::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.42); }
+
 /* Focus ring utility */
 :focus-visible {
   outline: 2px solid var(--accent);
