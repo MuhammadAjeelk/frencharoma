@@ -8,21 +8,21 @@ import { useCart } from "@/context/CartContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
 
-// Edition banner styling — Luxury = gold, Premium = silver, Classic = neutral.
+// Edition banner styling — Luxury = solid gold, Premium = solid silver, Classic = neutral.
 const EDITION_STYLE = {
   luxury: {
     label: "Luxury Edition",
-    bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]",
+    bar: "bg-[#c9a24a]",
     text: "text-[#3a2c08]",
   },
   premium: {
     label: "Premium Edition",
-    bar: "bg-gradient-to-r from-[#b6b6bb] to-[#e4e4e8]",
+    bar: "bg-[#c3c3ca]",
     text: "text-[#2b2b2b]",
   },
   classic: {
     label: "Classic Edition",
-    bar: "bg-gradient-to-r from-[#d8cbb8] to-[#efe7d8]",
+    bar: "bg-[#d8cbb8]",
     text: "text-[#3a352f]",
   },
 };
@@ -307,7 +307,7 @@ export default function ProductCard({
                       ev.stopPropagation();
                       addEdition(e);
                     }}
-                    className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2 ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
+                    className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 ${st.bar} ${st.text} shadow-sm transition-transform duration-200 hover:scale-[1.03]`}
                   >
                     <span className="text-[11px] font-bold">
                       {st.label}{" "}
@@ -315,13 +315,13 @@ export default function ProductCard({
                         ({e.variant.size})
                       </span>
                     </span>
-                    <span className="text-[11px] font-bold flex items-center gap-1.5">
+                    <span className="text-[11px] font-bold flex items-center gap-2">
                       {disc > 0 && (
-                        <span className="line-through opacity-60 font-medium">
+                        <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">
                           {formatRs(e.variant.price)}
                         </span>
                       )}
-                      {formatRs(finalOf(e.variant.price))}
+                      <span className="whitespace-nowrap">{formatRs(finalOf(e.variant.price))}</span>
                     </span>
                   </button>
                 );
