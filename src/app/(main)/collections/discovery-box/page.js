@@ -7,6 +7,10 @@ import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
+import PerfumeFilterBar, {
+  SortSelect,
+  matchesSeasonGroup,
+} from "@/components/PerfumeFilterBar";
 
 const BOX_SIZE = 5;
 const DISCOUNT_PERCENT = 25;
@@ -46,22 +50,7 @@ function is5mlInStock(p) {
   return (match?.variant?.stock ?? 0) > 0;
 }
 
-// ── Search / filter options ────────────────────────────────────────────────
-const GENDER_OPTIONS = [
-  { value: "all", label: " For All" },
-  { value: "men", label: "For Men" },
-  { value: "women", label: "For Women" },
-  { value: "unisex", label: "For Unisex" },
-];
-
-const SEASON_OPTIONS = [
-  { value: "all", label: "All Seasons" },
-  { value: "spring", label: "Spring" },
-  { value: "summer", label: "Summer" },
-  { value: "autumn", label: "Autumn" },
-  { value: "winter", label: "Winter" },
-];
-
+// Brand/name/impression text match for the filter bar's search box.
 function matchesQuery(p, q) {
   const term = q.trim().toLowerCase();
   if (!term) return true;
@@ -72,16 +61,34 @@ function matchesQuery(p, q) {
   return hay.includes(term);
 }
 
-// Perfumes tagged for a combined or all-season range also match the individual season.
-function matchesSeason(p, season) {
-  if (season === "all") return true;
-  const tags = p.tags || [];
-  if (tags.includes("all-seasons") || tags.includes(season)) return true;
-  if (season === "spring" || season === "summer")
-    return tags.includes("spring-summer");
-  if (season === "autumn" || season === "winter")
-    return tags.includes("autumn-winter");
-  return false;
+function matchesEdition(p, edition) {
+  if (edition === "all") return true;
+  return (p.editions || []).some((e) => e.key === edition && e.enabled);
+}
+
+function matchesSpecialOffer(p) {
+  if (p.isSpecialOffer) return true;
+  return (p.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
+}
+
+// Client-side sort mirroring the API; every sort ties-break by Globally Admired.
+function sortTesters(list, sort) {
+  const price = (p) => {
+    const m = get5mlVariant(p.editions);
+    return m?.variant?.price ?? Infinity;
+  };
+  const admire = (p) => Number(p.globalAdmirePercent) || 0;
+  const arr = [...list];
+  const byAdmire = (a, b) => admire(b) - admire(a);
+  switch (sort) {
+    case "newest":     return arr.sort((a, b) => String(b._id).localeCompare(String(a._id)) || byAdmire(a, b));
+    case "name-asc":   return arr.sort((a, b) => (a.name || "").localeCompare(b.name || "") || byAdmire(a, b));
+    case "name-desc":  return arr.sort((a, b) => (b.name || "").localeCompare(a.name || "") || byAdmire(a, b));
+    case "price-asc":  return arr.sort((a, b) => price(a) - price(b) || byAdmire(a, b));
+    case "price-desc": return arr.sort((a, b) => price(b) - price(a) || byAdmire(a, b));
+    case "discount-desc": return arr.sort((a, b) => (Number(b.discountPercent) || 0) - (Number(a.discountPercent) || 0) || byAdmire(a, b));
+    default:           return arr.sort(byAdmire); // global-admire-desc
+  }
 }
 
 // ── Empty slot placeholder ─────────────────────────────────────────────────
@@ -140,35 +147,53 @@ export default function DiscoveryBoxPage() {
   const [modalPerfume, setModalPerfume] = useState(null); // Quick View target
   const [modalOpen, setModalOpen] = useState(false);
 
-  // ── Search / filters ─────────────────────────────────────────────────────
-  const [query, setQuery] = useState("");
+  // ── Filters (same set as Shop All) ───────────────────────────────────────
   const [gender, setGender] = useState("all");
+  const [edition, setEdition] = useState("all");
   const [season, setSeason] = useState("all");
+  const [bestSeller, setBestSeller] = useState(false);
+  const [specialOffer, setSpecialOffer] = useState(false);
+  const [brand, setBrand] = useState("");
   const [onlyInStock, setOnlyInStock] = useState(false);
+  const [sort, setSort] = useState("global-admire-desc");
 
+  const DEFAULT_SORT = "global-admire-desc";
   const hasActiveFilters =
-    query.trim() !== "" || gender !== "all" || season !== "all" || onlyInStock;
+    gender !== "all" ||
+    edition !== "all" ||
+    season !== "all" ||
+    bestSeller ||
+    specialOffer ||
+    onlyInStock ||
+    brand.trim() !== "";
+  const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
 
   const resetFilters = () => {
-    setQuery("");
     setGender("all");
+    setEdition("all");
     setSeason("all");
+    setBestSeller(false);
+    setSpecialOffer(false);
+    setBrand("");
     setOnlyInStock(false);
+    setSort(DEFAULT_SORT);
   };
 
   // Filtering only changes what's visible — `perfumes` stays the source of
   // truth for slots and selection, so a picked tester survives a filter change.
-  const visiblePerfumes = useMemo(
-    () =>
-      perfumes.filter(
-        (p) =>
-          matchesQuery(p, query) &&
-          (gender === "all" || p.gender === gender) &&
-          matchesSeason(p, season) &&
-          (!onlyInStock || is5mlInStock(p)),
-      ),
-    [perfumes, query, gender, season, onlyInStock],
-  );
+  const visiblePerfumes = useMemo(() => {
+    const filtered = perfumes.filter(
+      (p) =>
+        matchesQuery(p, brand) &&
+        (gender === "all" || p.gender === gender) &&
+        matchesEdition(p, edition) &&
+        matchesSeasonGroup(p.tags, season) &&
+        (!bestSeller || p.isBestSeller) &&
+        (!specialOffer || matchesSpecialOffer(p)) &&
+        (!onlyInStock || is5mlInStock(p)),
+    );
+    return sortTesters(filtered, sort);
+  }, [perfumes, brand, gender, edition, season, bestSeller, specialOffer, onlyInStock, sort]);
 
   // Fetch available perfumes
   useEffect(() => {
@@ -479,92 +504,46 @@ export default function DiscoveryBoxPage() {
           )}
         </div>
 
-        {/* ── Search + Filters ── */}
+        {/* ── Filters (same component as Shop All) ── */}
         {!loading && perfumes.length > 0 && (
-          <div className="mb-6 flex flex-col lg:flex-row lg:items-center gap-2.5">
-            {/* Search */}
-            <div className="relative flex-1 min-w-0">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
-                />
-              </svg>
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search fragrance, brand or impression…"
-                className="w-full pl-9 pr-9 py-2.5 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] placeholder:text-gray-400 focus:outline-none focus:border-[#b8964e] transition-colors"
-              />
-              {query && (
+          <div className="mb-6">
+            <PerfumeFilterBar
+              gender={gender}
+              setGender={setGender}
+              edition={edition}
+              setEdition={setEdition}
+              season={season}
+              setSeason={setSeason}
+              bestSeller={bestSeller}
+              setBestSeller={setBestSeller}
+              specialOffer={specialOffer}
+              setSpecialOffer={setSpecialOffer}
+              brand={brand}
+              setBrand={setBrand}
+              onReset={resetFilters}
+              hasControlChanges={hasControlChanges}
+              extraControls={
                 <button
-                  onClick={() => setQuery("")}
-                  aria-label="Clear search"
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-gray-400 hover:text-[#1a1a2e] hover:bg-gray-100 transition-colors text-sm leading-none"
+                  onClick={() => setOnlyInStock((v) => !v)}
+                  aria-pressed={onlyInStock}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
+                    onlyInStock
+                      ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
+                      : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
+                  }`}
                 >
-                  ×
+                  In stock only
                 </button>
-              )}
-            </div>
-
-            {/* Gender */}
-            <select
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              aria-label="Filter by gender"
-              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors hover:underline underline-offset-4 decoration-1"
-            >
-              {GENDER_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-
-            {/* Season */}
-            <select
-              value={season}
-              onChange={(e) => setSeason(e.target.value)}
-              aria-label="Filter by season"
-              className="py-2.5 px-3 rounded-lg border border-[#e8e4df] bg-white text-sm text-[#1f1a16] focus:outline-none focus:border-[#b8964e] cursor-pointer transition-colors hover:underline underline-offset-4 decoration-1"
-            >
-              {SEASON_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-
-            {/* In-stock only */}
-            <button
-              onClick={() => setOnlyInStock((v) => !v)}
-              aria-pressed={onlyInStock}
-              className={`py-2.5 px-4 rounded-lg border text-sm font-semibold whitespace-nowrap transition-colors hover:underline underline-offset-4 decoration-1 ${
+              }
+              extraChips={
                 onlyInStock
-                  ? "bg-[#1a1a2e] text-white border-[#1a1a2e]"
-                  : "bg-white text-[#6b6560] border-[#e8e4df] hover:border-[#1a1a2e]"
-              }`}
-            >
-              In stock only
-            </button>
-
-            {/* Reset */}
-            {hasActiveFilters && (
-              <button
-                onClick={resetFilters}
-                className="py-2.5 px-4 rounded-lg border border-[#e8e4df] bg-white text-sm font-semibold text-[#6b6560] hover:border-[#1a1a2e] hover:text-[#1a1a2e] whitespace-nowrap transition-colors hover:underline underline-offset-4 decoration-1"
-              >
-                Reset
-              </button>
-            )}
+                  ? [{ key: "inStock", label: "In stock only", clear: () => setOnlyInStock(false) }]
+                  : []
+              }
+            />
+            <div className="flex justify-end mt-3">
+              <SortSelect sort={sort} setSort={setSort} />
+            </div>
           </div>
         )}
 

@@ -6,195 +6,13 @@ import Link from "next/link";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
 import QuickAddModal from "@/components/QuickAddModal";
+import PerfumeFilterBar, {
+  SortSelect,
+  seasonFromTags,
+  tagsForSeason,
+} from "@/components/PerfumeFilterBar";
 
 const PAGE_SIZE = 20;
-
-// ── Filter options ─────────────────────────────────────────────────────────
-const GENDER_OPTIONS = [
-  { value: "all", label: "For All" },
-  { value: "men", label: "For Men" },
-  { value: "women", label: "For Women" },
-  { value: "unisex", label: "For Unisex" },
-];
-
-const EDITION_OPTIONS = [
-  { value: "all", label: "All Editions" },
-  { value: "luxury", label: "Luxury Editions" },
-  { value: "premium", label: "Premium Editions" },
-];
-
-const SEASON_OPTIONS = [
-  { value: "all", label: "All" },
-  { value: "spring-summer", label: "Spring & Summer" },
-  { value: "autumn-winter", label: "Autumn & Winter" },
-  { value: "all-seasons", label: "All Seasons (Four Seasons)" },
-];
-
-const SORT_OPTIONS = [
-  { value: "global-admire-desc", label: "Globally Admired (High – Low)" },
-  { value: "newest", label: "All (Newest first)" },
-  { value: "name-asc", label: "Alphabetically (A – Z)" },
-  { value: "name-desc", label: "Alphabetically (Z – A)" },
-  { value: "price-asc", label: "Price (Low – High)" },
-  { value: "price-desc", label: "Price (High – Low)" },
-  { value: "discount-desc", label: "Discount (High – Low)" },
-];
-
-// ── Reusable filter dropdown ───────────────────────────────────────────────
-function FilterDropdown({ label, options, value, onChange }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const selected = options.find((o) => o.value === value);
-  const isActive = value !== "all" && value !== "";
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
-          isActive
-            ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
-            : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
-        }`}
-      >
-        <span>{label}</span>
-        {isActive && <span className="opacity-80">: {selected?.label}</span>}
-        <svg
-          className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-30 min-w-[180px] py-1.5 overflow-hidden">
-          {options.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => {
-                onChange(opt.value);
-                setOpen(false);
-              }}
-              className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] hover:underline underline-offset-4 decoration-1 ${
-                value === opt.value
-                  ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]"
-                  : "text-[#6b6560]"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function MultiSelectDropdown({ label, options, values, onChange }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const isActive = values.length > 0;
-  const toggleValue = (value) => {
-    if (values.includes(value)) {
-      onChange(values.filter((v) => v !== value));
-    } else {
-      onChange([...values, value]);
-    }
-  };
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
-          isActive
-            ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
-            : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
-        }`}
-      >
-        <span>{label}</span>
-        {isActive && (
-          <span className="opacity-80">: {values.length} selected</span>
-        )}
-        <svg
-          className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-30 min-w-[180px] py-1.5 overflow-hidden">
-          {options.map((opt) => {
-            const active = values.includes(opt.value);
-            return (
-              <button
-                key={opt.value}
-                onClick={() => toggleValue(opt.value)}
-                className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] hover:underline underline-offset-4 decoration-1 flex items-center justify-between ${
-                  active
-                    ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]"
-                    : "text-[#6b6560]"
-                }`}
-              >
-                <span>{opt.label}</span>
-                {active && (
-                  <svg
-                    className="w-3.5 h-3.5 text-[#b8964e]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ── Main Page ──────────────────────────────────────────────────────────────
 function ShopAllContent() {
@@ -215,10 +33,9 @@ function ShopAllContent() {
   const [edition, setEdition] = useState(
     () => searchParams.get("edition") || "all",
   );
-  const [season, setSeason] = useState(() => {
-    const t = searchParams.get("tags");
-    return t ? t.split(",")[0].trim() : "all";
-  });
+  const [season, setSeason] = useState(() =>
+    seasonFromTags(searchParams.get("tags")),
+  );
   const [scentFamily, setScentFamily] = useState(
     () => searchParams.get("scentFamily") || "",
   );
@@ -237,8 +54,7 @@ function ShopAllContent() {
   useEffect(() => {
     setGender(searchParams.get("gender") || "all");
     setEdition(searchParams.get("edition") || "all");
-    const t = searchParams.get("tags");
-    setSeason(t ? t.split(",")[0].trim() : "all");
+    setSeason(seasonFromTags(searchParams.get("tags")));
     setScentFamily(searchParams.get("scentFamily") || "");
     setBestSeller(searchParams.get("bestSeller") === "true");
     setSpecialOffer(searchParams.get("specialOffer") === "true");
@@ -272,50 +88,6 @@ function ShopAllContent() {
     signature ||
     scentFamily;
   const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
-  const getOptionLabel = (options, value) =>
-    options.find((o) => o.value === value)?.label || value;
-  const activeFilterChips = [
-    gender !== "all" && {
-      key: "gender",
-      label: `Gender: ${getOptionLabel(GENDER_OPTIONS, gender)}`,
-      clear: () => setGender("all"),
-    },
-    edition !== "all" && {
-      key: "edition",
-      label: `Category: ${getOptionLabel(EDITION_OPTIONS, edition)}`,
-      clear: () => setEdition("all"),
-    },
-    season !== "all" && {
-      key: "season",
-      label: `Season: ${getOptionLabel(SEASON_OPTIONS, season)}`,
-      clear: () => setSeason("all"),
-    },
-    brand.trim() && {
-      key: "brand",
-      label: `Brand: ${brand.trim()}`,
-      clear: () => setBrand(""),
-    },
-    bestSeller && {
-      key: "bestSeller",
-      label: "Best Sellers",
-      clear: () => setBestSeller(false),
-    },
-    specialOffer && {
-      key: "specialOffer",
-      label: "Special Offer",
-      clear: () => setSpecialOffer(false),
-    },
-    signature && {
-      key: "signature",
-      label: "Signature Scent",
-      clear: () => setSignature(false),
-    },
-    scentFamily && {
-      key: "scentFamily",
-      label: `Family: ${scentFamily}`,
-      clear: () => setScentFamily(""),
-    },
-  ].filter(Boolean);
 
   // ── Build fetch URL ──────────────────────────────────────────────────────
   const buildUrl = useCallback(
@@ -323,7 +95,7 @@ function ShopAllContent() {
       const p = new URLSearchParams();
       if (gender !== "all") p.set("gender", gender);
       if (edition !== "all") p.set("edition", edition);
-      if (season !== "all") p.set("tags", season);
+      if (season !== "all") p.set("tags", tagsForSeason(season).join(","));
       if (scentFamily) p.set("scentFamily", scentFamily);
       if (debouncedBrand) p.set("search", debouncedBrand);
       if (bestSeller) p.set("bestSeller", "true");
@@ -469,153 +241,26 @@ function ShopAllContent() {
         {/* ── Sticky Filter Bar ── */}
         <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#e8e4df]/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-            <div className="rounded-xl border border-[#e8e4df] bg-white p-3 md:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-              <div className="flex flex-wrap items-center gap-2.5">
-                {/* Label */}
-                <span className="text-[10px] font-bold text-[#b8964e] uppercase tracking-[0.18em] mr-1 shrink-0">
-                  Filters
-                </span>
-
-                {/* Gender */}
-                <FilterDropdown
-                  label="Gender"
-                  options={GENDER_OPTIONS}
-                  value={gender}
-                  onChange={setGender}
-                />
-
-                {/* Category (Edition) */}
-                <FilterDropdown
-                  label="Category"
-                  options={EDITION_OPTIONS}
-                  value={edition}
-                  onChange={setEdition}
-                />
-
-                {/* Season */}
-                <FilterDropdown
-                  label="Season"
-                  options={SEASON_OPTIONS}
-                  value={season}
-                  onChange={setSeason}
-                />
-
-                {/* Best Sellers toggle */}
-                <button
-                  onClick={() => setBestSeller((b) => !b)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
-                    bestSeller
-                      ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
-                      : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
-                  }`}
-                >
-                  Best Sellers
-                </button>
-
-                {/* Special Offer toggle */}
-                <button
-                  onClick={() => setSpecialOffer((s) => !s)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
-                    specialOffer
-                      ? "border-[#c2185b] bg-[#c2185b] text-white"
-                      : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#c2185b] hover:text-[#c2185b]"
-                  }`}
-                >
-                  Special Offer
-                </button>
-
-                {/* Brand search */}
-                <div className="relative min-w-[170px]">
-                  <input
-                    type="text"
-                    placeholder="Brand..."
-                    value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
-                    className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
-                      brand
-                        ? "border-[#1a1a2e] text-[#1f1a16]"
-                        : "border-[#e8e4df] text-[#4a4540] hover:border-[#ccc8c2] focus:border-[#1a1a2e]"
-                    }`}
-                  />
-                  <svg
-                    className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z"
-                    />
-                  </svg>
-                  {brand && (
-                    <button
-                      onClick={() => setBrand("")}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black"
-                    >
-                      <svg
-                        className="w-3 h-3"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-
-                {/* Spacer */}
-                <div className="flex-1" />
-
-                {/* Clear All Filters */}
-                <button
-                  onClick={clearFilters}
-                  disabled={!hasControlChanges}
-                  className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
-                    hasControlChanges
-                      ? "border-[#ccc8c2] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1"
-                      : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
-                  }`}
-                >
-                  Reset
-                </button>
-              </div>
-
-              {activeFilterChips.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-[#f0ece7] flex flex-wrap gap-2">
-                  {activeFilterChips.map((chip) => (
-                    <button
-                      key={chip.key}
-                      onClick={chip.clear}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1 transition-all duration-200"
-                    >
-                      <span>{chip.label}</span>
-                      <svg
-                        className="w-3 h-3 text-[#a09890]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <PerfumeFilterBar
+              gender={gender}
+              setGender={setGender}
+              edition={edition}
+              setEdition={setEdition}
+              season={season}
+              setSeason={setSeason}
+              bestSeller={bestSeller}
+              setBestSeller={setBestSeller}
+              specialOffer={specialOffer}
+              setSpecialOffer={setSpecialOffer}
+              brand={brand}
+              setBrand={setBrand}
+              scentFamily={scentFamily}
+              setScentFamily={setScentFamily}
+              signature={signature}
+              setSignature={setSignature}
+              onReset={clearFilters}
+              hasControlChanges={hasControlChanges}
+            />
           </div>
         </div>
 
@@ -640,28 +285,7 @@ function ShopAllContent() {
                 </>
               )}
             </p>
-            <div className="flex items-center gap-2.5">
-              <span className="text-[11px] font-medium text-[#8a847e] uppercase tracking-wide hidden sm:inline">
-                Sort by
-              </span>
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-                className="text-[12px] border border-[#e8e4df] rounded-lg px-3 py-2 focus:outline-none focus:border-[#1a1a2e] bg-white cursor-pointer font-medium text-[#1f1a16] appearance-none pr-8 hover:underline underline-offset-4 decoration-1"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b6560'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 8px center",
-                  backgroundSize: "14px",
-                }}
-              >
-                {SORT_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <SortSelect sort={sort} setSort={setSort} />
           </div>
 
           {/* ── Loading skeleton ── */}

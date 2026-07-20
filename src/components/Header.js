@@ -60,8 +60,8 @@ export default function Header() {
     { name: "Luxury Edition", href: "/collections/shop-all?edition=luxury" },
     { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
     { heading: "Shop by Season" },
-    { name: "For Autumn & Winter", href: "/collections/shop-all?tags=autumn-winter" },
-    { name: "For Spring & Summer", href: "/collections/shop-all?tags=spring-summer" },
+    { name: "For Autumn & Winter", href: "/collections/shop-all?tags=autumn,winter" },
+    { name: "For Spring & Summer", href: "/collections/shop-all?tags=spring,summer" },
   ];
 
   const menuItems = [
