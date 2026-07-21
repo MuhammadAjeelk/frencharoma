@@ -56,6 +56,7 @@ function ShopAllContent() {
     setEdition(searchParams.get("edition") || "all");
     setSeason(seasonFromTags(searchParams.get("tags")));
     setScentFamily(searchParams.get("scentFamily") || "");
+    setBrand(searchParams.get("search") || "");
     setBestSeller(searchParams.get("bestSeller") === "true");
     setSpecialOffer(searchParams.get("specialOffer") === "true");
     setSignature(searchParams.get("signature") === "true");
