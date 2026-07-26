@@ -20,7 +20,7 @@ export const SEASON_OPTIONS = [
   { value: "all", label: "All Seasons" },
   { value: "spring-summer", label: "Summer & Spring" },
   { value: "autumn-winter", label: "Winter & Autumn" },
-  { value: "all-seasons", label: "All Seasons (Four Seasons)" },
+  { value: "all-seasons", label: "Four Seasons (Versatile)" },
 ];
 
 export const SORT_OPTIONS = [
