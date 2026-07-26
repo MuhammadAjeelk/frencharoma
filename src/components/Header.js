@@ -136,7 +136,7 @@ export default function Header() {
       <header className="header relative z-50 border-b border-[#e8e4df] bg-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
-          <div className="flex items-center justify-between py-3 lg:py-4">
+          <div className="flex items-center justify-between py-1.5 lg:py-2">
             {/* Left — Search */}
             <div className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible">
               {/* Mobile Menu Button */}
@@ -152,7 +152,7 @@ export default function Header() {
               <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 p-2 focus:outline-none hover:opacity-70 transition-opacity whitespace-nowrap ${
+                  className={`flex items-center gap-2 p-2 focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200 whitespace-nowrap ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
@@ -247,9 +247,9 @@ export default function Header() {
                 <Image
                   src="/logo.png"
                   alt="French Aromas"
-                  width={120}
-                  height={45}
-                  className="h-auto w-auto max-w-[120px] mix-blend-multiply"
+                  width={96}
+                  height={36}
+                  className="h-auto w-auto max-w-[92px] mix-blend-multiply transition-transform duration-300 hover:scale-105"
                   priority
                 />
               </Link>
@@ -260,7 +260,7 @@ export default function Header() {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className="hidden lg:block relative focus:outline-none hover:opacity-70 transition-opacity"
+                className="hidden lg:block relative focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] hover:scale-110 transition-all duration-200"
                 aria-label="Wishlist"
               >
                 <svg
@@ -287,7 +287,7 @@ export default function Header() {
               <div className="hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className="p-2 focus:outline-none hover:opacity-70 transition-opacity"
+                  className="p-2 focus:outline-none hover:scale-110 hover:opacity-80 transition-all duration-200"
                   aria-label="Account"
                 >
                   <img
@@ -381,10 +381,10 @@ export default function Header() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className="focus:outline-none relative hover:opacity-70 transition-opacity"
+                className="focus:outline-none relative hover:scale-110 hover:opacity-80 transition-all duration-200"
                 aria-label="Cart"
               >
-                <img src="/icons/cart.svg" alt="Cart" className="w-11 h-11" />
+                <img src="/icons/cart.svg" alt="Cart" className="w-10 h-10" />
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
                     {itemCount > 99 ? "99+" : itemCount}
@@ -395,7 +395,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center py-2.5 border-t border-[#e8e4df]/70">
+          <nav className="hidden lg:flex items-center justify-center py-2 border-t border-[#e8e4df]/70">
             <ul className="flex items-center gap-7">
               {menuItems.map((item, index) => (
                 <li
