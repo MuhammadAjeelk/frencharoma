@@ -274,7 +274,7 @@ export default function ProductCard({
       <div
         className={
           hoverReveal
-            ? "absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 flex flex-col bg-[#f4f2ef] rounded-t-xl shadow-[0_-6px_24px_rgba(0,0,0,0.10)] transition-transform duration-300 translate-y-0 lg:translate-y-full lg:group-hover:translate-y-0"
+            ? "absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 flex flex-col bg-[#f4f2ef] rounded-t-xl shadow-[0_-6px_24px_rgba(0,0,0,0.10)] transition-transform duration-500 ease-out translate-y-0 lg:translate-y-full lg:group-hover:translate-y-0"
             : "p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]"
         }
       >
