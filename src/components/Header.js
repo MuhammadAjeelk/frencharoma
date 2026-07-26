@@ -416,7 +416,7 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center py-2 border-t border-[#e8e4df]/70">
-            <ul className="flex items-center gap-7">
+            <ul className="flex items-center gap-10 xl:gap-12">
               {menuItems.map((item, index) => (
                 <li
                   key={index}
