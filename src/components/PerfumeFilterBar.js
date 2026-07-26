@@ -417,7 +417,7 @@ export default function PerfumeFilterBar({
           disabled={!hasControlChanges}
           className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
             hasControlChanges
-              ? "border-red-400 text-red-500 hover:bg-red-50 hover:border-red-500 hover:text-red-600 hover:underline underline-offset-4 decoration-1"
+              ? "border-[#1a1a2e] text-[#1a1a2e] hover:bg-red-50 hover:border-red-500 hover:text-red-600 hover:underline underline-offset-4 decoration-1"
               : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
           }`}
         >
