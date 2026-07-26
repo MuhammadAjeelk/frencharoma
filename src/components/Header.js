@@ -264,11 +264,11 @@ export default function Header() {
                 aria-label="Wishlist"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-6 h-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={1.8}
+                  strokeWidth={1.6}
                 >
                   <path
                     strokeLinecap="round"
@@ -287,14 +287,22 @@ export default function Header() {
               <div className="hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className="p-2 focus:outline-none hover:scale-110 hover:opacity-80 transition-all duration-200"
+                  className="flex items-center focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] hover:scale-110 transition-all duration-200"
                   aria-label="Account"
                 >
-                  <img
-                    src="/icons/account.svg"
-                    alt="Account"
-                    className="w-5 h-5"
-                  />
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.6}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                    />
+                  </svg>
                 </button>
                 {isAccountOpen && (
                   <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
@@ -381,12 +389,24 @@ export default function Header() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className="focus:outline-none relative hover:scale-110 hover:opacity-80 transition-all duration-200"
+                className="flex items-center focus:outline-none relative text-[#1a1a2e] hover:text-[#b8964e] hover:scale-110 transition-all duration-200"
                 aria-label="Cart"
               >
-                <img src="/icons/cart.svg" alt="Cart" className="w-10 h-10" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.6}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
+                  />
+                </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
                     {itemCount > 99 ? "99+" : itemCount}
                   </span>
                 )}
