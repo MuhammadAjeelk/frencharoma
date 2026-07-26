@@ -31,7 +31,7 @@ export function NavList({
             {item.submenu ? (
               <>
                 <button
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-200 hover:font-bold ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
@@ -51,7 +51,7 @@ export function NavList({
                             key={si}
                             href={sub.href}
                             onClick={() => setOpenDropdown(null)}
-                            className={`group/link flex items-center transition-colors hover:bg-[#faf8f5] hover:text-[#b8964e] ${
+                            className={`group/link flex items-center transition-colors hover:bg-[#faf8f5] hover:text-[#b8964e] hover:font-bold ${
                               sub.accent
                                 ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e]"
                                 : sub.standalone
@@ -81,7 +81,7 @@ export function NavList({
                               key={f}
                               href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
                               onClick={() => setOpenDropdown(null)}
-                              className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] rounded-md transition-colors"
+                              className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] hover:font-bold rounded-md transition-colors"
                             >
                               <span className="mr-2 text-[#b8964e]">•</span>
                               <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
@@ -98,7 +98,7 @@ export function NavList({
             ) : item.brandDropdown ? (
               <>
                 <button
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-200 hover:font-bold ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
@@ -116,7 +116,7 @@ export function NavList({
                           <Link
                             key={b}
                             href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                            className="group/link flex items-center px-3 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] rounded-md transition-colors"
+                            className="group/link flex items-center px-3 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] hover:font-bold rounded-md transition-colors"
                             onClick={() => setOpenDropdown(null)}
                           >
                             <span className="mr-2 text-[#b8964e]">•</span>
@@ -137,7 +137,7 @@ export function NavList({
             ) : (
               <Link
                 href={item.href}
-                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-200 hover:font-bold ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
               >
                 {item.name}
               </Link>
