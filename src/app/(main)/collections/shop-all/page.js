@@ -296,9 +296,9 @@ function ShopAllContent() {
         </div>
 
         {/* ── Content ── */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-8">
           {/* Filter breadcrumb + Sort */}
-          <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
             <nav className="flex items-center gap-2 text-[13px] flex-wrap min-w-0">
               <Link href="/" className="text-[#8a847e] hover:text-[#1f1a16] transition-colors">
                 Home
@@ -333,7 +333,7 @@ function ShopAllContent() {
           </div>
 
           {/* Count */}
-          <p className="text-[13px] text-[#6b6560] mb-7 text-right">
+          <p className="text-[13px] text-[#6b6560] mb-4 text-right">
             {loading ? (
               <span className="inline-block w-16 h-4 bg-[#f0ece7] rounded animate-pulse" />
             ) : (
