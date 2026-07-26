@@ -212,6 +212,7 @@ export default function PerfumeFilterBar({
   // Brand suggestions for the search box
   const [brands, setBrands] = useState([]);
   const [brandFocused, setBrandFocused] = useState(false);
+  const [brandActive, setBrandActive] = useState(-1);
   useEffect(() => {
     fetch("/api/brands")
       .then((r) => r.json())
@@ -310,9 +311,34 @@ export default function PerfumeFilterBar({
             type="text"
             placeholder="Brand..."
             value={brand}
-            onChange={(e) => setBrand(e.target.value)}
+            onChange={(e) => {
+              setBrand(e.target.value);
+              setBrandActive(-1);
+            }}
             onFocus={() => setBrandFocused(true)}
             onBlur={() => setTimeout(() => setBrandFocused(false), 150)}
+            onKeyDown={(e) => {
+              if (!brandFocused || brandMatches.length === 0) return;
+              if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setBrandActive((i) => (i + 1) % brandMatches.length);
+              } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setBrandActive(
+                  (i) => (i - 1 + brandMatches.length) % brandMatches.length,
+                );
+              } else if (e.key === "Enter") {
+                if (brandActive >= 0 && brandActive < brandMatches.length) {
+                  e.preventDefault();
+                  setBrand(brandMatches[brandActive]);
+                  setBrandFocused(false);
+                  setBrandActive(-1);
+                }
+              } else if (e.key === "Escape") {
+                setBrandFocused(false);
+                setBrandActive(-1);
+              }
+            }}
             className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
               brand
                 ? "border-[#1a1a2e] text-[#1f1a16]"
@@ -356,12 +382,17 @@ export default function PerfumeFilterBar({
           {/* Brand suggestions */}
           {brandFocused && brandMatches.length > 0 && (
             <div className="absolute left-0 top-full mt-1.5 w-full min-w-[180px] bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.08)] z-40 py-1.5 max-h-60 overflow-y-auto scrollbar-always">
-              {brandMatches.map((b) => (
+              {brandMatches.map((b, i) => (
                 <button
                   key={b}
                   type="button"
                   onMouseDown={() => setBrand(b)}
-                  className="w-full text-left px-4 py-1.5 text-[12px] text-[#6b6560] hover:bg-[#faf8f5] hover:text-[#1a1a2e] hover:font-bold hover:underline underline-offset-4 decoration-1 transition-colors"
+                  onMouseEnter={() => setBrandActive(i)}
+                  className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors underline-offset-4 decoration-1 ${
+                    i === brandActive
+                      ? "bg-[#faf8f5] text-[#1a1a2e] font-bold underline"
+                      : "text-[#6b6560] hover:bg-[#faf8f5] hover:text-[#1a1a2e] hover:font-bold hover:underline"
+                  }`}
                 >
                   {b}
                 </button>
