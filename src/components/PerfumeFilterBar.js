@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 
 // ── Filter options (shared by Shop All + Discovery Box) ─────────────────────
 export const GENDER_OPTIONS = [
-  { value: "all", label: "For All" },
+  { value: "all", label: "All Genders" },
   { value: "men", label: "For Men" },
   { value: "women", label: "For Women" },
   { value: "unisex", label: "For Unisex" },
