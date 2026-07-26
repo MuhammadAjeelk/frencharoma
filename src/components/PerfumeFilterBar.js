@@ -209,6 +209,25 @@ export default function PerfumeFilterBar({
     ...families.map((f) => ({ value: f, label: f })),
   ];
 
+  // Brand suggestions for the search box
+  const [brands, setBrands] = useState([]);
+  const [brandFocused, setBrandFocused] = useState(false);
+  useEffect(() => {
+    fetch("/api/brands")
+      .then((r) => r.json())
+      .then((d) => setBrands(d.brands || []))
+      .catch(() => {});
+  }, []);
+  const brandMatches = brand?.trim()
+    ? brands
+        .filter(
+          (b) =>
+            b.toLowerCase().includes(brand.trim().toLowerCase()) &&
+            b.toLowerCase() !== brand.trim().toLowerCase(),
+        )
+        .slice(0, 8)
+    : [];
+
   const chips = [
     gender !== "all" && {
       key: "gender",
@@ -292,6 +311,8 @@ export default function PerfumeFilterBar({
             placeholder="Brand..."
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
+            onFocus={() => setBrandFocused(true)}
+            onBlur={() => setTimeout(() => setBrandFocused(false), 150)}
             className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
               brand
                 ? "border-[#1a1a2e] text-[#1f1a16]"
@@ -330,6 +351,22 @@ export default function PerfumeFilterBar({
                 />
               </svg>
             </button>
+          )}
+
+          {/* Brand suggestions */}
+          {brandFocused && brandMatches.length > 0 && (
+            <div className="absolute left-0 top-full mt-1.5 w-full min-w-[180px] bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.08)] z-40 py-1.5 max-h-60 overflow-y-auto scrollbar-always">
+              {brandMatches.map((b) => (
+                <button
+                  key={b}
+                  type="button"
+                  onMouseDown={() => setBrand(b)}
+                  className="w-full text-left px-4 py-1.5 text-[12px] text-[#6b6560] hover:bg-[#faf8f5] hover:text-[#1a1a2e] hover:font-bold hover:underline underline-offset-4 decoration-1 transition-colors"
+                >
+                  {b}
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
