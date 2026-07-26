@@ -349,7 +349,7 @@ export default function PerfumeFilterBar({
             className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
               brand
                 ? "border-[#1a1a2e] text-[#1f1a16]"
-                : "border-[#1a1a2e] text-[#4a4540] focus:border-[#1a1a2e]"
+                : "border-[#e8e4df] text-[#4a4540] hover:border-[#1a1a2e] focus:border-[#1a1a2e]"
             }`}
           />
           <svg
