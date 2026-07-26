@@ -333,7 +333,7 @@ function ShopAllContent() {
           </div>
 
           {/* Count */}
-          <p className="text-[13px] text-[#6b6560] mb-7">
+          <p className="text-[13px] text-[#6b6560] mb-7 text-right">
             {loading ? (
               <span className="inline-block w-16 h-4 bg-[#f0ece7] rounded animate-pulse" />
             ) : (
