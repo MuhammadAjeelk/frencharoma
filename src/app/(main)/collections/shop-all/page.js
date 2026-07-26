@@ -299,22 +299,35 @@ function ShopAllContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           {/* Filter breadcrumb + Sort */}
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
-            <nav className="flex items-center gap-1.5 text-[12px] flex-wrap min-w-0">
-              <span className="text-[#8a847e] uppercase tracking-wide text-[11px] font-medium shrink-0">
-                Filters:
-              </span>
+            <nav className="flex items-center gap-2 text-[13px] flex-wrap min-w-0">
+              <Link href="/" className="text-[#8a847e] hover:text-[#1f1a16] transition-colors">
+                Home
+              </Link>
+              <span className="text-[#ccc8c2]">/</span>
               {filterCrumbs.length > 0 ? (
-                filterCrumbs.map((c, i) => (
-                  <span key={i} className="flex items-center gap-1.5">
-                    {i > 0 && <span className="text-[#ccc8c2]">›</span>}
-                    <span className="font-semibold text-[#1f1a16] px-2 py-0.5 rounded-full bg-[#f4f0e8]">
-                      {c}
-                    </span>
-                  </span>
-                ))
+                <Link
+                  href="/collections/shop-all"
+                  className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
+                >
+                  Shop All
+                </Link>
               ) : (
-                <span className="text-[#6b6560]">All Perfumes</span>
+                <span className="font-semibold text-[#1f1a16]">Shop All</span>
               )}
+              {filterCrumbs.map((c, i) => (
+                <span key={i} className="flex items-center gap-2">
+                  <span className="text-[#ccc8c2]">/</span>
+                  <span
+                    className={
+                      i === filterCrumbs.length - 1
+                        ? "font-semibold text-[#1f1a16]"
+                        : "text-[#8a847e]"
+                    }
+                  >
+                    {c}
+                  </span>
+                </span>
+              ))}
             </nav>
             <SortSelect sort={sort} setSort={setSort} />
           </div>
