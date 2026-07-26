@@ -17,7 +17,7 @@ export const EDITION_OPTIONS = [
 ];
 
 export const SEASON_OPTIONS = [
-  { value: "all", label: "All" },
+  { value: "all", label: "All Seasons" },
   { value: "spring-summer", label: "Spring & Summer" },
   { value: "autumn-winter", label: "Autumn & Winter" },
   { value: "all-seasons", label: "All Seasons (Four Seasons)" },
@@ -215,7 +215,7 @@ export default function PerfumeFilterBar({
     },
     season !== "all" && {
       key: "season",
-      label: `Season: ${getLabel(SEASON_OPTIONS, season)}`,
+      label: `Seasons: ${getLabel(SEASON_OPTIONS, season)}`,
       clear: () => setSeason("all"),
     },
     brand?.trim() && {
@@ -266,7 +266,7 @@ export default function PerfumeFilterBar({
           onChange={setEdition}
         />
         <FilterDropdown
-          label="Season"
+          label="Seasons"
           options={SEASON_OPTIONS}
           value={season}
           onChange={setSeason}
