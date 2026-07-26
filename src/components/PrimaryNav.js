@@ -51,12 +51,12 @@ export function NavList({
                             key={si}
                             href={sub.href}
                             onClick={() => setOpenDropdown(null)}
-                            className={`group/link flex items-center transition-colors hover:bg-[#faf8f5] ${
+                            className={`group/link flex items-center transition-colors hover:bg-[#faf8f5] hover:text-[#b8964e] ${
                               sub.accent
-                                ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e] hover:text-[#0f0f24]"
+                                ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e]"
                                 : sub.standalone
-                                  ? "px-5 pt-2 pb-1 text-[13px] font-semibold text-[#1f1a16] hover:text-[#b8964e]"
-                                  : "pl-8 pr-5 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e]"
+                                  ? "px-5 pt-2 pb-1 text-[13px] font-semibold text-[#1f1a16]"
+                                  : "pl-8 pr-5 py-1 text-[13px] text-[#4a4540]"
                             }`}
                           >
                             {!sub.accent && !sub.standalone && (
@@ -81,7 +81,7 @@ export function NavList({
                               key={f}
                               href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
                               onClick={() => setOpenDropdown(null)}
-                              className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
+                              className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] rounded-md transition-colors"
                             >
                               <span className="mr-2 text-[#b8964e]">•</span>
                               <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
@@ -116,7 +116,7 @@ export function NavList({
                           <Link
                             key={b}
                             href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                            className="group/link flex items-center px-3 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
+                            className="group/link flex items-center px-3 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] rounded-md transition-colors"
                             onClick={() => setOpenDropdown(null)}
                           >
                             <span className="mr-2 text-[#b8964e]">•</span>
