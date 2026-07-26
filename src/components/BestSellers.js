@@ -60,7 +60,7 @@ export default function BestSellers() {
 
   if (loading) {
     return (
-      <div className="py-8 md:py-12 px-4 bg-white">
+      <div className="py-12 md:py-16 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8" style={{ color: "#1a1a2e" }}>
             BEST-SELLERS

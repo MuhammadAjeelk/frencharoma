@@ -17,7 +17,7 @@ export default function BrandMarquee() {
   if (brands.length === 0) return null;
 
   return (
-    <div className="py-10 md:py-14 px-4 bg-white border-b border-[#f0ece7]">
+    <div className="py-12 md:py-16 px-4 bg-white border-b border-[#f0ece7]">
       <div className="max-w-7xl mx-auto mb-8">
         <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
           Inspired Collections

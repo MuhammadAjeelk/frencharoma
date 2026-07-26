@@ -4,7 +4,7 @@ import PromoBanner from "./PromoBanner";
 
 export default function Discovery() {
   return (
-    <div className="py-6 md:py-10">
+    <div className="py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 mb-6 md:mb-8">
         <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
           Explore & Sample

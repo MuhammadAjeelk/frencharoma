@@ -107,7 +107,7 @@ How to reach us:
   ];
 
   return (
-    <div className="py-14 md:py-20 px-4 bg-[#faf8f5]">
+    <div className="py-12 md:py-16 px-4 bg-[#faf8f5]">
       <div className="max-w-7xl mx-auto">
         <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
           Why Choose Us
