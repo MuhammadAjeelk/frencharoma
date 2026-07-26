@@ -51,7 +51,11 @@ export default function Header() {
 
   const shopSubmenu = [
     { name: "Shop All", href: "/collections/shop-all", accent: true },
-    { name: "Signature Scents", href: "/collections/shop-all?signature=true", standalone: true },
+    {
+      name: "Signature Scents",
+      href: "/collections/shop-all?signature=true",
+      standalone: true,
+    },
     { heading: "Shop by Gender" },
     { name: "For Men", href: "/collections/shop-all?gender=men" },
     { name: "For Women", href: "/collections/shop-all?gender=women" },
@@ -60,8 +64,14 @@ export default function Header() {
     { name: "Luxury Edition", href: "/collections/shop-all?edition=luxury" },
     { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
     { heading: "Shop by Season" },
-    { name: "For Autumn & Winter", href: "/collections/shop-all?tags=autumn,winter" },
-    { name: "For Spring & Summer", href: "/collections/shop-all?tags=spring,summer" },
+    {
+      name: "For Autumn & Winter",
+      href: "/collections/shop-all?tags=autumn,winter",
+    },
+    {
+      name: "For Spring & Summer",
+      href: "/collections/shop-all?tags=spring,summer",
+    },
   ];
 
   const menuItems = [
@@ -75,10 +85,14 @@ export default function Header() {
   ];
 
   const baseMarquee = [
-    "100% Original",
-    "Long-Lasting Perfumes",
-    "Premium Quality",
+    "Original French Perfume Oils",
+    "Up To 40% Concentration",
+    "Long-lasting Performance",
     "Affordable Luxury",
+    "More than 100 Iconic Fragrances",
+    "Countrywide Free Shipping",
+    "Free Suprise Gift",
+    "Trsuted by Regular Customers",
   ];
   // Repeat so a single half is wider than any screen → seamless, gap-free loop.
   const marqueeItems = Array.from({ length: 4 }, () => baseMarquee).flat();
@@ -89,14 +103,28 @@ export default function Header() {
       <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#e8e4df] bg-[#faf8f5]">
         <div className="flex w-max animate-marquee py-2">
           {[0, 1].map((dup) => (
-            <div key={dup} className="flex items-center shrink-0" aria-hidden={dup === 1}>
+            <div
+              key={dup}
+              className="flex items-center shrink-0"
+              aria-hidden={dup === 1}
+            >
               {marqueeItems.map((item, i) => (
                 <span key={i} className="flex items-center">
                   <span className="px-6 text-[13px] font-medium tracking-wide text-[#4a3f2a] whitespace-nowrap">
                     {item}
                   </span>
-                  <svg className="w-4 h-4 text-[#b8964e] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                  <svg
+                    className="w-4 h-4 text-[#b8964e] shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                    />
                   </svg>
                 </span>
               ))}
@@ -129,8 +157,14 @@ export default function Header() {
                   }`}
                   aria-label="Search"
                 >
-                  <img src="/icons/search.svg" alt="Search" className="w-5 h-5" />
-                  <span className="text-[13px] font-medium uppercase tracking-[0.12em]">Search</span>
+                  <img
+                    src="/icons/search.svg"
+                    alt="Search"
+                    className="w-5 h-5"
+                  />
+                  <span className="text-[13px] font-medium uppercase tracking-[0.12em]">
+                    Search
+                  </span>
                 </button>
                 {isSearchExpanded && (
                   <form
@@ -161,15 +195,28 @@ export default function Header() {
                         }}
                       />
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <Image src="/icons/search.svg" alt="Search" width={20} height={20} className="w-5 h-5" />
+                        <Image
+                          src="/icons/search.svg"
+                          alt="Search"
+                          width={20}
+                          height={20}
+                          className="w-5 h-5"
+                        />
                       </div>
                       <button
                         type="button"
-                        onClick={() => { setIsSearchExpanded(false); setSearchQuery(""); }}
+                        onClick={() => {
+                          setIsSearchExpanded(false);
+                          setSearchQuery("");
+                        }}
                         className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:opacity-70"
                         aria-label="Close search"
                       >
-                        <img src="/icons/close.svg" alt="Close" className="w-4 h-4" />
+                        <img
+                          src="/icons/close.svg"
+                          alt="Close"
+                          className="w-4 h-4"
+                        />
                       </button>
                     </div>
                   </form>
@@ -182,12 +229,20 @@ export default function Header() {
                 className="lg:hidden flex items-center gap-2 p-2 focus:outline-none hover:opacity-70"
                 aria-label="Search"
               >
-                <Image src="/icons/search.svg" alt="Search" width={20} height={20} className="w-5 h-5" />
+                <Image
+                  src="/icons/search.svg"
+                  alt="Search"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
               </button>
             </div>
 
             {/* Logo — Center */}
-            <div className={`flex-1 flex justify-center ${isSearchOpen ? "lg:flex hidden" : "flex"}`}>
+            <div
+              className={`flex-1 flex justify-center ${isSearchOpen ? "lg:flex hidden" : "flex"}`}
+            >
               <Link href="/">
                 <Image
                   src="/logo.png"
@@ -208,8 +263,18 @@ export default function Header() {
                 className="hidden lg:block relative focus:outline-none hover:opacity-70 transition-opacity"
                 aria-label="Wishlist"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
                 </svg>
                 {wishlistCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
@@ -225,45 +290,86 @@ export default function Header() {
                   className="p-2 focus:outline-none hover:opacity-70 transition-opacity"
                   aria-label="Account"
                 >
-                  <img src="/icons/account.svg" alt="Account" className="w-5 h-5" />
+                  <img
+                    src="/icons/account.svg"
+                    alt="Account"
+                    className="w-5 h-5"
+                  />
                 </button>
                 {isAccountOpen && (
                   <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      <div className="px-4 py-2 text-sm text-gray-500">
+                        Loading...
+                      </div>
                     ) : user ? (
                       <>
                         <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900 truncate">{user.name || user.email}</p>
-                          <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {user.name || user.email}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user.email}
+                          </p>
                         </div>
                         {isAdmin && (
-                          <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                          <Link
+                            href="/admin"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                            onClick={() => setIsAccountOpen(false)}
+                          >
                             Admin Panel
                           </Link>
                         )}
-                        <Link href="/account" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                        <Link
+                          href="/account"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
                           My Account
                         </Link>
-                        <Link href="/account/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                        <Link
+                          href="/account/orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
                           My Orders
                         </Link>
-                        <Link href="/track-order" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                        <Link
+                          href="/track-order"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
                           Track Order
                         </Link>
-                        <Link href="/wishlist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                        <Link
+                          href="/wishlist"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
                           Wishlist
                         </Link>
-                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                        >
                           Log Out
                         </button>
                       </>
                     ) : (
                       <>
-                        <Link href="/account/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                        <Link
+                          href="/account/login"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
                           Log In
                         </Link>
-                        <Link href="/account/signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsAccountOpen(false)}>
+                        <Link
+                          href="/account/signup"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          onClick={() => setIsAccountOpen(false)}
+                        >
                           Sign Up
                         </Link>
                       </>
@@ -273,7 +379,11 @@ export default function Header() {
               </div>
 
               {/* Cart */}
-              <Link href="/cart" className="focus:outline-none relative hover:opacity-70 transition-opacity" aria-label="Cart">
+              <Link
+                href="/cart"
+                className="focus:outline-none relative hover:opacity-70 transition-opacity"
+                aria-label="Cart"
+              >
                 <img src="/icons/cart.svg" alt="Cart" className="w-11 h-11" />
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
@@ -291,22 +401,40 @@ export default function Header() {
                 <li
                   key={index}
                   className="relative group"
-                  onMouseEnter={() => (item.submenu || item.brandDropdown) && setOpenDropdown(index)}
+                  onMouseEnter={() =>
+                    (item.submenu || item.brandDropdown) &&
+                    setOpenDropdown(index)
+                  }
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   {item.submenu ? (
                     <>
                       <button className="flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200">
                         {item.name}
-                        <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
+                        <img
+                          src="/icons/caret.svg"
+                          alt=""
+                          className="w-3 h-3 opacity-50"
+                        />
                       </button>
                       {openDropdown === index && (
-                        <div className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}>
+                        <div
+                          className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}
+                        >
                           {/* Left: sections */}
-                          <div className={families.length > 0 ? "w-1/2 border-r border-[#f0ece7]" : "w-full"}>
+                          <div
+                            className={
+                              families.length > 0
+                                ? "w-1/2 border-r border-[#f0ece7]"
+                                : "w-full"
+                            }
+                          >
                             {item.submenu.map((sub, si) =>
                               sub.heading ? (
-                                <p key={si} className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
+                                <p
+                                  key={si}
+                                  className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide"
+                                >
                                   {sub.heading}
                                 </p>
                               ) : (
@@ -318,18 +446,20 @@ export default function Header() {
                                     sub.accent
                                       ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e] hover:text-[#0f0f24]"
                                       : sub.standalone
-                                      ? "px-5 pt-2 pb-1 text-[13px] font-semibold text-[#1f1a16] hover:text-[#b8964e]"
-                                      : "pl-8 pr-5 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e]"
+                                        ? "px-5 pt-2 pb-1 text-[13px] font-semibold text-[#1f1a16] hover:text-[#b8964e]"
+                                        : "pl-8 pr-5 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e]"
                                   }`}
                                 >
                                   {!sub.accent && !sub.standalone && (
-                                    <span className="mr-2 text-[#b8964e]">•</span>
+                                    <span className="mr-2 text-[#b8964e]">
+                                      •
+                                    </span>
                                   )}
                                   <span className="group-hover/link:underline underline-offset-4 decoration-1">
                                     {sub.name}
                                   </span>
                                 </Link>
-                              )
+                              ),
                             )}
                           </div>
 
@@ -347,7 +477,9 @@ export default function Header() {
                                     onClick={() => setOpenDropdown(null)}
                                     className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#1a1a2e] hover:bg-[#faf8f5] rounded-md transition-colors"
                                   >
-                                    <span className="mr-2 text-[#b8964e]">•</span>
+                                    <span className="mr-2 text-[#b8964e]">
+                                      •
+                                    </span>
                                     <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
                                       {f}
                                     </span>
@@ -363,12 +495,18 @@ export default function Header() {
                     <>
                       <button className="flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200">
                         {item.name}
-                        <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
+                        <img
+                          src="/icons/caret.svg"
+                          alt=""
+                          className="w-3 h-3 opacity-50"
+                        />
                       </button>
                       {openDropdown === index && (
                         <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[500px] bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-4 z-50 animate-fadeIn">
                           <div className="px-5 pb-3 border-b border-[#f0ece7] mb-3">
-                            <p className="text-[11px] font-semibold text-[#b8964e] uppercase tracking-[0.16em]">Browse by Brand (A–Z)</p>
+                            <p className="text-[11px] font-semibold text-[#b8964e] uppercase tracking-[0.16em]">
+                              Browse by Brand (A–Z)
+                            </p>
                           </div>
                           <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-scroll scrollbar-always px-3">
                             {brands.length > 0 ? (
@@ -386,7 +524,9 @@ export default function Header() {
                                 </Link>
                               ))
                             ) : (
-                              <p className="col-span-3 px-3 py-2 text-[13px] text-[#a09890]">Loading brands...</p>
+                              <p className="col-span-3 px-3 py-2 text-[13px] text-[#a09890]">
+                                Loading brands...
+                              </p>
                             )}
                           </div>
                         </div>
@@ -410,13 +550,26 @@ export default function Header() {
       {/* Mobile Menu Drawer */}
       {isMenuOpen && (
         <>
-          <div className="fixed inset-0 bg-black/30 z-40 lg:hidden" onClick={() => setIsMenuOpen(false)} />
+          <div
+            className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+            onClick={() => setIsMenuOpen(false)}
+          />
           <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-white z-50 transform transition-transform lg:hidden overflow-y-auto shadow-lg">
             <div className="p-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold">Menu</h2>
-                <button onClick={() => setIsMenuOpen(false)} className="p-2 focus:outline-none" aria-label="Close menu">
-                  <Image src="/icons/close.svg" alt="Close" width={20} height={20} className="w-5 h-5" />
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 focus:outline-none"
+                  aria-label="Close menu"
+                >
+                  <Image
+                    src="/icons/close.svg"
+                    alt="Close"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
                 </button>
               </div>
 
@@ -427,12 +580,19 @@ export default function Header() {
                       {item.submenu ? (
                         <div>
                           <button
-                            onClick={() => setMobileSubOpen(mobileSubOpen === index ? null : index)}
+                            onClick={() =>
+                              setMobileSubOpen(
+                                mobileSubOpen === index ? null : index,
+                              )
+                            }
                             className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
                           >
                             {item.name}
                             <Image
-                              src="/icons/caret.svg" alt="" width={16} height={16}
+                              src="/icons/caret.svg"
+                              alt=""
+                              width={16}
+                              height={16}
                               className={`w-4 h-4 transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
                             />
                           </button>
@@ -454,20 +614,25 @@ export default function Header() {
                                         sub.accent
                                           ? "font-bold text-[#1a1a2e] uppercase tracking-wide"
                                           : sub.standalone
-                                          ? "font-semibold"
-                                          : "pl-3"
+                                            ? "font-semibold"
+                                            : "pl-3"
                                       }`}
-                                      onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                                      onClick={() => {
+                                        setMobileSubOpen(null);
+                                        setIsMenuOpen(false);
+                                      }}
                                     >
                                       {!sub.accent && !sub.standalone && (
-                                        <span className="mr-2 text-[#b8964e]">•</span>
+                                        <span className="mr-2 text-[#b8964e]">
+                                          •
+                                        </span>
                                       )}
                                       <span className="group-hover/link:underline underline-offset-4 decoration-1">
                                         {sub.name}
                                       </span>
                                     </Link>
                                   </li>
-                                )
+                                ),
                               )}
                               {families.length > 0 && (
                                 <>
@@ -481,9 +646,14 @@ export default function Header() {
                                           <Link
                                             href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
                                             className="group/link flex items-center py-2 pl-3 text-sm transition-opacity hover:opacity-70"
-                                            onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                                            onClick={() => {
+                                              setMobileSubOpen(null);
+                                              setIsMenuOpen(false);
+                                            }}
                                           >
-                                            <span className="mr-2 text-[#b8964e]">•</span>
+                                            <span className="mr-2 text-[#b8964e]">
+                                              •
+                                            </span>
                                             <span className="group-hover/link:underline underline-offset-4 decoration-1">
                                               {f}
                                             </span>
@@ -500,12 +670,19 @@ export default function Header() {
                       ) : item.brandDropdown ? (
                         <div>
                           <button
-                            onClick={() => setMobileSubOpen(mobileSubOpen === index ? null : index)}
+                            onClick={() =>
+                              setMobileSubOpen(
+                                mobileSubOpen === index ? null : index,
+                              )
+                            }
                             className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
                           >
                             {item.name}
                             <Image
-                              src="/icons/caret.svg" alt="" width={16} height={16}
+                              src="/icons/caret.svg"
+                              alt=""
+                              width={16}
+                              height={16}
                               className={`w-4 h-4 transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
                             />
                           </button>
@@ -516,13 +693,20 @@ export default function Header() {
                                   <Link
                                     href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
                                     className="block py-1.5 text-sm hover:opacity-70 transition-opacity"
-                                    onClick={() => { setMobileSubOpen(null); setIsMenuOpen(false); }}
+                                    onClick={() => {
+                                      setMobileSubOpen(null);
+                                      setIsMenuOpen(false);
+                                    }}
                                   >
                                     {b}
                                   </Link>
                                 </li>
                               ))}
-                              {brands.length === 0 && <li className="py-2 text-sm text-gray-400">Loading...</li>}
+                              {brands.length === 0 && (
+                                <li className="py-2 text-sm text-gray-400">
+                                  Loading...
+                                </li>
+                              )}
                             </ul>
                           )}
                         </div>
@@ -547,8 +731,18 @@ export default function Header() {
                   className="flex items-center gap-2 py-3 text-sm font-medium"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
                   </svg>
                   Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
                 </Link>
@@ -558,20 +752,39 @@ export default function Header() {
                 ) : user ? (
                   <>
                     <div className="py-3 border-b border-gray-100 mb-2">
-                      <p className="text-sm font-medium text-gray-900">{user.name || user.email}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {user.name || user.email}
+                      </p>
                       <p className="text-xs text-gray-500">{user.email}</p>
                     </div>
                     {isAdmin && (
-                      <Link href="/admin" className="flex items-center gap-2 py-3 text-sm font-medium text-gray-900" onClick={() => setIsMenuOpen(false)}>
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-2 py-3 text-sm font-medium text-gray-900"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         Admin Panel
                       </Link>
                     )}
-                    <Link href="/account" className="flex items-center gap-2 py-3 text-sm font-medium" onClick={() => setIsMenuOpen(false)}>
-                      <Image src="/icons/account.svg" alt="Account" width={20} height={20} className="w-5 h-5" />
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-2 py-3 text-sm font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Image
+                        src="/icons/account.svg"
+                        alt="Account"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5"
+                      />
                       My Account
                     </Link>
                     <button
-                      onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
                       className="flex items-center gap-2 py-3 text-sm font-medium text-red-600"
                     >
                       Log Out
@@ -579,11 +792,25 @@ export default function Header() {
                   </>
                 ) : (
                   <>
-                    <Link href="/account/login" className="flex items-center gap-2 py-3 text-sm font-medium" onClick={() => setIsMenuOpen(false)}>
-                      <Image src="/icons/account.svg" alt="Account" width={20} height={20} className="w-5 h-5" />
+                    <Link
+                      href="/account/login"
+                      className="flex items-center gap-2 py-3 text-sm font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Image
+                        src="/icons/account.svg"
+                        alt="Account"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5"
+                      />
                       Log In
                     </Link>
-                    <Link href="/account/signup" className="flex items-center gap-2 py-3 text-sm font-medium" onClick={() => setIsMenuOpen(false)}>
+                    <Link
+                      href="/account/signup"
+                      className="flex items-center gap-2 py-3 text-sm font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       Sign Up
                     </Link>
                   </>
@@ -597,17 +824,34 @@ export default function Header() {
       {/* Mobile Search Modal */}
       {isSearchOpen && (
         <>
-          <div className="fixed inset-0 bg-black z-40 lg:hidden" onClick={() => setIsSearchOpen(false)} />
+          <div
+            className="fixed inset-0 bg-black z-40 lg:hidden"
+            onClick={() => setIsSearchOpen(false)}
+          />
           <div className="fixed inset-0 z-50 lg:hidden flex flex-col">
             <div className="bg-white w-full h-full flex flex-col border-t border-gray-300">
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h2 className="text-lg font-bold text-gray-900">Search</h2>
-                <button onClick={() => setIsSearchOpen(false)} className="p-2 focus:outline-none hover:opacity-70" aria-label="Close search">
-                  <Image src="/icons/close.svg" alt="Close" width={20} height={20} className="w-5 h-5" />
+                <button
+                  onClick={() => setIsSearchOpen(false)}
+                  className="p-2 focus:outline-none hover:opacity-70"
+                  aria-label="Close search"
+                >
+                  <Image
+                    src="/icons/close.svg"
+                    alt="Close"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
                 </button>
               </div>
               <div className="flex-1 p-4">
-                <form action="/collections/shop-all" method="get" className="relative">
+                <form
+                  action="/collections/shop-all"
+                  method="get"
+                  className="relative"
+                >
                   <input
                     type="search"
                     name="search"
@@ -615,8 +859,18 @@ export default function Header() {
                     className="w-full px-4 py-3 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 text-base"
                     autoFocus
                   />
-                  <button type="submit" className="absolute left-3 top-1/2 -translate-y-1/2 p-2" aria-label="Search">
-                    <Image src="/icons/search.svg" alt="Search" width={20} height={20} className="w-5 h-5" />
+                  <button
+                    type="submit"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2"
+                    aria-label="Search"
+                  >
+                    <Image
+                      src="/icons/search.svg"
+                      alt="Search"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
                   </button>
                 </form>
               </div>
