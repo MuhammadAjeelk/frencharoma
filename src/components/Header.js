@@ -152,7 +152,7 @@ export default function Header() {
               <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 p-2 focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200 whitespace-nowrap ${
+                  className={`flex items-center gap-2 py-2 focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200 whitespace-nowrap ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
@@ -186,7 +186,7 @@ export default function Header() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search perfumes..."
-                        className="w-64 px-4 py-2.5 pl-10 pr-10 border border-[#e8e4df] rounded-lg focus:outline-none focus:border-[#1a1a2e] bg-white text-[13px]"
+                        className="w-64 px-4 py-2 pl-10 pr-10 border-0 rounded-lg focus:outline-none focus:ring-0 bg-[#f1ede6] text-[13px]"
                         autoFocus
                         onBlur={() => {
                           setTimeout(() => {
@@ -256,7 +256,7 @@ export default function Header() {
             </div>
 
             {/* Right — Wishlist, Account, Cart */}
-            <div className="flex items-center gap-3 flex-1 justify-end lg:flex-none">
+            <div className="flex items-center gap-5 lg:gap-6 flex-1 justify-end lg:flex-none">
               {/* Wishlist */}
               <Link
                 href="/wishlist"
