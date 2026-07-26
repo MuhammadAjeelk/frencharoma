@@ -106,7 +106,7 @@ export function FilterDropdown({ label, options, value, onChange }) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-40 min-w-[180px] py-1.5 overflow-hidden">
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-40 min-w-[180px] py-1.5 max-h-72 overflow-y-auto scrollbar-always">
           {options.map((opt) => (
             <button
               key={opt.value}
