@@ -74,12 +74,14 @@ export default function Header() {
     { name: "BLOGS", href: "/blogs/blog" },
   ];
 
-  const marqueeItems = [
+  const baseMarquee = [
     "100% Original",
     "Long-Lasting Perfumes",
     "Premium Quality",
     "Affordable Luxury",
   ];
+  // Repeat so a single half is wider than any screen → seamless, gap-free loop.
+  const marqueeItems = Array.from({ length: 4 }, () => baseMarquee).flat();
 
   return (
     <>
