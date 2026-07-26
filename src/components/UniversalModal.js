@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 
 export default function UniversalModal({
@@ -10,6 +11,9 @@ export default function UniversalModal({
   details,
   children,
 }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -21,9 +25,11 @@ export default function UniversalModal({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  // Portal to <body> so the fixed overlay isn't clipped/offset by an ancestor
+  // with a CSS transform (e.g. the Best Sellers carousel track).
+  return createPortal(
     <>
       <div
         className="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-40 transition-opacity"
@@ -66,6 +72,7 @@ export default function UniversalModal({
           {children}
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }

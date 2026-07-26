@@ -223,7 +223,7 @@ export default function ProductCard({
 
         {/* Quick View — appears on hover (wrapper centers, button vibrates) */}
         {onQuickView && (
-          <div className={`absolute left-1/2 -translate-x-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${hoverReveal ? "top-3" : "bottom-2"}`}>
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
               ref={qvRef}
               onMouseEnter={() => vibrate(qvRef.current)}
