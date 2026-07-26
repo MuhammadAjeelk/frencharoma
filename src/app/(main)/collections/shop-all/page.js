@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect, useCallback, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
@@ -17,6 +17,7 @@ const PAGE_SIZE = 20;
 // ── Main Page ──────────────────────────────────────────────────────────────
 function ShopAllContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const DEFAULT_SORT = "global-admire-desc";
 
   // Products state
@@ -186,6 +187,9 @@ function ShopAllContent() {
     setSignature(false);
     setScentFamily("");
     setSort(DEFAULT_SORT);
+    // Clear the URL params too, so the address bar returns to plain Shop All
+    // (SHOP ALL tab becomes active and no stale ?signature=true etc. remain).
+    router.replace("/collections/shop-all", { scroll: false });
   };
 
   // ────────────────────────────────────────────────────────────────────────
