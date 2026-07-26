@@ -80,7 +80,13 @@ export function matchesSeasonGroup(tags, season) {
 const getLabel = (opts, v) => opts.find((o) => o.value === v)?.label || v;
 
 // ── Single-select pill dropdown ─────────────────────────────────────────────
-export function FilterDropdown({ label, options, value, onChange, standalone = false }) {
+export function FilterDropdown({
+  label,
+  options,
+  value,
+  onChange,
+  standalone = false,
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -250,11 +256,12 @@ export default function PerfumeFilterBar({
       label: `Brand: ${brand.trim()}`,
       clear: () => setBrand(""),
     },
-    featured && featured !== "all" && {
-      key: "featured",
-      label: getLabel(FEATURED_OPTIONS, featured),
-      clear: () => setFeatured("all"),
-    },
+    featured &&
+      featured !== "all" && {
+        key: "featured",
+        label: getLabel(FEATURED_OPTIONS, featured),
+        clear: () => setFeatured("all"),
+      },
     scentFamily && {
       key: "scentFamily",
       label: `Fragrance: ${scentFamily}`,
@@ -410,11 +417,11 @@ export default function PerfumeFilterBar({
           disabled={!hasControlChanges}
           className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
             hasControlChanges
-              ? "border-[#ccc8c2] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1"
+              ? "border-red-400 text-red-500 hover:bg-red-50 hover:border-red-500 hover:text-red-600 hover:underline underline-offset-4 decoration-1"
               : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
           }`}
         >
-          Reset
+          Clear Filters
         </button>
       </div>
 
