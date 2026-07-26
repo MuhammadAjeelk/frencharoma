@@ -106,7 +106,7 @@ export default function BestSellers() {
               </svg>
             </button>
 
-            <div className="min-w-0 pl-10 sm:pl-12 pr-10 sm:pr-12">
+            <div className="min-w-0 px-12 sm:px-14">
               <div className="flex gap-3 md:gap-4">
                 {visibleItems.map((perfume, index) => {
                   const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
@@ -168,9 +168,12 @@ export default function BestSellers() {
           <div className="flex flex-col items-center gap-4">
             <a
               href="/collections/shop-all?bestSeller=true"
-              className="bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg hover:bg-[#2d2d44] transition-colors font-semibold text-sm tracking-wide uppercase"
+              className="group inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg shadow-sm hover:bg-[#b8964e] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-semibold text-sm tracking-wide uppercase"
             >
               View All
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+              </svg>
             </a>
           </div>
         </div>
