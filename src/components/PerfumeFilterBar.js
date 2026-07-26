@@ -49,7 +49,10 @@ export function tagsForSeason(season) {
 export function seasonFromTags(t) {
   if (!t) return "all";
   const set = new Set(
-    t.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean)
+    t
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean),
   );
   if (set.has("spring") || set.has("summer")) return "spring-summer";
   if (set.has("autumn") || set.has("winter")) return "autumn-winter";
@@ -101,7 +104,12 @@ export function FilterDropdown({ label, options, value, onChange }) {
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
@@ -202,7 +210,7 @@ export default function PerfumeFilterBar({
     },
     edition !== "all" && {
       key: "edition",
-      label: `Category: ${getLabel(EDITION_OPTIONS, edition)}`,
+      label: `Collections: ${getLabel(EDITION_OPTIONS, edition)}`,
       clear: () => setEdition("all"),
     },
     season !== "all" && {
@@ -215,9 +223,21 @@ export default function PerfumeFilterBar({
       label: `Brand: ${brand.trim()}`,
       clear: () => setBrand(""),
     },
-    bestSeller && { key: "bestSeller", label: "Best Sellers", clear: () => setBestSeller(false) },
-    specialOffer && { key: "specialOffer", label: "Special Offer", clear: () => setSpecialOffer(false) },
-    signature && { key: "signature", label: "Signature Scent", clear: () => setSignature?.(false) },
+    bestSeller && {
+      key: "bestSeller",
+      label: "Best Sellers",
+      clear: () => setBestSeller(false),
+    },
+    specialOffer && {
+      key: "specialOffer",
+      label: "Special Offer",
+      clear: () => setSpecialOffer(false),
+    },
+    signature && {
+      key: "signature",
+      label: "Signature Scent",
+      clear: () => setSignature?.(false),
+    },
     scentFamily && {
       key: "scentFamily",
       label: `Fragrance: ${scentFamily}`,
@@ -233,9 +253,24 @@ export default function PerfumeFilterBar({
           Filters
         </span>
 
-        <FilterDropdown label="Gender" options={GENDER_OPTIONS} value={gender} onChange={setGender} />
-        <FilterDropdown label="Category" options={EDITION_OPTIONS} value={edition} onChange={setEdition} />
-        <FilterDropdown label="Season" options={SEASON_OPTIONS} value={season} onChange={setSeason} />
+        <FilterDropdown
+          label="Gender"
+          options={GENDER_OPTIONS}
+          value={gender}
+          onChange={setGender}
+        />
+        <FilterDropdown
+          label="Collections"
+          options={EDITION_OPTIONS}
+          value={edition}
+          onChange={setEdition}
+        />
+        <FilterDropdown
+          label="Season"
+          options={SEASON_OPTIONS}
+          value={season}
+          onChange={setSeason}
+        />
         {setScentFamily && (
           <FilterDropdown
             label="Fragrance"
@@ -286,15 +321,30 @@ export default function PerfumeFilterBar({
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z"
+            />
           </svg>
           {brand && (
             <button
               onClick={() => setBrand("")}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black"
             >
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           )}
@@ -326,8 +376,18 @@ export default function PerfumeFilterBar({
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1 transition-all duration-200"
             >
               <span>{chip.label}</span>
-              <svg className="w-3 h-3 text-[#a09890]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-3 h-3 text-[#a09890]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           ))}
