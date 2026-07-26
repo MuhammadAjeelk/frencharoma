@@ -61,7 +61,7 @@ export default function Header() {
     { name: "For Men", href: "/collections/shop-all?gender=men" },
     { name: "For Women", href: "/collections/shop-all?gender=women" },
     { name: "For Unisex", href: "/collections/shop-all?gender=unisex" },
-    { heading: "Shop by Category" },
+    { heading: "Shop by Collections" },
     { name: "Luxury Edition", href: "/collections/shop-all?edition=luxury" },
     { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
     { heading: "Shop by Season" },
