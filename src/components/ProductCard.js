@@ -278,9 +278,11 @@ export default function ProductCard({
             : "p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]"
         }
       >
-        {/* Quick View — straddles the top edge of the reveal panel */}
+        {/* Quick View — sits on the image, just above the reveal panel */}
         {hoverReveal && onQuickView && (
           <button
+            ref={qvRef}
+            onMouseEnter={() => vibrate(qvRef.current)}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

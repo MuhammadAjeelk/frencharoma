@@ -95,7 +95,7 @@ export default function BestSellers() {
           </h2>
           <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-8 md:mb-10" />
 
-          <div className="relative mb-6 md:mb-8 overflow-visible">
+          <div className="relative mb-10 md:mb-14 overflow-visible">
             <button
               onClick={handlePrevious}
               className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] hover:shadow-md transition-all duration-200"
