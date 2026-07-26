@@ -6,10 +6,8 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
-import UniversalModal from "@/components/UniversalModal";
 
 export default function Header() {
-  const [marqueeModal, setMarqueeModal] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -87,76 +85,14 @@ export default function Header() {
   ];
 
   const baseMarquee = [
-    {
-      label: "Original French Perfume Oils",
-      details: `100% original French perfume oils in every bottle.
-
-• Imported directly from France
-• Premium-grade essential oils
-• The same scent DNA as the originals
-• Individually filled & quality checked`,
-    },
-    {
-      label: "Up To 40% Concentration",
-      details: `Rich, high-concentration fragrances built to last.
-
-• Up to 40% perfume oil concentration
-• Deep projection and a strong scent trail
-• 12–16 hours of longevity on skin
-• A little goes a long way`,
-    },
-    {
-      label: "Long-lasting Performance",
-      details: `Designed to stay with you from morning to night.
-
-• High oil concentration for all-day wear
-• Long-lasting projection and sillage
-• Consistent performance in every batch`,
-    },
-    {
-      label: "Affordable Luxury",
-      details: `Luxury & premium perfumes at an affordable price.
-
-• Premium designer-inspired fragrances
-• Long-lasting scents that rival high-end brands
-• Quality without the luxury price tag
-• Regular discounts and special offers`,
-    },
-    {
-      label: "More than 100 Iconic Fragrances",
-      details: `A curated library of 100+ iconic fragrances.
-
-• Designer-inspired impressions across every family
-• Fresh, floral, woody, oriental, gourmand & more
-• Scents for every mood, season and occasion
-• New additions added regularly`,
-    },
-    {
-      label: "Countrywide Free Shipping",
-      details: `Free shipping across the country via top couriers.
-
-• Countrywide delivery
-• Fully tracked & insured shipments
-• Fast dispatch on every order
-• Free delivery on qualifying orders`,
-    },
-    {
-      label: "Free Surprise Gift",
-      details: `Every order comes with a complimentary surprise.
-
-• A free 5ml tester in every order
-• Discover new scents with each purchase
-• Premium glass vial packaging
-• Our way of saying thank you`,
-    },
-    {
-      label: "Trusted by Regular Customers",
-      details: `Loved and trusted by thousands of repeat customers.
-
-• Consistent quality in every bottle
-• Reliable service and fast support
-• A growing community of loyal customers`,
-    },
+    "Original French Perfume Oils",
+    "Up To 40% Concentration",
+    "Long-lasting Performance",
+    "Affordable Luxury",
+    "More than 100 Iconic Fragrances",
+    "Countrywide Free Shipping",
+    "Free Suprise Gift",
+    "Trsuted by Regular Customers",
   ];
   // Repeat so a single half is wider than any screen → seamless, gap-free loop.
   const marqueeItems = Array.from({ length: 4 }, () => baseMarquee).flat();
@@ -174,14 +110,9 @@ export default function Header() {
             >
               {marqueeItems.map((item, i) => (
                 <span key={i} className="flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => setMarqueeModal(item)}
-                    className="px-6 text-[13px] font-medium tracking-wide text-[#4a3f2a] whitespace-nowrap hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1 transition-colors cursor-pointer"
-                    tabIndex={dup === 1 ? -1 : 0}
-                  >
-                    {item.label}
-                  </button>
+                  <span className="px-6 text-[13px] font-medium tracking-wide text-[#4a3f2a] whitespace-nowrap">
+                    {item}
+                  </span>
                   <svg
                     className="w-4 h-4 text-[#b8964e] shrink-0"
                     fill="none"
@@ -201,16 +132,6 @@ export default function Header() {
           ))}
         </div>
       </div>
-
-      {/* Marquee item detail modal (same modal as "What Makes Us Special") */}
-      {marqueeModal && (
-        <UniversalModal
-          isOpen={!!marqueeModal}
-          onClose={() => setMarqueeModal(null)}
-          heading={marqueeModal.label}
-          details={marqueeModal.details}
-        />
-      )}
 
       <header className="header relative z-50 border-b border-[#e8e4df] bg-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
