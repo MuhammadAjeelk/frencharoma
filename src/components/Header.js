@@ -74,8 +74,35 @@ export default function Header() {
     { name: "BLOGS", href: "/blogs/blog" },
   ];
 
+  const marqueeItems = [
+    "100% Original",
+    "Long-Lasting Perfumes",
+    "Premium Quality",
+    "Affordable Luxury",
+  ];
+
   return (
     <>
+      {/* Running announcement bar */}
+      <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#e8e4df] bg-[#faf8f5]">
+        <div className="flex w-max animate-marquee py-2">
+          {[0, 1].map((dup) => (
+            <div key={dup} className="flex items-center shrink-0" aria-hidden={dup === 1}>
+              {marqueeItems.map((item, i) => (
+                <span key={i} className="flex items-center">
+                  <span className="px-6 text-[13px] font-medium tracking-wide text-[#4a3f2a] whitespace-nowrap">
+                    {item}
+                  </span>
+                  <svg className="w-4 h-4 text-[#b8964e] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.5a.56.56 0 011.04 0l2.12 4.86 5.28.46c.5.05.7.68.32 1.02l-4 3.48 1.2 5.17c.12.5-.43.9-.87.63L12 17.9l-4.57 2.72c-.44.27-.98-.13-.86-.63l1.2-5.17-4.01-3.48c-.38-.34-.17-.97.32-1.02l5.28-.46 2.12-4.86z" />
+                  </svg>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <header className="header relative z-50 border-b border-[#e8e4df] bg-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
