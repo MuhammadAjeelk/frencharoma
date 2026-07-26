@@ -7,19 +7,36 @@ import BundleOffers from "@/components/BundleOffers";
 import SpecialOffers from "@/components/SpecialOffers";
 import Discovery from "@/components/Discovery";
 import WhatMakesUsSpecial from "@/components/WhatMakesUsSpecial";
+import Reveal from "@/components/Reveal";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <HeroCarousel />
-      <BrandMarquee />
-      <ShopByGender />
-      <ShopByCategory />
-      <BestSellers />
-      <BundleOffers />
-      <SpecialOffers />
-      <Discovery />
-      <WhatMakesUsSpecial />
+      <Reveal>
+        <BrandMarquee />
+      </Reveal>
+      <Reveal>
+        <ShopByGender />
+      </Reveal>
+      <Reveal>
+        <ShopByCategory />
+      </Reveal>
+      <Reveal>
+        <BestSellers />
+      </Reveal>
+      <Reveal>
+        <BundleOffers />
+      </Reveal>
+      <Reveal>
+        <SpecialOffers />
+      </Reveal>
+      <Reveal>
+        <Discovery />
+      </Reveal>
+      <Reveal>
+        <WhatMakesUsSpecial />
+      </Reveal>
     </div>
   );
 }
