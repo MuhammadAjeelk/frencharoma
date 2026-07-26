@@ -13,6 +13,8 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileSubOpen, setMobileSubOpen] = useState(null);
@@ -34,6 +36,25 @@ export default function Header() {
       .then((data) => setFamilies(data.families || []))
       .catch(() => {});
   }, []);
+
+  // Live search suggestions (debounced)
+  useEffect(() => {
+    const q = searchQuery.trim();
+    if (!q) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      return;
+    }
+    setSearchLoading(true);
+    const t = setTimeout(() => {
+      fetch(`/api/perfumes?search=${encodeURIComponent(q)}&limit=6`)
+        .then((r) => r.json())
+        .then((d) => setSearchResults(d.perfumes || []))
+        .catch(() => setSearchResults([]))
+        .finally(() => setSearchLoading(false));
+    }, 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -220,6 +241,50 @@ export default function Header() {
                           className="w-4 h-4"
                         />
                       </button>
+
+                      {/* Live suggestions */}
+                      {searchQuery.trim() && (
+                        <div className="absolute left-0 top-full mt-1.5 w-72 bg-white border border-[#e8e4df] rounded-lg shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-20 overflow-hidden animate-fadeIn">
+                          {searchResults.length > 0 ? (
+                            <>
+                              {searchResults.map((p) => (
+                                <Link
+                                  key={p._id}
+                                  href={`/products/${p.slug}`}
+                                  onClick={() => {
+                                    setIsSearchExpanded(false);
+                                    setSearchQuery("");
+                                  }}
+                                  className="flex items-center gap-3 px-3 py-2 hover:bg-[#faf8f5] transition-colors"
+                                >
+                                  <div className="relative w-9 h-9 rounded-md overflow-hidden bg-gray-50 shrink-0 border border-[#f0ece7]">
+                                    {p.images?.main ? (
+                                      <Image src={p.images.main} alt={p.name} fill className="object-cover" sizes="36px" />
+                                    ) : null}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="text-[12px] font-medium text-[#1f1a16] truncate">{p.name}</p>
+                                    <p className="text-[11px] text-[#a09890] truncate">
+                                      {p.brand || (p.brands && p.brands[0]) || "French Aromas"}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ))}
+                              <Link
+                                href={`/collections/shop-all?search=${encodeURIComponent(searchQuery.trim())}`}
+                                onClick={() => setIsSearchExpanded(false)}
+                                className="block px-4 py-2.5 text-[12px] font-semibold text-[#b8964e] hover:bg-[#faf8f5] border-t border-[#f0ece7] transition-colors"
+                              >
+                                See all results for “{searchQuery.trim()}”
+                              </Link>
+                            </>
+                          ) : (
+                            <p className="px-4 py-3 text-[12px] text-[#a09890]">
+                              {searchLoading ? "Searching…" : `No matches for “${searchQuery.trim()}”`}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </form>
                 )}
