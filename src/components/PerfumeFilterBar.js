@@ -180,6 +180,20 @@ export default function PerfumeFilterBar({
   extraControls = null,
   extraChips = [],
 }) {
+  // Fragrance families for the "Family" dropdown (only when scentFamily is wired)
+  const [families, setFamilies] = useState([]);
+  useEffect(() => {
+    if (!setScentFamily) return;
+    fetch("/api/scent-families")
+      .then((r) => r.json())
+      .then((d) => setFamilies(d.families || []))
+      .catch(() => {});
+  }, [setScentFamily]);
+  const familyOptions = [
+    { value: "all", label: "All Families" },
+    ...families.map((f) => ({ value: f, label: f })),
+  ];
+
   const chips = [
     gender !== "all" && {
       key: "gender",
@@ -222,6 +236,14 @@ export default function PerfumeFilterBar({
         <FilterDropdown label="Gender" options={GENDER_OPTIONS} value={gender} onChange={setGender} />
         <FilterDropdown label="Category" options={EDITION_OPTIONS} value={edition} onChange={setEdition} />
         <FilterDropdown label="Season" options={SEASON_OPTIONS} value={season} onChange={setSeason} />
+        {setScentFamily && (
+          <FilterDropdown
+            label="Family"
+            options={familyOptions}
+            value={scentFamily || "all"}
+            onChange={(v) => setScentFamily(v === "all" ? "" : v)}
+          />
+        )}
 
         <button
           onClick={() => setBestSeller((b) => !b)}

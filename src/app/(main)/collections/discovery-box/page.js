@@ -151,6 +151,7 @@ export default function DiscoveryBoxPage() {
   const [gender, setGender] = useState("all");
   const [edition, setEdition] = useState("all");
   const [season, setSeason] = useState("all");
+  const [scentFamily, setScentFamily] = useState("");
   const [bestSeller, setBestSeller] = useState(false);
   const [specialOffer, setSpecialOffer] = useState(false);
   const [brand, setBrand] = useState("");
@@ -162,6 +163,7 @@ export default function DiscoveryBoxPage() {
     gender !== "all" ||
     edition !== "all" ||
     season !== "all" ||
+    scentFamily !== "" ||
     bestSeller ||
     specialOffer ||
     onlyInStock ||
@@ -172,6 +174,7 @@ export default function DiscoveryBoxPage() {
     setGender("all");
     setEdition("all");
     setSeason("all");
+    setScentFamily("");
     setBestSeller(false);
     setSpecialOffer(false);
     setBrand("");
@@ -188,12 +191,14 @@ export default function DiscoveryBoxPage() {
         (gender === "all" || p.gender === gender) &&
         matchesEdition(p, edition) &&
         matchesSeasonGroup(p.tags, season) &&
+        (!scentFamily ||
+          (p.scentFamily || "").toLowerCase() === scentFamily.toLowerCase()) &&
         (!bestSeller || p.isBestSeller) &&
         (!specialOffer || matchesSpecialOffer(p)) &&
         (!onlyInStock || is5mlInStock(p)),
     );
     return sortTesters(filtered, sort);
-  }, [perfumes, brand, gender, edition, season, bestSeller, specialOffer, onlyInStock, sort]);
+  }, [perfumes, brand, gender, edition, season, scentFamily, bestSeller, specialOffer, onlyInStock, sort]);
 
   // Fetch available perfumes
   useEffect(() => {
@@ -520,6 +525,8 @@ export default function DiscoveryBoxPage() {
               setSpecialOffer={setSpecialOffer}
               brand={brand}
               setBrand={setBrand}
+              scentFamily={scentFamily}
+              setScentFamily={setScentFamily}
               onReset={resetFilters}
               hasControlChanges={hasControlChanges}
               extraControls={
