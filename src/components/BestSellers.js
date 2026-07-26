@@ -140,6 +140,7 @@ export default function BestSellers() {
                         isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
                         tags={perfume.tags || []}
                         href={`/products/${perfume.slug}`}
+                        hoverReveal
                         onQuickView={() => {
                           setSelectedPerfume(perfume);
                           setModalOpen(true);
