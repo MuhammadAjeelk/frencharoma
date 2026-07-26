@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
 import QuickAddModal from "./QuickAddModal";
@@ -99,13 +98,15 @@ export default function BestSellers() {
           <div className="relative mb-6 md:mb-8 overflow-visible">
             <button
               onClick={handlePrevious}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm hover:border-[#b8964e] hover:shadow-md transition-all duration-200"
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] hover:shadow-md transition-all duration-200"
               aria-label="Previous products"
             >
-              <Image src="/icons/arrow-left.svg" alt="Previous" width={20} height={20} className="w-5 h-5 md:w-6 md:h-6" />
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
 
-            <div className="min-w-0 pl-12 sm:pl-14 md:pl-16 pr-12 sm:pr-14 md:pr-16">
+            <div className="min-w-0 pl-10 sm:pl-12 pr-10 sm:pr-12">
               <div className="flex gap-3 md:gap-4">
                 {visibleItems.map((perfume, index) => {
                   const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
@@ -154,19 +155,17 @@ export default function BestSellers() {
 
             <button
               onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm hover:border-[#b8964e] hover:shadow-md transition-all duration-200"
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] hover:shadow-md transition-all duration-200"
               aria-label="Next products"
             >
-              <Image src="/icons/arrow-right.svg" alt="Next" width={20} height={20} className="w-5 h-5 md:w-6 md:h-6" />
+              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
 
-          {/* Count + View All */}
+          {/* View All */}
           <div className="flex flex-col items-center gap-4">
-            <p className="text-[13px] text-[#8a847e]">
-              Showing <span className="font-semibold text-[#1f1a16]">{Math.min(visibleCount, perfumes.length)}</span> of{" "}
-              <span className="font-semibold text-[#1f1a16]">{perfumes.length}</span> products
-            </p>
             <a
               href="/collections/shop-all?bestSeller=true"
               className="bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg hover:bg-[#2d2d44] transition-colors font-semibold text-sm tracking-wide uppercase"

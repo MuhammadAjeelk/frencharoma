@@ -222,7 +222,7 @@ export default function ProductCard({
         )}
 
         {/* Quick View — appears on hover (wrapper centers, button vibrates) */}
-        {onQuickView && (
+        {onQuickView && !hoverReveal && (
           <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
               ref={qvRef}
@@ -274,10 +274,27 @@ export default function ProductCard({
       <div
         className={
           hoverReveal
-            ? "absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 flex flex-col bg-[#f4f2ef] rounded-t-xl shadow-[0_-6px_24px_rgba(0,0,0,0.10)] transition-transform duration-300 translate-y-0 lg:translate-y-full lg:group-hover:translate-y-0"
+            ? "absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 pt-6 flex flex-col bg-[#f4f2ef] rounded-t-xl shadow-[0_-6px_24px_rgba(0,0,0,0.10)] transition-transform duration-300 translate-y-0 lg:translate-y-full lg:group-hover:translate-y-0"
             : "p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]"
         }
       >
+        {/* Quick View — straddles the top edge of the reveal panel */}
+        {hoverReveal && onQuickView && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onQuickView();
+            }}
+            className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md hover:bg-[#faf8f5] transition-colors whitespace-nowrap"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Quick View
+          </button>
+        )}
         {boxMode ? (
           <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
             {name}
