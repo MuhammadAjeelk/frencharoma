@@ -23,6 +23,15 @@ export const SEASON_OPTIONS = [
   { value: "all-seasons", label: "Four Seasons (Versatile)" },
 ];
 
+// The "Shop All" dropdown — single-select featured filters (map to URL params).
+export const FEATURED_OPTIONS = [
+  { value: "all", label: "Shop All" },
+  { value: "bestSeller", label: "Best Sellers" },
+  { value: "specialOffer", label: "Special Offer" },
+  { value: "signature", label: "Signature Scent" },
+  { value: "newArrival", label: "New Arrivals" },
+];
+
 export const SORT_OPTIONS = [
   { value: "global-admire-desc", label: "Globally Admired (High – Low)" },
   { value: "newest", label: "All (Newest first)" },
@@ -71,7 +80,7 @@ export function matchesSeasonGroup(tags, season) {
 const getLabel = (opts, v) => opts.find((o) => o.value === v)?.label || v;
 
 // ── Single-select pill dropdown ─────────────────────────────────────────────
-export function FilterDropdown({ label, options, value, onChange }) {
+export function FilterDropdown({ label, options, value, onChange, standalone = false }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -96,8 +105,10 @@ export function FilterDropdown({ label, options, value, onChange }) {
             : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
         }`}
       >
-        <span>{label}</span>
-        {isActive && <span className="opacity-80">: {selected?.label}</span>}
+        <span>{standalone && isActive ? selected?.label : label}</span>
+        {isActive && !standalone && (
+          <span className="opacity-80">: {selected?.label}</span>
+        )}
         <svg
           className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
           fill="none"
@@ -173,16 +184,12 @@ export default function PerfumeFilterBar({
   setEdition,
   season,
   setSeason,
-  bestSeller,
-  setBestSeller,
-  specialOffer,
-  setSpecialOffer,
+  featured,
+  setFeatured,
   brand,
   setBrand,
   scentFamily,
   setScentFamily,
-  signature,
-  setSignature,
   onReset,
   hasControlChanges,
   extraControls = null,
@@ -223,20 +230,10 @@ export default function PerfumeFilterBar({
       label: `Brand: ${brand.trim()}`,
       clear: () => setBrand(""),
     },
-    bestSeller && {
-      key: "bestSeller",
-      label: "Best Sellers",
-      clear: () => setBestSeller(false),
-    },
-    specialOffer && {
-      key: "specialOffer",
-      label: "Special Offer",
-      clear: () => setSpecialOffer(false),
-    },
-    signature && {
-      key: "signature",
-      label: "Signature Scent",
-      clear: () => setSignature?.(false),
+    featured && featured !== "all" && {
+      key: "featured",
+      label: getLabel(FEATURED_OPTIONS, featured),
+      clear: () => setFeatured("all"),
     },
     scentFamily && {
       key: "scentFamily",
@@ -280,27 +277,13 @@ export default function PerfumeFilterBar({
           />
         )}
 
-        <button
-          onClick={() => setBestSeller((b) => !b)}
-          className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
-            bestSeller
-              ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
-              : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
-          }`}
-        >
-          Best Sellers
-        </button>
-
-        <button
-          onClick={() => setSpecialOffer((s) => !s)}
-          className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
-            specialOffer
-              ? "border-[#c2185b] bg-[#c2185b] text-white"
-              : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#c2185b] hover:text-[#c2185b]"
-          }`}
-        >
-          Special Offer
-        </button>
+        <FilterDropdown
+          label="Shop All"
+          standalone
+          options={FEATURED_OPTIONS}
+          value={featured || "all"}
+          onChange={setFeatured}
+        />
 
         {/* Brand search */}
         <div className="relative min-w-[170px]">

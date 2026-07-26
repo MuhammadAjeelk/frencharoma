@@ -42,6 +42,7 @@ export async function GET(request) {
     const bestSeller  = searchParams.get("bestSeller");
     const specialOffer = searchParams.get("specialOffer");
     const signature   = searchParams.get("signature");
+    const newArrival  = searchParams.get("newArrival");
     const sort        = searchParams.get("sort") || "global-admire-desc";
     const limit       = parseInt(searchParams.get("limit") || "20");
     const page        = parseInt(searchParams.get("page")  || "1");
@@ -102,6 +103,10 @@ export async function GET(request) {
 
     if (signature === "true") {
       conditions.push({ isSignature: true });
+    }
+
+    if (newArrival === "true") {
+      conditions.push({ isNewArrival: true });
     }
 
     if (specialOffer === "true") {
@@ -201,7 +206,7 @@ export async function GET(request) {
           $project: {
             name: 1, slug: 1, brand: 1, brands: 1, gender: 1,
             scentFamily: 1, tags: 1, images: 1, editions: 1,
-            description: 1, impressionName: 1, notes: 1, status: 1, isBestSeller: 1, isSpecialOffer: 1,
+            description: 1, impressionName: 1, notes: 1, status: 1, isBestSeller: 1, isSpecialOffer: 1, isSignature: 1, isNewArrival: 1,
             discountPercent: 1, globalAdmirePercent: 1,
           },
         },
@@ -248,7 +253,7 @@ export async function GET(request) {
         .skip(skip)
         .limit(limit)
         .select(
-          "name slug brand brands gender scentFamily tags images editions description impressionName notes status isBestSeller isSpecialOffer discountPercent globalAdmirePercent"
+          "name slug brand brands gender scentFamily tags images editions description impressionName notes status isBestSeller isSpecialOffer isSignature isNewArrival discountPercent globalAdmirePercent"
         )
         .lean(),
       Perfume.countDocuments(query),

@@ -10,7 +10,11 @@ import PerfumeFilterBar, {
   SortSelect,
   seasonFromTags,
   tagsForSeason,
+  FEATURED_OPTIONS,
 } from "@/components/PerfumeFilterBar";
+
+const getFeaturedLabel = (v) =>
+  FEATURED_OPTIONS.find((o) => o.value === v)?.label || "";
 
 const PAGE_SIZE = 20;
 
@@ -41,15 +45,18 @@ function ShopAllContent() {
     () => searchParams.get("scentFamily") || "",
   );
   const [brand, setBrand] = useState(() => searchParams.get("search") || "");
-  const [bestSeller, setBestSeller] = useState(
-    () => searchParams.get("bestSeller") === "true",
-  );
-  const [specialOffer, setSpecialOffer] = useState(
-    () => searchParams.get("specialOffer") === "true",
-  );
-  const [signature, setSignature] = useState(
-    () => searchParams.get("signature") === "true",
-  );
+  // "Shop All" featured filter — single value backed by the URL param.
+  const featuredFromParams = (sp) =>
+    sp.get("bestSeller") === "true"
+      ? "bestSeller"
+      : sp.get("specialOffer") === "true"
+        ? "specialOffer"
+        : sp.get("signature") === "true"
+          ? "signature"
+          : sp.get("newArrival") === "true"
+            ? "newArrival"
+            : "all";
+  const [featured, setFeatured] = useState(() => featuredFromParams(searchParams));
 
   // Keep URL-driven filters in sync whenever query params change (e.g. Shop menu)
   useEffect(() => {
@@ -58,10 +65,21 @@ function ShopAllContent() {
     setSeason(seasonFromTags(searchParams.get("tags")));
     setScentFamily(searchParams.get("scentFamily") || "");
     setBrand(searchParams.get("search") || "");
-    setBestSeller(searchParams.get("bestSeller") === "true");
-    setSpecialOffer(searchParams.get("specialOffer") === "true");
-    setSignature(searchParams.get("signature") === "true");
+    setFeatured(featuredFromParams(searchParams));
   }, [searchParams]);
+
+  // Change the featured filter and reflect it in the URL so the nav's active
+  // tab (which reads the URL) stays in sync.
+  const changeFeatured = (v) => {
+    setFeatured(v);
+    const p = new URLSearchParams(searchParams.toString());
+    ["bestSeller", "specialOffer", "signature", "newArrival"].forEach((k) =>
+      p.delete(k),
+    );
+    if (v !== "all") p.set(v, "true");
+    const qs = p.toString();
+    router.replace(`/collections/shop-all${qs ? `?${qs}` : ""}`, { scroll: false });
+  };
   const [sort, setSort] = useState(DEFAULT_SORT);
 
   // Debounce brand search
@@ -85,9 +103,7 @@ function ShopAllContent() {
     edition !== "all" ||
     season !== "all" ||
     brand.trim() ||
-    bestSeller ||
-    specialOffer ||
-    signature ||
+    featured !== "all" ||
     scentFamily;
   const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
 
@@ -100,9 +116,7 @@ function ShopAllContent() {
       if (season !== "all") p.set("tags", tagsForSeason(season).join(","));
       if (scentFamily) p.set("scentFamily", scentFamily);
       if (debouncedBrand) p.set("search", debouncedBrand);
-      if (bestSeller) p.set("bestSeller", "true");
-      if (specialOffer) p.set("specialOffer", "true");
-      if (signature) p.set("signature", "true");
+      if (featured !== "all") p.set(featured, "true");
       p.set("sort", sort);
       p.set("limit", PAGE_SIZE.toString());
       p.set("page", pageNum.toString());
@@ -114,9 +128,7 @@ function ShopAllContent() {
       season,
       scentFamily,
       debouncedBrand,
-      bestSeller,
-      specialOffer,
-      signature,
+      featured,
       sort,
     ],
   );
@@ -182,9 +194,7 @@ function ShopAllContent() {
     setEdition("all");
     setSeason("all");
     setBrand("");
-    setBestSeller(false);
-    setSpecialOffer(false);
-    setSignature(false);
+    setFeatured("all");
     setScentFamily("");
     setSort(DEFAULT_SORT);
     // Clear the URL params too, so the address bar returns to plain Shop All
@@ -211,28 +221,19 @@ function ShopAllContent() {
             >
               Shop
             </Link>
-            {bestSeller && (
+            {featured !== "all" ? (
               <>
                 <span className="text-[#ccc8c2]">/</span>
                 <span className="text-[#1f1a16] font-semibold">
-                  Best Sellers
+                  {getFeaturedLabel(featured)}
                 </span>
               </>
-            )}
-            {specialOffer && (
-              <>
-                <span className="text-[#ccc8c2]">/</span>
-                <span className="text-[#1f1a16] font-semibold">
-                  Special Offer
-                </span>
-              </>
-            )}
-            {!bestSeller && !specialOffer && hasControlChanges && (
+            ) : hasControlChanges ? (
               <>
                 <span className="text-[#ccc8c2]">/</span>
                 <span className="text-[#1f1a16] font-semibold">Refined</span>
               </>
-            )}
+            ) : null}
           </nav>
           <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-[0.04em] text-[#1a1a2e]">
             All Perfumes
@@ -253,16 +254,12 @@ function ShopAllContent() {
               setEdition={setEdition}
               season={season}
               setSeason={setSeason}
-              bestSeller={bestSeller}
-              setBestSeller={setBestSeller}
-              specialOffer={specialOffer}
-              setSpecialOffer={setSpecialOffer}
+              featured={featured}
+              setFeatured={changeFeatured}
               brand={brand}
               setBrand={setBrand}
               scentFamily={scentFamily}
               setScentFamily={setScentFamily}
-              signature={signature}
-              setSignature={setSignature}
               onReset={clearFilters}
               hasControlChanges={hasControlChanges}
             />

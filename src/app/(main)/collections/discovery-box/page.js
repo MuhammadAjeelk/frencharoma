@@ -152,8 +152,7 @@ export default function DiscoveryBoxPage() {
   const [edition, setEdition] = useState("all");
   const [season, setSeason] = useState("all");
   const [scentFamily, setScentFamily] = useState("");
-  const [bestSeller, setBestSeller] = useState(false);
-  const [specialOffer, setSpecialOffer] = useState(false);
+  const [featured, setFeatured] = useState("all");
   const [brand, setBrand] = useState("");
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [sort, setSort] = useState("global-admire-desc");
@@ -164,8 +163,7 @@ export default function DiscoveryBoxPage() {
     edition !== "all" ||
     season !== "all" ||
     scentFamily !== "" ||
-    bestSeller ||
-    specialOffer ||
+    featured !== "all" ||
     onlyInStock ||
     brand.trim() !== "";
   const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
@@ -175,11 +173,18 @@ export default function DiscoveryBoxPage() {
     setEdition("all");
     setSeason("all");
     setScentFamily("");
-    setBestSeller(false);
-    setSpecialOffer(false);
+    setFeatured("all");
     setBrand("");
     setOnlyInStock(false);
     setSort(DEFAULT_SORT);
+  };
+
+  const matchesFeatured = (p) => {
+    if (featured === "bestSeller") return !!p.isBestSeller;
+    if (featured === "specialOffer") return matchesSpecialOffer(p);
+    if (featured === "signature") return !!p.isSignature;
+    if (featured === "newArrival") return !!p.isNewArrival;
+    return true;
   };
 
   // Filtering only changes what's visible — `perfumes` stays the source of
@@ -193,12 +198,11 @@ export default function DiscoveryBoxPage() {
         matchesSeasonGroup(p.tags, season) &&
         (!scentFamily ||
           (p.scentFamily || "").toLowerCase() === scentFamily.toLowerCase()) &&
-        (!bestSeller || p.isBestSeller) &&
-        (!specialOffer || matchesSpecialOffer(p)) &&
+        matchesFeatured(p) &&
         (!onlyInStock || is5mlInStock(p)),
     );
     return sortTesters(filtered, sort);
-  }, [perfumes, brand, gender, edition, season, scentFamily, bestSeller, specialOffer, onlyInStock, sort]);
+  }, [perfumes, brand, gender, edition, season, scentFamily, featured, onlyInStock, sort]);
 
   // Fetch available perfumes
   useEffect(() => {
@@ -519,10 +523,8 @@ export default function DiscoveryBoxPage() {
               setEdition={setEdition}
               season={season}
               setSeason={setSeason}
-              bestSeller={bestSeller}
-              setBestSeller={setBestSeller}
-              specialOffer={specialOffer}
-              setSpecialOffer={setSpecialOffer}
+              featured={featured}
+              setFeatured={setFeatured}
               brand={brand}
               setBrand={setBrand}
               scentFamily={scentFamily}

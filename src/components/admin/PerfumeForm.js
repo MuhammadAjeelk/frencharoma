@@ -90,6 +90,7 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     isBestSeller:    perfume?.isBestSeller    || false,
     isSpecialOffer:  perfume?.isSpecialOffer  || false,
     isSignature:     perfume?.isSignature     || false,
+    isNewArrival:    perfume?.isNewArrival    || false,
     discountPercent: perfume?.discountPercent ?? 0,
     globalAdmirePercent: perfume?.globalAdmirePercent ?? 60,
     images: {
@@ -468,6 +469,31 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                   formData.isSignature ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* New Arrivals Toggle */}
+          <div className="flex items-center gap-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg col-span-1 md:col-span-2">
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-emerald-900">🆕 New Arrivals</p>
+              <p className="text-xs text-emerald-700 mt-0.5">
+                Mark this perfume as a New Arrival — it will appear under the New Arrivals filter.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateField("isNewArrival", !formData.isNewArrival)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.isNewArrival ? "bg-emerald-500" : "bg-gray-300"
+              }`}
+              role="switch"
+              aria-checked={formData.isNewArrival}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  formData.isNewArrival ? "translate-x-5" : "translate-x-0"
                 }`}
               />
             </button>

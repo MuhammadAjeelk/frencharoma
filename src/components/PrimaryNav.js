@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
-const SHOP_FLAGS = ["bestSeller", "specialOffer", "bundle", "signature", "search"];
+const SHOP_FLAGS = ["bestSeller", "specialOffer", "bundle", "signature", "newArrival", "search"];
 
 // Pure nav list — receives an isItemActive() so it can render both statically
 // (fallback: always false) and reactively (via DesktopNav below).

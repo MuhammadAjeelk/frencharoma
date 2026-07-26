@@ -155,6 +155,10 @@ const PerfumeSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isNewArrival: {
+      type: Boolean,
+      default: false,
+    },
     discountPercent: {
       type: Number,
       default: 0,
@@ -272,6 +276,14 @@ if (mongoose.models.Perfume) {
   if (!Perfume.schema.path("isSignature")) {
     Perfume.schema.add({
       isSignature: {
+        type: Boolean,
+        default: false,
+      },
+    });
+  }
+  if (!Perfume.schema.path("isNewArrival")) {
+    Perfume.schema.add({
+      isNewArrival: {
         type: Boolean,
         default: false,
       },
