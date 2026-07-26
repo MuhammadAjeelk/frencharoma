@@ -11,10 +11,13 @@ import PerfumeFilterBar, {
   seasonFromTags,
   tagsForSeason,
   FEATURED_OPTIONS,
+  GENDER_OPTIONS,
+  EDITION_OPTIONS,
+  SEASON_OPTIONS,
 } from "@/components/PerfumeFilterBar";
 
-const getFeaturedLabel = (v) =>
-  FEATURED_OPTIONS.find((o) => o.value === v)?.label || "";
+const labelOf = (opts, v) => opts.find((o) => o.value === v)?.label || v;
+const getFeaturedLabel = (v) => labelOf(FEATURED_OPTIONS, v);
 
 const PAGE_SIZE = 20;
 
@@ -122,6 +125,16 @@ function ShopAllContent() {
     featured !== "all" ||
     scentFamily;
   const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
+
+  // Applied filters as an ordered breadcrumb (the "filter stack")
+  const filterCrumbs = [
+    featured !== "all" && getFeaturedLabel(featured),
+    gender !== "all" && labelOf(GENDER_OPTIONS, gender),
+    edition !== "all" && labelOf(EDITION_OPTIONS, edition),
+    season !== "all" && labelOf(SEASON_OPTIONS, season),
+    scentFamily && scentFamily,
+    brand.trim() && `“${brand.trim()}”`,
+  ].filter(Boolean);
 
   // ── Build fetch URL ──────────────────────────────────────────────────────
   const buildUrl = useCallback(
@@ -284,27 +297,46 @@ function ShopAllContent() {
 
         {/* ── Content ── */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          {/* Sort + Count Row */}
-          <div className="flex items-center justify-between gap-3 mb-7">
-            <p className="text-[13px] text-[#6b6560]">
-              {loading ? (
-                <span className="inline-block w-16 h-4 bg-[#f0ece7] rounded animate-pulse" />
+          {/* Filter breadcrumb + Sort */}
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
+            <nav className="flex items-center gap-1.5 text-[12px] flex-wrap min-w-0">
+              <span className="text-[#8a847e] uppercase tracking-wide text-[11px] font-medium shrink-0">
+                Filters:
+              </span>
+              {filterCrumbs.length > 0 ? (
+                filterCrumbs.map((c, i) => (
+                  <span key={i} className="flex items-center gap-1.5">
+                    {i > 0 && <span className="text-[#ccc8c2]">›</span>}
+                    <span className="font-semibold text-[#1f1a16] px-2 py-0.5 rounded-full bg-[#f4f0e8]">
+                      {c}
+                    </span>
+                  </span>
+                ))
               ) : (
-                <>
-                  Showing{" "}
-                  <span className="font-semibold text-[#1f1a16]">
-                    {perfumes.length.toLocaleString()}
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-[#1f1a16]">
-                    {total.toLocaleString()}
-                  </span>{" "}
-                  products
-                </>
+                <span className="text-[#6b6560]">All Perfumes</span>
               )}
-            </p>
+            </nav>
             <SortSelect sort={sort} setSort={setSort} />
           </div>
+
+          {/* Count */}
+          <p className="text-[13px] text-[#6b6560] mb-7">
+            {loading ? (
+              <span className="inline-block w-16 h-4 bg-[#f0ece7] rounded animate-pulse" />
+            ) : (
+              <>
+                Showing{" "}
+                <span className="font-semibold text-[#1f1a16]">
+                  {perfumes.length.toLocaleString()}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-[#1f1a16]">
+                  {total.toLocaleString()}
+                </span>{" "}
+                products
+              </>
+            )}
+          </p>
 
           {/* ── Loading skeleton ── */}
           {loading && (
