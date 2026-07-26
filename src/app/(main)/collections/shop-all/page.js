@@ -126,15 +126,33 @@ function ShopAllContent() {
     scentFamily;
   const hasControlChanges = hasActiveFilters || sort !== DEFAULT_SORT;
 
-  // Applied filters as an ordered breadcrumb (the "filter stack")
+  // Applied filters as an ordered breadcrumb "stack". Clicking a crumb removes
+  // every filter stacked after it.
   const filterCrumbs = [
-    featured !== "all" && getFeaturedLabel(featured),
-    gender !== "all" && labelOf(GENDER_OPTIONS, gender),
-    edition !== "all" && labelOf(EDITION_OPTIONS, edition),
-    season !== "all" && labelOf(SEASON_OPTIONS, season),
-    scentFamily && scentFamily,
-    brand.trim() && `“${brand.trim()}”`,
+    featured !== "all" && {
+      label: getFeaturedLabel(featured),
+      reset: () => changeFeatured("all"),
+    },
+    gender !== "all" && {
+      label: labelOf(GENDER_OPTIONS, gender),
+      reset: () => setGender("all"),
+    },
+    edition !== "all" && {
+      label: labelOf(EDITION_OPTIONS, edition),
+      reset: () => setEdition("all"),
+    },
+    season !== "all" && {
+      label: labelOf(SEASON_OPTIONS, season),
+      reset: () => setSeason("all"),
+    },
+    scentFamily && { label: scentFamily, reset: () => setScentFamily("") },
+    brand.trim() && { label: `“${brand.trim()}”`, reset: () => setBrand("") },
   ].filter(Boolean);
+
+  // Clear all crumbs after index i (keep i and everything before it)
+  const trimCrumbsAfter = (i) => {
+    for (let j = i + 1; j < filterCrumbs.length; j++) filterCrumbs[j].reset();
+  };
 
   // ── Build fetch URL ──────────────────────────────────────────────────────
   const buildUrl = useCallback(
@@ -314,20 +332,25 @@ function ShopAllContent() {
               ) : (
                 <span className="font-semibold text-[#1f1a16]">Shop All</span>
               )}
-              {filterCrumbs.map((c, i) => (
-                <span key={i} className="flex items-center gap-2">
-                  <span className="text-[#ccc8c2]">/</span>
-                  <span
-                    className={
-                      i === filterCrumbs.length - 1
-                        ? "font-semibold text-[#1f1a16]"
-                        : "text-[#8a847e]"
-                    }
-                  >
-                    {c}
+              {filterCrumbs.map((c, i) => {
+                const isLast = i === filterCrumbs.length - 1;
+                return (
+                  <span key={i} className="flex items-center gap-2">
+                    <span className="text-[#ccc8c2]">/</span>
+                    {isLast ? (
+                      <span className="font-semibold text-[#1f1a16]">{c.label}</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => trimCrumbsAfter(i)}
+                        className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
+                      >
+                        {c.label}
+                      </button>
+                    )}
                   </span>
-                </span>
-              ))}
+                );
+              })}
             </nav>
             <SortSelect sort={sort} setSort={setSort} />
           </div>
