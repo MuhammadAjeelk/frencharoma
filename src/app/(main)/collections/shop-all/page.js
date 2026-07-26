@@ -323,12 +323,13 @@ function ShopAllContent() {
               </Link>
               <span className="text-[#ccc8c2]">/</span>
               {filterCrumbs.length > 0 ? (
-                <Link
-                  href="/collections/shop-all"
+                <button
+                  type="button"
+                  onClick={clearFilters}
                   className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
                 >
                   Shop All
-                </Link>
+                </button>
               ) : (
                 <span className="font-semibold text-[#1f1a16]">Shop All</span>
               )}
