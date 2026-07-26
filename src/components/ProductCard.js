@@ -286,7 +286,7 @@ export default function ProductCard({
               e.stopPropagation();
               onQuickView();
             }}
-            className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md hover:bg-[#faf8f5] transition-colors whitespace-nowrap"
+            className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md hover:bg-[#faf8f5] transition-all duration-200 whitespace-nowrap opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
