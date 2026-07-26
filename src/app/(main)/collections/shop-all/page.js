@@ -82,12 +82,28 @@ function ShopAllContent() {
   };
   const [sort, setSort] = useState(DEFAULT_SORT);
 
-  // Debounce brand search
-  const [debouncedBrand, setDebouncedBrand] = useState("");
+  // Debounce brand search (init from URL so we don't wipe an incoming ?search=)
+  const [debouncedBrand, setDebouncedBrand] = useState(
+    () => searchParams.get("search") || "",
+  );
   useEffect(() => {
     const t = setTimeout(() => setDebouncedBrand(brand.trim()), 400);
     return () => clearTimeout(t);
   }, [brand]);
+
+  // Keep the ?search= URL param in sync with the brand filter, so clearing it
+  // removes the param (and the SHOP BY BRAND nav tab de-activates).
+  useEffect(() => {
+    const current = searchParams.get("search") || "";
+    if (current === debouncedBrand) return;
+    const p = new URLSearchParams(searchParams.toString());
+    if (debouncedBrand) p.set("search", debouncedBrand);
+    else p.delete("search");
+    const qs = p.toString();
+    router.replace(`/collections/shop-all${qs ? `?${qs}` : ""}`, {
+      scroll: false,
+    });
+  }, [debouncedBrand]);
 
   // Quick view modal
   const [modalOpen, setModalOpen] = useState(false);
