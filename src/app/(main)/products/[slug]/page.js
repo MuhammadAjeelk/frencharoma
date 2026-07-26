@@ -431,8 +431,8 @@ export default function ProductDetailPage() {
             {/* Season Tags */}
             {(() => {
               const SEASON_LABELS = {
-                "spring-summer": "Spring & Summer",
-                "autumn-winter": "Autumn & Winter",
+                "spring-summer": "Summer & Spring",
+                "autumn-winter": "Winter & Autumn",
                 "spring":        "Spring",
                 "summer":        "Summer",
                 "autumn":        "Autumn",

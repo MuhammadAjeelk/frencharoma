@@ -88,7 +88,7 @@ export function getCardEdition(editions) {
 export function getBestFor(tags) {
   const t = tags || [];
   if (t.includes("all-seasons")) return "All Seasons";
-  if (t.includes("spring-summer") || t.includes("spring") || t.includes("summer")) return "Spring & Summer";
-  if (t.includes("autumn-winter") || t.includes("autumn") || t.includes("winter")) return "Autumn & Winter";
+  if (t.includes("spring-summer") || t.includes("spring") || t.includes("summer")) return "Summer & Spring";
+  if (t.includes("autumn-winter") || t.includes("autumn") || t.includes("winter")) return "Winter & Autumn";
   return null;
 }

@@ -87,11 +87,11 @@ export default function Header() {
     { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
     { heading: "Shop by Season" },
     {
-      name: "For Autumn & Winter",
+      name: "For Winter & Autumn",
       href: "/collections/shop-all?tags=autumn,winter",
     },
     {
-      name: "For Spring & Summer",
+      name: "For Summer & Spring",
       href: "/collections/shop-all?tags=spring,summer",
     },
   ];
