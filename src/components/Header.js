@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -21,6 +22,17 @@ export default function Header() {
   const { user, logout, isAdmin, loading } = useAuth();
   const { itemCount } = useCart();
   const { itemCount: wishlistCount } = useWishlist();
+  const pathname = usePathname();
+  // Read the query string on the client so active-state detection stays reactive
+  // to route changes without forcing a Suspense boundary (useSearchParams does).
+  const [locSearch, setLocSearch] = useState("");
+  useEffect(() => {
+    const sync = () => setLocSearch(window.location.search);
+    sync();
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
+  }, [pathname]);
+  const searchParams = new URLSearchParams(locSearch);
 
   // Fetch brands for the dropdown
   useEffect(() => {
@@ -83,6 +95,32 @@ export default function Header() {
     { name: "DISCOVERY BOX", href: "/collections/discovery-box" },
     { name: "BLOGS", href: "/blogs/blog" },
   ];
+
+  // Which top-nav item matches the current route (for the active gold highlight)
+  const SHOP_FLAGS = ["bestSeller", "specialOffer", "bundle", "signature", "search"];
+  const isItemActive = (item) => {
+    // SHOP BY BRAND dropdown → active while browsing a brand (?search=…)
+    if (item.brandDropdown) {
+      return pathname === "/collections/shop-all" && !!searchParams.get("search");
+    }
+    // SHOP ALL dropdown → active on shop-all with no distinguishing filter
+    if (item.submenu) {
+      return (
+        pathname === "/collections/shop-all" &&
+        !SHOP_FLAGS.some((k) => searchParams.get(k))
+      );
+    }
+    if (!item.href || item.href === "#") return false;
+    const [path, qs] = item.href.split("?");
+    if (path.startsWith("/blogs")) return pathname.startsWith("/blogs");
+    if (pathname !== path) return false;
+    if (!qs) return true;
+    const params = new URLSearchParams(qs);
+    for (const [k, v] of params.entries()) {
+      if (searchParams.get(k) !== v) return false;
+    }
+    return true;
+  };
 
   const baseMarquee = [
     "Original French Perfume Oils",
@@ -417,7 +455,9 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center py-2 border-t border-[#e8e4df]/70">
             <ul className="flex items-center gap-10 xl:gap-12">
-              {menuItems.map((item, index) => (
+              {menuItems.map((item, index) => {
+                const active = isItemActive(item);
+                return (
                 <li
                   key={index}
                   className="relative group"
@@ -429,7 +469,7 @@ export default function Header() {
                 >
                   {item.submenu ? (
                     <>
-                      <button className="flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200">
+                      <button className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}>
                         {item.name}
                         <img
                           src="/icons/caret.svg"
@@ -513,7 +553,7 @@ export default function Header() {
                     </>
                   ) : item.brandDropdown ? (
                     <>
-                      <button className="flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200">
+                      <button className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}>
                         {item.name}
                         <img
                           src="/icons/caret.svg"
@@ -555,13 +595,14 @@ export default function Header() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#1f1a16] hover:text-[#b8964e] transition-colors duration-200"
+                      className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
                     >
                       {item.name}
                     </Link>
                   )}
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </nav>
         </div>
