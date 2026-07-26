@@ -190,7 +190,7 @@ export default function PerfumeFilterBar({
       .catch(() => {});
   }, [setScentFamily]);
   const familyOptions = [
-    { value: "all", label: "All Families" },
+    { value: "all", label: "All Fragrances" },
     ...families.map((f) => ({ value: f, label: f })),
   ];
 
