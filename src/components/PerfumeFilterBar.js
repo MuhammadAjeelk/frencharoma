@@ -27,8 +27,8 @@ export const SEASON_OPTIONS = [
 export const FEATURED_OPTIONS = [
   { value: "all", label: "Shop All" },
   { value: "bestSeller", label: "Best Sellers" },
-  { value: "specialOffer", label: "Special Offer" },
-  { value: "signature", label: "Signature Scent" },
+  { value: "specialOffer", label: "Special Offers" },
+  { value: "signature", label: "Signature Scents" },
   { value: "newArrival", label: "New Arrivals" },
 ];
 
