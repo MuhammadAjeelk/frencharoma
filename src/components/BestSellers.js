@@ -107,7 +107,7 @@ export default function BestSellers() {
             </button>
 
             <div className="min-w-0 px-12 sm:px-14">
-              <div className="flex gap-3 md:gap-4">
+              <div className="flex gap-3">
                 {visibleItems.map((perfume, index) => {
                   const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
                   const hasSpecialOfferTag = (perfume.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
