@@ -31,7 +31,7 @@ export function NavList({
             {item.submenu ? (
               <>
                 <button
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-200 hover:font-bold ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
@@ -98,7 +98,7 @@ export function NavList({
             ) : item.brandDropdown ? (
               <>
                 <button
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-200 hover:font-bold ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
@@ -137,7 +137,7 @@ export function NavList({
             ) : (
               <Link
                 href={item.href}
-                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-200 hover:font-bold ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
               >
                 {item.name}
               </Link>
