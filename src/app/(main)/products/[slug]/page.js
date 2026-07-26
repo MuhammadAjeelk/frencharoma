@@ -437,7 +437,7 @@ export default function ProductDetailPage() {
                 "summer":        "Summer",
                 "autumn":        "Autumn",
                 "winter":        "Winter",
-                "all-seasons":   "All Seasons",
+                "all-seasons":   "Four Seasons (Versatile)",
               };
               const seasonTags = (perfume.tags || []).filter((t) => SEASON_LABELS[t]);
               return seasonTags.length > 0 ? (
