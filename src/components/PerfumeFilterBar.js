@@ -220,7 +220,7 @@ export default function PerfumeFilterBar({
     signature && { key: "signature", label: "Signature Scent", clear: () => setSignature?.(false) },
     scentFamily && {
       key: "scentFamily",
-      label: `Family: ${scentFamily}`,
+      label: `Fragrance: ${scentFamily}`,
       clear: () => setScentFamily?.(""),
     },
     ...extraChips,
@@ -238,7 +238,7 @@ export default function PerfumeFilterBar({
         <FilterDropdown label="Season" options={SEASON_OPTIONS} value={season} onChange={setSeason} />
         {setScentFamily && (
           <FilterDropdown
-            label="Family"
+            label="Fragrance"
             options={familyOptions}
             value={scentFamily || "all"}
             onChange={(v) => setScentFamily(v === "all" ? "" : v)}
