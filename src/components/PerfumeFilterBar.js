@@ -133,7 +133,7 @@ export function FilterDropdown({ label, options, value, onChange, standalone = f
                 onChange(opt.value);
                 setOpen(false);
               }}
-              className={`w-full text-left px-4 py-2.5 text-[12px] transition-colors hover:bg-[#faf8f5] hover:underline underline-offset-4 decoration-1 hover:font-bold ${
+              className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors hover:bg-[#faf8f5] hover:underline underline-offset-4 decoration-1 hover:font-bold ${
                 value === opt.value
                   ? "font-semibold text-[#1a1a2e] bg-[#faf8f5]"
                   : "text-[#6b6560]"
