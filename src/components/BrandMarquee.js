@@ -119,7 +119,7 @@ export default function BrandMarquee() {
         }}
       >
         {/* Fixed decorative patti behind the boxes */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[76px] sm:h-[92px] rounded-2xl bg-gradient-to-r from-[#f2ede3] via-white to-[#f2ede3] border-y border-[#e8dcc4]/60 overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[88px] sm:h-[104px] rounded-2xl bg-gradient-to-r from-[#f2ede3] via-white to-[#f2ede3] border-y border-[#e8dcc4]/60 overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center gap-10 opacity-[0.05]">
             <span className="whitespace-nowrap text-3xl sm:text-5xl font-black uppercase tracking-[0.2em] text-[#1a1a2e]">
               {bandNames.join("   ·   ")}
