@@ -100,7 +100,7 @@ export default function Header() {
   ];
 
   const menuItems = [
-    { name: "SHOP ALL", href: "#", submenu: shopSubmenu },
+    { name: "SHOP ALL", href: "/collections/shop-all", submenu: shopSubmenu },
     { name: "BEST SELLERS", href: "/collections/shop-all?bestSeller=true" },
     { name: "SHOP BY BRAND", href: "#", brandDropdown: true },
     { name: "BUNDLE OFFERS", href: "/collections/shop-all?bundle=true" },

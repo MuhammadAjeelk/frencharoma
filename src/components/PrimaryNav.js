@@ -30,12 +30,14 @@ export function NavList({
           >
             {item.submenu ? (
               <>
-                <button
+                <Link
+                  href={item.href && item.href !== "#" ? item.href : "#"}
+                  onClick={() => setOpenDropdown(null)}
                   className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
-                </button>
+                </Link>
                 {openDropdown === index && (
                   <div
                     className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}
