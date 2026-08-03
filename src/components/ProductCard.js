@@ -221,40 +221,63 @@ export default function ProductCard({
           </Link>
         )}
 
-        {/* Quick View — appears on hover (wrapper centers, button vibrates) */}
-        {onQuickView && !hoverReveal && (
+        {/* Discovery Box: when this tester is already in the box, the Quick
+            View position becomes a "Click to Remove from Discovery Box" button
+            (revealed on hover), and the card is dulled (overlay below). */}
+        {boxMode && boxSelected && !boxSoldOut ? (
           <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
-              ref={qvRef}
-              onMouseEnter={() => vibrate(qvRef.current)}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                onQuickView();
+                onAddToBox?.();
               }}
-              className="flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
+              className="flex flex-col items-center leading-tight bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-xl text-[11px] font-bold text-red-600 shadow-md hover:bg-white"
             >
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.6}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
-              Quick View
+              <span>Click to Remove</span>
+              <span>from Discovery Box</span>
             </button>
           </div>
+        ) : (
+          onQuickView && !hoverReveal && (
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <button
+                ref={qvRef}
+                onMouseEnter={() => vibrate(qvRef.current)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onQuickView();
+                }}
+                className="flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.6}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+                Quick View
+              </button>
+            </div>
+          )
+        )}
+
+        {/* Dull overlay when this tester is already in the discovery box */}
+        {boxMode && boxSelected && !boxSoldOut && (
+          <div className="absolute inset-0 z-10 bg-[#f4f2ef]/55 pointer-events-none" />
         )}
 
         {/* Best Seller pill — bottom-left */}
