@@ -46,16 +46,9 @@ function BrandBox({ brand }) {
           src={`/icons/brands/${slug}.png`}
           alt={brand}
           onError={() => setNoLogo(true)}
-          className="max-h-12 sm:max-h-14 max-w-[82%] w-auto object-contain grayscale opacity-80 transition-all duration-300 group-hover/box:grayscale-0 group-hover/box:opacity-100 group-hover/box:-translate-y-2 group-hover/box:scale-[1.04]"
+          className="max-h-14 sm:max-h-16 max-w-[84%] w-auto object-contain grayscale opacity-80 transition-all duration-300 group-hover/box:grayscale-0 group-hover/box:opacity-100 group-hover/box:scale-[1.06]"
         />
       )}
-
-      {/* Brand name — slides up into the empty strip below the logo on hover.
-          The logo lifts up (-translate-y-2) so the bar never covers it, and it
-          stays inside the card so it can't overflow the marquee row. */}
-      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-[#1a1a2e]/95 py-1 text-center text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-300 ease-out group-hover/box:translate-y-0">
-        {brand}
-      </span>
     </Link>
   );
 }
