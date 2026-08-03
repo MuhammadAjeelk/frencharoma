@@ -126,7 +126,7 @@ export default function Header() {
   return (
     <>
       {/* Running announcement bar */}
-      <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#e8e4df] bg-[#faf8f5]">
+      <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#e6ddc9] bg-[#f6efe2]">
         <div className="flex w-max animate-marquee py-2">
           {[0, 1].map((dup) => (
             <div
@@ -159,7 +159,7 @@ export default function Header() {
         </div>
       </div>
 
-      <header className="header relative z-50 border-b border-[#e8e4df] bg-[#faf8f5]">
+      <header className="header relative z-50 border-b border-[#e6ddc9] bg-[#f6efe2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
           <div className="flex items-center justify-between py-1.5 lg:py-2">
@@ -523,7 +523,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center py-2 border-t border-[#e8e4df]/70">
+          <nav className="hidden lg:flex items-center justify-center py-2 border-t border-[#e6ddc9]/70">
             <Suspense
               fallback={
                 <NavList
