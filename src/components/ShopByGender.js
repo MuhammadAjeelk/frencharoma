@@ -6,20 +6,17 @@ export default function ShopByGender() {
   const genders = [
     {
       name: "Men",
-      image:
-        "https://frencharoma.sparksgate.com/uploads/perfumes/1770289762669-aokoen.png",
+      image: "/images/home/gender-men.webp",
       href: "/collections/shop-all?gender=men",
     },
     {
       name: "Women",
-      image:
-        "https://frencharoma.sparksgate.com/uploads/perfumes/1770294420203-294t77.png",
+      image: "/images/home/gender-women.webp",
       href: "/collections/shop-all?gender=women",
     },
     {
       name: "Unisex",
-      image:
-        "https://frencharoma.sparksgate.com/uploads/perfumes/1770294414215-qush9i.png",
+      image: "/images/home/gender-unisex.webp",
       href: "/collections/shop-all?gender=unisex",
     },
   ];

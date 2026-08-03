@@ -8,15 +8,13 @@ export default function ShopByCategory() {
     {
       name: "Luxury Edition",
       tagline: "Maximum Performance",
-      image:
-        "https://www.linea-debella.com/cdn/shop/files/MEN-min.jpg?v=1753724171&width=750",
+      image: "/images/home/collection-luxury.webp",
       href: "/collections/shop-all?edition=luxury",
     },
     {
       name: "Premium Edition",
       tagline: "Everyday Excellence",
-      image:
-        "https://www.linea-debella.com/cdn/shop/files/WOMEN-min.jpg?v=1753724179&width=750",
+      image: "/images/home/collection-premium.webp",
       href: "/collections/shop-all?edition=premium",
     },
   ];
