@@ -29,7 +29,7 @@ const PROVINCES = [
 ];
 
 export default function CheckoutPage() {
-  const { items, subtotal, clearCart, hydrated } = useCart();
+  const { items, subtotal, summary, clearCart, hydrated } = useCart();
   const { user } = useAuth();
   const router = useRouter();
 
@@ -53,11 +53,23 @@ export default function CheckoutPage() {
       }));
     }
   }, [user]);
+
+  // Carry the Order Note written on the cart page into the checkout notes.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("fa_order_note");
+      if (saved) setForm((prev) => (prev.notes ? prev : { ...prev, notes: saved }));
+    } catch {}
+  }, []);
+
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const total = subtotal + SHIPPING_COST;
+  // Match the cart: free shipping above the threshold, and apply the
+  // Bundle Offer discount so checkout charges the same Grand Total.
+  const shipping = subtotal >= 7000 ? 0 : SHIPPING_COST;
+  const total = summary.grandTotal + shipping;
 
   useEffect(() => {
     if (hydrated && items.length === 0) {
@@ -114,7 +126,9 @@ export default function CheckoutPage() {
         })),
         paymentMethod,
         subtotal,
-        shippingCost: SHIPPING_COST,
+        bundleDiscount: summary.bundle.savings,
+        totalSavings: summary.totalSavings,
+        shippingCost: shipping,
         total,
         notes: form.notes.trim(),
       };
@@ -411,9 +425,17 @@ export default function CheckoutPage() {
                     <span>Subtotal</span>
                     <span>PKR {subtotal.toLocaleString()}</span>
                   </div>
+                  {summary.bundle.savings > 0 && (
+                    <div className="flex justify-between text-green-700">
+                      <span>Bundle Offer Discount</span>
+                      <span>− PKR {summary.bundle.savings.toLocaleString()}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
-                    <span>PKR {SHIPPING_COST.toLocaleString()}</span>
+                    <span className={shipping === 0 ? "text-green-700 font-medium" : ""}>
+                      {shipping === 0 ? "FREE" : `PKR ${shipping.toLocaleString()}`}
+                    </span>
                   </div>
                   <div className="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-gray-100">
                     <span>Total</span>

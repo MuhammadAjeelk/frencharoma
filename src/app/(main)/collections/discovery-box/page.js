@@ -327,6 +327,10 @@ export default function DiscoveryBoxPage() {
           edition: match?.edition?.key || "classic",
           size: "5ml",
           price: discounted(basePrice),
+          originalPrice: basePrice,
+          discountPercent: DISCOUNT_PERCENT,
+          gender: p.gender || "",
+          impressionName: p.impressionName || "",
           isDiscoveryBox: true,
           boxId,
         });

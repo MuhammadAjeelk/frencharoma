@@ -4,33 +4,18 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 
 const CartContext = createContext(null);
 
-// Bundle discount tiers: the nth item (1-indexed) gets this discount
-const BUNDLE_DISCOUNTS = [0, 0.10, 0.15, 0.20];
+// Bundle Offer: a flat discount off every perfume after the first
+// (2nd, 3rd, 4th … each -Rs BUNDLE_PER_UNIT). Discovery boxes don't count.
+const BUNDLE_PER_UNIT = 500;
 
-function computeBundleSavings(items) {
-  if (items.length < 2) return { savings: 0, breakdown: [] };
+const ordinal = (n) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return `${n}${s[(v - 20) % 10] || s[v] || s[0]}`;
+};
 
-  const sorted = [...items].sort((a, b) => b.price - a.price);
-  let totalSavings = 0;
-  const breakdown = [];
-
-  for (let i = 0; i < sorted.length; i++) {
-    const discountRate = BUNDLE_DISCOUNTS[Math.min(i, BUNDLE_DISCOUNTS.length - 1)];
-    const itemTotal = sorted[i].price * sorted[i].quantity;
-    const saving = Math.round(itemTotal * discountRate);
-    totalSavings += saving;
-    if (discountRate > 0) {
-      breakdown.push({
-        id: sorted[i].id,
-        name: sorted[i].name,
-        discount: Math.round(discountRate * 100),
-        saving,
-      });
-    }
-  }
-
-  return { savings: totalSavings, breakdown };
-}
+// undiscounted unit price (older carts may only have the final `price`)
+const origOf = (i) => (i.originalPrice != null ? i.originalPrice : i.price);
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
@@ -82,17 +67,74 @@ export function CartProvider({ children }) {
   }, []);
 
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-  const bundle = useMemo(() => {
-    const uniqueProducts = items.length;
-    if (uniqueProducts >= 2) {
-      return computeBundleSavings(items);
+  const summary = useMemo(() => {
+    const perfumeItems = items.filter((i) => !i.isDiscoveryBox);
+    const boxItems = items.filter((i) => i.isDiscoveryBox);
+
+    // Total at full (undiscounted) price
+    const totalOriginal = items.reduce((s, i) => s + origOf(i) * i.quantity, 0);
+
+    // Per-item discounts already applied to `price`
+    const perfumeDiscount = perfumeItems.reduce(
+      (s, i) => s + Math.max(0, origOf(i) - i.price) * i.quantity,
+      0,
+    );
+    const boxDiscount = boxItems.reduce(
+      (s, i) => s + Math.max(0, origOf(i) - i.price) * i.quantity,
+      0,
+    );
+
+    // Subtotal after per-item discounts (what `price` already reflects)
+    const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
+
+    // The range of perfume discount %s, for the "(20% – 40%)" label
+    const pcts = perfumeItems
+      .filter((i) => origOf(i) > i.price)
+      .map((i) =>
+        Number(i.discountPercent) ||
+        Math.round((1 - i.price / origOf(i)) * 100),
+      );
+    const perfumeDiscMin = pcts.length ? Math.min(...pcts) : 0;
+    const perfumeDiscMax = pcts.length ? Math.max(...pcts) : 0;
+
+    const boxPcts = boxItems
+      .filter((i) => origOf(i) > i.price)
+      .map((i) =>
+        Number(i.discountPercent) ||
+        Math.round((1 - i.price / origOf(i)) * 100),
+      );
+    const boxDiscPct = boxPcts.length ? Math.max(...boxPcts) : 0;
+
+    // Bundle Offer — flat Rs BUNDLE_PER_UNIT off each perfume unit past the 1st
+    const perfumeUnits = perfumeItems.reduce((s, i) => s + i.quantity, 0);
+    const bundleCount = Math.max(0, perfumeUnits - 1);
+    const bundleSavings = bundleCount * BUNDLE_PER_UNIT;
+    const bundleBreakdown = [];
+    for (let n = 2; n <= perfumeUnits; n++) {
+      bundleBreakdown.push({ label: `${ordinal(n)} Perfume`, saving: BUNDLE_PER_UNIT });
     }
-    return { savings: 0, breakdown: [] };
+
+    const grandTotal = subtotal - bundleSavings;
+    const totalSavings = perfumeDiscount + boxDiscount + bundleSavings;
+
+    return {
+      totalOriginal,
+      perfumeDiscount,
+      boxDiscount,
+      perfumeDiscMin,
+      perfumeDiscMax,
+      boxDiscPct,
+      subtotal,
+      bundle: { savings: bundleSavings, breakdown: bundleBreakdown, count: bundleCount },
+      grandTotal,
+      totalSavings,
+    };
   }, [items]);
 
-  const total = subtotal - bundle.savings;
+  const subtotal = summary.subtotal;
+  const bundle = summary.bundle;
+  const total = summary.grandTotal;
 
   return (
     <CartContext.Provider
@@ -102,6 +144,7 @@ export function CartProvider({ children }) {
         subtotal,
         total,
         bundle,
+        summary,
         hydrated,
         addItem,
         removeItem,

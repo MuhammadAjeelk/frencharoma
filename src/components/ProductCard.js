@@ -108,6 +108,10 @@ export default function ProductCard({
       edition: entry.key,
       size: entry.variant.size,
       price: finalOf(entry.variant.price),
+      originalPrice: entry.variant.price,
+      discountPercent: disc,
+      gender,
+      impressionName,
     });
     setShowBanners(false);
     setAdded(true);

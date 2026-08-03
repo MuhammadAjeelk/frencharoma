@@ -1,13 +1,39 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+import { genderMeta } from "@/lib/gender";
 import Image from "next/image";
 import Link from "next/link";
 
-// A single regular cart line (with quantity + remove).
+const EDITION_LABEL = {
+  luxury: "Luxury Edition",
+  premium: "Premium Edition",
+  classic: "Classic Edition",
+};
+
+const FREE_SHIPPING_THRESHOLD = 7000;
+const rs = (n) => `Rs. ${Math.round(n).toLocaleString()}`;
+
+// ── A single perfume line — full detail + price breakup (spec pt 2/6) ────────
 function CartItemRow({ item, updateQuantity, removeItem }) {
+  const gm = genderMeta(item.gender);
+  const orig = item.originalPrice != null ? item.originalPrice : item.price;
+  const hasDisc = orig > item.price;
+  const disc =
+    Number(item.discountPercent) ||
+    (hasDisc ? Math.round((1 - item.price / orig) * 100) : 0);
+  const lineOriginal = orig * item.quantity;
+  const lineSubtotal = item.price * item.quantity;
+  const lineDiscount = lineOriginal - lineSubtotal;
+  const editionLabel =
+    EDITION_LABEL[item.edition] ||
+    (item.edition
+      ? item.edition.charAt(0).toUpperCase() + item.edition.slice(1)
+      : "");
+
   return (
-    <div className="flex gap-4 py-6">
+    <div className="flex flex-col sm:flex-row gap-4 py-6">
       {/* Image */}
       <Link href={`/products/${item.slug}`} className="shrink-0">
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
@@ -27,31 +53,43 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
       {/* Details */}
       <div className="flex-1 min-w-0">
         <Link href={`/products/${item.slug}`}>
-          <h3 className="font-semibold text-gray-900 text-sm sm:text-base hover:text-gray-600 transition-colors line-clamp-2">
+          <h3 className="font-bold text-gray-900 text-sm sm:text-base hover:text-gray-600 transition-colors leading-snug">
             {item.name}
+            {gm && (
+              <>
+                {" – "}
+                <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+              </>
+            )}
           </h3>
         </Link>
-        <div className="flex flex-wrap gap-2 mt-1">
-          {item.edition && (
-            <span className="text-xs text-gray-500 capitalize bg-gray-100 px-2 py-0.5 rounded">
-              {item.edition}
+
+        {item.impressionName && (
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+            Impression of:{" "}
+            <span className="font-semibold text-gray-800">{item.impressionName}</span>
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          {editionLabel && (
+            <span className="text-[11px] font-semibold text-[#9a7b32] bg-[#f7f0e2] border border-[#e8dcbf] px-2 py-0.5 rounded">
+              Edition: {editionLabel}
             </span>
           )}
           {item.size && (
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-              {item.size}
+            <span className="text-[11px] font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
+              Size: {item.size}
             </span>
           )}
         </div>
-        <p className="text-sm font-bold text-gray-900 mt-2">
-          PKR {item.price.toLocaleString()}
-        </p>
 
         <div className="flex items-center gap-4 mt-3">
           <div className="flex items-center border border-gray-300 rounded">
             <button
               onClick={() => updateQuantity(item.id, item.quantity - 1)}
               className="px-2.5 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors text-lg leading-none"
+              aria-label="Decrease quantity"
             >
               −
             </button>
@@ -61,46 +99,67 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
             <button
               onClick={() => updateQuantity(item.id, item.quantity + 1)}
               className="px-2.5 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors text-lg leading-none"
+              aria-label="Increase quantity"
             >
               +
             </button>
           </div>
-
-          <button
-            onClick={() => removeItem(item.id)}
-            className="text-xs text-red-500 hover:text-red-700 transition-colors flex items-center gap-1"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-            Remove
-          </button>
         </div>
       </div>
 
-      {/* Line Total */}
-      <div className="hidden sm:block text-right shrink-0">
-        <p className="font-bold text-gray-900 text-sm">
-          PKR {(item.price * item.quantity).toLocaleString()}
-        </p>
+      {/* Price breakup */}
+      <div className="sm:text-right shrink-0 sm:w-44 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
+        <div className="space-y-1 text-[13px]">
+          <div className="flex justify-between sm:justify-end sm:gap-3">
+            <span className="text-gray-500">Total Amount</span>
+            <span className="font-semibold text-gray-900">{rs(lineOriginal)}</span>
+          </div>
+          {hasDisc && (
+            <div className="flex justify-between sm:justify-end sm:gap-3 text-green-700">
+              <span>Less Discount ({disc}%)</span>
+              <span className="font-semibold">− {rs(lineDiscount)}</span>
+            </div>
+          )}
+          <div className="flex justify-between sm:justify-end sm:gap-3 pt-1 border-t border-gray-100">
+            <span className="text-gray-700 font-semibold">Subtotal</span>
+            <span className="font-bold text-gray-900">{rs(lineSubtotal)}</span>
+          </div>
+        </div>
+        <button
+          onClick={() => removeItem(item.id)}
+          className="mt-2 text-xs text-red-500 hover:text-red-700 font-semibold transition-colors inline-flex items-center gap-1 sm:justify-end"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Remove
+        </button>
       </div>
     </div>
   );
 }
 
-// A Discovery Box shown as one combined line (its 5 testers grouped together).
+// ── A Discovery Box shown as one combined line ───────────────────────────────
 function DiscoveryBoxCard({ box, removeItem }) {
+  const orig = box.items.reduce(
+    (s, i) => s + (i.originalPrice != null ? i.originalPrice : i.price) * i.quantity,
+    0,
+  );
   const total = box.items.reduce((s, i) => s + i.price * i.quantity, 0);
+  const disc = orig > total ? Math.round((1 - total / orig) * 100) : 0;
+
   return (
     <div className="py-6">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-[#1a1a2e]">🎁 Discovery Box {box.number}</span>
-          <span className="text-xs text-gray-500">{box.items.length} × 5ml · 25% off</span>
+          <span className="text-xs text-gray-500">
+            {box.items.length} × 5ml{disc > 0 ? ` · ${disc}% off` : ""}
+          </span>
         </div>
         <button
           onClick={() => box.items.forEach((i) => removeItem(i.id))}
-          className="text-xs text-red-500 hover:text-red-700 transition-colors flex items-center gap-1"
+          className="text-xs text-red-500 hover:text-red-700 font-semibold transition-colors flex items-center gap-1"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -124,14 +183,17 @@ function DiscoveryBoxCard({ box, removeItem }) {
                 <Link href={`/products/${i.slug}`}>
                   <p className="text-xs font-semibold text-gray-900 truncate hover:text-gray-600 transition-colors">{i.name}</p>
                 </Link>
-                <p className="text-[11px] text-gray-500">5ml · PKR {i.price.toLocaleString()}</p>
+                <p className="text-[11px] text-gray-500">5ml · {rs(i.price)}</p>
               </div>
             </div>
           ))}
         </div>
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#e8dcbf]">
           <span className="text-xs text-gray-500">Box total</span>
-          <span className="text-sm font-bold text-[#1a1a2e]">PKR {total.toLocaleString()}</span>
+          <span className="flex items-baseline gap-2">
+            {disc > 0 && <span className="text-xs text-gray-400 line-through">{rs(orig)}</span>}
+            <span className="text-sm font-bold text-[#1a1a2e]">{rs(total)}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -139,31 +201,60 @@ function DiscoveryBoxCard({ box, removeItem }) {
 }
 
 export default function CartPage() {
-  const { items, itemCount, subtotal, total: cartTotal, bundle, removeItem, updateQuantity, hydrated } =
-    useCart();
+  const {
+    items,
+    itemCount,
+    subtotal,
+    summary,
+    removeItem,
+    updateQuantity,
+    hydrated,
+  } = useCart();
 
-  const FREE_SHIPPING_THRESHOLD = 7000;
+  const [note, setNote] = useState("");
+
+  // Persist the order note so it survives navigation / can be read at checkout
+  useEffect(() => {
+    try {
+      setNote(localStorage.getItem("fa_order_note") || "");
+    } catch {}
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem("fa_order_note", note);
+    } catch {}
+  }, [note]);
+
   const SHIPPING = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : itemCount > 0 ? 200 : 0;
-  const total = cartTotal + SHIPPING;
+  const qualifiesFreeShip = itemCount > 0 && subtotal >= FREE_SHIPPING_THRESHOLD;
+  const grandTotal = summary.grandTotal + SHIPPING;
 
-  // Group Discovery-Box testers (same boxId) into one combined card; keep the
-  // original order and render everything else as a normal line.
-  const cartGroups = [];
+  // Ordering (spec pt 5): all perfumes first, then all discovery boxes.
+  const perfumeGroups = [];
+  const boxGroups = [];
   const boxSlot = new Map();
   let boxNo = 0;
   for (const item of items) {
     if (item.isDiscoveryBox && item.boxId) {
       if (boxSlot.has(item.boxId)) {
-        cartGroups[boxSlot.get(item.boxId)].items.push(item);
+        boxGroups[boxSlot.get(item.boxId)].items.push(item);
       } else {
         boxNo += 1;
-        boxSlot.set(item.boxId, cartGroups.length);
-        cartGroups.push({ type: "box", boxId: item.boxId, number: boxNo, items: [item] });
+        boxSlot.set(item.boxId, boxGroups.length);
+        boxGroups.push({ type: "box", boxId: item.boxId, number: boxNo, items: [item] });
       }
     } else {
-      cartGroups.push({ type: "item", item });
+      perfumeGroups.push({ type: "item", item });
     }
   }
+  const cartGroups = [...perfumeGroups, ...boxGroups];
+
+  const perfumeLabel =
+    summary.perfumeDiscMin && summary.perfumeDiscMax
+      ? summary.perfumeDiscMin === summary.perfumeDiscMax
+        ? `${summary.perfumeDiscMax}%`
+        : `${summary.perfumeDiscMin}% – ${summary.perfumeDiscMax}%`
+      : "";
 
   if (!hydrated) {
     return (
@@ -207,6 +298,27 @@ export default function CartPage() {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Cart Items */}
             <div className="flex-1">
+              {/* Free shipping banner (spec pt 1) */}
+              {qualifiesFreeShip ? (
+                <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 mb-4">
+                  <svg className="w-5 h-5 text-green-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-sm font-semibold text-green-800">
+                    🎉 You have qualified for <span className="uppercase">free shipping</span>!
+                  </p>
+                </div>
+              ) : (
+                itemCount > 0 && (
+                  <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 mb-4">
+                    <p className="text-sm text-amber-800 font-medium">
+                      Add {rs(FREE_SHIPPING_THRESHOLD - subtotal)} more to qualify for{" "}
+                      <span className="font-bold">FREE shipping</span>.
+                    </p>
+                  </div>
+                )
+              )}
+
               <div className="divide-y divide-gray-100">
                 {cartGroups.map((g) =>
                   g.type === "box" ? (
@@ -222,76 +334,114 @@ export default function CartPage() {
                 )}
               </div>
 
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <Link href="/collections/shop-all" className="text-sm text-gray-500 hover:text-black transition-colors flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
-                  Continue Shopping
-                </Link>
+              {/* Order Note (spec pt 3) */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <label htmlFor="order-note" className="block text-sm font-bold text-gray-900 mb-2">
+                  Order Note
+                </label>
+                <textarea
+                  id="order-note"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  rows={3}
+                  placeholder="Add any instructions for your order (e.g. gift wrap, delivery preference)…"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e] transition-colors resize-y"
+                />
               </div>
             </div>
 
-            {/* Order Summary */}
+            {/* Order Summary (spec pt 4) */}
             <div className="lg:w-80 xl:w-96 shrink-0">
-              <div className="border border-gray-200 rounded-xl p-6 sticky top-24">
+              <div className="border border-gray-200 rounded-2xl p-6 sticky top-24">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
 
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between text-gray-600">
-                    <span>Subtotal ({itemCount} item{itemCount !== 1 ? "s" : ""})</span>
-                    <span className="font-medium text-gray-900">PKR {subtotal.toLocaleString()}</span>
+                <div className="space-y-2.5 text-sm">
+                  <div className="flex justify-between text-gray-700">
+                    <span>Total Amount ({itemCount} item{itemCount !== 1 ? "s" : ""})</span>
+                    <span className="font-semibold text-gray-900">{rs(summary.totalOriginal)}</span>
                   </div>
 
-                  {bundle.savings > 0 && (
-                    <div>
-                      <div className="flex justify-between text-green-700">
-                        <span className="font-medium">Bundle Discount</span>
-                        <span className="font-semibold">-PKR {bundle.savings.toLocaleString()}</span>
-                      </div>
-                      <div className="mt-1 space-y-0.5">
-                        {bundle.breakdown.map((b) => (
-                          <p key={b.id} className="text-[10px] text-green-600 truncate">
-                            {b.name}: {b.discount}% off (-PKR {b.saving.toLocaleString()})
-                          </p>
-                        ))}
-                      </div>
+                  {summary.perfumeDiscount > 0 && (
+                    <div className="flex justify-between text-green-700">
+                      <span className="font-medium">
+                        Discount on Perfumes{perfumeLabel ? ` (${perfumeLabel})` : ""}
+                      </span>
+                      <span className="font-semibold">− {rs(summary.perfumeDiscount)}</span>
                     </div>
                   )}
 
-                  <div className="flex justify-between text-gray-600">
-                    <span>Shipping</span>
-                    <span className={`font-medium ${SHIPPING === 0 && itemCount > 0 ? "text-green-700" : "text-gray-900"}`}>
-                      {SHIPPING === 0 && itemCount > 0 ? "FREE" : `PKR ${SHIPPING.toLocaleString()}`}
+                  {summary.boxDiscount > 0 && (
+                    <div className="flex justify-between text-green-700">
+                      <span className="font-medium">
+                        Discount on Discovery Boxes{summary.boxDiscPct ? ` (${summary.boxDiscPct}%)` : ""}
+                      </span>
+                      <span className="font-semibold">− {rs(summary.boxDiscount)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between text-gray-800 pt-2 border-t border-gray-100">
+                    <span className="font-semibold">Subtotal</span>
+                    <span className="font-bold">{rs(summary.subtotal)}</span>
+                  </div>
+
+                  <div className="flex justify-between text-gray-700">
+                    <span>Shipping Charges</span>
+                    <span className={`font-semibold ${SHIPPING === 0 ? "text-green-700" : "text-gray-900"}`}>
+                      {SHIPPING === 0 ? "0" : rs(SHIPPING)}
                     </span>
                   </div>
 
-                  {subtotal > 0 && subtotal < FREE_SHIPPING_THRESHOLD && (
-                    <p className="text-[10px] text-gray-400">
-                      Spend PKR {(FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString()} more for free shipping
-                    </p>
+                  {/* Bundle Offer breakdown */}
+                  {summary.bundle.savings > 0 && (
+                    <div className="pt-1">
+                      <p className="text-[13px] font-semibold text-green-700">Less Bundle Offer Discount:</p>
+                      <div className="mt-1 space-y-0.5">
+                        {summary.bundle.breakdown.map((b, i) => (
+                          <div key={i} className="flex justify-between text-[12px] text-green-600">
+                            <span>{b.label}</span>
+                            <span>− {rs(b.saving)}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-between text-[13px] text-green-700 font-semibold mt-1 pt-1 border-t border-green-100">
+                        <span>Bundle Discount</span>
+                        <span>− {rs(summary.bundle.savings)}</span>
+                      </div>
+                    </div>
                   )}
-
-                  <div className="h-px bg-gray-100 my-2" />
-                  <div className="flex justify-between text-base font-bold text-gray-900">
-                    <span>Total</span>
-                    <span>PKR {total.toLocaleString()}</span>
-                  </div>
                 </div>
 
-                {items.length >= 2 && bundle.savings === 0 && (
-                  <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                    <p className="text-xs text-amber-800 font-medium">
-                      Add more perfumes to unlock bundle discounts: Buy 2 (10-15% off), Buy 3+ (up to 20% off)!
-                    </p>
+                {/* Grand Total */}
+                <div className="mt-4 rounded-lg bg-[#1a1a2e] text-white px-4 py-3 flex justify-between items-center">
+                  <span className="font-bold">Grand Total</span>
+                  <span className="font-extrabold text-lg">{rs(grandTotal)}</span>
+                </div>
+
+                {/* Total Savings */}
+                {summary.totalSavings > 0 && (
+                  <div className="mt-2 rounded-lg bg-green-600 text-white px-4 py-2.5 flex justify-between items-center">
+                    <span className="font-bold">Total Savings</span>
+                    <span className="font-extrabold">− {rs(summary.totalSavings)}</span>
                   </div>
                 )}
 
+                {/* Proceed to Checkout */}
                 <Link
                   href="/checkout"
-                  className="w-full mt-6 bg-black text-white py-3.5 rounded-lg font-semibold text-sm hover:bg-gray-800 transition-colors text-center block"
+                  className="w-full mt-5 bg-[#2f2a6b] text-white py-3.5 rounded-lg font-bold text-sm hover:bg-[#241f55] transition-colors text-center block"
                 >
                   Proceed to Checkout
+                </Link>
+
+                {/* Continue Shopping (spec pt 2) — different colour + idle life + hover */}
+                <Link
+                  href="/collections/shop-all"
+                  className="group w-full mt-3 border-2 border-[#b8964e] text-[#b8964e] bg-white py-3 rounded-lg font-bold text-sm hover:bg-[#b8964e] hover:text-white hover:shadow-[0_10px_28px_rgba(184,150,78,0.35)] transition-all duration-200 text-center flex items-center justify-center gap-2"
+                >
+                  <svg className="w-4 h-4 animate-bobX group-hover:animate-none group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Continue Shopping
                 </Link>
 
                 <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-400">

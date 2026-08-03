@@ -72,6 +72,10 @@ export default function QuickAddModal({
       edition: entry.key,
       size: entry.variant.size,
       price: finalOf(entry.variant.price),
+      originalPrice: entry.variant.price,
+      discountPercent: disc,
+      gender: perfume.gender || "",
+      impressionName: perfume.impressionName || "",
     });
     setShowBanners(false);
     setAdded(true);

@@ -246,6 +246,10 @@ export default function ProductDetailPage() {
         edition:   selectedEdition?.key || "",
         size:      selectedVariant.size,
         price:     finalPrice,
+        originalPrice: selectedVariant.price,
+        discountPercent: disc,
+        gender:    perfume.gender || "",
+        impressionName: perfume.impressionName || "",
       });
     }
     setCartAdded(true);
