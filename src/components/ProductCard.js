@@ -56,6 +56,9 @@ export default function ProductCard({
   boxSwapTarget = false,
   boxSoldOut = false,
   onAddToBox,
+  // Wishlist page: the top-right heart becomes a "Delete from Wishlist"
+  // control — red heart by default, red trash + label on hover.
+  wishlistRemoveMode = false,
 }) {
   const { isInWishlist, toggleItem } = useWishlist();
   const { addItem } = useCart();
@@ -177,25 +180,66 @@ export default function ProductCard({
       </div>
 
       {/* Wishlist heart - top-right */}
-      <button
-        onClick={handleWishlistToggle}
-        className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
-        aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-      >
-        <svg
-          className={`w-[15px] h-[15px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#9a9590]"}`}
-          fill={wishlisted ? "currentColor" : "none"}
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
+      {wishlistRemoveMode ? (
+        <button
+          onClick={handleWishlistToggle}
+          aria-label="Delete from wishlist"
+          className="group/wish absolute top-2 right-2 z-30 flex items-center h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-red-50 transition-colors duration-200 overflow-hidden"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          />
-        </svg>
-      </button>
+          <span className="relative w-8 h-8 shrink-0 flex items-center justify-center">
+            {/* Red heart (default) */}
+            <svg
+              className="w-[15px] h-[15px] text-[#e11d48] fill-[#e11d48] absolute transition-opacity duration-200 group-hover/wish:opacity-0"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+            {/* Red trash (on hover) */}
+            <svg
+              className="w-[15px] h-[15px] text-red-600 absolute opacity-0 transition-opacity duration-200 group-hover/wish:opacity-100"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </span>
+          <span className="max-w-0 group-hover/wish:max-w-[140px] group-hover/wish:pr-3 transition-all duration-300 ease-out whitespace-nowrap text-[10px] font-bold text-red-600">
+            Delete from Wishlist
+          </span>
+        </button>
+      ) : (
+        <button
+          onClick={handleWishlistToggle}
+          className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        >
+          <svg
+            className={`w-[15px] h-[15px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#9a9590]"}`}
+            fill={wishlisted ? "currentColor" : "none"}
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </button>
+      )}
 
       {/* Product Image */}
       <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
