@@ -34,7 +34,7 @@ function BrandBox({ brand }) {
   return (
     <Link
       href={`/collections/shop-all?search=${encodeURIComponent(brand)}`}
-      className="group/box relative shrink-0 mx-2.5 sm:mx-3.5 flex items-center justify-center h-16 sm:h-20 w-36 sm:w-44 rounded-2xl border border-[#e8e4df] bg-white/90 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#b8964e] hover:shadow-[0_14px_36px_rgba(184,150,78,0.18)] hover:bg-white"
+      className="group/box relative shrink-0 mx-2.5 sm:mx-3.5 flex items-center justify-center h-16 sm:h-20 w-36 sm:w-44 overflow-hidden rounded-2xl border border-[#e8e4df] bg-white/90 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#b8964e] hover:shadow-[0_14px_36px_rgba(184,150,78,0.18)] hover:bg-white"
     >
       {noLogo ? (
         <span className="px-3 text-center text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.06em] text-[#4a4540] group-hover/box:text-[#b8964e] transition-colors leading-tight line-clamp-2">
@@ -46,12 +46,13 @@ function BrandBox({ brand }) {
           src={`/icons/brands/${slug}.png`}
           alt={brand}
           onError={() => setNoLogo(true)}
-          className="max-h-11 sm:max-h-14 max-w-[78%] w-auto object-contain opacity-90 transition-all duration-300 group-hover/box:opacity-100 group-hover/box:scale-[1.08]"
+          className="max-h-12 sm:max-h-14 max-w-[82%] w-auto object-contain grayscale opacity-80 transition-all duration-300 group-hover/box:grayscale-0 group-hover/box:opacity-100 group-hover/box:scale-[1.06]"
         />
       )}
 
-      {/* Brand name tooltip on hover */}
-      <span className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 translate-y-full whitespace-nowrap rounded-full bg-[#1a1a2e] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white opacity-0 shadow-md transition-opacity duration-200 group-hover/box:opacity-100 z-30">
+      {/* Brand name — slides up from inside the card on hover (stays within the
+          box so it never overflows the marquee row / triggers a scrollbar) */}
+      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-[#1a1a2e]/95 py-1 text-center text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-300 ease-out group-hover/box:translate-y-0">
         {brand}
       </span>
     </Link>
@@ -132,6 +133,7 @@ export default function BrandMarquee() {
         {/* Moving boxes */}
         <div className="relative z-10 py-3">
           <Marquee
+            className="!overflow-hidden"
             play={play}
             direction={direction}
             speed={55}
