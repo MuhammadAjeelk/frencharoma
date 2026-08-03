@@ -622,16 +622,18 @@ export default function ProductDetailPage() {
             {/* ── Feature icons row ── */}
             <div className="grid grid-cols-4 gap-2 mb-5">
               {[
-                { emoji: "🚚", label: "Free Shipping",      sub: "Across Rs. 7,000+"     },
-                { emoji: "🌸", label: "Original French",    sub: "Perfume Oils"          },
-                { emoji: "💎", label: "High Concentration", sub: "of Perfume Oils"       },
-                { emoji: "🎁", label: "Sample Gift",        sub: "in Every Box"          },
+                { icon: "/images/why/free-shipping.webp", label: "Free Shipping",      sub: "Across Rs. 7,000+" },
+                { icon: "/images/why/original-oils.webp",  label: "Original French",    sub: "Perfume Oils"      },
+                { icon: "/images/why/concentration.webp",  label: "High Concentration", sub: "of Perfume Oils"   },
+                { icon: "/images/why/surprise-gift.webp",  label: "Sample Gift",        sub: "in Every Box"      },
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="flex flex-col items-center text-center gap-1 py-3 px-1 bg-gray-50 rounded-xl border border-gray-100"
+                  className="flex flex-col items-center text-center gap-1.5 py-3 px-1 bg-gray-50 rounded-xl border border-gray-100"
                 >
-                  <span className="text-2xl leading-none">{b.emoji}</span>
+                  <span className="relative w-8 h-8 sm:w-9 sm:h-9">
+                    <Image src={b.icon} alt={b.label} fill className="object-contain" sizes="36px" />
+                  </span>
                   <p className="text-[9px] sm:text-[10px] font-semibold text-gray-800 leading-tight">{b.label}</p>
                   <p className="text-[8px] sm:text-[9px] text-gray-500 leading-tight">{b.sub}</p>
                 </div>
