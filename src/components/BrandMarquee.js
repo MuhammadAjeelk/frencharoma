@@ -34,7 +34,7 @@ function BrandBox({ brand }) {
   return (
     <Link
       href={`/collections/shop-all?search=${encodeURIComponent(brand)}`}
-      className="group/box relative shrink-0 mx-2.5 sm:mx-3.5 flex items-center justify-center h-16 sm:h-20 w-36 sm:w-44 overflow-hidden rounded-2xl border border-[#e8e4df] bg-white/90 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#b8964e] hover:shadow-[0_14px_36px_rgba(184,150,78,0.18)] hover:bg-white"
+      className="group/box relative shrink-0 mx-2.5 sm:mx-3.5 flex items-center justify-center h-20 sm:h-24 w-36 sm:w-44 overflow-hidden rounded-2xl border border-[#e8e4df] bg-white/90 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#b8964e] hover:shadow-[0_14px_36px_rgba(184,150,78,0.18)] hover:bg-white"
     >
       {noLogo ? (
         <span className="px-3 text-center text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.06em] text-[#4a4540] group-hover/box:text-[#b8964e] transition-colors leading-tight line-clamp-2">
@@ -46,12 +46,13 @@ function BrandBox({ brand }) {
           src={`/icons/brands/${slug}.png`}
           alt={brand}
           onError={() => setNoLogo(true)}
-          className="max-h-12 sm:max-h-14 max-w-[82%] w-auto object-contain grayscale opacity-80 transition-all duration-300 group-hover/box:grayscale-0 group-hover/box:opacity-100 group-hover/box:scale-[1.06]"
+          className="max-h-12 sm:max-h-14 max-w-[82%] w-auto object-contain grayscale opacity-80 transition-all duration-300 group-hover/box:grayscale-0 group-hover/box:opacity-100 group-hover/box:-translate-y-2 group-hover/box:scale-[1.04]"
         />
       )}
 
-      {/* Brand name — slides up from inside the card on hover (stays within the
-          box so it never overflows the marquee row / triggers a scrollbar) */}
+      {/* Brand name — slides up into the empty strip below the logo on hover.
+          The logo lifts up (-translate-y-2) so the bar never covers it, and it
+          stays inside the card so it can't overflow the marquee row. */}
       <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-[#1a1a2e]/95 py-1 text-center text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-300 ease-out group-hover/box:translate-y-0">
         {brand}
       </span>
@@ -118,7 +119,7 @@ export default function BrandMarquee() {
         }}
       >
         {/* Fixed decorative patti behind the boxes */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[68px] sm:h-[84px] rounded-2xl bg-gradient-to-r from-[#f2ede3] via-white to-[#f2ede3] border-y border-[#e8dcc4]/60 overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[76px] sm:h-[92px] rounded-2xl bg-gradient-to-r from-[#f2ede3] via-white to-[#f2ede3] border-y border-[#e8dcc4]/60 overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center gap-10 opacity-[0.05]">
             <span className="whitespace-nowrap text-3xl sm:text-5xl font-black uppercase tracking-[0.2em] text-[#1a1a2e]">
               {bandNames.join("   ·   ")}
