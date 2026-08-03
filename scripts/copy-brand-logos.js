@@ -14,6 +14,7 @@ const map = {
   azzaro: "Azzaro.png",
   burberry: "Burberry.png",
   "carolina-herrera": "Carolina Herrera (1).png",
+  chanel: "Chanel.png",
   "christian-dior": "Christian Dior.png",
   creed: "Creed.png",
   davidoff: "Davidoff.png",

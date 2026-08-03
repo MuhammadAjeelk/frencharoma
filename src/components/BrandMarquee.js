@@ -12,6 +12,19 @@ const slugify = (b) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+// Brands we ship a logo file for (public/icons/brands/<slug>.png). Only these
+// appear in the marquee so every box is a real logo — no text-fallback boxes.
+// Brands without a logo still show in the SHOP BY BRAND nav dropdown.
+const LOGO_SLUGS = new Set([
+  "ajmal", "azzaro", "burberry", "carolina-herrera", "chanel", "christian-dior",
+  "creed", "davidoff", "dolce-and-gabbana", "ex-nihilo", "giorgio-armani",
+  "givenchy", "gucci", "hermes", "issey-miyake", "jean-paul-gaultier", "kilian",
+  "louis-vuitton", "maison-francis-kurkdjian", "maison-martin-margiela", "montale",
+  "nasomatto", "nishane", "ormonde-jayne", "paco-rabbane", "parfums-de-marly",
+  "thierry-mugler", "tom-ford", "victoria-s-secret", "viktor-and-rolf", "xerjoff",
+  "yves-saint-laurent",
+]);
+
 // A single brand box: shows the logo (from /icons/brands/<slug>.png) with a
 // text fallback, and reveals the brand name on hover.
 function BrandBox({ brand }) {
@@ -57,7 +70,9 @@ export default function BrandMarquee() {
       .catch(() => {});
   }, []);
 
-  if (brands.length === 0) return null;
+  // Only brands we have a logo for — keeps every box a consistent logo card.
+  const logoBrands = brands.filter((b) => LOGO_SLUGS.has(slugify(b)));
+  if (logoBrands.length === 0) return null;
 
   // Auto-scrolls left. On hover it pauses; press-and-hold an arrow to move
   // backward (◀ = scroll right) or forward (▶ = scroll left).
@@ -124,7 +139,7 @@ export default function BrandMarquee() {
             pauseOnHover={false}
             gradient={false}
           >
-            {brands.map((brand, index) => (
+            {logoBrands.map((brand, index) => (
               <BrandBox key={`${brand}-${index}`} brand={brand} />
             ))}
           </Marquee>
