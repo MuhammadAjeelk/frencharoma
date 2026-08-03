@@ -39,7 +39,6 @@ export default function ShopByGender() {
               name={gender.name}
               image={gender.image}
               href={gender.href}
-              hideLabel
             />
           ))}
         </div>
