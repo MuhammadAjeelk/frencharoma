@@ -3,7 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ShopCard({ name, image, href, tagline, hideLabel = false }) {
+export default function ShopCard({
+  name,
+  image,
+  href,
+  tagline,
+  hideLabel = false,
+  // When true, no text shows on the picture by default; on hover the name
+  // reveals in gold and the divider sweeps left→right (Shop By Gender).
+  hideDefaultName = false,
+}) {
   return (
     <Link
       href={href}
@@ -19,8 +28,13 @@ export default function ShopCard({ name, image, href, tagline, hideLabel = false
         />
         {!hideLabel && (
           <>
-            {/* Base bottom gradient for the label */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/55 via-black/5 to-transparent" />
+            {/* Base bottom gradient — always on, unless we want a clean image
+                by default (hideDefaultName) in which case it fades in on hover */}
+            <div
+              className={`absolute inset-0 bg-linear-to-t from-black/55 via-black/5 to-transparent ${
+                hideDefaultName ? "opacity-0 group-hover:opacity-100 transition-opacity duration-400" : ""
+              }`}
+            />
 
             {tagline && (
               <>
@@ -35,14 +49,20 @@ export default function ShopCard({ name, image, href, tagline, hideLabel = false
               </>
             )}
 
-            {/* Name + golden divider that spans the full width on hover */}
+            {/* Name + golden divider that sweeps the full width on hover */}
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-              <div className="mb-2.5 h-[2px] w-6 bg-[#b8964e] transition-all duration-500 ease-out group-hover:w-full" />
+              <div
+                className={`mb-2.5 h-[2px] bg-[#b8964e] transition-all duration-500 ease-out group-hover:w-full ${
+                  hideDefaultName ? "w-0" : "w-6"
+                }`}
+              />
               <h3
-                className={`text-white text-sm sm:text-base font-semibold uppercase tracking-widest drop-shadow-lg transition-all duration-300 ${
-                  tagline
-                    ? "group-hover:opacity-0 group-hover:translate-y-1"
-                    : "group-hover:text-[#b8964e]"
+                className={`text-sm sm:text-base font-semibold uppercase tracking-widest drop-shadow-lg transition-all duration-300 ${
+                  hideDefaultName
+                    ? "text-[#b8964e] opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"
+                    : tagline
+                      ? "text-white group-hover:opacity-0 group-hover:translate-y-1"
+                      : "text-white group-hover:text-[#b8964e]"
                 }`}
               >
                 {name}
