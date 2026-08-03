@@ -38,7 +38,13 @@ export default function ShopCard({ name, image, href, tagline, hideLabel = false
             {/* Name + golden divider that spans the full width on hover */}
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
               <div className="mb-2.5 h-[2px] w-6 bg-[#b8964e] transition-all duration-500 ease-out group-hover:w-full" />
-              <h3 className="text-white group-hover:text-[#b8964e] text-sm sm:text-base font-semibold uppercase tracking-widest drop-shadow-lg transition-colors duration-300">
+              <h3
+                className={`text-white text-sm sm:text-base font-semibold uppercase tracking-widest drop-shadow-lg transition-all duration-300 ${
+                  tagline
+                    ? "group-hover:opacity-0 group-hover:translate-y-1"
+                    : "group-hover:text-[#b8964e]"
+                }`}
+              >
                 {name}
               </h3>
             </div>
