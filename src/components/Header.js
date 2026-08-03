@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -15,6 +16,8 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [searchActive, setSearchActive] = useState(-1);
+  const router = useRouter();
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileSubOpen, setMobileSubOpen] = useState(null);
@@ -207,7 +210,34 @@ export default function Header() {
                         type="search"
                         name="search"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
+                          setSearchActive(-1);
+                        }}
+                        onKeyDown={(e) => {
+                          if (!searchResults.length) return;
+                          if (e.key === "ArrowDown") {
+                            e.preventDefault();
+                            setSearchActive((i) => (i + 1) % searchResults.length);
+                          } else if (e.key === "ArrowUp") {
+                            e.preventDefault();
+                            setSearchActive(
+                              (i) => (i - 1 + searchResults.length) % searchResults.length,
+                            );
+                          } else if (e.key === "Enter") {
+                            if (searchActive >= 0 && searchActive < searchResults.length) {
+                              e.preventDefault();
+                              const p = searchResults[searchActive];
+                              setIsSearchExpanded(false);
+                              setSearchQuery("");
+                              setSearchActive(-1);
+                              router.push(`/products/${p.slug}`);
+                            }
+                          } else if (e.key === "Escape") {
+                            setIsSearchExpanded(false);
+                            setSearchActive(-1);
+                          }
+                        }}
                         placeholder="Search perfumes..."
                         className="w-64 px-4 py-2 pl-10 pr-10 border-0 rounded-lg focus:outline-none focus:ring-0 bg-[#f1ede6] text-[13px]"
                         autoFocus
@@ -232,14 +262,12 @@ export default function Header() {
                           setIsSearchExpanded(false);
                           setSearchQuery("");
                         }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:opacity-70"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#6b6560] hover:text-red-500 transition-colors"
                         aria-label="Close search"
                       >
-                        <img
-                          src="/icons/close.svg"
-                          alt="Close"
-                          className="w-4 h-4"
-                        />
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                       </button>
 
                       {/* Live suggestions */}
@@ -247,15 +275,17 @@ export default function Header() {
                         <div className="absolute left-0 top-full mt-1.5 w-72 bg-white border border-[#e8e4df] rounded-lg shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-20 overflow-hidden animate-fadeIn">
                           {searchResults.length > 0 ? (
                             <>
-                              {searchResults.map((p) => (
+                              {searchResults.map((p, i) => (
                                 <Link
                                   key={p._id}
                                   href={`/products/${p.slug}`}
                                   onClick={() => {
                                     setIsSearchExpanded(false);
                                     setSearchQuery("");
+                                    setSearchActive(-1);
                                   }}
-                                  className="flex items-center gap-3 px-3 py-2 hover:bg-[#faf8f5] transition-colors"
+                                  onMouseEnter={() => setSearchActive(i)}
+                                  className={`flex items-center gap-3 px-3 py-2 transition-colors ${i === searchActive ? "bg-[#faf8f5]" : "hover:bg-[#faf8f5]"}`}
                                 >
                                   <div className="relative w-9 h-9 rounded-md overflow-hidden bg-gray-50 shrink-0 border border-[#f0ece7]">
                                     {p.images?.main ? (
@@ -327,11 +357,11 @@ export default function Header() {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className="hidden lg:block relative focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] hover:scale-110 transition-all duration-200"
+                className="group hidden lg:block relative focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200"
                 aria-label="Wishlist"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -348,17 +378,20 @@ export default function Header() {
                     {wishlistCount > 99 ? "99+" : wishlistCount}
                   </span>
                 )}
+                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 rounded bg-[#1a1a2e] text-white text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                  Wishlist
+                </span>
               </Link>
 
               {/* Account */}
-              <div className="hidden lg:block relative" ref={accountRef}>
+              <div className="group hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className="flex items-center focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] hover:scale-110 transition-all duration-200"
+                  className="flex items-center focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200"
                   aria-label="Account"
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -371,6 +404,11 @@ export default function Header() {
                     />
                   </svg>
                 </button>
+                {!isAccountOpen && (
+                  <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 rounded bg-[#1a1a2e] text-white text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                    Account
+                  </span>
+                )}
                 {isAccountOpen && (
                   <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
                     {loading ? (
@@ -456,11 +494,11 @@ export default function Header() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className="flex items-center focus:outline-none relative text-[#1a1a2e] hover:text-[#b8964e] hover:scale-110 transition-all duration-200"
+                className="group flex items-center focus:outline-none relative text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200"
                 aria-label="Cart"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -477,6 +515,9 @@ export default function Header() {
                     {itemCount > 99 ? "99+" : itemCount}
                   </span>
                 )}
+                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 rounded bg-[#1a1a2e] text-white text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                  Cart
+                </span>
               </Link>
             </div>
           </div>
