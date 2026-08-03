@@ -87,13 +87,16 @@ export default function BestSellers() {
     <>
       <div className="py-12 md:py-16 px-4 bg-white relative overflow-visible">
         <div className="max-w-7xl mx-auto overflow-visible">
-          <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
-            Customer Favourites
-          </p>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
-            BEST SELLERS
-          </h2>
-          <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-8 md:mb-10" />
+          <div className="text-center mb-8 md:mb-10">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#b8964e] animate-pulse" />
+              Try It. Love It.
+            </span>
+            <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a1a2e] via-[#3a3550] to-[#1a1a2e] bg-clip-text text-transparent">
+              BEST SELLERS
+            </h2>
+            <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
+          </div>
 
           <div className="relative mb-10 md:mb-14 overflow-visible">
             <button
