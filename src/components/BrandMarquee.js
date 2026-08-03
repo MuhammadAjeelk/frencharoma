@@ -12,7 +12,7 @@ const slugify = (b) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-// A single brand box: shows the logo (from /uploads/brands/<slug>.png) with a
+// A single brand box: shows the logo (from /icons/brands/<slug>.png) with a
 // text fallback, and reveals the brand name on hover.
 function BrandBox({ brand }) {
   const [noLogo, setNoLogo] = useState(false);
@@ -30,10 +30,10 @@ function BrandBox({ brand }) {
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={`/uploads/brands/${slug}.png`}
+          src={`/icons/brands/${slug}.png`}
           alt={brand}
           onError={() => setNoLogo(true)}
-          className="max-h-10 sm:max-h-12 max-w-[74%] w-auto object-contain opacity-80 grayscale transition-all duration-300 group-hover/box:opacity-100 group-hover/box:grayscale-0 group-hover/box:scale-105"
+          className="max-h-11 sm:max-h-14 max-w-[78%] w-auto object-contain opacity-90 transition-all duration-300 group-hover/box:opacity-100 group-hover/box:scale-[1.08]"
         />
       )}
 
