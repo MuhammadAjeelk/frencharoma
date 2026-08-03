@@ -6,7 +6,7 @@ import BestSellers from "@/components/BestSellers";
 import BundleOffers from "@/components/BundleOffers";
 import SpecialOffers from "@/components/SpecialOffers";
 import Discovery from "@/components/Discovery";
-import WhatMakesUsSpecial from "@/components/WhatMakesUsSpecial";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import Reveal from "@/components/Reveal";
 
 export default function Home() {
@@ -35,7 +35,7 @@ export default function Home() {
         <Discovery />
       </Reveal>
       <Reveal>
-        <WhatMakesUsSpecial />
+        <WhyChooseUs />
       </Reveal>
     </div>
   );
