@@ -34,7 +34,7 @@ function BrandBox({ brand }) {
   return (
     <Link
       href={`/collections/shop-all?search=${encodeURIComponent(brand)}`}
-      className="group/box relative shrink-0 mx-2.5 sm:mx-3.5 flex items-center justify-center h-20 sm:h-24 w-36 sm:w-44 overflow-hidden rounded-2xl border border-[#e8e4df] bg-white/90 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#b8964e] hover:shadow-[0_14px_36px_rgba(184,150,78,0.18)] hover:bg-white"
+      className="group/box relative shrink-0 mx-2.5 sm:mx-3.5 my-3 flex items-center justify-center h-20 sm:h-24 w-36 sm:w-44 overflow-hidden rounded-2xl border border-[#e8e4df] bg-white/90 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#b8964e] hover:shadow-[0_14px_36px_rgba(184,150,78,0.18)] hover:bg-white"
     >
       {noLogo ? (
         <span className="px-3 text-center text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.06em] text-[#4a4540] group-hover/box:text-[#b8964e] transition-colors leading-tight line-clamp-2">
