@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 
 export default function UniversalModal({
   isOpen,
@@ -46,16 +45,18 @@ export default function UniversalModal({
           <h2 className="text-lg font-bold text-[#1a1a2e]">{heading}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-[#faf8f5] rounded-lg transition-colors"
+            className="group/close p-2 rounded-lg text-[#6b6560] hover:text-red-500 transition-colors"
             aria-label="Close modal"
           >
-            <Image
-              src="/icons/close.svg"
-              alt="Close"
-              width={18}
-              height={18}
-              className="w-[18px] h-[18px] opacity-60"
-            />
+            <svg
+              className="w-[18px] h-[18px]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
