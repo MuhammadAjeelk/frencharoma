@@ -103,7 +103,6 @@ export default function Header() {
     { name: "SHOP ALL", href: "/collections/shop-all", submenu: shopSubmenu },
     { name: "BEST SELLERS", href: "/collections/shop-all?bestSeller=true" },
     { name: "SHOP BY BRAND", href: "#", brandDropdown: true },
-    { name: "BUNDLE OFFERS", href: "/collections/shop-all?bundle=true" },
     { name: "SPECIAL OFFERS", href: "/collections/shop-all?specialOffer=true" },
     { name: "DISCOVERY BOX", href: "/collections/discovery-box" },
     { name: "BLOGS", href: "/blogs/blog" },

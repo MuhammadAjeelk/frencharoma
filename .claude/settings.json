@@ -18,7 +18,14 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5050/)",
       "Bash(pkill -f \"PORT=5050\")",
       "Bash(pkill -f \"next start\")",
-      "Bash(git commit -q -m ' *)"
+      "Bash(git commit -q -m ' *)",
+      "Bash(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@209.145.62.145 'cd /root/frencharoma && git pull --ff-only && npm run build 2>&1 | tail -5 && ID=$\\(pm2 jlist | node -e \"let d=JSON.parse\\(require\\(\\\\\"fs\\\\\"\\).readFileSync\\(0\\)\\);let p=d.find\\(x=>x.pm2_env.pm_cwd===\\\\\"/root/frencharoma\\\\\"\\);process.stdout.write\\(String\\(p?p.pm_id:\\\\\"\\\\\"\\)\\)\"\\) && echo \"resolved pm2 id: $ID\" && pm2 restart \"$ID\" && pm2 status')",
+      "Bash(sshpass -p Ab35123890 ssh -o StrictHostKeyChecking=no -o ConnectTimeout=20 root@209.145.62.145 'cd /root/frencharoma && git pull --ff-only && npm run build 2>&1 | tail -6 && ID=$\\(pm2 jlist | node -e \"let d=JSON.parse\\(require\\(\\\\\"fs\\\\\"\\).readFileSync\\(0\\)\\);let p=d.find\\(x=>x.pm2_env.pm_cwd===\\\\\"/root/frencharoma\\\\\"\\);process.stdout.write\\(String\\(p?p.pm_id:\\\\\"\\\\\"\\)\\)\"\\) && echo \"resolved pm2 id: $ID\" && pm2 restart \"$ID\" && pm2 status')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://frencharoma.sparksgate.com/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://frencharoma.sparksgate.com/collections/shop-all)",
+      "Bash(lsof -iTCP:5050 -sTCP:LISTEN -n -P)",
+      "Bash(curl -s http://localhost:5050/)",
+      "Bash(pkill -f \"next-server\")"
     ]
   }
 }

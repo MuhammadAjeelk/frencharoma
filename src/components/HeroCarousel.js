@@ -15,12 +15,6 @@ export default function HeroCarousel() {
       href: "/collections/shop-all?bestSeller=true",
     },
     {
-      image: "https://www.linea-debella.com/cdn/shop/files/new_collection_of_perfumes_1.webp?v=1767521728&width=1500",
-      title: "BUNDLE OFFERS",
-      subtitle: "Buy 2 or 3 perfumes and save up to 20% — mix & match your favourites.",
-      href: "/collections/shop-all?bundle=true",
-    },
-    {
       image: "https://www.linea-debella.com/cdn/shop/files/DIVE-INTO-LUXURY.jpg?v=1755525359&width=3000",
       title: "SPECIAL OFFERS",
       subtitle: "Up to 50% off on select perfumes — limited time, limited stock.",

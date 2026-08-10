@@ -11,7 +11,6 @@ export default function Footer() {
   const popularCollection = [
     { name: "Best Sellers", href: "/collections/shop-all?bestSeller=true" },
     { name: "Shop All", href: "/collections/shop-all" },
-    { name: "Bundle Offers", href: "/collections/shop-all?bundle=true" },
     { name: "Special Offers", href: "/collections/shop-all?specialOffer=true" },
     { name: "Discovery Box", href: "/collections/discovery-box" },
     { name: "Brands", href: "/collections/shop-all" },

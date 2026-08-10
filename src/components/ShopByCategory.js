@@ -20,17 +20,27 @@ export default function ShopByCategory() {
   ];
 
   return (
-    <section className="py-14 md:py-20 px-4 bg-gradient-to-b from-[#f3ede1] via-[#faf8f5] to-[#f3ede1] border-y border-[#e6dcc6]">
-      <div className="max-w-7xl mx-auto">
-        <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
-          Choose Your Tier
-        </p>
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
-          SHOP BY COLLECTION
-        </h2>
-        <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-8 md:mb-10" />
+    <section className="relative py-16 md:py-24 px-4 overflow-hidden bg-[#f7f3ea] border-y border-[#e6dcc6]">
+      {/* Sophisticated, understated backdrop */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(100%_70%_at_50%_0%,rgba(201,162,90,0.10),transparent_60%)]" />
 
-        <div className="flex flex-col md:flex-row justify-center items-stretch gap-4 md:gap-6 lg:gap-8 max-w-4xl mx-auto">
+      <div className="relative max-w-7xl mx-auto">
+        {/* Heading — same refined style as the other sections */}
+        <div className="text-center mb-10 md:mb-14">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#b8964e] animate-pulse" />
+            Choose Your Tier
+          </span>
+          <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a1a2e] via-[#3a3550] to-[#1a1a2e] bg-clip-text text-transparent">
+            SHOP BY COLLECTION
+          </h2>
+          <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
+          <p className="text-[13px] md:text-sm text-[#8a847e] mt-4 max-w-lg mx-auto italic font-[family-name:var(--font-playfair)]">
+            Crafted for every preference.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center items-stretch gap-6 md:gap-9">
           {categories.map((category, index) => (
             <ShopCard
               key={index}
@@ -43,10 +53,10 @@ export default function ShopByCategory() {
         </div>
 
         {/* View All */}
-        <div className="flex justify-center mt-10 md:mt-12">
+        <div className="flex justify-center mt-11 md:mt-14">
           <Link
             href="/collections/shop-all"
-            className="group inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg shadow-sm hover:bg-[#b8964e] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-semibold text-sm tracking-wide uppercase"
+            className="group inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-9 md:px-11 py-3 rounded-lg shadow-sm hover:bg-[#2a2640] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-semibold text-sm tracking-wide uppercase"
           >
             View All
             <svg

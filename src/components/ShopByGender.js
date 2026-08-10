@@ -26,17 +26,28 @@ export default function ShopByGender() {
   ];
 
   return (
-    <section className="py-14 md:py-20 px-4 bg-gradient-to-b from-white via-[#f1ece3] to-white">
-      <div className="max-w-7xl mx-auto">
-        <p className="text-[11px] font-bold text-[#b8964e] uppercase tracking-[0.2em] text-center mb-2">
-          Find Your Signature
-        </p>
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#1a1a2e] tracking-tight mb-2">
-          SHOP BY GENDER
-        </h2>
-        <div className="w-10 h-[2px] bg-[#b8964e] mx-auto mb-8 md:mb-10" />
+    <section className="relative py-16 md:py-24 px-4 overflow-hidden bg-[#141118]">
+      {/* Sophisticated background — sets the section apart from the page */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(201,162,90,0.16),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_60%_at_50%_120%,rgba(201,162,90,0.10),transparent_55%)]" />
 
-        <div className="flex flex-col md:flex-row justify-center items-stretch gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto">
+      <div className="relative max-w-7xl mx-auto">
+        {/* Heading — styled like Shop By Brand, tuned for the dark backdrop */}
+        <div className="text-center mb-10 md:mb-14">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#c9a25a]/15 border border-[#c9a25a]/40 text-[#e8cf9f] text-[10px] font-bold uppercase tracking-[0.22em]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a25a] animate-pulse" />
+            Find Your Signature
+          </span>
+          <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white via-[#f2dca8] to-white bg-clip-text text-transparent">
+            SHOP BY GENDER
+          </h2>
+          <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#c9a25a] to-transparent" />
+          <p className="text-[13px] md:text-sm text-[#b8b2ad] mt-4 max-w-lg mx-auto italic font-[family-name:var(--font-playfair)]">
+            Every fragrance tells a story — find the one that reflects yours.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center items-stretch gap-5 md:gap-7">
           {genders.map((gender, index) => (
             <ShopCard
               key={index}
@@ -44,20 +55,20 @@ export default function ShopByGender() {
               tagline={gender.tagline}
               image={gender.image}
               href={gender.href}
-              hideDefaultName
             />
           ))}
         </div>
 
-        {/* View All */}
-        <div className="flex justify-center mt-10 md:mt-12">
+        {/* View All — deliberately not golden; a clean invert-fill on hover */}
+        <div className="flex justify-center mt-11 md:mt-14">
           <Link
             href="/collections/shop-all"
-            className="group inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg shadow-sm hover:bg-[#b8964e] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-semibold text-sm tracking-wide uppercase"
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg border border-white/35 px-9 md:px-11 py-3 text-white font-semibold text-sm tracking-wide uppercase transition-colors duration-300 hover:text-[#141118]"
           >
-            View All
+            <span className="absolute inset-0 -z-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+            <span className="relative z-10">View All</span>
             <svg
-              className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+              className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

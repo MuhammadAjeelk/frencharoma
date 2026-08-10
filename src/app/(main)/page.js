@@ -3,7 +3,6 @@ import BrandMarquee from "@/components/BrandMarquee";
 import ShopByGender from "@/components/ShopByGender";
 import ShopByCategory from "@/components/ShopByCategory";
 import BestSellers from "@/components/BestSellers";
-import BundleOffers from "@/components/BundleOffers";
 import SpecialOffers from "@/components/SpecialOffers";
 import Discovery from "@/components/Discovery";
 import WhyChooseUs from "@/components/WhyChooseUs";
@@ -24,9 +23,6 @@ export default function Home() {
       </Reveal>
       <Reveal>
         <BestSellers />
-      </Reveal>
-      <Reveal>
-        <BundleOffers />
       </Reveal>
       <Reveal>
         <SpecialOffers />
