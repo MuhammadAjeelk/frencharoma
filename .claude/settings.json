@@ -13,7 +13,12 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(ssh -V)"
+      "Bash(ssh -V)",
+      "Bash(PORT=5050 npm run start)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5050/)",
+      "Bash(pkill -f \"PORT=5050\")",
+      "Bash(pkill -f \"next start\")",
+      "Bash(git commit -q -m ' *)"
     ]
   }
 }

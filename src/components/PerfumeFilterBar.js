@@ -34,7 +34,6 @@ export const FEATURED_OPTIONS = [
 
 export const SORT_OPTIONS = [
   { value: "global-admire-desc", label: "Globally Admired (High – Low)" },
-  { value: "newest", label: "All (Newest first)" },
   { value: "name-asc", label: "Alphabetically (A – Z)" },
   { value: "name-desc", label: "Alphabetically (Z – A)" },
   { value: "price-asc", label: "Price (Low – High)" },
@@ -431,11 +430,11 @@ export default function PerfumeFilterBar({
             <button
               key={chip.key}
               onClick={chip.clear}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e] hover:underline underline-offset-4 decoration-1 transition-all duration-200"
+              className="group/chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
             >
               <span>{chip.label}</span>
               <svg
-                className="w-3 h-3 text-[#a09890]"
+                className="w-3 h-3 text-[#a09890] group-hover/chip:text-red-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

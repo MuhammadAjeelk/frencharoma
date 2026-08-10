@@ -231,7 +231,7 @@ export default function Header() {
                               setIsSearchExpanded(false);
                               setSearchQuery("");
                               setSearchActive(-1);
-                              router.push(`/products/${p.slug}`);
+                              router.push(`/collections/shop-all?search=${encodeURIComponent(p.name)}`);
                             }
                           } else if (e.key === "Escape") {
                             setIsSearchExpanded(false);
@@ -278,14 +278,18 @@ export default function Header() {
                               {searchResults.map((p, i) => (
                                 <Link
                                   key={p._id}
-                                  href={`/products/${p.slug}`}
+                                  href={`/collections/shop-all?search=${encodeURIComponent(p.name)}`}
                                   onClick={() => {
                                     setIsSearchExpanded(false);
                                     setSearchQuery("");
                                     setSearchActive(-1);
                                   }}
                                   onMouseEnter={() => setSearchActive(i)}
-                                  className={`flex items-center gap-3 px-3 py-2 transition-colors ${i === searchActive ? "bg-[#faf8f5]" : "hover:bg-[#faf8f5]"}`}
+                                  className={`flex items-center gap-3 px-3 py-2 transition-colors border-l-[3px] ${
+                                    i === searchActive
+                                      ? "bg-[#b8964e]/15 border-[#b8964e]"
+                                      : "border-transparent hover:bg-[#f6efe2]"
+                                  }`}
                                 >
                                   <div className="relative w-9 h-9 rounded-md overflow-hidden bg-gray-50 shrink-0 border border-[#f0ece7]">
                                     {p.images?.main ? (
@@ -293,9 +297,9 @@ export default function Header() {
                                     ) : null}
                                   </div>
                                   <div className="min-w-0">
-                                    <p className="text-[12px] font-medium text-[#1f1a16] truncate">{p.name}</p>
+                                    <p className={`text-[12px] font-medium truncate ${i === searchActive ? "text-[#8a6d2a]" : "text-[#1f1a16]"}`}>{p.name}</p>
                                     <p className="text-[11px] text-[#a09890] truncate">
-                                      {p.brand || (p.brands && p.brands[0]) || "French Aromas"}
+                                      Impression of: {p.impressionName || p.brand || (p.brands && p.brands[0]) || "French Aromas"}
                                     </p>
                                   </div>
                                 </Link>

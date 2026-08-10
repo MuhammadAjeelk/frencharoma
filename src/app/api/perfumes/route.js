@@ -68,7 +68,12 @@ export async function GET(request) {
     }
 
     if (scentFamily && scentFamily !== "all") {
-      conditions.push({ scentFamily: { $regex: scentFamily, $options: "i" } });
+      // Exact family match (case-insensitive). Anchored so a perfume whose
+      // family is "Citrus-Fresh" only appears under the "Citrus-Fresh" filter —
+      // never under a separate "Citrus" or "Fresh" family.
+      conditions.push({
+        scentFamily: { $regex: `^${escapeRegExp(scentFamily)}$`, $options: "i" },
+      });
     }
 
     if (tagsParam) {
