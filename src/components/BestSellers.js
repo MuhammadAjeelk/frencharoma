@@ -139,6 +139,7 @@ export default function BestSellers() {
                         perfumeId={perfume._id}
                         editions={perfume.editions || []}
                         gender={perfume.gender || ""}
+                        scentFamily={perfume.scentFamily || ""}
                         avgRating={perfume.avgRating || 0}
                         reviewCount={perfume.reviewCount || 0}
                         isBestSeller={Boolean(perfume.isBestSeller)}

@@ -8,6 +8,11 @@ const CartContext = createContext(null);
 // (2nd, 3rd, 4th … each -Rs BUNDLE_PER_UNIT). Discovery boxes don't count.
 const BUNDLE_PER_UNIT = 500;
 
+// Flat shipping when charged. Free shipping applies to any order that has at
+// least one perfume, or 2+ discovery boxes. A cart with ONLY one discovery box
+// (and nothing else) is charged shipping (Discovery Box already at 40% off).
+const SHIPPING_FLAT = 200;
+
 const ordinal = (n) => {
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
@@ -20,6 +25,9 @@ const origOf = (i) => (i.originalPrice != null ? i.originalPrice : i.price);
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [hydrated, setHydrated] = useState(false);
+  // Add-to-Cart confirmation popup (shows the Order Summary)
+  const [addedOpen, setAddedOpen] = useState(false);
+  const [lastAdded, setLastAdded] = useState(null);
 
   useEffect(() => {
     try {
@@ -49,7 +57,26 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...item, id, quantity: 1 }];
     });
+    // Perfume adds pop the confirmation summary; box testers (built on the
+    // Discovery Box page) do not, so the box flow isn't interrupted.
+    if (!item.isDiscoveryBox) {
+      setLastAdded(item);
+      setAddedOpen(true);
+    }
   }, []);
+
+  const openAdded = useCallback(() => setAddedOpen(true), []);
+  const closeAdded = useCallback(() => setAddedOpen(false), []);
+
+  // Total quantity of a specific perfume in the cart (across editions/sizes,
+  // excluding discovery-box testers) — drives the "Added to Cart (N)" state.
+  const perfumeQty = useCallback(
+    (pid) =>
+      items
+        .filter((i) => !i.isDiscoveryBox && String(i.perfumeId) === String(pid))
+        .reduce((s, i) => s + i.quantity, 0),
+    [items],
+  );
 
   const removeItem = useCallback((id) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
@@ -106,17 +133,33 @@ export function CartProvider({ children }) {
       );
     const boxDiscPct = boxPcts.length ? Math.max(...boxPcts) : 0;
 
-    // Bundle Offer — flat Rs BUNDLE_PER_UNIT off each perfume unit past the 1st
+    // Bundle Offer — flat Rs BUNDLE_PER_UNIT off each perfume unit past the 1st.
+    // Breakdown always lists the 1st perfume at Rs 0, then each extra at Rs 500.
     const perfumeUnits = perfumeItems.reduce((s, i) => s + i.quantity, 0);
     const bundleCount = Math.max(0, perfumeUnits - 1);
     const bundleSavings = bundleCount * BUNDLE_PER_UNIT;
     const bundleBreakdown = [];
-    for (let n = 2; n <= perfumeUnits; n++) {
-      bundleBreakdown.push({ label: `${ordinal(n)} Perfume`, saving: BUNDLE_PER_UNIT });
+    if (perfumeUnits >= 1) {
+      bundleBreakdown.push({ label: "1st Perfume", saving: 0 });
+      for (let n = 2; n <= perfumeUnits; n++) {
+        bundleBreakdown.push({ label: `${ordinal(n)} Perfume`, saving: BUNDLE_PER_UNIT });
+      }
     }
 
-    const grandTotal = subtotal - bundleSavings;
-    const totalSavings = perfumeDiscount + boxDiscount + bundleSavings;
+    // Shipping — free with any perfume, or 2+ discovery boxes. Only a lone
+    // single Discovery Box (no other products) is charged.
+    const boxCount = new Set(boxItems.map((i) => i.boxId).filter(Boolean)).size;
+    const hasItems = items.length > 0;
+    const shippingFree = perfumeUnits >= 1 || boxCount >= 2;
+    const shipping = !hasItems ? 0 : shippingFree ? 0 : SHIPPING_FLAT;
+    const shippingSaved = hasItems && shippingFree ? SHIPPING_FLAT : 0;
+    const singleBoxOnly = perfumeUnits === 0 && boxCount === 1;
+
+    // Net Amount (what the customer pays) and Net Savings (everything saved).
+    const grandTotal = subtotal - bundleSavings; // pre-shipping (back-compat)
+    const netAmount = grandTotal + shipping;
+    const netSavings =
+      perfumeDiscount + boxDiscount + shippingSaved + bundleSavings;
 
     return {
       totalOriginal,
@@ -127,8 +170,17 @@ export function CartProvider({ children }) {
       boxDiscPct,
       subtotal,
       bundle: { savings: bundleSavings, breakdown: bundleBreakdown, count: bundleCount },
+      perfumeUnits,
+      boxCount,
+      shipping,
+      shippingSaved,
+      shippingFree,
+      singleBoxOnly,
       grandTotal,
-      totalSavings,
+      netAmount,
+      netSavings,
+      // legacy alias
+      totalSavings: netSavings,
     };
   }, [items]);
 
@@ -150,6 +202,11 @@ export function CartProvider({ children }) {
         removeItem,
         updateQuantity,
         clearCart,
+        perfumeQty,
+        addedOpen,
+        lastAdded,
+        openAdded,
+        closeAdded,
       }}
     >
       {children}

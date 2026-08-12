@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { genderMeta } from "@/lib/gender";
+import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,7 +13,6 @@ const EDITION_LABEL = {
   classic: "Classic Edition",
 };
 
-const FREE_SHIPPING_THRESHOLD = 7000;
 const rs = (n) => `Rs. ${Math.round(n).toLocaleString()}`;
 
 // ── A single perfume line — full detail + price breakup (spec pt 2/6) ────────
@@ -204,7 +204,6 @@ export default function CartPage() {
   const {
     items,
     itemCount,
-    subtotal,
     summary,
     removeItem,
     updateQuantity,
@@ -225,9 +224,7 @@ export default function CartPage() {
     } catch {}
   }, [note]);
 
-  const SHIPPING = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : itemCount > 0 ? 200 : 0;
-  const qualifiesFreeShip = itemCount > 0 && subtotal >= FREE_SHIPPING_THRESHOLD;
-  const grandTotal = summary.grandTotal + SHIPPING;
+  const qualifiesFreeShip = itemCount > 0 && summary.shippingFree;
 
   // Ordering (spec pt 5): all perfumes first, then all discovery boxes.
   const perfumeGroups = [];
@@ -248,13 +245,6 @@ export default function CartPage() {
     }
   }
   const cartGroups = [...perfumeGroups, ...boxGroups];
-
-  const perfumeLabel =
-    summary.perfumeDiscMin && summary.perfumeDiscMax
-      ? summary.perfumeDiscMin === summary.perfumeDiscMax
-        ? `${summary.perfumeDiscMax}%`
-        : `${summary.perfumeDiscMin}% – ${summary.perfumeDiscMax}%`
-      : "";
 
   if (!hydrated) {
     return (
@@ -309,10 +299,10 @@ export default function CartPage() {
                   </p>
                 </div>
               ) : (
-                itemCount > 0 && (
+                summary.singleBoxOnly && (
                   <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 mb-4">
                     <p className="text-sm text-amber-800 font-medium">
-                      Add {rs(FREE_SHIPPING_THRESHOLD - subtotal)} more to qualify for{" "}
+                      Add any perfume or another Discovery Box to qualify for{" "}
                       <span className="font-bold">FREE shipping</span>.
                     </p>
                   </div>
@@ -353,77 +343,7 @@ export default function CartPage() {
             {/* Order Summary (spec pt 4) */}
             <div className="lg:w-80 xl:w-96 shrink-0">
               <div className="border border-gray-200 rounded-2xl p-6 sticky top-24">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
-
-                <div className="space-y-2.5 text-sm">
-                  <div className="flex justify-between text-gray-700">
-                    <span>Total Amount ({itemCount} item{itemCount !== 1 ? "s" : ""})</span>
-                    <span className="font-semibold text-gray-900">{rs(summary.totalOriginal)}</span>
-                  </div>
-
-                  {summary.perfumeDiscount > 0 && (
-                    <div className="flex justify-between text-green-700">
-                      <span className="font-medium">
-                        Discount on Perfumes{perfumeLabel ? ` (${perfumeLabel})` : ""}
-                      </span>
-                      <span className="font-semibold">− {rs(summary.perfumeDiscount)}</span>
-                    </div>
-                  )}
-
-                  {summary.boxDiscount > 0 && (
-                    <div className="flex justify-between text-green-700">
-                      <span className="font-medium">
-                        Discount on Discovery Boxes{summary.boxDiscPct ? ` (${summary.boxDiscPct}%)` : ""}
-                      </span>
-                      <span className="font-semibold">− {rs(summary.boxDiscount)}</span>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between text-gray-800 pt-2 border-t border-gray-100">
-                    <span className="font-semibold">Subtotal</span>
-                    <span className="font-bold">{rs(summary.subtotal)}</span>
-                  </div>
-
-                  <div className="flex justify-between text-gray-700">
-                    <span>Shipping Charges</span>
-                    <span className={`font-semibold ${SHIPPING === 0 ? "text-green-700" : "text-gray-900"}`}>
-                      {SHIPPING === 0 ? "0" : rs(SHIPPING)}
-                    </span>
-                  </div>
-
-                  {/* Bundle Offer breakdown */}
-                  {summary.bundle.savings > 0 && (
-                    <div className="pt-1">
-                      <p className="text-[13px] font-semibold text-green-700">Less Bundle Offer Discount:</p>
-                      <div className="mt-1 space-y-0.5">
-                        {summary.bundle.breakdown.map((b, i) => (
-                          <div key={i} className="flex justify-between text-[12px] text-green-600">
-                            <span>{b.label}</span>
-                            <span>− {rs(b.saving)}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex justify-between text-[13px] text-green-700 font-semibold mt-1 pt-1 border-t border-green-100">
-                        <span>Bundle Discount</span>
-                        <span>− {rs(summary.bundle.savings)}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Grand Total */}
-                <div className="mt-4 rounded-lg bg-[#1a1a2e] text-white px-4 py-3 flex justify-between items-center">
-                  <span className="font-bold">Grand Total</span>
-                  <span className="font-extrabold text-lg">{rs(grandTotal)}</span>
-                </div>
-
-                {/* Total Savings */}
-                {summary.totalSavings > 0 && (
-                  <div className="mt-2 rounded-lg bg-green-600 text-white px-4 py-2.5 flex justify-between items-center">
-                    <span className="font-bold">Total Savings</span>
-                    <span className="font-extrabold">− {rs(summary.totalSavings)}</span>
-                  </div>
-                )}
+                <OrderSummary summary={summary} itemCount={itemCount} />
 
                 {/* Proceed to Checkout */}
                 <Link

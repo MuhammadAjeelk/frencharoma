@@ -449,6 +449,8 @@ function ShopAllContent() {
                     perfumeId={perfume._id}
                     editions={perfume.editions || []}
                     gender={perfume.gender || ""}
+                    scentFamily={perfume.scentFamily || ""}
+                    activeEdition={edition !== "all" ? edition : null}
                     avgRating={perfume.avgRating || 0}
                     reviewCount={perfume.reviewCount || 0}
                     isBestSeller={Boolean(perfume.isBestSeller)}

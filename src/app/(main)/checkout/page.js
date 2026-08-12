@@ -15,7 +15,6 @@ const BANK_INFO = {
   iban: "PK36MEZN0001230112345678",
 };
 const WHATSAPP_NUMBER = "923001234567"; // without + or spaces
-const SHIPPING_COST = 200;
 // ─────────────────────────────────────────────────────────────────────────────
 
 const PROVINCES = [
@@ -66,10 +65,10 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Match the cart: free shipping above the threshold, and apply the
-  // Bundle Offer discount so checkout charges the same Grand Total.
-  const shipping = subtotal >= 7000 ? 0 : SHIPPING_COST;
-  const total = summary.grandTotal + shipping;
+  // Use the shared cart summary so checkout charges exactly the cart's
+  // Net Amount (free shipping with any perfume or 2+ boxes; a lone box pays).
+  const shipping = summary.shipping;
+  const total = summary.netAmount;
 
   useEffect(() => {
     if (hydrated && items.length === 0) {

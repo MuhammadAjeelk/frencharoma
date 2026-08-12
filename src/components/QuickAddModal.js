@@ -6,11 +6,12 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
+import EditionInfoModal from "./EditionInfoModal";
 
 const EDITION_STYLE = {
-  luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]", text: "text-[#3a2c08]" },
-  premium: { label: "Premium Edition", bar: "bg-gradient-to-r from-[#b6b6bb] to-[#e4e4e8]", text: "text-[#2b2b2b]" },
-  classic: { label: "Classic Edition", bar: "bg-gradient-to-r from-[#d8cbb8] to-[#efe7d8]", text: "text-[#3a352f]" },
+  luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]", text: "text-[#3a2c08]", pill: "bg-[#c9a24a] text-[#2a2008]" },
+  premium: { label: "Premium Edition", bar: "bg-gradient-to-r from-[#b6b6bb] to-[#e4e4e8]", text: "text-[#2b2b2b]", pill: "bg-[#c3c3ca] text-[#2b2b2b]" },
+  classic: { label: "Classic Edition", bar: "bg-gradient-to-r from-[#d8cbb8] to-[#efe7d8]", text: "text-[#3a352f]", pill: "bg-[#d8cbb8] text-[#3a352f]" },
 };
 
 function buildImages(perfume) {
@@ -33,7 +34,7 @@ export default function QuickAddModal({
   boxSoldOut = false,
   onAddToBox,
 }) {
-  const { addItem } = useCart();
+  const { addItem, perfumeQty } = useCart();
 
   const images = useMemo(
     () => (boxMode ? (boxImage ? [boxImage] : buildImages(perfume)) : buildImages(perfume)),
@@ -54,9 +55,11 @@ export default function QuickAddModal({
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [showBanners, setShowBanners] = useState(false);
-  const [added, setAdded] = useState(false);
   const [descOpen, setDescOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
+  const [editionInfoOpen, setEditionInfoOpen] = useState(false);
+  const [editionFocus, setEditionFocus] = useState(null);
+  const inCartQty = !boxMode && perfume?._id ? perfumeQty(perfume._id) : 0;
 
   const brandLabel = Array.isArray(perfume?.brands) && perfume.brands.length > 0
     ? perfume.brands.join(", ")
@@ -78,8 +81,6 @@ export default function QuickAddModal({
       impressionName: perfume.impressionName || "",
     });
     setShowBanners(false);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1800);
   };
 
   const handleCta = () => {
@@ -136,14 +137,34 @@ export default function QuickAddModal({
       <div className="space-y-1 text-sm text-[#4a4540]">
         {perfume.impressionName && <p>Inspired by: <span className="font-semibold text-[#1f1a16]">{perfume.impressionName}</span></p>}
         {brandLabel && <p>Brand: <span className="font-semibold text-[#1f1a16]">{brandLabel}</span></p>}
+        {perfume.scentFamily && (
+          <p>Fragrance Family: <span className="font-semibold text-[#1f1a16]">{perfume.scentFamily}</span></p>
+        )}
         {bestFor && (
           <p className="flex items-center gap-2">
             Best For:
             <span className="inline-block px-3 py-0.5 rounded-full bg-[#f7f0e2] text-[#9a7b32] text-xs font-semibold border border-[#e8dcbf]">{bestFor}</span>
           </p>
         )}
+        {!boxMode && sellable.length > 0 && (
+          <p className="flex items-center gap-2 flex-wrap">
+            Edition:
+            {sellable.map((e) => {
+              const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
+              return (
+                <button
+                  key={e.key}
+                  onClick={() => { setEditionFocus(e.key); setEditionInfoOpen(true); }}
+                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.pill}`}
+                >
+                  {st.label}
+                </button>
+              );
+            })}
+          </p>
+        )}
         <div className="pt-0.5">
-          <span>Globally Admired by: <span className="font-bold text-[#1f1a16]">{admire}%</span></span>
+          <span>Globally Admired by: <span className="font-bold text-[#1f1a16]">{admire}%</span> <span className="text-[#6b6560]">Satisfied Users</span></span>
         </div>
       </div>
 
@@ -161,7 +182,7 @@ export default function QuickAddModal({
       {/* Add to cart + edition banners */}
       <div className="mb-4">
         {showBanners && hasChoice && (
-          <div className="flex flex-col gap-1.5 mb-2">
+          <div className="flex flex-col gap-1.5 mb-2 animate-fadeIn">
             {sellable.map((e) => {
               const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
               return (
@@ -190,22 +211,43 @@ export default function QuickAddModal({
                 : boxSelected
                 ? "bg-[#efe9db] text-[#8a6f2e] hover:bg-[#e7dfcb]"
                 : "bg-black text-white hover:bg-gray-800 hover-vibrate"
-              : cardEdition
-              ? "bg-black text-white hover:bg-gray-800 hover-vibrate"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : !cardEdition
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : showBanners
+              ? "bg-black text-white hover:bg-gray-800"
+              : inCartQty > 0
+              ? "bg-[#1d3a8f] text-white hover:bg-[#16306f]"
+              : "bg-black text-white hover:bg-gray-800 hover-vibrate"
           }`}
         >
-          {boxMode
-            ? boxSoldOut
-              ? "Sold Out"
-              : boxSelected
-              ? "✓ In Box — Remove"
-              : "Add to Box"
-            : added
-            ? "Added to Cart ✓"
-            : "Add to Cart"}
+          {boxMode ? (
+            boxSoldOut ? "Sold Out" : boxSelected ? "✓ In Box — Remove" : "Add to Box"
+          ) : !cardEdition ? (
+            "Unavailable"
+          ) : showBanners ? (
+            "Choose Your Edition"
+          ) : inCartQty > 0 ? (
+            <span className="inline-flex items-center justify-center gap-2">
+              Added to Cart
+              <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-white/25 text-white text-[11px] font-bold leading-none">
+                {inCartQty}
+              </span>
+            </span>
+          ) : (
+            "Add to Cart"
+          )}
         </button>
       </div>
+
+      {!boxMode && (
+        <EditionInfoModal
+          open={editionInfoOpen}
+          onClose={() => setEditionInfoOpen(false)}
+          sellable={sellable}
+          disc={disc}
+          focus={editionFocus}
+        />
+      )}
 
       {/* Description */}
       {perfume.description && (

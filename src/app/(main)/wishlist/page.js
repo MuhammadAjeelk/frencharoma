@@ -105,6 +105,7 @@ export default function WishlistPage() {
                     perfumeId={p._id}
                     editions={p.editions || []}
                     gender={p.gender || ""}
+                    scentFamily={p.scentFamily || ""}
                     isBestSeller={Boolean(p.isBestSeller)}
                     discountPercent={p.discountPercent || 0}
                     globalAdmirePercent={p.globalAdmirePercent ?? 60}

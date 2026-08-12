@@ -7,6 +7,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
+import EditionInfoModal from "./EditionInfoModal";
 
 // Edition banner styling — Luxury = solid gold, Premium = solid silver, Classic = neutral.
 const EDITION_STYLE = {
@@ -41,6 +42,11 @@ export default function ProductCard({
   globalAdmirePercent = 60,
   tags = [],
   gender = "",
+  scentFamily = "",
+  // When a collection/edition filter is active (luxury|premium), Add to Cart
+  // adds that edition directly instead of opening the "Choose Your Edition"
+  // chooser.
+  activeEdition = null,
   onQuickView,
   // Home "Best Sellers" style: card is just the image + pills; the details
   // (with Quick View at top) reveal as an overlay on hover.
@@ -61,7 +67,7 @@ export default function ProductCard({
   wishlistRemoveMode = false,
 }) {
   const { isInWishlist, toggleItem } = useWishlist();
-  const { addItem } = useCart();
+  const { addItem, perfumeQty } = useCart();
 
   const brandLabel = Array.isArray(brand) ? brand.join(", ") : brand;
   const productSlug = slug || (href ? href.replace("/products/", "") : "");
@@ -82,10 +88,15 @@ export default function ProductCard({
     ? cardEdition.variant.price
     : null;
   const hasChoice = !boxMode && sellable.length > 1;
+  const activeSellable = activeEdition
+    ? sellable.find((s) => s.key === activeEdition)
+    : null;
+  const inCartQty = !boxMode && perfumeId ? perfumeQty(perfumeId) : 0;
 
   const [hovered, setHovered] = useState(false);
   const [showBanners, setShowBanners] = useState(false);
-  const [added, setAdded] = useState(false);
+  const [editionInfoOpen, setEditionInfoOpen] = useState(false);
+  const [editionFocus, setEditionFocus] = useState(null);
 
   const qvRef = useRef(null);
   const cartRef = useRef(null);
@@ -114,8 +125,6 @@ export default function ProductCard({
       impressionName,
     });
     setShowBanners(false);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1800);
   };
 
   const handleCta = (e) => {
@@ -126,11 +135,24 @@ export default function ProductCard({
       return;
     }
     if (!cardEdition) return;
+    // Collection filter active → add the filtered edition straight away.
+    if (activeSellable) {
+      addEdition(activeSellable);
+      return;
+    }
+    // Two editions & no filter → let the user pick.
     if (hasChoice) {
       setShowBanners((v) => !v);
       return;
     }
     addEdition(sellable[0]);
+  };
+
+  const openEditionInfo = (key) => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditionFocus(key);
+    setEditionInfoOpen(true);
   };
 
   const handleWishlistToggle = (e) => {
@@ -407,6 +429,12 @@ export default function ProductCard({
               <span className="font-semibold text-[#1f1a16]">{brandLabel}</span>
             </p>
           )}
+          {scentFamily && (
+            <p className="line-clamp-1">
+              Fragrance Family:{" "}
+              <span className="font-semibold text-[#1f1a16]">{scentFamily}</span>
+            </p>
+          )}
           {bestFor && (
             <p className="flex items-center gap-1.5">
               Best For:
@@ -415,10 +443,29 @@ export default function ProductCard({
               </span>
             </p>
           )}
+          {/* Edition detail — pills (clickable → edition info) before admired */}
+          {!boxMode && sellable.length > 0 && (
+            <p className="flex items-center gap-1.5 flex-wrap pt-0.5">
+              Edition:
+              {sellable.map((e) => {
+                const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
+                return (
+                  <button
+                    key={e.key}
+                    onClick={openEditionInfo(e.key)}
+                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.bar} ${st.text}`}
+                  >
+                    {st.label}
+                  </button>
+                );
+              })}
+            </p>
+          )}
           <div className="pt-0.5">
             <span>
               Globally Admired by:{" "}
-              <span className="font-bold text-[#1f1a16]">{admire}%</span>
+              <span className="font-bold text-[#1f1a16]">{admire}%</span>{" "}
+              <span className="text-[#6b6560]">Satisfied Users</span>
             </span>
           </div>
         </div>
@@ -450,7 +497,7 @@ export default function ProductCard({
         <div className="mt-auto relative">
           {/* Edition banners — float above the button so the card keeps its height */}
           {showBanners && hasChoice && (
-            <div className="absolute bottom-full left-0 right-0 mb-2 z-30 flex flex-col gap-1.5 drop-shadow-xl">
+            <div className="absolute bottom-full left-0 right-0 mb-2 z-30 flex flex-col gap-1.5 drop-shadow-xl animate-fadeIn">
               {sellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
                 return (
@@ -514,16 +561,44 @@ export default function ProductCard({
               onClick={handleCta}
               disabled={!cardEdition}
               className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
-                cardEdition
+                !cardEdition
+                  ? "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+                  : showBanners
                   ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
-                  : "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+                  : inCartQty > 0
+                  ? "bg-[#1d3a8f] text-white hover:bg-[#16306f]"
+                  : "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
               }`}
             >
-              {added ? "Added ✓" : "Add to Cart"}
+              {!cardEdition ? (
+                "Unavailable"
+              ) : showBanners ? (
+                "Choose Your Edition"
+              ) : inCartQty > 0 ? (
+                <span className="inline-flex items-center justify-center gap-2">
+                  Added to Cart
+                  <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-white/25 text-white text-[10px] font-bold leading-none">
+                    {inCartQty}
+                  </span>
+                </span>
+              ) : (
+                "Add to Cart"
+              )}
             </button>
           )}
         </div>
       </div>
+
+      {/* Edition detail popup (opened by the Edition pills) */}
+      {!boxMode && (
+        <EditionInfoModal
+          open={editionInfoOpen}
+          onClose={() => setEditionInfoOpen(false)}
+          sellable={sellable}
+          disc={disc}
+          focus={editionFocus}
+        />
+      )}
     </div>
   );
 }
