@@ -174,12 +174,8 @@ export default function BrandMarquee() {
           <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
         </div>
 
-        {/* Edge fades (the blurred ends) — pills dissolve into the dark band */}
-        <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 left-0 h-[120px] sm:h-[136px] w-16 sm:w-28 z-20 rounded-l-2xl bg-gradient-to-r from-[#17161d] via-[#17161d]/90 to-transparent" />
-        <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 right-0 h-[120px] sm:h-[136px] w-16 sm:w-28 z-20 rounded-r-2xl bg-gradient-to-l from-[#17161d] via-[#17161d]/90 to-transparent" />
-
-        {/* Moving pills */}
-        <div className="relative z-10 py-4 overflow-hidden">
+        {/* Moving pills — clipped to the rounded band shape (no edge shades) */}
+        <div className="relative z-10 my-1 py-3 h-[120px] sm:h-[136px] flex items-center rounded-2xl overflow-hidden">
           <div
             ref={trackRef}
             className="flex w-max will-change-transform"
