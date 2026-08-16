@@ -193,9 +193,9 @@ export default function BrandMarquee() {
           type="button"
           aria-label="Previous brand"
           onClick={() => step("prev")}
-          className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-r from-[#0a0a0e] via-[#0a0a0e] to-[#0a0a0e]/70"
+          className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-r from-black via-black to-black/90"
         >
-          <svg className="w-4 h-6 sm:w-5 sm:h-7 fill-[#585849] group-hover/cap:fill-[#c9a25a] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M16 3 L6 12 L16 21 Z" />
           </svg>
         </button>
@@ -203,9 +203,9 @@ export default function BrandMarquee() {
           type="button"
           aria-label="Next brand"
           onClick={() => step("next")}
-          className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-l from-[#0a0a0e] via-[#0a0a0e] to-[#0a0a0e]/70"
+          className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-l from-black via-black to-black/90"
         >
-          <svg className="w-4 h-6 sm:w-5 sm:h-7 fill-[#585849] group-hover/cap:fill-[#c9a25a] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M8 3 L18 12 L8 21 Z" />
           </svg>
         </button>
