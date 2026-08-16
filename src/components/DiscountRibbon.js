@@ -20,8 +20,8 @@ export default function DiscountRibbon({ percent, className = "" }) {
           top: "8px",
           left: "-48px",
           transform: "rotate(-45deg)",
-          paddingTop: "5px",
-          paddingBottom: "5px",
+          paddingTop: "4px",
+          paddingBottom: "4px",
           fontFamily:
             'Calibri, "Segoe UI", Candara, Optima, "Trebuchet MS", sans-serif',
         }}
@@ -30,12 +30,12 @@ export default function DiscountRibbon({ percent, className = "" }) {
           className="flex items-center justify-center leading-none"
           style={{ transform: "translateX(-5px)" }}
         >
-          <span className="text-[26px] font-bold leading-[0.9] drop-shadow-[0_1px_1px_rgba(0,0,0,0.18)]">
+          <span className="text-[29px] font-bold leading-[0.9] drop-shadow-[0_1px_1px_rgba(0,0,0,0.18)]">
             {p}
           </span>
-          <span className="flex flex-col items-start ml-[1px] leading-none">
-            <span className="text-[13px] font-bold leading-none">%</span>
-            <span className="text-[8px] font-bold tracking-wide leading-none mt-[1px]">
+          <span className="flex flex-col items-start ml-[3px] leading-none">
+            <span className="text-[15px] font-bold leading-none">%</span>
+            <span className="text-[9px] font-bold tracking-wide leading-none mt-[1px]">
               OFF
             </span>
           </span>
