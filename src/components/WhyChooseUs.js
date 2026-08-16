@@ -89,6 +89,18 @@ const FEATURES = [
   },
 ];
 
+// Two-line title breaks for the cards (modal heading still uses the full title).
+const TITLE_BREAKS = {
+  "Original French Perfume Oils": ["Original French", "Perfume Oils"],
+  "Up to 40% Concentration of Fragrance Oils": ["Up to 40% Concentration", "of Fragrance Oils"],
+  "Long-Lasting Performance": ["Long-Lasting", "Performance"],
+  "Affordable Luxury": ["Affordable", "Luxury"],
+  "More Than 100 Iconic Fragrances": ["More Than 100", "Iconic Fragrances"],
+  "Countrywide Free Shipping": ["Countrywide", "Free Shipping"],
+  "Free Surprise Gift in Every Box": ["Free Surprise Gift", "in Every Box"],
+  "Trusted by Regular Customers": ["Trusted by", "Regular Customers"],
+};
+
 // Render inline segments: ***bold-italic*** and **bold**.
 function renderInline(text, keyPrefix) {
   return text.split(/(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*)/g).map((part, i) => {
@@ -182,7 +194,15 @@ export default function WhyChooseUs() {
                 />
               </div>
               <h3 className="text-[13px] sm:text-sm font-bold text-[#1f1a16] leading-snug group-hover:text-[#b8964e] transition-colors">
-                {f.title}
+                {TITLE_BREAKS[f.title] ? (
+                  <>
+                    {TITLE_BREAKS[f.title][0]}
+                    <br />
+                    {TITLE_BREAKS[f.title][1]}
+                  </>
+                ) : (
+                  f.title
+                )}
               </h3>
               {/* Learn More — reveals in the bottom-right corner on hover */}
               <span className="pointer-events-none absolute bottom-2.5 right-3 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-[#b8964e] opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
