@@ -6,6 +6,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
+import { genderSuffix } from "@/lib/gender";
 
 const hasSpecialOfferTag = (p) =>
   (p.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
@@ -174,7 +175,8 @@ export default function WishlistPage() {
       <UniversalModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        heading={modalPerfume?.name || ""}
+        wide
+        heading={`${modalPerfume?.name || ""}${genderSuffix(modalPerfume?.gender)}`}
       >
         {modalPerfume && (
           <QuickAddModal

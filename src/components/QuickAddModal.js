@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
@@ -33,8 +34,10 @@ export default function QuickAddModal({
   boxSelected = false,
   boxSoldOut = false,
   onAddToBox,
+  activeEdition = null,
 }) {
   const { addItem, perfumeQty } = useCart();
+  const { isInWishlist, toggleItem } = useWishlist();
 
   const images = useMemo(
     () => (boxMode ? (boxImage ? [boxImage] : buildImages(perfume)) : buildImages(perfume)),
@@ -50,16 +53,37 @@ export default function QuickAddModal({
     ? Number(boxDiscountPercent) || 0
     : Number(perfume?.discountPercent) || 0;
   const finalOf = (p) => (disc > 0 ? Math.round(p * (1 - disc / 100)) : p);
-  const headlinePrice = boxMode ? boxPrice : cardEdition ? cardEdition.variant.price : null;
-  const hasChoice = !boxMode && sellable.length > 1;
+  // Collection filter → commit to one edition (single pill, its price, direct add)
+  const activeSellable =
+    !boxMode && activeEdition ? sellable.find((s) => s.key === activeEdition) : null;
+  const displayEdition = activeSellable || cardEdition;
+  const displaySellable = activeSellable ? [activeSellable] : sellable;
+  const headlinePrice = boxMode
+    ? boxPrice
+    : displayEdition
+    ? displayEdition.variant.price
+    : null;
+  const hasChoice = !boxMode && !activeSellable && sellable.length > 1;
+  const sizeLabel = boxMode ? "5ml" : displayEdition?.variant?.size || "50ml";
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [showBanners, setShowBanners] = useState(false);
   const [descOpen, setDescOpen] = useState(false);
-  const [notesOpen, setNotesOpen] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(true); // Scent Profile open by default
   const [editionInfoOpen, setEditionInfoOpen] = useState(false);
   const [editionFocus, setEditionFocus] = useState(null);
   const inCartQty = !boxMode && perfume?._id ? perfumeQty(perfume._id) : 0;
+  const wishlisted = perfume?.slug ? isInWishlist(perfume.slug) : false;
+
+  const toggleWishlist = () => {
+    toggleItem({
+      slug: perfume.slug,
+      name: perfume.name,
+      brand: brandLabel,
+      image: perfume.images?.main || "",
+      price: headlinePrice != null ? finalOf(headlinePrice) : 0,
+    });
+  };
 
   const brandLabel = Array.isArray(perfume?.brands) && perfume.brands.length > 0
     ? perfume.brands.join(", ")
@@ -89,6 +113,7 @@ export default function QuickAddModal({
       return;
     }
     if (!cardEdition) return;
+    if (activeSellable) { addEdition(activeSellable); return; }
     if (hasChoice) { setShowBanners((v) => !v); return; }
     addEdition(sellable[0]);
   };
@@ -100,8 +125,41 @@ export default function QuickAddModal({
     <div>
       {/* Image with hover arrows */}
       {images.length > 0 && (
-        <div className="group relative w-full aspect-[6.818/7.5] overflow-hidden bg-gray-50 mb-4">
-          <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="500px" />
+        <div className="group relative w-full aspect-[6.818/7.5] overflow-hidden bg-gray-50 mb-4 rounded-xl">
+          <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="620px" />
+
+          {/* Card badges — same as the perfume card (discount, wishlist, best seller, size) */}
+          {!boxMode && disc > 0 && (
+            <span className="absolute top-2 left-2 z-10 bg-[#1a1a2e] text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
+              -{disc}% OFF
+            </span>
+          )}
+          {!boxMode && (
+            <button
+              onClick={toggleWishlist}
+              aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+            >
+              <svg
+                className={`w-[15px] h-[15px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#9a9590]"}`}
+                fill={wishlisted ? "currentColor" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+          )}
+          {!boxMode && perfume.isBestSeller && (
+            <span className="absolute bottom-2 left-2 z-10 bg-[#b8964e] text-white rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md">
+              Best Sellers
+            </span>
+          )}
+          <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm">
+            {sizeLabel}
+          </span>
+
           {images.length > 1 && (
             <>
               <button
@@ -146,10 +204,10 @@ export default function QuickAddModal({
             <span className="inline-block px-3 py-0.5 rounded-full bg-[#f7f0e2] text-[#9a7b32] text-xs font-semibold border border-[#e8dcbf]">{bestFor}</span>
           </p>
         )}
-        {!boxMode && sellable.length > 0 && (
+        {!boxMode && displaySellable.length > 0 && (
           <p className="flex items-center gap-2 flex-wrap">
             Edition:
-            {sellable.map((e) => {
+            {displaySellable.map((e) => {
               const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
               return (
                 <button
@@ -171,9 +229,9 @@ export default function QuickAddModal({
       {/* Gender divider */}
       <div className="h-[3px] rounded-full my-3" style={{ backgroundColor: gm ? gm.hex : "#d9d3cb" }} />
 
-      {/* Price */}
-      {headlinePrice != null && (
-        <div className="flex items-baseline justify-center gap-8 flex-wrap mb-3">
+      {/* Price — hidden once the edition chooser is showing (spec pt 7) */}
+      {headlinePrice != null && !showBanners && (
+        <div className="flex items-baseline justify-center gap-12 sm:gap-16 flex-wrap mb-3">
           {disc > 0 && <span className="text-base font-normal text-[#a09890] strike-diagonal">{formatRs(headlinePrice)}</span>}
           <span className="text-base font-semibold text-[#1f1a16]">{formatRs(finalOf(headlinePrice))}</span>
         </div>
@@ -243,10 +301,34 @@ export default function QuickAddModal({
         <EditionInfoModal
           open={editionInfoOpen}
           onClose={() => setEditionInfoOpen(false)}
-          sellable={sellable}
+          sellable={displaySellable}
           disc={disc}
           focus={editionFocus}
         />
+      )}
+
+      {/* Scent Profile — open by default (spec pt 13/14): How It Smells?, Ideal
+          For:, then Top/Heart/Base notes */}
+      {!boxMode && (perfume.howItSmells || perfume.idealFor || hasNotes) && (
+        <div className="border-t border-[#e8e4df]">
+          <button onClick={() => setNotesOpen((o) => !o)} className="w-full flex items-center justify-between py-3 text-left">
+            <span className="text-sm font-semibold text-[#1f1a16] uppercase tracking-wide">Scent Profile</span>
+            <span className={`text-gray-400 transition-transform ${notesOpen ? "rotate-180" : ""}`}>▴</span>
+          </button>
+          {notesOpen && (
+            <div className="space-y-1.5 text-sm text-[#4a4540] pb-3">
+              {perfume.howItSmells && (
+                <p><span className="font-semibold text-[#1f1a16]">How It Smells?</span> {perfume.howItSmells}</p>
+              )}
+              {perfume.idealFor && (
+                <p><span className="font-semibold text-[#1f1a16]">Ideal For:</span> {perfume.idealFor}</p>
+              )}
+              {notes.top?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Top Notes:</span> {notes.top.join(", ")}</p>}
+              {notes.middle?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Heart Notes:</span> {notes.middle.join(", ")}</p>}
+              {notes.base?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Base Notes:</span> {notes.base.join(", ")}</p>}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Description */}
@@ -257,23 +339,6 @@ export default function QuickAddModal({
             <span className={`text-gray-400 transition-transform ${descOpen ? "rotate-180" : ""}`}>▾</span>
           </button>
           {descOpen && <p className="text-sm text-[#4a4540] leading-relaxed pb-3">{perfume.description}</p>}
-        </div>
-      )}
-
-      {/* Scent Profile */}
-      {hasNotes && (
-        <div className="border-t border-[#e8e4df]">
-          <button onClick={() => setNotesOpen((o) => !o)} className="w-full flex items-center justify-between py-3 text-left">
-            <span className="text-sm font-semibold text-[#1f1a16] uppercase tracking-wide">Scent Profile</span>
-            <span className={`text-gray-400 transition-transform ${notesOpen ? "rotate-180" : ""}`}>▾</span>
-          </button>
-          {notesOpen && (
-            <div className="space-y-1.5 text-sm text-[#4a4540] pb-3">
-              {notes.top?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Top:</span> {notes.top.join(", ")}</p>}
-              {notes.middle?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Heart:</span> {notes.middle.join(", ")}</p>}
-              {notes.base?.length > 0 && <p><span className="font-semibold text-[#1f1a16]">Base:</span> {notes.base.join(", ")}</p>}
-            </div>
-          )}
         </div>
       )}
 

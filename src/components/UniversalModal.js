@@ -9,6 +9,7 @@ export default function UniversalModal({
   heading,
   details,
   children,
+  wide = false,
 }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -36,13 +37,15 @@ export default function UniversalModal({
       />
 
       <div
-        className="fixed inset-y-0 right-0 w-full sm:w-[420px] md:w-[500px] bg-white z-50 shadow-[−20px_0_60px_rgba(0,0,0,0.08)] transform transition-transform duration-300 ease-in-out overflow-y-auto"
+        className={`fixed inset-y-0 right-0 w-full bg-white z-50 shadow-[−20px_0_60px_rgba(0,0,0,0.08)] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
+          wide ? "sm:w-[560px] md:w-[620px] lg:w-[680px]" : "sm:w-[420px] md:w-[500px]"
+        }`}
         style={{
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
         }}
       >
-        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-[#e8e4df] px-6 py-4 flex items-center justify-between z-10">
-          <h2 className="text-lg font-bold text-[#1a1a2e]">{heading}</h2>
+        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-[#e8e4df] px-5 py-2.5 flex items-center justify-between z-10">
+          <h2 className="text-base font-bold text-[#1a1a2e] leading-tight pr-2">{heading}</h2>
           <button
             onClick={onClose}
             className="group/close p-2 rounded-lg text-[#6b6560] hover:text-red-500 transition-colors"

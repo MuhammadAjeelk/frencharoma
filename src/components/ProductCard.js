@@ -81,16 +81,20 @@ export default function ProductCard({
 
   const sellable = useMemo(() => getSellableEditions(editions), [editions]);
   const cardEdition = useMemo(() => getCardEdition(editions), [editions]);
-  const sizeLabel = boxMode ? "5ml" : cardEdition?.variant?.size || "50ml";
-  const headlinePrice = boxMode
-    ? boxPrice
-    : cardEdition
-    ? cardEdition.variant.price
-    : null;
-  const hasChoice = !boxMode && sellable.length > 1;
+  // When a collection filter is active, the card commits to that edition only:
+  // one pill, that edition's price, and Add-to-Cart adds it without a chooser.
   const activeSellable = activeEdition
     ? sellable.find((s) => s.key === activeEdition)
     : null;
+  const displayEdition = activeSellable || cardEdition;
+  const displaySellable = activeSellable ? [activeSellable] : sellable;
+  const sizeLabel = boxMode ? "5ml" : displayEdition?.variant?.size || "50ml";
+  const headlinePrice = boxMode
+    ? boxPrice
+    : displayEdition
+    ? displayEdition.variant.price
+    : null;
+  const hasChoice = !boxMode && !activeSellable && sellable.length > 1;
   const inCartQty = !boxMode && perfumeId ? perfumeQty(perfumeId) : 0;
 
   const [hovered, setHovered] = useState(false);
@@ -444,10 +448,10 @@ export default function ProductCard({
             </p>
           )}
           {/* Edition detail — pills (clickable → edition info) before admired */}
-          {!boxMode && sellable.length > 0 && (
+          {!boxMode && displaySellable.length > 0 && (
             <p className="flex items-center gap-1.5 flex-wrap pt-0.5">
               Edition:
-              {sellable.map((e) => {
+              {displaySellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
                 return (
                   <button
@@ -594,7 +598,7 @@ export default function ProductCard({
         <EditionInfoModal
           open={editionInfoOpen}
           onClose={() => setEditionInfoOpen(false)}
-          sellable={sellable}
+          sellable={displaySellable}
           disc={disc}
           focus={editionFocus}
         />

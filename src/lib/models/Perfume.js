@@ -138,6 +138,17 @@ const PerfumeSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    // Quick View scent-profile prose (admin data-entry fields)
+    howItSmells: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    idealFor: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     status: {
       type: String,
       enum: ["draft", "active", "archived"],

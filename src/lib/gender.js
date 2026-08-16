@@ -7,3 +7,9 @@ export const GENDER_META = {
 };
 
 export const genderMeta = (g) => GENDER_META[g] || null;
+
+// " – For Men" style suffix for headings, or "" when gender is unknown.
+export const genderSuffix = (g) => {
+  const m = GENDER_META[g];
+  return m ? ` – ${m.label}` : "";
+};

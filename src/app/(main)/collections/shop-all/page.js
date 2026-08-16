@@ -6,6 +6,7 @@ import Link from "next/link";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
 import QuickAddModal from "@/components/QuickAddModal";
+import { genderSuffix } from "@/lib/gender";
 import PerfumeFilterBar, {
   SortSelect,
   seasonFromTags,
@@ -496,12 +497,14 @@ function ShopAllContent() {
       <UniversalModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        heading={selectedPerfume?.name || ""}
+        wide
+        heading={`${selectedPerfume?.name || ""}${genderSuffix(selectedPerfume?.gender)}`}
       >
         {selectedPerfume && (
           <QuickAddModal
             key={selectedPerfume._id}
             perfume={selectedPerfume}
+            activeEdition={edition !== "all" ? edition : null}
             onClose={() => setModalOpen(false)}
           />
         )}

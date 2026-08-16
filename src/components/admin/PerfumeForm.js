@@ -86,6 +86,8 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
     seasonTags:  existingSeasonTags,
     gender:      perfume?.gender       || "",
     scentFamily: perfume?.scentFamily  || "",
+    howItSmells: perfume?.howItSmells  || "",
+    idealFor:    perfume?.idealFor     || "",
     status:      perfume?.status       || "draft",
     isBestSeller:    perfume?.isBestSeller    || false,
     isSpecialOffer:  perfume?.isSpecialOffer  || false,
@@ -544,6 +546,34 @@ export default function PerfumeForm({ perfume, isEdit = false }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
             placeholder="Enter perfume description..."
           />
+        </div>
+
+        {/* Quick View scent-profile fields */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              How It Smells?
+            </label>
+            <textarea
+              value={formData.howItSmells}
+              onChange={(e) => updateField("howItSmells", e.target.value)}
+              rows={3}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
+              placeholder="Describe how the fragrance smells…"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Ideal For
+            </label>
+            <textarea
+              value={formData.idealFor}
+              onChange={(e) => updateField("idealFor", e.target.value)}
+              rows={3}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
+              placeholder="e.g., Evening wear, special occasions, winter…"
+            />
+          </div>
         </div>
 
         {/* Season Tags */}

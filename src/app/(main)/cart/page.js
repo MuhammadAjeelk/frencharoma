@@ -107,27 +107,27 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
         </div>
       </div>
 
-      {/* Price breakup */}
+      {/* Price breakup (spec pt 5 mock) */}
       <div className="sm:text-right shrink-0 sm:w-44 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
-        <div className="space-y-1 text-[13px]">
-          <div className="flex justify-between sm:justify-end sm:gap-3">
-            <span className="text-gray-500">Total Amount</span>
-            <span className="font-semibold text-gray-900">{rs(lineOriginal)}</span>
-          </div>
-          {hasDisc && (
-            <div className="flex justify-between sm:justify-end sm:gap-3 text-green-700">
-              <span>Less Discount ({disc}%)</span>
-              <span className="font-semibold">− {rs(lineDiscount)}</span>
-            </div>
-          )}
-          <div className="flex justify-between sm:justify-end sm:gap-3 pt-1 border-t border-gray-100">
-            <span className="text-gray-700 font-semibold">Subtotal</span>
-            <span className="font-bold text-gray-900">{rs(lineSubtotal)}</span>
-          </div>
+        <div className="text-xl font-extrabold text-gray-900 leading-tight">
+          {rs(lineSubtotal)}
         </div>
+        {hasDisc && (
+          <>
+            <div className="text-sm text-[#a09890] line-through leading-tight">
+              {rs(lineOriginal)}
+            </div>
+            <div className="mt-1.5 text-sm font-bold text-green-600 leading-tight">
+              Savings {disc}%
+            </div>
+            <div className="text-sm font-bold text-green-600 leading-tight">
+              {rs(lineDiscount)}
+            </div>
+          </>
+        )}
         <button
           onClick={() => removeItem(item.id)}
-          className="mt-2 text-xs text-red-500 hover:text-red-700 font-semibold transition-colors inline-flex items-center gap-1 sm:justify-end"
+          className="mt-2.5 text-xs text-red-500 hover:text-red-700 font-semibold transition-colors inline-flex items-center gap-1 sm:justify-end"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
 import QuickAddModal from "./QuickAddModal";
+import { genderSuffix } from "@/lib/gender";
 
 export default function BestSellers() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -186,7 +187,7 @@ export default function BestSellers() {
         </div>
       </div>
 
-      <UniversalModal isOpen={modalOpen} onClose={() => setModalOpen(false)} heading={selectedPerfume?.name || ""}>
+      <UniversalModal isOpen={modalOpen} onClose={() => setModalOpen(false)} wide heading={`${selectedPerfume?.name || ""}${genderSuffix(selectedPerfume?.gender)}`}>
         {selectedPerfume && <QuickAddModal key={selectedPerfume._id} perfume={selectedPerfume} onClose={() => setModalOpen(false)} />}
       </UniversalModal>
     </>
