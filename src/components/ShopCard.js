@@ -4,10 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Shared card for Shop By Gender + Shop By Collection.
-// Default: the name sits centered on the picture in a stylish serif, golden,
-// with a short golden line (name-width) just beneath it.
-// Hover: the picture zooms, the golden line sweeps to full width, and the
-// tagline fades in just above the name — all in matching gold.
+// The name sits in the bottom-left corner (stylish serif, gold). Beneath it a
+// short gold line; on hover the picture zooms, the line draws left→right across
+// the full card, and the tagline fades in centered on the line.
 export default function ShopCard({ name, image, href, tagline }) {
   return (
     <Link
@@ -23,26 +22,24 @@ export default function ShopCard({ name, image, href, tagline }) {
           sizes="(max-width: 768px) 100vw, 300px"
         />
 
-        {/* Permanent scrim so the centered gold text is always legible;
-            deepens on hover. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-black/25 group-hover:from-black/70 group-hover:via-black/35 transition-all duration-500" />
+        {/* Permanent scrim so the gold text is always legible; deepens on hover. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/20 group-hover:from-black/72 group-hover:via-black/30 transition-all duration-500" />
 
-        {/* Centered label */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          {tagline && (
-            <span className="mb-4 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.28em] text-[#e8cf9f] opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-              {tagline}
-            </span>
-          )}
+        {/* Name (bottom-left) + divider line with centered tagline */}
+        <div className="absolute inset-x-0 bottom-0 px-5 pb-5 text-left">
+          <h3 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-semibold tracking-wide text-[#e8cf9f] group-hover:text-[#f2dca8] transition-colors duration-500 drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
+            {name}
+          </h3>
 
-          <span className="relative inline-block">
-            <h3 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-semibold tracking-wide text-[#e8cf9f] group-hover:text-[#f2dca8] transition-colors duration-500 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-              {name}
-            </h3>
-            {/* Golden line: exactly the name's width by default, sweeps to full
-                card width on hover (clipped by the card's overflow-hidden). */}
-            <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2.5 h-[2px] bg-[#c9a25a] w-full group-hover:w-[100vw] transition-all duration-[600ms] ease-out" />
-          </span>
+          {/* Line grows from the left; tagline sits centered on the line */}
+          <div className="relative mt-2.5 h-4">
+            <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#c9a25a] w-9 group-hover:w-full transition-[width] duration-[650ms] ease-out" />
+            {tagline && (
+              <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2.5 py-0.5 rounded bg-black/45 backdrop-blur-[2px] text-[#f0d9a8] text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+                {tagline}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </Link>
