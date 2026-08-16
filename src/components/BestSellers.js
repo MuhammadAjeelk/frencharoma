@@ -97,7 +97,7 @@ export default function BestSellers() {
               BEST SELLERS
             </h2>
             <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
-            <p className="text-[13px] md:text-sm text-[#8a847e] mt-4 max-w-md mx-auto">
+            <p className="text-[13px] md:text-sm text-[#8a847e] mt-4 max-w-md mx-auto italic font-[family-name:var(--font-playfair)]">
               The most admired fragrances in our collection.
             </p>
           </div>
