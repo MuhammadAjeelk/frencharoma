@@ -24,17 +24,13 @@ export default function DiscountRibbon({ percent, className = "" }) {
           paddingBottom: "4px",
         }}
       >
-        <span className="flex items-start leading-none">
-          <span className="text-[24px] font-black leading-[0.82] drop-shadow-[0_1px_1px_rgba(0,0,0,0.18)]">
+        <span className="flex items-stretch leading-none">
+          <span className="text-[26px] font-bold leading-[0.9] drop-shadow-[0_1px_1px_rgba(0,0,0,0.18)]">
             {p}
           </span>
-          <span className="flex flex-col items-start ml-0.5 mt-[1px]">
-            <span className="text-[9px] sm:text-[10px] font-black leading-none">
-              %
-            </span>
-            <span className="text-[7px] sm:text-[8px] font-extrabold tracking-wide leading-none mt-[1px]">
-              OFF
-            </span>
+          <span className="flex flex-col justify-between items-start ml-1 py-[1.5px]">
+            <span className="text-[10px] font-bold leading-none">%</span>
+            <span className="text-[8px] font-bold tracking-wide leading-none">OFF</span>
           </span>
         </span>
       </div>
