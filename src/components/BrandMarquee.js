@@ -147,7 +147,7 @@ export default function BrandMarquee() {
   }, []);
 
   return (
-    <div className="pt-12 md:pt-16 pb-32 md:pb-44 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
+    <div className="pt-12 md:pt-16 pb-24 md:pb-36 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
       {/* Heading */}
       <div className="max-w-7xl mx-auto px-4 mb-9 md:mb-12 text-center">
         <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
