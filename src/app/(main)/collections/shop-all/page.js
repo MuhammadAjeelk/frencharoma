@@ -196,11 +196,22 @@ function ShopAllContent() {
   );
 
   // ── Fetch page 1 whenever filters change ────────────────────────────────
+  const firstFetchRef = useRef(true);
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setPerfumes([]);
     setPage(1);
+
+    // On a filter/sort change (not the first load), if the user has scrolled
+    // past the results, bring them back up to the top of the new results.
+    if (!firstFetchRef.current) {
+      const el = gridTopRef.current;
+      if (el && el.getBoundingClientRect().top < 0) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+    firstFetchRef.current = false;
 
     fetch(buildUrl(1))
       .then((r) => r.json())
