@@ -60,7 +60,9 @@ function ShopAllContent() {
           : sp.get("newArrival") === "true"
             ? "newArrival"
             : "all";
-  const [featured, setFeatured] = useState(() => featuredFromParams(searchParams));
+  const [featured, setFeatured] = useState(() =>
+    featuredFromParams(searchParams),
+  );
 
   // Keep URL-driven filters in sync whenever query params change (e.g. Shop menu)
   useEffect(() => {
@@ -82,7 +84,9 @@ function ShopAllContent() {
     );
     if (v !== "all") p.set(v, "true");
     const qs = p.toString();
-    router.replace(`/collections/shop-all${qs ? `?${qs}` : ""}`, { scroll: false });
+    router.replace(`/collections/shop-all${qs ? `?${qs}` : ""}`, {
+      scroll: false,
+    });
   };
   const [sort, setSort] = useState(DEFAULT_SORT);
 
@@ -127,7 +131,10 @@ function ShopAllContent() {
     didAutoScrollRef.current = true;
     // let the grid paint first
     requestAnimationFrame(() => {
-      gridTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      gridTopRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     });
   }, [loading, searchParams]);
 
@@ -185,15 +192,7 @@ function ShopAllContent() {
       p.set("page", pageNum.toString());
       return `/api/perfumes?${p.toString()}`;
     },
-    [
-      gender,
-      edition,
-      season,
-      scentFamily,
-      debouncedBrand,
-      featured,
-      sort,
-    ],
+    [gender, edition, season, scentFamily, debouncedBrand, featured, sort],
   );
 
   // ── Fetch page 1 whenever filters change ────────────────────────────────
@@ -270,7 +269,7 @@ function ShopAllContent() {
     <>
       <div className="min-h-screen bg-linear-to-b from-[#f8f5ef] via-white to-white">
         {/* ── Page Header ── */}
-        <div className="relative py-12 md:py-16 text-center overflow-hidden bg-linear-to-b from-[#f3efe8] to-[#f7f5f2] border-b border-[#e8e4df]">
+        {/* <div className="relative py-12 md:py-16 text-center overflow-hidden bg-linear-to-b from-[#f3efe8] to-[#f7f5f2] border-b border-[#e8e4df]">
           <div className="absolute -left-16 -top-16 w-56 h-56 bg-[#d8c7ae]/25 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -right-12 bottom-0 w-64 h-64 bg-[#eadbc6]/30 rounded-full blur-3xl pointer-events-none" />
           <nav className="relative flex justify-center items-center gap-2 text-[11px] text-[#8a847e] mb-4 uppercase tracking-widest">
@@ -305,7 +304,7 @@ function ShopAllContent() {
           <p className="relative mt-3 text-sm md:text-base text-[#6b6560] tracking-wide">
             Discover signature impressions curated by mood, season and style.
           </p>
-        </div>
+        </div> */}
 
         {/* Scroll anchor for brand-logo clicks (?view=products) */}
         <div ref={gridTopRef} className="scroll-mt-0" />
@@ -337,7 +336,10 @@ function ShopAllContent() {
           {/* Filter breadcrumb + Sort */}
           <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
             <nav className="flex items-center gap-2 text-[13px] flex-wrap min-w-0">
-              <Link href="/" className="text-[#8a847e] hover:text-[#1f1a16] transition-colors">
+              <Link
+                href="/"
+                className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
+              >
                 Home
               </Link>
               <span className="text-[#ccc8c2]">/</span>
@@ -358,7 +360,9 @@ function ShopAllContent() {
                   <span key={i} className="flex items-center gap-2">
                     <span className="text-[#ccc8c2]">/</span>
                     {isLast ? (
-                      <span className="font-semibold text-[#1f1a16]">{c.label}</span>
+                      <span className="font-semibold text-[#1f1a16]">
+                        {c.label}
+                      </span>
                     ) : (
                       <button
                         type="button"
