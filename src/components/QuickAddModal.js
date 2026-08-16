@@ -8,6 +8,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
+import DiscountRibbon from "./DiscountRibbon";
 
 const EDITION_STYLE = {
   luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]", text: "text-[#3a2c08]", pill: "bg-[#c9a24a] text-[#2a2008]" },
@@ -129,11 +130,7 @@ export default function QuickAddModal({
           <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="620px" />
 
           {/* Card badges — same as the perfume card (discount, wishlist, best seller, size) */}
-          {!boxMode && disc > 0 && (
-            <span className="absolute top-2 left-2 z-10 bg-[#1a1a2e] text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
-              -{disc}% OFF
-            </span>
-          )}
+          {!boxMode && disc > 0 && <DiscountRibbon percent={disc} />}
           {!boxMode && (
             <button
               onClick={toggleWishlist}

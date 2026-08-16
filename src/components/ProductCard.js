@@ -8,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
 import { genderMeta } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
+import DiscountRibbon from "./DiscountRibbon";
 
 // Edition banner styling — Luxury = solid gold, Premium = solid silver, Classic = neutral.
 const EDITION_STYLE = {
@@ -191,7 +192,10 @@ export default function ProductCard({
         boxShadow: hovered && !(boxMode && boxSoldOut) ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
       }}
     >
-      {/* Badges - top-left */}
+      {/* Diagonal discount ribbon — top-left corner (non-box cards) */}
+      {!boxMode && disc > 0 && <DiscountRibbon percent={disc} />}
+
+      {/* Badges - top-left (box mode: selection number / sold out / discount) */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
         {boxMode && boxSelected && !boxSoldOut && (
           <span className="w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
@@ -202,7 +206,7 @@ export default function ProductCard({
           <span className="bg-gray-800/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
             Sold out
           </span>
-        ) : disc > 0 ? (
+        ) : boxMode && disc > 0 ? (
           <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
             -{disc}% OFF
           </span>
