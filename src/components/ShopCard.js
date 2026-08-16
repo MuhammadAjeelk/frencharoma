@@ -27,7 +27,7 @@ export default function ShopCard({ name, image, href, tagline }) {
 
         {/* Name (bottom-left) + divider line with centered tagline */}
         <div className="absolute inset-x-0 bottom-0 px-5 pb-5 text-left">
-          <h3 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-semibold tracking-wide text-[#e8cf9f] group-hover:text-[#f2dca8] transition-colors duration-500 drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
+          <h3 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-semibold tracking-wide text-[#c9a25a] transition-colors duration-500 drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
             {name}
           </h3>
 
