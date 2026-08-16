@@ -17,7 +17,7 @@ const BRANDS = [
   { name: "Davidoff", slug: "davidoff" },
   { name: "Dolce & Gabbana", slug: "dolce-and-gabbana" },
   // { name: "Dunhill London", slug: "dunhill-london" },
-  { name: "Escada", slug: "escada" },
+  // { name: "Escada", slug: "escada" },
   { name: "Ex Nihilo", slug: "ex-nihilo" },
   { name: "French Aromas", slug: "french-aromas" },
   { name: "Giardini di Toscana", slug: "giardini-di-toscana" },
@@ -147,7 +147,7 @@ export default function BrandMarquee() {
   }, []);
 
   return (
-    <div className="py-12 md:py-16 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
+    <div className="pt-12 md:pt-16 pb-32 md:pb-44 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
       {/* Heading */}
       <div className="max-w-7xl mx-auto px-4 mb-9 md:mb-12 text-center">
         <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
@@ -195,7 +195,11 @@ export default function BrandMarquee() {
           onClick={() => step("prev")}
           className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-r from-black via-black to-black/90"
         >
-          <svg className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" viewBox="0 0 24 24" aria-hidden="true">
+          <svg
+            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
             <path d="M16 3 L6 12 L16 21 Z" />
           </svg>
         </button>
@@ -205,7 +209,11 @@ export default function BrandMarquee() {
           onClick={() => step("next")}
           className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-l from-black via-black to-black/90"
         >
-          <svg className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]" viewBox="0 0 24 24" aria-hidden="true">
+          <svg
+            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
             <path d="M8 3 L18 12 L8 21 Z" />
           </svg>
         </button>
