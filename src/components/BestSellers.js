@@ -17,7 +17,7 @@ export default function BestSellers() {
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
-        const res = await fetch("/api/perfumes?bestSeller=true&limit=12");
+        const res = await fetch("/api/perfumes?bestSeller=true&limit=200");
         const data = await res.json();
         setPerfumes(data.perfumes || []);
       } catch (err) {
