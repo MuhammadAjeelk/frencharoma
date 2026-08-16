@@ -55,7 +55,7 @@ function BrandBox({ brand }) {
   return (
     <Link
       href={`/collections/shop-all?search=${encodeURIComponent(brand.name)}`}
-      className="group/box relative shrink-0 mx-2 sm:mx-2.5 flex items-center justify-center h-[96px] w-[188px] sm:h-[112px] sm:w-[220px]"
+      className="group/box relative shrink-0 mx-2 sm:mx-2.5 flex items-center justify-center h-[82px] w-[160px] sm:h-[94px] sm:w-[184px]"
       aria-label={brand.name}
     >
       <span className="relative block w-full h-full">
@@ -170,12 +170,12 @@ export default function BrandMarquee() {
         onMouseLeave={() => setHovering(false)}
       >
         {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[104px] sm:h-[120px] bg-gradient-to-r from-[#17161d] via-[#232230] to-[#17161d] border-y-2 border-[#c9a25a] shadow-inner overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[90px] sm:h-[102px] bg-gradient-to-r from-[#17161d] via-[#232230] to-[#17161d] border-y-[3px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
         </div>
 
         {/* Moving pills — clipped to the band (no edge shades) */}
-        <div className="relative z-10 h-[104px] sm:h-[120px] flex items-center overflow-hidden">
+        <div className="relative z-10 h-[90px] sm:h-[102px] flex items-center overflow-hidden">
           <div
             ref={trackRef}
             className="flex w-max will-change-transform"
