@@ -76,8 +76,6 @@ export function matchesSeasonGroup(tags, season) {
   return want.some((w) => set.has(w));
 }
 
-const getLabel = (opts, v) => opts.find((o) => o.value === v)?.label || v;
-
 // ── Single-select pill dropdown ─────────────────────────────────────────────
 export function FilterDropdown({
   label,
@@ -99,12 +97,15 @@ export function FilterDropdown({
 
   const selected = options.find((o) => o.value === value);
   const isActive = value !== "all" && value !== "";
+  const resetValue = options[0]?.value ?? "all";
 
   return (
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
+        className={`flex items-center gap-1.5 pl-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
+          isActive ? "pr-2" : "pr-3.5"
+        } ${
           isActive
             ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
             : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
@@ -114,19 +115,37 @@ export function FilterDropdown({
         {isActive && !standalone && (
           <span className="opacity-80">: {selected?.label}</span>
         )}
-        <svg
-          className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        {isActive ? (
+          // ✕ clears this filter (doesn't toggle the dropdown)
+          <span
+            role="button"
+            aria-label={`Clear ${label} filter`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange(resetValue);
+              setOpen(false);
+            }}
+            className="ml-0.5 w-4 h-4 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-red-500 transition-colors"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.4}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </span>
+        ) : (
+          <svg
+            className={`w-3 h-3 transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        )}
       </button>
 
       {open && (
@@ -198,7 +217,6 @@ export default function PerfumeFilterBar({
   onReset,
   hasControlChanges,
   extraControls = null,
-  extraChips = [],
 }) {
   // Fragrance families for the "Family" dropdown (only when scentFamily is wired)
   const [families, setFamilies] = useState([]);
@@ -233,41 +251,6 @@ export default function PerfumeFilterBar({
         )
         .slice(0, 8)
     : [];
-
-  const chips = [
-    gender !== "all" && {
-      key: "gender",
-      label: `Gender: ${getLabel(GENDER_OPTIONS, gender)}`,
-      clear: () => setGender("all"),
-    },
-    edition !== "all" && {
-      key: "edition",
-      label: `Collections: ${getLabel(EDITION_OPTIONS, edition)}`,
-      clear: () => setEdition("all"),
-    },
-    season !== "all" && {
-      key: "season",
-      label: `Seasons: ${getLabel(SEASON_OPTIONS, season)}`,
-      clear: () => setSeason("all"),
-    },
-    brand?.trim() && {
-      key: "brand",
-      label: `Brand: ${brand.trim()}`,
-      clear: () => setBrand(""),
-    },
-    featured &&
-      featured !== "all" && {
-        key: "featured",
-        label: getLabel(FEATURED_OPTIONS, featured),
-        clear: () => setFeatured("all"),
-      },
-    scentFamily && {
-      key: "scentFamily",
-      label: `Fragrance: ${scentFamily}`,
-      clear: () => setScentFamily?.(""),
-    },
-    ...extraChips,
-  ].filter(Boolean);
 
   return (
     <div className="rounded-xl border border-[#e8e4df] bg-white p-3 md:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
@@ -423,33 +406,6 @@ export default function PerfumeFilterBar({
           Clear Filters
         </button>
       </div>
-
-      {chips.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-[#f0ece7] flex flex-wrap gap-2">
-          {chips.map((chip) => (
-            <button
-              key={chip.key}
-              onClick={chip.clear}
-              className="group/chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border border-[#e8e4df] bg-[#faf8f5] text-[#4a4540] hover:border-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
-            >
-              <span>{chip.label}</span>
-              <svg
-                className="w-3 h-3 text-[#a09890] group-hover/chip:text-red-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
