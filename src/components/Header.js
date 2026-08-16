@@ -230,7 +230,7 @@ export default function Header() {
                               setIsSearchExpanded(false);
                               setSearchQuery("");
                               setSearchActive(-1);
-                              router.push(`/products/${p.slug}`);
+                              router.push(`/collections/shop-all?search=${encodeURIComponent(p.name)}&view=products`);
                             }
                           } else if (e.key === "Escape") {
                             setIsSearchExpanded(false);
@@ -277,7 +277,7 @@ export default function Header() {
                               {searchResults.map((p, i) => (
                                 <Link
                                   key={p._id}
-                                  href={`/products/${p.slug}`}
+                                  href={`/collections/shop-all?search=${encodeURIComponent(p.name)}&view=products`}
                                   onClick={() => {
                                     setIsSearchExpanded(false);
                                     setSearchQuery("");
