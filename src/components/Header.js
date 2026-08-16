@@ -298,7 +298,10 @@ export default function Header() {
                                   <div className="min-w-0">
                                     <p className={`text-[12px] font-medium truncate ${i === searchActive ? "text-[#8a6d2a]" : "text-[#1f1a16]"}`}>{p.name}</p>
                                     <p className="text-[11px] text-[#a09890] truncate">
-                                      Impression of: {p.impressionName || p.brand || (p.brands && p.brands[0]) || "French Aromas"}
+                                      {(() => {
+                                        const imp = p.impressionName || p.brand || (p.brands && p.brands[0]) || "French Aromas";
+                                        return /^signature\s*scent$/i.test(imp) ? imp : `Impression of: ${imp}`;
+                                      })()}
                                     </p>
                                   </div>
                                 </Link>
