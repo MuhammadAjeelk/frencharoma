@@ -126,7 +126,7 @@ export default function QuickAddModal({
     <div>
       {/* Image with hover arrows */}
       {images.length > 0 && (
-        <div className="group relative w-full aspect-[6.818/7.5] overflow-hidden bg-gray-50 mb-4 rounded-xl">
+        <div className="group relative isolate w-full aspect-[6.818/7.5] overflow-hidden bg-gray-50 mb-4 rounded-xl">
           <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="620px" />
 
           {/* Card badges — same as the perfume card (discount, wishlist, best seller, size) */}

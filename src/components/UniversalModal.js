@@ -44,7 +44,7 @@ export default function UniversalModal({
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
         }}
       >
-        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-[#e8e4df] px-5 py-2.5 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-[#e8e4df] px-5 py-2.5 flex items-center justify-between z-30">
           <h2 className="text-base font-bold text-[#1a1a2e] leading-tight pr-2">{heading}</h2>
           <button
             onClick={onClose}
