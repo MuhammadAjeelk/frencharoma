@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import ProductCard from "./ProductCard";
 import UniversalModal from "./UniversalModal";
 import QuickAddModal from "./QuickAddModal";
@@ -14,20 +14,44 @@ export default function BestSellers() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPerfume, setSelectedPerfume] = useState(null);
 
-  useEffect(() => {
-    const fetchBestSellers = async () => {
-      try {
-        const res = await fetch("/api/perfumes?bestSeller=true&limit=200");
-        const data = await res.json();
-        setPerfumes(data.perfumes || []);
-      } catch (err) {
-        console.error("Failed to fetch best sellers:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBestSellers();
+  // Paginated loading: fetch 12, then pull the next 12 in the background as the
+  // user navigates — never all at once.
+  const PAGE_SIZE = 12;
+  const pageRef = useRef(1);
+  const pagesRef = useRef(1);
+  const fetchingRef = useRef(false);
+
+  const loadPage = useCallback(async (p) => {
+    if (fetchingRef.current) return;
+    fetchingRef.current = true;
+    try {
+      const res = await fetch(
+        `/api/perfumes?bestSeller=true&limit=${PAGE_SIZE}&page=${p}`,
+      );
+      const data = await res.json();
+      pagesRef.current = data.pages || 1;
+      pageRef.current = p;
+      setPerfumes((prev) =>
+        p === 1 ? data.perfumes || [] : [...prev, ...(data.perfumes || [])],
+      );
+    } catch (err) {
+      console.error("Failed to fetch best sellers:", err);
+    } finally {
+      fetchingRef.current = false;
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadPage(1);
+  }, [loadPage]);
+
+  // Pull the next page in the background if there is one.
+  const prefetchMore = useCallback(() => {
+    if (pageRef.current < pagesRef.current && !fetchingRef.current) {
+      loadPage(pageRef.current + 1);
+    }
+  }, [loadPage]);
 
   useEffect(() => {
     const update = () => {
@@ -40,23 +64,22 @@ export default function BestSellers() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  const products = perfumes.length > 0 ? [...perfumes, ...perfumes, ...perfumes] : [];
+  const n = perfumes.length;
 
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => {
-      const next = prev - visibleCount;
-      return next < 0 ? products.length - visibleCount : next;
-    });
-  };
-
+  const handlePrevious = () => setCurrentIndex((prev) => prev - visibleCount);
   const handleNext = () => {
-    setCurrentIndex((prev) => {
-      const next = prev + visibleCount;
-      return next >= products.length - visibleCount + 1 ? 0 : next;
-    });
+    setCurrentIndex((prev) => prev + visibleCount);
+    prefetchMore();
   };
 
-  const visibleItems = products.slice(currentIndex, currentIndex + visibleCount);
+  // Show `visibleCount` items starting at currentIndex, wrapping over whatever
+  // is loaded so far (more get appended in the background).
+  const visibleItems =
+    n === 0
+      ? []
+      : Array.from({ length: Math.min(visibleCount, n) }, (_, i) =>
+          perfumes[(((currentIndex + i) % n) + n) % n],
+        );
 
   if (loading) {
     return (

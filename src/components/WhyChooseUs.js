@@ -150,7 +150,7 @@ export default function WhyChooseUs() {
             The French Aromas Promise
           </span>
           <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a1a2e] via-[#3a3550] to-[#1a1a2e] bg-clip-text text-transparent">
-            Why Fragrance Lovers Choose French Aromas
+            Why Choose French Aromas
           </h2>
           <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
         </div>
@@ -194,7 +194,13 @@ export default function WhyChooseUs() {
         {active && (
           <div className="flex flex-col">
             <div className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-2">
-              <Image src={active.icon} alt={active.title} fill className="object-contain" sizes="128px" />
+              <Image
+                src={active.icon}
+                alt={active.title}
+                fill
+                className="object-contain"
+                sizes="128px"
+              />
             </div>
             <div className="space-y-3">
               {active.details.map((para, idx) => (
