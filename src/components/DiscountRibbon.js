@@ -5,7 +5,7 @@ export default function DiscountRibbon({ percent, className = "" }) {
   const p = Number(percent) || 0;
   if (p <= 0) return null;
 
-  const color = p >= 40 ? "#ee3b3b" : p >= 30 ? "#f0872f" : "#f7bf2e";
+  const color = p >= 30 ? "#ee3b3b" : "#f7bf2e";
 
   return (
     <div
