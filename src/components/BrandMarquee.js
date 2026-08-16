@@ -54,7 +54,7 @@ const BRANDS = [
 function BrandBox({ brand }) {
   return (
     <Link
-      href={`/collections/shop-all?search=${encodeURIComponent(brand.name)}`}
+      href={`/collections/shop-all?search=${encodeURIComponent(brand.name)}&view=products`}
       className="group/box relative shrink-0 mx-2 sm:mx-2.5 flex items-center justify-center h-[72px] w-[146px] sm:h-[82px] sm:w-[166px]"
       aria-label={brand.name}
     >
@@ -70,7 +70,7 @@ function BrandBox({ brand }) {
           src={`/icons/brands-labels/${brand.slug}-gold.png`}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover/box:opacity-100 drop-shadow-[0_10px_24px_rgba(201,162,90,0.45)]"
+          className="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover/box:opacity-100 drop-shadow-[0_2px_8px_rgba(201,162,90,0.2)]"
         />
       </span>
     </Link>

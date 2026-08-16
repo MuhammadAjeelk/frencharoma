@@ -116,6 +116,21 @@ function ShopAllContent() {
   // Sentinel for IntersectionObserver
   const sentinelRef = useRef(null);
 
+  // Auto-scroll to the products when arriving via ?view=products (e.g. a brand
+  // logo click on the home marquee).
+  const gridTopRef = useRef(null);
+  const didAutoScrollRef = useRef(false);
+  useEffect(() => {
+    if (didAutoScrollRef.current) return;
+    if (searchParams.get("view") !== "products") return;
+    if (loading) return;
+    didAutoScrollRef.current = true;
+    // let the grid paint first
+    requestAnimationFrame(() => {
+      gridTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [loading, searchParams]);
+
   // Derived
   const hasMore = !loading && perfumes.length < total;
   const hasActiveFilters =
@@ -291,6 +306,9 @@ function ShopAllContent() {
             Discover signature impressions curated by mood, season and style.
           </p>
         </div>
+
+        {/* Scroll anchor for brand-logo clicks (?view=products) */}
+        <div ref={gridTopRef} className="scroll-mt-0" />
 
         {/* ── Sticky Filter Bar ── */}
         <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#e8e4df]/80">
