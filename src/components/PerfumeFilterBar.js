@@ -111,10 +111,7 @@ export function FilterDropdown({
             : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
         }`}
       >
-        <span>{standalone && isActive ? selected?.label : label}</span>
-        {isActive && !standalone && (
-          <span className="opacity-80">: {selected?.label}</span>
-        )}
+        <span>{isActive ? selected?.label : label}</span>
         {isActive ? (
           // ✕ clears this filter (doesn't toggle the dropdown)
           <span
