@@ -55,7 +55,7 @@ function BrandBox({ brand }) {
   return (
     <Link
       href={`/collections/shop-all?search=${encodeURIComponent(brand.name)}`}
-      className="group/box relative shrink-0 mx-2 sm:mx-2.5 flex items-center justify-center h-[82px] w-[160px] sm:h-[94px] sm:w-[184px]"
+      className="group/box relative shrink-0 mx-2 sm:mx-2.5 flex items-center justify-center h-[72px] w-[146px] sm:h-[82px] sm:w-[166px]"
       aria-label={brand.name}
     >
       <span className="relative block w-full h-full">
