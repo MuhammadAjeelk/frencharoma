@@ -35,7 +35,7 @@ export default function ShopCard({ name, image, href, tagline }) {
           <div className="relative mt-2.5 h-4">
             <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#c9a25a] w-9 group-hover:w-full transition-[width] duration-[650ms] ease-out" />
             {tagline && (
-              <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2.5 py-0.5 rounded bg-black/45 backdrop-blur-[2px] text-[#f0d9a8] text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+              <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2.5 py-0.5 rounded bg-black/45 backdrop-blur-[2px] text-[#c9a25a] text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
                 {tagline}
               </span>
             )}
