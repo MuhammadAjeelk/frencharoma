@@ -17,7 +17,7 @@ export default function DiscountRibbon({ percent, className = "" }) {
         style={{
           background: color,
           width: "220px",
-          top: "52px",
+          top: "16px",
           left: "-52px",
           transform: "rotate(-45deg)",
           paddingTop: "6px",
@@ -29,8 +29,12 @@ export default function DiscountRibbon({ percent, className = "" }) {
             {p}
           </span>
           <span className="flex flex-col items-start ml-0.5 mt-[3px]">
-            <span className="text-[13px] sm:text-[14px] font-black leading-none">%</span>
-            <span className="text-[10px] sm:text-[11px] font-extrabold tracking-wide leading-none mt-[1px]">OFF</span>
+            <span className="text-[13px] sm:text-[14px] font-black leading-none">
+              %
+            </span>
+            <span className="text-[10px] sm:text-[11px] font-extrabold tracking-wide leading-none mt-[1px]">
+              OFF
+            </span>
           </span>
         </span>
       </div>
