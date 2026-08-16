@@ -116,6 +116,13 @@ img { image-rendering: -webkit-optimize-contrast; }
 }
 .animate-bobX { animation: bobX 1.5s ease-in-out infinite; }
 
+/* Very small hover wiggle for the Shop-By-Brand logo pills */
+@keyframes brandWiggle {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-1px); }
+  70%      { transform: translateX(1px); }
+}
+
 /* Thin scrollbar for sticky containers */
 .scrollbar-thin { scrollbar-width: thin; scrollbar-color: transparent transparent; }
 .scrollbar-thin:hover { scrollbar-color: rgba(0,0,0,0.12) transparent; }
