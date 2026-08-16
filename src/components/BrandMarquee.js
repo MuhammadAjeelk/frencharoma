@@ -16,7 +16,7 @@ const BRANDS = [
   { name: "Creed", slug: "creed" },
   { name: "Davidoff", slug: "davidoff" },
   { name: "Dolce & Gabbana", slug: "dolce-and-gabbana" },
-  { name: "Dunhill London", slug: "dunhill-london" },
+  // { name: "Dunhill London", slug: "dunhill-london" },
   { name: "Escada", slug: "escada" },
   { name: "Ex Nihilo", slug: "ex-nihilo" },
   { name: "French Aromas", slug: "french-aromas" },
@@ -170,12 +170,12 @@ export default function BrandMarquee() {
         onMouseLeave={() => setHovering(false)}
       >
         {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[90px] sm:h-[102px] bg-gradient-to-r from-[#17161d] via-[#232230] to-[#17161d] border-y-[3px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[94px] sm:h-[106px] bg-gradient-to-r from-[#17161d] via-[#232230] to-[#17161d] border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
         </div>
 
         {/* Moving pills — clipped to the band (no edge shades) */}
-        <div className="relative z-10 h-[90px] sm:h-[102px] flex items-center overflow-hidden">
+        <div className="relative z-10 h-[94px] sm:h-[106px] flex items-center overflow-hidden">
           <div
             ref={trackRef}
             className="flex w-max will-change-transform"
@@ -187,25 +187,26 @@ export default function BrandMarquee() {
           </div>
         </div>
 
-        {/* Prev / Next arrows — appear on hover, one click = one pill */}
+        {/* Black end-caps — pills come and go behind them; the triangle arrow
+            sits on each cap. One click = one pill. */}
         <button
           type="button"
           aria-label="Previous brand"
           onClick={() => step("prev")}
-          className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/95 border border-[#e8e4df] shadow-lg text-[#4a4540] opacity-0 group-hover:opacity-100 hover:border-[#b8964e] hover:text-[#b8964e] hover:scale-105 active:scale-95 transition-all duration-200"
+          className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-r from-[#0a0a0e] via-[#0a0a0e] to-[#0a0a0e]/70"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.4}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          <svg className="w-4 h-6 sm:w-5 sm:h-7 fill-[#585849] group-hover/cap:fill-[#c9a25a] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16 3 L6 12 L16 21 Z" />
           </svg>
         </button>
         <button
           type="button"
           aria-label="Next brand"
           onClick={() => step("next")}
-          className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/95 border border-[#e8e4df] shadow-lg text-[#4a4540] opacity-0 group-hover:opacity-100 hover:border-[#b8964e] hover:text-[#b8964e] hover:scale-105 active:scale-95 transition-all duration-200"
+          className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-l from-[#0a0a0e] via-[#0a0a0e] to-[#0a0a0e]/70"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.4}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          <svg className="w-4 h-6 sm:w-5 sm:h-7 fill-[#585849] group-hover/cap:fill-[#c9a25a] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 3 L18 12 L8 21 Z" />
           </svg>
         </button>
       </div>
