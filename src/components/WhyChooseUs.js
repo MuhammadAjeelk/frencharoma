@@ -48,7 +48,7 @@ const FEATURES = [
     title: "More Than 100 Iconic Fragrances",
     details: [
       "We craft **exceptional fragrance impressions** inspired by **more than 100** of the world's most celebrated designer and niche perfumes. Our collection captures the essence and character of iconic creations from renowned fragrance houses, allowing you to experience **luxurious scent profiles at exceptional value**.",
-      "Our inspirations include legendary names such as **Louis Vuitton, Christian Dior, Yves Saint Laurent, Chanel, Creed, Tom Ford, Parfums de Marly, Maison Francis Kurkdjian, Jean Paul Gaultier, Xerjoff**, and many more.",
+      "Our inspirations include legendary names such as ***Louis Vuitton, Christian Dior, Yves Saint Laurent, Chanel, Creed, Tom Ford, Parfums de Marly, Maison Francis Kurkdjian, Jean Paul Gaultier, Xerjoff***, and many more.",
       "Disclaimer: Our fragrances are independently crafted impressions inspired by well-known perfumes. We are **not affiliated with, endorsed by, or associated with** any of the referenced designer brands or fragrance houses. All trademarks and brand names are the property of their respective owners and are used solely for identification and comparison purposes.",
     ],
   },
@@ -89,17 +89,25 @@ const FEATURES = [
   },
 ];
 
-// Render inline **bold** segments inside a line.
+// Render inline segments: ***bold-italic*** and **bold**.
 function renderInline(text, keyPrefix) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-    part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={`${keyPrefix}-${i}`} className="font-bold text-[#1f1a16]">
-        {part.slice(2, -2)}
-      </strong>
-    ) : (
-      <span key={`${keyPrefix}-${i}`}>{part}</span>
-    ),
-  );
+  return text.split(/(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*)/g).map((part, i) => {
+    if (part.startsWith("***") && part.endsWith("***")) {
+      return (
+        <strong key={`${keyPrefix}-${i}`} className="font-bold italic text-[#1f1a16]">
+          {part.slice(3, -3)}
+        </strong>
+      );
+    }
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={`${keyPrefix}-${i}`} className="font-bold text-[#1f1a16]">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <span key={`${keyPrefix}-${i}`}>{part}</span>;
+  });
 }
 
 // One paragraph / sub-heading / bullet / disclaimer line.
