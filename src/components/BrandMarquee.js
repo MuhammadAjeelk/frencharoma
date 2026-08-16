@@ -147,9 +147,9 @@ export default function BrandMarquee() {
   }, []);
 
   return (
-    <div className="py-12 md:py-16 px-4 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
+    <div className="py-12 md:py-16 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
       {/* Heading */}
-      <div className="max-w-7xl mx-auto mb-9 md:mb-12 text-center">
+      <div className="max-w-7xl mx-auto px-4 mb-9 md:mb-12 text-center">
         <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#b8964e] animate-pulse" />
           Inspired Collections
@@ -163,19 +163,19 @@ export default function BrandMarquee() {
         </p>
       </div>
 
-      {/* Slider */}
+      {/* Slider — full-bleed edge to edge */}
       <div
-        className="group relative max-w-[1400px] mx-auto"
+        className="group relative w-full"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       >
-        {/* Fixed dark patti behind the pills — framed with a gold line top & bottom */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[120px] sm:h-[136px] rounded-2xl bg-gradient-to-r from-[#17161d] via-[#232230] to-[#17161d] border-y-2 border-[#c9a25a] shadow-inner overflow-hidden">
+        {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[104px] sm:h-[120px] bg-gradient-to-r from-[#17161d] via-[#232230] to-[#17161d] border-y-2 border-[#c9a25a] shadow-inner overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
         </div>
 
-        {/* Moving pills — clipped to the rounded band shape (no edge shades) */}
-        <div className="relative z-10 my-1 py-3 h-[120px] sm:h-[136px] flex items-center rounded-2xl overflow-hidden">
+        {/* Moving pills — clipped to the band (no edge shades) */}
+        <div className="relative z-10 h-[104px] sm:h-[120px] flex items-center overflow-hidden">
           <div
             ref={trackRef}
             className="flex w-max will-change-transform"

@@ -184,7 +184,7 @@ export default function ProductCard({
         setShowBanners(false);
       }}
       onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
-      className={`group relative rounded-xl overflow-hidden bg-white border-[2.5px] flex flex-col transition-all duration-300 ${
+      className={`group relative isolate rounded-xl overflow-hidden bg-white border-[2.5px] flex flex-col transition-all duration-300 ${
         boxMode && boxSoldOut ? "opacity-60" : ""
       } ${boxMode && !boxSoldOut ? "cursor-pointer" : ""}`}
       style={{
