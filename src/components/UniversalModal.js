@@ -32,12 +32,12 @@ export default function UniversalModal({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-40 transition-opacity"
+        className="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-[60] transition-opacity"
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full bg-white z-50 shadow-[−20px_0_60px_rgba(0,0,0,0.08)] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
+        className={`fixed inset-y-0 right-0 w-full bg-white z-[70] shadow-[−20px_0_60px_rgba(0,0,0,0.08)] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
           wide ? "sm:w-[480px] md:w-[520px] lg:w-[560px]" : "sm:w-[420px] md:w-[500px]"
         }`}
         style={{
