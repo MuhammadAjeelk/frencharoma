@@ -185,7 +185,7 @@ img { image-rendering: -webkit-optimize-contrast; }
   top: 50%;
   height: 1px;
   background: #e11d2b;
-  transform: translateY(-50%) rotate(-8deg);
+  transform: translateY(-50%) rotate(-4deg);
   transform-origin: center;
   pointer-events: none;
 }
