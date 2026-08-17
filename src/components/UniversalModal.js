@@ -38,7 +38,7 @@ export default function UniversalModal({
 
       <div
         className={`fixed inset-y-0 right-0 w-full bg-white z-50 shadow-[−20px_0_60px_rgba(0,0,0,0.08)] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-          wide ? "sm:w-[560px] md:w-[620px] lg:w-[680px]" : "sm:w-[420px] md:w-[500px]"
+          wide ? "sm:w-[480px] md:w-[520px] lg:w-[560px]" : "sm:w-[420px] md:w-[500px]"
         }`}
         style={{
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
