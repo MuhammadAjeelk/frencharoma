@@ -130,7 +130,7 @@ export default function QuickAddModal({
           <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="620px" />
 
           {/* Card badges — same as the perfume card (discount, wishlist, best seller, size) */}
-          {!boxMode && disc > 0 && <DiscountRibbon percent={disc} />}
+          {!boxMode && disc > 0 && activeIdx === 0 && <DiscountRibbon percent={disc} />}
           {!boxMode && (
             <button
               onClick={toggleWishlist}
