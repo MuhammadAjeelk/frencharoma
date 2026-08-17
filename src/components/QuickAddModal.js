@@ -130,8 +130,8 @@ export default function QuickAddModal({
           <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="620px" />
 
           {/* Card badges — same as the perfume card (discount, wishlist, best seller, size) */}
-          {!boxMode && disc > 0 && activeIdx === 0 && <DiscountRibbon percent={disc} />}
-          {!boxMode && (
+          {!boxMode && disc > 0 && activeIdx === 0 && <DiscountRibbon percent={disc} className="scale-[1.28] origin-top-left" />}
+          {!boxMode && activeIdx === 0 && (
             <button
               onClick={toggleWishlist}
               aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
@@ -148,14 +148,16 @@ export default function QuickAddModal({
               </svg>
             </button>
           )}
-          {!boxMode && perfume.isBestSeller && (
+          {!boxMode && perfume.isBestSeller && activeIdx === 0 && (
             <span className="absolute bottom-2 left-2 z-10 bg-[#b8964e] text-white rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md">
               Best Sellers
             </span>
           )}
-          <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm">
-            {sizeLabel}
-          </span>
+          {activeIdx === 0 && (
+            <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm">
+              {sizeLabel}
+            </span>
+          )}
 
           {images.length > 1 && (
             <>
