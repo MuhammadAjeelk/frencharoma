@@ -246,7 +246,7 @@ export default function QuickAddModal({
                 <button
                   key={e.key}
                   onClick={() => addEdition(e)}
-                  className={`w-full flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-8 md:gap-x-12 gap-y-1 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
+                  className={`hover-vibrate w-full flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-8 md:gap-x-12 gap-y-1 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
                 >
                   <span className="text-xs sm:text-sm font-bold leading-none">{st.label} <span className="font-medium opacity-80">({e.variant.size})</span></span>
                   <span className="text-xs sm:text-sm font-bold flex items-center gap-2.5 leading-none">
