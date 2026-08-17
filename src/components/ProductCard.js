@@ -516,7 +516,7 @@ export default function ProductCard({
                       ev.stopPropagation();
                       addEdition(e);
                     }}
-                    className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm transition-transform duration-200 hover:scale-[1.03]`}
+                    className={`w-full flex items-center justify-center gap-3 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm transition-transform duration-200 hover:scale-[1.03]`}
                   >
                     <span className="text-xs font-bold leading-none">
                       {st.label}{" "}
