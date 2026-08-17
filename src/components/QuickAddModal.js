@@ -246,8 +246,9 @@ export default function QuickAddModal({
                   onClick={() => addEdition(e)}
                   className={`w-full flex items-center justify-center gap-12 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
                 >
-                  <span className="text-sm font-bold leading-none">{st.label} <span className="font-medium opacity-80">({e.variant.size})</span></span>
-                  <span className="text-sm font-bold flex items-center gap-1 leading-none">
+                  <span className="text-xs sm:text-sm font-bold leading-none">{st.label} <span className="font-medium opacity-80">({e.variant.size})</span></span>
+                  <span className="text-xs sm:text-sm font-bold flex items-center gap-1.5 leading-none">
+                    {disc > 0 && <span className="bg-[#e11d1d] text-white text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.5 rounded-md tracking-wide whitespace-nowrap">-{disc}%</span>}
                     {disc > 0 && <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">{formatRs(e.variant.price)}</span>}
                     {formatRs(finalOf(e.variant.price))}
                   </span>
