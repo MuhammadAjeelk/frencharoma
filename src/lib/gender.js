@@ -13,3 +13,20 @@ export const genderSuffix = (g) => {
   const m = GENDER_META[g];
   return m ? ` – ${m.label}` : "";
 };
+
+// Heading node: name in the default colour + a colour-coded gender suffix
+// (blue/pink/purple) matching the perfume cards.
+export const genderHeading = (name, g) => {
+  const m = GENDER_META[g];
+  return (
+    <>
+      {name || ""}
+      {m && (
+        <>
+          {" – "}
+          <span className={m.text}>{m.label}</span>
+        </>
+      )}
+    </>
+  );
+};
