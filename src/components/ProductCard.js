@@ -518,13 +518,13 @@ export default function ProductCard({
                     }}
                     className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm transition-transform duration-200 hover:scale-[1.03]`}
                   >
-                    <span className="text-[11px] font-bold">
+                    <span className="text-xs font-bold leading-none">
                       {st.label}{" "}
                       <span className="font-medium opacity-80">
                         ({e.variant.size})
                       </span>
                     </span>
-                    <span className="text-[11px] font-bold flex items-center gap-2">
+                    <span className="text-xs font-bold flex items-center gap-2 leading-none">
                       {disc > 0 && (
                         <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">
                           {formatRs(e.variant.price)}
