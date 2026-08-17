@@ -524,7 +524,7 @@ export default function ProductCard({
                         ({e.variant.size})
                       </span>
                     </span>
-                    <span className="text-xs font-bold flex items-center gap-2 leading-none">
+                    <span className="text-xs font-bold flex items-center gap-1 leading-none">
                       {disc > 0 && (
                         <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">
                           {formatRs(e.variant.price)}
