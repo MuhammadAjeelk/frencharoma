@@ -98,6 +98,9 @@ export function FilterDropdown({
   const selected = options.find((o) => o.value === value);
   const isActive = value !== "all" && value !== "";
   const resetValue = options[0]?.value ?? "all";
+  // Inactive label shows the "All …" first option (e.g. "All Genders",
+  // "All Editions") rather than the short category name.
+  const defaultLabel = options[0]?.label ?? label;
 
   return (
     <div ref={ref} className="relative">
@@ -111,7 +114,7 @@ export function FilterDropdown({
             : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
         }`}
       >
-        <span>{isActive ? selected?.label : label}</span>
+        <span>{isActive ? selected?.label : defaultLabel}</span>
         {isActive ? (
           // ✕ clears this filter (doesn't toggle the dropdown)
           <span
