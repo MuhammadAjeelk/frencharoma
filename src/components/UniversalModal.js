@@ -14,25 +14,41 @@ export default function UniversalModal({
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  // Keep the panel in the DOM through its slide-out so the exit animates too.
+  const [render, setRender] = useState(false); // present in the DOM
+  const [shown, setShown] = useState(false);   // slid into view (translateX 0)
+
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
+      setRender(true);
+      // Double rAF: mount at translateX(100%), then flip to 0 so it slides in.
+      const raf = requestAnimationFrame(() =>
+        requestAnimationFrame(() => setShown(true)),
+      );
+      return () => cancelAnimationFrame(raf);
     }
+    setShown(false);
+    const t = setTimeout(() => setRender(false), 300); // matches duration-300
+    return () => clearTimeout(t);
+  }, [isOpen]);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  if (!isOpen || !mounted) return null;
+  if (!render || !mounted) return null;
 
   // Portal to <body> so the fixed overlay isn't clipped/offset by an ancestor
   // with a CSS transform (e.g. the Best Sellers carousel track).
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-[60] transition-opacity"
+        className={`fixed inset-0 bg-black/30 backdrop-blur-[2px] z-[60] transition-opacity duration-300 ${
+          shown ? "opacity-100" : "opacity-0"
+        }`}
         onClick={onClose}
       />
 
@@ -41,7 +57,7 @@ export default function UniversalModal({
           wide ? "sm:w-[480px] md:w-[520px] lg:w-[560px]" : "sm:w-[420px] md:w-[500px]"
         }`}
         style={{
-          transform: isOpen ? "translateX(0)" : "translateX(100%)",
+          transform: shown ? "translateX(0)" : "translateX(100%)",
         }}
       >
         <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-[#e8e4df] px-4 sm:px-5 py-1.5 flex items-center justify-between z-30">
