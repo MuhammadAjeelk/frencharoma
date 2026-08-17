@@ -244,11 +244,11 @@ export default function QuickAddModal({
                 <button
                   key={e.key}
                   onClick={() => addEdition(e)}
-                  className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
+                  className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:brightness-[1.04] hover:shadow transition`}
                 >
                   <span className="text-xs font-bold">{st.label} <span className="font-medium opacity-80">({e.variant.size})</span></span>
                   <span className="text-xs font-bold flex items-center gap-1.5">
-                    {disc > 0 && <span className="line-through opacity-60 font-medium">{formatRs(e.variant.price)}</span>}
+                    {disc > 0 && <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">{formatRs(e.variant.price)}</span>}
                     {formatRs(finalOf(e.variant.price))}
                   </span>
                 </button>
@@ -259,7 +259,7 @@ export default function QuickAddModal({
         <button
           onClick={handleCta}
           disabled={boxMode ? boxSoldOut : !cardEdition}
-          className={`w-full py-3 rounded-lg font-semibold text-sm tracking-wide uppercase transition-colors ${
+          className={`w-full py-3 min-h-[46px] flex items-center justify-center rounded-lg font-semibold text-sm tracking-wide uppercase transition-colors ${
             boxMode
               ? boxSoldOut
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"

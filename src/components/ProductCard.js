@@ -516,7 +516,7 @@ export default function ProductCard({
                       ev.stopPropagation();
                       addEdition(e);
                     }}
-                    className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 ${st.bar} ${st.text} shadow-sm transition-transform duration-200 hover:scale-[1.03]`}
+                    className={`w-full flex items-center justify-between gap-2 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm transition-transform duration-200 hover:scale-[1.03]`}
                   >
                     <span className="text-[11px] font-bold">
                       {st.label}{" "}
@@ -568,7 +568,7 @@ export default function ProductCard({
               onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
               onClick={handleCta}
               disabled={!cardEdition}
-              className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+              className={`w-full py-3 px-3 min-h-[46px] flex items-center justify-center rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
                 !cardEdition
                   ? "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
                   : showBanners
