@@ -212,7 +212,7 @@ export default function QuickAddModal({
                 <button
                   key={e.key}
                   onClick={() => { setEditionFocus(e.key); setEditionInfoOpen(true); }}
-                  className={`shrink-0 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.pill}`}
+                  className={`shrink-0 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.pill}`}
                 >
                   {st.label}
                 </button>
