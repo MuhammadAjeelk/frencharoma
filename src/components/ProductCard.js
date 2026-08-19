@@ -256,11 +256,11 @@ export default function ProductCard({
       ) : (
         <button
           onClick={handleWishlistToggle}
-          className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+          className="group/heart absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
           <svg
-            className={`w-[15px] h-[15px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#9a9590]"}`}
+            className={`w-[18px] h-[18px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#9a9590] group-hover/heart:text-[#e11d48]"}`}
             fill={wishlisted ? "currentColor" : "none"}
             viewBox="0 0 24 24"
             stroke="currentColor"
