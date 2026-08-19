@@ -453,15 +453,15 @@ export default function ProductCard({
           )}
           {/* Edition detail — pills (clickable → edition info) before admired */}
           {!boxMode && displaySellable.length > 0 && (
-            <p className="flex items-center gap-1.5 flex-wrap pt-0.5">
-              Edition:
+            <p className="flex items-center gap-1.5 whitespace-nowrap pt-0.5">
+              <span className="shrink-0">Edition:</span>
               {displaySellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
                 return (
                   <button
                     key={e.key}
                     onClick={openEditionInfo(e.key)}
-                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.bar} ${st.text}`}
+                    className={`shrink-0 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.bar} ${st.text}`}
                   >
                     {st.label}
                   </button>
