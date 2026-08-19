@@ -585,7 +585,7 @@ export default function ProductCard({
               ) : inCartQty > 0 ? (
                 <span className="inline-flex items-center justify-center gap-3">
                   Added to Cart
-                  <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1 rounded-full bg-white/25 text-white text-[12px] font-bold leading-none">
+                  <span className="inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full bg-white/25 text-white text-[10px] font-bold leading-none">
                     {inCartQty}
                   </span>
                 </span>

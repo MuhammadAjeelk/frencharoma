@@ -286,7 +286,7 @@ export default function QuickAddModal({
           ) : inCartQty > 0 ? (
             <span className="inline-flex items-center justify-center gap-3">
               Added to Cart
-              <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-1 rounded-full bg-white/25 text-white text-[13px] font-bold leading-none">
+              <span className="inline-flex items-center justify-center min-w-[21px] h-[21px] px-1 rounded-full bg-white/25 text-white text-[11px] font-bold leading-none">
                 {inCartQty}
               </span>
             </span>
