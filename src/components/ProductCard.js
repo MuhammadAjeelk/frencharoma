@@ -461,7 +461,7 @@ export default function ProductCard({
                   <button
                     key={e.key}
                     onClick={openEditionInfo(e.key)}
-                    className={`shrink-0 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.bar} ${st.text}`}
+                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.bar} ${st.text}`}
                   >
                     {st.label}
                   </button>
