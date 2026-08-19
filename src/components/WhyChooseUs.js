@@ -133,9 +133,9 @@ function DetailBlock({ text, idx }) {
   }
   if (text.startsWith("> ")) {
     return (
-      <div className="flex gap-2 pl-1.5" style={{ marginTop: "4px" }}>
-        <span className="text-[#b8964e] font-bold leading-relaxed">›</span>
-        <p className="text-[14px] text-[#4a4540] leading-relaxed">
+      <div className="flex gap-2 pl-1.5" style={{ marginTop: "2px" }}>
+        <span className="text-[#b8964e] font-bold leading-snug">›</span>
+        <p className="text-[14px] text-[#4a4540] leading-snug">
           {renderInline(text.slice(2), idx)}
         </p>
       </div>
