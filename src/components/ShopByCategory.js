@@ -32,7 +32,7 @@ export default function ShopByCategory() {
             Choose Your Tier
           </span>
           <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a1a2e] via-[#3a3550] to-[#1a1a2e] bg-clip-text text-transparent">
-            SHOP BY COLLECTION
+            SHOP BY EDITIONS
           </h2>
           <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
           <p className="text-[13px] md:text-sm text-[#8a847e] mt-4 max-w-lg mx-auto italic font-[family-name:var(--font-playfair)]">
@@ -66,7 +66,11 @@ export default function ShopByCategory() {
               stroke="currentColor"
               strokeWidth={2}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 7l5 5-5 5M6 12h12"
+              />
             </svg>
           </Link>
         </div>
