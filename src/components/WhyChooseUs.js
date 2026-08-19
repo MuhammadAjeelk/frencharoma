@@ -126,7 +126,7 @@ function renderInline(text, keyPrefix) {
 function DetailBlock({ text, idx }) {
   if (text.startsWith("### ")) {
     return (
-      <h4 className="text-[15px] font-bold text-[#1a1a2e] mt-2 pt-1">
+      <h4 className="text-[15px] font-bold text-[#1a1a2e] mt-2 pt-1 underline underline-offset-4 decoration-2 decoration-[#b8964e]">
         {text.slice(4)}
       </h4>
     );
