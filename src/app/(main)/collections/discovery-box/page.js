@@ -85,13 +85,30 @@ function sortTesters(list, sort) {
   const arr = [...list];
   const byAdmire = (a, b) => admire(b) - admire(a);
   switch (sort) {
-    case "newest":     return arr.sort((a, b) => String(b._id).localeCompare(String(a._id)) || byAdmire(a, b));
-    case "name-asc":   return arr.sort((a, b) => (a.name || "").localeCompare(b.name || "") || byAdmire(a, b));
-    case "name-desc":  return arr.sort((a, b) => (b.name || "").localeCompare(a.name || "") || byAdmire(a, b));
-    case "price-asc":  return arr.sort((a, b) => price(a) - price(b) || byAdmire(a, b));
-    case "price-desc": return arr.sort((a, b) => price(b) - price(a) || byAdmire(a, b));
-    case "discount-desc": return arr.sort((a, b) => (Number(b.discountPercent) || 0) - (Number(a.discountPercent) || 0) || byAdmire(a, b));
-    default:           return arr.sort(byAdmire); // global-admire-desc
+    case "newest":
+      return arr.sort(
+        (a, b) => String(b._id).localeCompare(String(a._id)) || byAdmire(a, b),
+      );
+    case "name-asc":
+      return arr.sort(
+        (a, b) => (a.name || "").localeCompare(b.name || "") || byAdmire(a, b),
+      );
+    case "name-desc":
+      return arr.sort(
+        (a, b) => (b.name || "").localeCompare(a.name || "") || byAdmire(a, b),
+      );
+    case "price-asc":
+      return arr.sort((a, b) => price(a) - price(b) || byAdmire(a, b));
+    case "price-desc":
+      return arr.sort((a, b) => price(b) - price(a) || byAdmire(a, b));
+    case "discount-desc":
+      return arr.sort(
+        (a, b) =>
+          (Number(b.discountPercent) || 0) - (Number(a.discountPercent) || 0) ||
+          byAdmire(a, b),
+      );
+    default:
+      return arr.sort(byAdmire); // global-admire-desc
   }
 }
 
@@ -114,7 +131,14 @@ function EmptySlot({ index, onClick }) {
 }
 
 // ── Filled slot — click scrolls to card, hover shows a bigger preview, × removes
-function FilledSlot({ perfume, onRemove, onScrollTo, onPreview, onPreviewEnd, tone = "active" }) {
+function FilledSlot({
+  perfume,
+  onRemove,
+  onScrollTo,
+  onPreview,
+  onPreviewEnd,
+  tone = "active",
+}) {
   const border = tone === "done" ? "border-green-400" : "border-[#b8964e]";
   return (
     <button
@@ -125,7 +149,13 @@ function FilledSlot({ perfume, onRemove, onScrollTo, onPreview, onPreviewEnd, to
       className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 ${border} group shrink-0 transition-transform duration-200 hover:scale-105`}
     >
       {get5mlImage(perfume) ? (
-        <Image src={get5mlImage(perfume)} alt={perfume.name} fill className="object-cover" sizes="64px" />
+        <Image
+          src={get5mlImage(perfume)}
+          alt={perfume.name}
+          fill
+          className="object-cover"
+          sizes="64px"
+        />
       ) : (
         <div className="w-full h-full bg-gray-100" />
       )}
@@ -246,7 +276,17 @@ export default function DiscoveryBoxPage() {
         (!onlyInStock || is5mlInStock(p)),
     );
     return sortTesters(filtered, sort);
-  }, [perfumes, brand, gender, edition, season, scentFamily, featured, onlyInStock, sort]);
+  }, [
+    perfumes,
+    brand,
+    gender,
+    edition,
+    season,
+    scentFamily,
+    featured,
+    onlyInStock,
+    sort,
+  ]);
 
   // Fetch available perfumes
   useEffect(() => {
@@ -256,7 +296,9 @@ export default function DiscoveryBoxPage() {
         const all = data.perfumes || [];
         // Only perfumes that actually offer a 5ml tester belong in the box.
         const testers = all.filter((p) => get5mlVariant(p.editions));
-        testers.sort((a, b) => Number(is5mlInStock(b)) - Number(is5mlInStock(a)));
+        testers.sort(
+          (a, b) => Number(is5mlInStock(b)) - Number(is5mlInStock(a)),
+        );
         setPerfumes(testers);
         setSelected((prev) =>
           prev.filter((id) => testers.some((t) => t._id === id)),
@@ -384,7 +426,10 @@ export default function DiscoveryBoxPage() {
 
   // Reusable active/new box (always the far-left box)
   const activeBox = (
-    <div data-box className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/60 bg-[#fbf8f1] p-2.5">
+    <div
+      data-box
+      className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/60 bg-[#fbf8f1] p-2.5"
+    >
       <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
         <span className="text-[13px] sm:text-sm font-bold text-[#b8964e] whitespace-nowrap">
           Discovery Box {completeCount + 1}
@@ -415,10 +460,12 @@ export default function DiscoveryBoxPage() {
   return (
     <div className="min-h-screen bg-[#faf8f5]">
       {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
-      <div className="relative bg-[#1a1a2e] text-white border-y-4 border-[#c9a25a]">
+      <div className="relative bg-[#1a1a2e] text-white border-y-[6px] border-[#c9a25a]">
         {/* Breadcrumb overlaid so it doesn't offset the vertically-centred logo */}
         <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-white/40">
-          <Link href="/" className="hover:text-white/70">Home</Link>
+          <Link href="/" className="hover:text-white/70">
+            Home
+          </Link>
           <span>/</span>
           <span className="text-white/60">Discovery Box</span>
         </nav>
@@ -427,7 +474,10 @@ export default function DiscoveryBoxPage() {
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
               className="shrink-0 flex items-stretch text-[#c9a25a] -translate-y-4 md:-translate-y-8"
-              style={{ fontFamily: '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif' }}
+              style={{
+                fontFamily:
+                  '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif',
+              }}
             >
               <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-white/90">
                 FLAT
@@ -436,7 +486,9 @@ export default function DiscoveryBoxPage() {
                 {DISCOUNT_PERCENT}
               </span>
               <span className="self-stretch flex flex-col justify-between items-start -ml-1 -my-1 md:-my-3">
-                <span className="text-5xl md:text-8xl font-bold leading-none">%</span>
+                <span className="text-5xl md:text-8xl font-bold leading-none">
+                  %
+                </span>
                 <span className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none">
                   OFF
                 </span>
@@ -473,7 +525,10 @@ export default function DiscoveryBoxPage() {
       </div>
 
       {/* ── Sticky box builder ───────────────────────────────────────────── */}
-      <div ref={barRef} className="sticky top-0 z-30 border-b border-gray-200 bg-white shadow-sm">
+      <div
+        ref={barRef}
+        className="sticky top-0 z-30 border-b border-gray-200 bg-white shadow-sm"
+      >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3.5 sm:py-4">
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             {/* Left arrow — only once 2+ boxes are ready */}
@@ -484,7 +539,11 @@ export default function DiscoveryBoxPage() {
                 aria-label="Previous box"
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
-                <svg className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   <path d="M16 3 L6 12 L16 21 Z" />
                 </svg>
               </button>
@@ -547,7 +606,11 @@ export default function DiscoveryBoxPage() {
                 aria-label="Next box"
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
-                <svg className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   <path d="M8 3 L18 12 L8 21 Z" />
                 </svg>
               </button>
@@ -555,10 +618,11 @@ export default function DiscoveryBoxPage() {
 
             {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
-              <p className="w-full lg:w-auto lg:flex-1 lg:min-w-[180px] text-[13px] sm:text-sm text-[#4a4540] leading-snug text-center lg:text-left">
+              <p className="w-full lg:flex-1 mx-auto text-base sm:text-lg text-[#4a4540] leading-relaxed text-center">
                 To fill your Discovery Box — Choose any{" "}
-                <strong className="text-[#b8964e]">5 fragrances</strong> from the
-                collection below.
+                <strong className="text-[#b8964e]">5 fragrances</strong>
+                <br />
+                from the collection below.
               </p>
             )}
 
@@ -589,8 +653,18 @@ export default function DiscoveryBoxPage() {
                   {addedToCart
                     ? "✓ Added!"
                     : `Add Ready Box${completeCount > 1 ? "es" : ""} to Cart`}
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 7l5 5-5 5M6 12h12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -606,54 +680,69 @@ export default function DiscoveryBoxPage() {
         </div>
 
         {/* Filled-slot hover preview — same layout as the card, centred below the slot */}
-        {preview && (() => {
-          const gm = genderMeta(preview.gender);
-          const brandLabel = preview.brands?.[0] || preview.brand;
-          const price = getPerfumePrice(preview);
-          return (
-            <div
-              style={{ left: previewLeft }}
-              className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 max-w-[92vw] flex items-center gap-2.5 rounded-xl border border-[#e8e4df] bg-white p-2.5 shadow-2xl animate-fadeIn"
-            >
-              <div className="relative w-[72px] h-[72px] rounded-lg overflow-hidden bg-[#f7f5f2] shrink-0">
-                {get5mlImage(preview) ? (
-                  <Image src={get5mlImage(preview)} alt={preview.name} fill className="object-cover" sizes="72px" />
-                ) : null}
+        {preview &&
+          (() => {
+            const gm = genderMeta(preview.gender);
+            const brandLabel = preview.brands?.[0] || preview.brand;
+            const price = getPerfumePrice(preview);
+            return (
+              <div
+                style={{ left: previewLeft }}
+                className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 max-w-[92vw] flex items-center gap-2.5 rounded-xl border border-[#e8e4df] bg-white p-2.5 shadow-2xl animate-fadeIn"
+              >
+                <div className="relative w-[72px] h-[72px] rounded-lg overflow-hidden bg-[#f7f5f2] shrink-0">
+                  {get5mlImage(preview) ? (
+                    <Image
+                      src={get5mlImage(preview)}
+                      alt={preview.name}
+                      fill
+                      className="object-cover"
+                      sizes="72px"
+                    />
+                  ) : null}
+                </div>
+                <div className="min-w-0 pr-1">
+                  <p className="text-[13px] font-bold text-[#1f1a16] leading-tight whitespace-nowrap">
+                    {preview.name}
+                    {gm && <span className={gm.text}> - ({gm.label})</span>}
+                  </p>
+                  {preview.impressionName && (
+                    <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
+                      Impression of:{" "}
+                      <span className="font-bold text-[#1f1a16]">
+                        {preview.impressionName}
+                      </span>
+                    </p>
+                  )}
+                  {brandLabel && (
+                    <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
+                      Brand:{" "}
+                      <span className="font-bold text-[#1f1a16]">
+                        {brandLabel}
+                      </span>
+                    </p>
+                  )}
+                  {price != null && (
+                    <p className="mt-1 flex items-center gap-2">
+                      <span className="text-[13px] font-bold text-red-500 strike-diagonal whitespace-nowrap">
+                        {formatRs(price)}
+                      </span>
+                      <span className="text-[13px] font-bold text-green-600 whitespace-nowrap">
+                        {formatRs(discounted(price))}
+                      </span>
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="min-w-0 pr-1">
-                <p className="text-[13px] font-bold text-[#1f1a16] leading-tight whitespace-nowrap">
-                  {preview.name}
-                  {gm && <span className={gm.text}> - ({gm.label})</span>}
-                </p>
-                {preview.impressionName && (
-                  <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
-                    Impression of:{" "}
-                    <span className="font-bold text-[#1f1a16]">{preview.impressionName}</span>
-                  </p>
-                )}
-                {brandLabel && (
-                  <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
-                    Brand: <span className="font-bold text-[#1f1a16]">{brandLabel}</span>
-                  </p>
-                )}
-                {price != null && (
-                  <p className="mt-1 flex items-center gap-2">
-                    <span className="text-[13px] font-bold text-red-500 strike-diagonal whitespace-nowrap">
-                      {formatRs(price)}
-                    </span>
-                    <span className="text-[13px] font-bold text-green-600 whitespace-nowrap">
-                      {formatRs(discounted(price))}
-                    </span>
-                  </p>
-                )}
-              </div>
-            </div>
-          );
-        })()}
+            );
+          })()}
       </div>
 
       {/* ── Grid ─────────────────────────────────────────────────────────── */}
-      <div id="disc-collection" className="max-w-7xl mx-auto px-4 py-8 scroll-mt-24">
+      <div
+        id="disc-collection"
+        className="max-w-7xl mx-auto px-4 py-8 scroll-mt-24"
+      >
         {/* ── Filters (same component as Shop All) ── */}
         {!loading && perfumes.length > 0 && (
           <div className="mb-6">
@@ -687,7 +776,13 @@ export default function DiscoveryBoxPage() {
               }
               extraChips={
                 onlyInStock
-                  ? [{ key: "inStock", label: "In stock only", clear: () => setOnlyInStock(false) }]
+                  ? [
+                      {
+                        key: "inStock",
+                        label: "In stock only",
+                        clear: () => setOnlyInStock(false),
+                      },
+                    ]
                   : []
               }
             />
@@ -701,7 +796,10 @@ export default function DiscoveryBoxPage() {
         {loading && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {[...Array(10)].map((_, i) => (
-              <div key={i} className="rounded-xl border border-gray-200 overflow-hidden animate-pulse">
+              <div
+                key={i}
+                className="rounded-xl border border-gray-200 overflow-hidden animate-pulse"
+              >
                 <div className="aspect-[6.818/7.5] bg-gray-100" />
                 <div className="p-3 space-y-2">
                   <div className="h-3 bg-gray-100 rounded w-3/4" />
@@ -754,7 +852,11 @@ export default function DiscoveryBoxPage() {
         {!loading && visiblePerfumes.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {visiblePerfumes.map((p) => (
-              <div key={p._id} id={`disc-card-${p._id}`} className="scroll-mt-40">
+              <div
+                key={p._id}
+                id={`disc-card-${p._id}`}
+                className="scroll-mt-40"
+              >
                 <ProductCard
                   name={p.name}
                   brand={p.brands?.[0] || p.brand}
