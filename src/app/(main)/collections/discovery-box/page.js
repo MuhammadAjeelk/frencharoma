@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { formatRs } from "@/lib/pricing";
+import { genderMeta } from "@/lib/gender";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
@@ -119,9 +120,8 @@ function FilledSlot({ perfume, onRemove, onScrollTo, onPreview, onPreviewEnd, to
     <button
       type="button"
       onClick={onScrollTo}
-      onMouseEnter={() => onPreview?.(perfume)}
+      onMouseEnter={(e) => onPreview?.(perfume, e.currentTarget)}
       onMouseLeave={() => onPreviewEnd?.()}
-      title={perfume.name}
       className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 ${border} group shrink-0 transition-transform duration-200 hover:scale-105`}
     >
       {get5mlImage(perfume) ? (
@@ -155,9 +155,11 @@ export default function DiscoveryBoxPage() {
   const [modalPerfume, setModalPerfume] = useState(null); // Quick View target
   const [modalOpen, setModalOpen] = useState(false);
   const [preview, setPreview] = useState(null); // filled-slot hover preview
-  const [hint, setHint] = useState(false); // "select fragrances" toast
+  const [previewLeft, setPreviewLeft] = useState(0); // centered under hovered slot
+  const [hint, setHint] = useState(false); // "select fragrances" message
   const hintTimer = useRef(null);
   const rowRef = useRef(null);
+  const barRef = useRef(null);
 
   const showHint = useCallback(() => {
     setHint(true);
@@ -168,8 +170,26 @@ export default function DiscoveryBoxPage() {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const scrollRow = (dir) =>
-    rowRef.current?.scrollBy({ left: dir * 240, behavior: "smooth" });
+  // Position the hover preview directly below the hovered slot, centred.
+  const handlePreview = useCallback((perfume, el) => {
+    if (barRef.current && el) {
+      const bar = barRef.current.getBoundingClientRect();
+      const slot = el.getBoundingClientRect();
+      const center = slot.left - bar.left + slot.width / 2;
+      // Keep the (~330px wide) preview inside the bar.
+      setPreviewLeft(Math.min(Math.max(center, 170), bar.width - 170));
+    }
+    setPreview(perfume);
+  }, []);
+
+  // One click moves exactly one complete box (forward/backward).
+  const scrollRow = (dir) => {
+    const row = rowRef.current;
+    if (!row) return;
+    const box = row.querySelector("[data-box]");
+    const step = box ? box.offsetWidth + 12 /* gap-3 */ : 300;
+    row.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
 
   // ── Filters (same set as Shop All) ───────────────────────────────────────
   const [gender, setGender] = useState("all");
@@ -364,7 +384,7 @@ export default function DiscoveryBoxPage() {
 
   // Reusable active/new box (always the far-left box)
   const activeBox = (
-    <div className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/60 bg-[#fbf8f1] p-2.5">
+    <div data-box className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/60 bg-[#fbf8f1] p-2.5">
       <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
         <span className="text-[13px] sm:text-sm font-bold text-[#b8964e] whitespace-nowrap">
           Discovery Box {completeCount + 1}
@@ -381,7 +401,7 @@ export default function DiscoveryBoxPage() {
               perfume={perfume}
               onRemove={() => removeTester(perfume._id)}
               onScrollTo={() => scrollToPerfume(perfume._id)}
-              onPreview={setPreview}
+              onPreview={handlePreview}
               onPreviewEnd={() => setPreview(null)}
             />
           ) : (
@@ -394,54 +414,80 @@ export default function DiscoveryBoxPage() {
 
   return (
     <div className="min-h-screen bg-[#faf8f5]">
-      {/* ── Slim banner with prominent 40% ───────────────────────────────── */}
-      <div className="bg-[#1a1a2e] text-white">
-        <div className="max-w-7xl mx-auto px-4 py-4 md:py-5 flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <nav className="flex items-center gap-2 text-[11px] text-white/40 mb-1">
-              <Link href="/" className="hover:text-white/70">Home</Link>
-              <span>/</span>
-              <span className="text-white/60">Discovery Box</span>
-            </nav>
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-none">
-              Discovery Box
-            </h1>
-            <p className="text-white/60 text-[12px] md:text-sm mt-1.5 max-w-xl leading-snug">
-              Build your own kit with any{" "}
-              <strong className="text-[#b8964e]">5 fragrances</strong> in 5ml
-              bottles — discover before you buy.
-            </p>
-          </div>
-
-          {/* FLAT 40% OFF badge */}
-          <div className="shrink-0 flex items-center justify-center rounded-full bg-red-600 shadow-[0_8px_24px_rgba(220,38,38,0.35)] w-[92px] h-[92px] md:w-[104px] md:h-[104px] text-center leading-none">
-            <div>
-              <span className="block text-[9px] md:text-[10px] font-bold tracking-[0.2em] text-white/85">FLAT</span>
-              <span className="block text-2xl md:text-3xl font-extrabold text-white">
-                {DISCOUNT_PERCENT}
-                <span className="text-base md:text-lg align-top">%</span>
+      {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
+      <div className="bg-[#1a1a2e] text-white border-y-4 border-[#c9a25a]">
+        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
+          <nav className="flex items-center gap-2 text-[11px] text-white/40 mb-4 md:mb-5">
+            <Link href="/" className="hover:text-white/70">Home</Link>
+            <span>/</span>
+            <span className="text-white/60">Discovery Box</span>
+          </nav>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
+            {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
+            <div
+              className="shrink-0 flex items-stretch text-[#c9a25a]"
+              style={{ fontFamily: '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif' }}
+            >
+              <span className="self-center mr-2 md:mr-3 text-2xl md:text-4xl tracking-[0.08em] text-white/90">
+                FLAT
               </span>
-              <span className="block text-[9px] md:text-[10px] font-bold tracking-[0.3em] text-white/85">OFF</span>
+              <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72]">
+                {DISCOUNT_PERCENT}
+              </span>
+              <span className="flex flex-col justify-between items-start ml-1 md:ml-2 py-1">
+                <span className="text-4xl md:text-6xl font-bold leading-none">%</span>
+                <span className="text-2xl md:text-4xl tracking-[0.06em] text-white/90 leading-none">
+                  OFF
+                </span>
+              </span>
+            </div>
+
+            {/* Gold vertical divider */}
+            <div className="hidden md:block self-stretch w-px bg-[#c9a25a]/50" />
+
+            {/* Right — title, subtitle, description */}
+            <div className="max-w-2xl text-center">
+              <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-bold text-white inline-block border-b-2 border-[#c9a25a] pb-1">
+                Discovery Box
+              </h1>
+              <p className="text-[#c9a25a] font-semibold mt-2.5 text-sm md:text-lg font-[family-name:var(--font-playfair)] italic">
+                Discover Fragrances Before You Buy ...
+              </p>
+              <div className="flex items-center gap-2 my-3 justify-center">
+                <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
+                <span className="w-2 h-2 rotate-45 bg-[#c9a25a]" />
+                <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
+              </div>
+              <p className="text-white/70 text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
+                Build your discovery box with any{" "}
+                <strong className="text-[#c9a25a]">5 fragrances</strong> in 5ml
+                bottles and enjoy a{" "}
+                <strong className="text-[#c9a25a]">Flat 40% OFF</strong> —
+                Explore, compare, and discover your favorites—More you explore,
+                more you love our Fragrances.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Sticky box builder (bigger bar + slots + arrows) ─────────────── */}
-      <div className="sticky top-0 z-30 border-b border-gray-200 bg-white shadow-sm">
+      {/* ── Sticky box builder ───────────────────────────────────────────── */}
+      <div ref={barRef} className="sticky top-0 z-30 border-b border-gray-200 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3.5 sm:py-4">
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Left arrow */}
-            <button
-              type="button"
-              onClick={() => scrollRow(-1)}
-              aria-label="Scroll boxes left"
-              className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] transition-colors"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* Left arrow — only once 2+ boxes are ready */}
+            {completeCount >= 2 && (
+              <button
+                type="button"
+                onClick={() => scrollRow(-1)}
+                aria-label="Previous box"
+                className="group/cap shrink-0 flex items-center justify-center px-1"
+              >
+                <svg className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M16 3 L6 12 L16 21 Z" />
+                </svg>
+              </button>
+            )}
 
             {/* Far-left = new box, ready boxes move to the right */}
             <div
@@ -455,6 +501,7 @@ export default function DiscoveryBoxPage() {
                 return (
                   <div
                     key={bi}
+                    data-box
                     className="shrink-0 rounded-xl border-2 border-green-300 bg-green-50/70 p-2.5"
                   >
                     <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
@@ -480,7 +527,7 @@ export default function DiscoveryBoxPage() {
                             tone="done"
                             onRemove={() => removeTester(id)}
                             onScrollTo={() => scrollToPerfume(id)}
-                            onPreview={setPreview}
+                            onPreview={handlePreview}
                             onPreviewEnd={() => setPreview(null)}
                           />
                         ) : null;
@@ -491,65 +538,117 @@ export default function DiscoveryBoxPage() {
               })}
             </div>
 
-            {/* Right arrow */}
-            <button
-              type="button"
-              onClick={() => scrollRow(1)}
-              aria-label="Scroll boxes right"
-              className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] transition-colors"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            {/* Right arrow — only once 2+ boxes are ready */}
+            {completeCount >= 2 && (
+              <button
+                type="button"
+                onClick={() => scrollRow(1)}
+                aria-label="Next box"
+                className="group/cap shrink-0 flex items-center justify-center px-1"
+              >
+                <svg className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 3 L18 12 L8 21 Z" />
+                </svg>
+              </button>
+            )}
 
-            {/* Inline progress + CTA — only until the first box is ready
-                (after that the fixed corner summary takes over). */}
+            {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
-              <div className="hidden md:flex flex-col items-end gap-1 shrink-0">
-                <p className="text-xs font-semibold text-gray-600 whitespace-nowrap">
-                  {activeCount}/{BOX_SIZE} in this box
-                </p>
-                {hasPartial && (
-                  <p className="text-[11px] text-[#b8964e] font-medium whitespace-nowrap">
-                    {BOX_SIZE - activeCount} more to fill this box
+              <p className="w-full lg:w-auto lg:flex-1 lg:min-w-[180px] text-[13px] sm:text-sm text-[#4a4540] leading-snug text-center lg:text-left">
+                To fill your Discovery Box — Choose any{" "}
+                <strong className="text-[#b8964e]">5 fragrances</strong> from the
+                collection below.
+              </p>
+            )}
+
+            {/* Ready — inline summary + Add Ready Box to Cart */}
+            {completeCount >= 1 && (
+              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-2 rounded-xl border border-green-200 bg-green-50/70 px-4 py-2.5">
+                <div className="min-w-0">
+                  <p className="text-[#1a1a2e] font-extrabold text-[13px] sm:text-sm whitespace-nowrap">
+                    {completeCount} Discovery Box{completeCount > 1 ? "es" : ""}{" "}
+                    {completeCount > 1 ? "are" : "is"} Ready.
                   </p>
-                )}
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-gray-400 text-[13px] line-through">
+                      {formatRs(totalOriginal)}
+                    </span>
+                    <span className="text-[#b8964e] text-base sm:text-lg font-extrabold">
+                      {formatRs(totalDiscounted)}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-green-600 font-semibold whitespace-nowrap">
+                    You Saved {formatRs(savings)} (Flat {DISCOUNT_PERCENT}% Off)
+                  </p>
+                </div>
+                <button
+                  onClick={handleCheckout}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#1a1a2e] text-white font-bold text-[12px] sm:text-[13px] px-4 py-2.5 rounded-xl hover:bg-[#b8964e] transition-colors"
+                >
+                  {addedToCart
+                    ? "✓ Added!"
+                    : `Add Ready Box${completeCount > 1 ? "es" : ""} to Cart`}
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+                  </svg>
+                </button>
               </div>
             )}
           </div>
+
+          {/* Click-an-empty-slot hint — shown close to the box */}
+          {hint && (
+            <p className="mt-2.5 text-center text-[13px] font-bold text-[#b8964e] animate-fadeIn">
+              Select Fragrances from the collection below ↓
+            </p>
+          )}
         </div>
 
-        {/* Filled-slot hover preview — bigger picture below the box bar */}
-        {preview && (
-          <div className="pointer-events-none absolute left-4 top-full mt-2 z-40 flex items-center gap-3 rounded-xl border border-[#e8e4df] bg-white p-2.5 shadow-2xl animate-fadeIn">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden bg-[#f7f5f2] shrink-0">
-              {get5mlImage(preview) ? (
-                <Image src={get5mlImage(preview)} alt={preview.name} fill className="object-cover" sizes="112px" />
-              ) : null}
-            </div>
-            <div className="pr-2">
-              <p className="text-sm font-bold text-[#1f1a16] leading-tight max-w-[180px]">
-                {preview.name}
-              </p>
-              {(preview.brands?.[0] || preview.brand) && (
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {preview.brands?.[0] || preview.brand}
+        {/* Filled-slot hover preview — same layout as the card, centred below the slot */}
+        {preview && (() => {
+          const gm = genderMeta(preview.gender);
+          const brandLabel = preview.brands?.[0] || preview.brand;
+          const price = getPerfumePrice(preview);
+          return (
+            <div
+              style={{ left: previewLeft }}
+              className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 max-w-[92vw] flex items-center gap-2.5 rounded-xl border border-[#e8e4df] bg-white p-2.5 shadow-2xl animate-fadeIn"
+            >
+              <div className="relative w-[72px] h-[72px] rounded-lg overflow-hidden bg-[#f7f5f2] shrink-0">
+                {get5mlImage(preview) ? (
+                  <Image src={get5mlImage(preview)} alt={preview.name} fill className="object-cover" sizes="72px" />
+                ) : null}
+              </div>
+              <div className="min-w-0 pr-1">
+                <p className="text-[13px] font-bold text-[#1f1a16] leading-tight whitespace-nowrap">
+                  {preview.name}
+                  {gm && <span className={gm.text}> - ({gm.label})</span>}
                 </p>
-              )}
-              {getPerfumePrice(preview) != null && (
-                <p className="text-xs mt-1">
-                  <span className="text-gray-400 line-through mr-1.5">
-                    {formatRs(getPerfumePrice(preview))}
-                  </span>
-                  <span className="font-bold text-[#b8964e]">
-                    {formatRs(discounted(getPerfumePrice(preview)))}
-                  </span>
-                </p>
-              )}
+                {preview.impressionName && (
+                  <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
+                    Impression of:{" "}
+                    <span className="font-bold text-[#1f1a16]">{preview.impressionName}</span>
+                  </p>
+                )}
+                {brandLabel && (
+                  <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
+                    Brand: <span className="font-bold text-[#1f1a16]">{brandLabel}</span>
+                  </p>
+                )}
+                {price != null && (
+                  <p className="mt-1 flex items-center gap-2">
+                    <span className="text-[13px] font-bold text-red-500 strike-diagonal whitespace-nowrap">
+                      {formatRs(price)}
+                    </span>
+                    <span className="text-[13px] font-bold text-green-600 whitespace-nowrap">
+                      {formatRs(discounted(price))}
+                    </span>
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* ── Grid ─────────────────────────────────────────────────────────── */}
@@ -704,45 +803,6 @@ export default function DiscoveryBoxPage() {
           </div>
         )}
       </div>
-
-      {/* ── Fixed right-corner summary (appears once ≥1 box is ready) ─────── */}
-      {completeCount >= 1 && (
-        <div className="fixed bottom-4 right-4 z-40 w-[240px] sm:w-[260px] rounded-2xl bg-white border border-[#e8e4df] shadow-[0_18px_50px_rgba(0,0,0,0.18)] p-4 animate-fadeIn">
-          <p className="text-[#1a1a2e] font-extrabold text-sm">
-            {completeCount} Discovery Box{completeCount > 1 ? "es" : ""}{" "}
-            {completeCount > 1 ? "are" : "is"} Ready.
-          </p>
-          <div className="flex items-baseline gap-2 mt-1.5">
-            <span className="text-gray-400 text-sm line-through">
-              {formatRs(totalOriginal)}
-            </span>
-            <span className="text-[#b8964e] text-lg font-extrabold">
-              {formatRs(totalDiscounted)}
-            </span>
-          </div>
-          <p className="text-[11px] text-green-600 font-semibold mt-0.5">
-            You save {formatRs(savings)} ({DISCOUNT_PERCENT}% off)
-          </p>
-          <button
-            onClick={handleCheckout}
-            className="mt-3 w-full inline-flex items-center justify-center gap-2 bg-[#1a1a2e] text-white font-bold text-[13px] py-3 rounded-xl hover:bg-[#b8964e] transition-colors"
-          >
-            {addedToCart
-              ? "✓ Added to Cart!"
-              : `Add Ready Box${completeCount > 1 ? "es" : ""} to Cart`}
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
-            </svg>
-          </button>
-        </div>
-      )}
-
-      {/* ── "Select fragrances" hint toast ───────────────────────────────── */}
-      {hint && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#1a1a2e] text-white text-[13px] sm:text-sm font-semibold px-5 py-3 rounded-full shadow-2xl animate-fadeIn">
-          Select Fragrances from the collection below
-        </div>
-      )}
 
       {/* ── Checkout prompt when a box is half-filled ─────────────────────── */}
       <UniversalModal
