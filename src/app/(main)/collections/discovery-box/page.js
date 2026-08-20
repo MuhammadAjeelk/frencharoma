@@ -435,7 +435,7 @@ export default function DiscoveryBoxPage() {
               <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
                 {DISCOUNT_PERCENT}
               </span>
-              <span className="flex flex-col justify-between items-start -ml-1">
+              <span className="self-stretch flex flex-col justify-between items-start -ml-1 -my-1 md:-my-3">
                 <span className="text-5xl md:text-8xl font-bold leading-none">%</span>
                 <span className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none">
                   OFF
