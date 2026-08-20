@@ -415,13 +415,14 @@ export default function DiscoveryBoxPage() {
   return (
     <div className="min-h-screen bg-[#faf8f5]">
       {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
-      <div className="bg-[#1a1a2e] text-white border-y-4 border-[#c9a25a]">
-        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
-          <nav className="flex items-center gap-2 text-[11px] text-white/40 mb-4 md:mb-5">
-            <Link href="/" className="hover:text-white/70">Home</Link>
-            <span>/</span>
-            <span className="text-white/60">Discovery Box</span>
-          </nav>
+      <div className="relative bg-[#1a1a2e] text-white border-y-4 border-[#c9a25a]">
+        {/* Breadcrumb overlaid so it doesn't offset the vertically-centred logo */}
+        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-white/40">
+          <Link href="/" className="hover:text-white/70">Home</Link>
+          <span>/</span>
+          <span className="text-white/60">Discovery Box</span>
+        </nav>
+        <div className="max-w-7xl mx-auto px-4 pt-12 pb-8 md:py-12">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
