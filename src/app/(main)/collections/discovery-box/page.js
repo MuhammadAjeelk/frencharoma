@@ -510,7 +510,7 @@ export default function DiscoveryBoxPage() {
                         Discovery Box {bi + 1} ✓
                       </span>
                       <span className="flex items-baseline gap-1.5 whitespace-nowrap">
-                        <span className="text-[11px] text-gray-400 line-through">
+                        <span className="text-[11px] font-semibold text-[#1f1a16] strike-diagonal">
                           {formatRs(orig)}
                         </span>
                         <span className="text-[12px] sm:text-[13px] font-bold text-green-700">
@@ -571,7 +571,7 @@ export default function DiscoveryBoxPage() {
                     {completeCount > 1 ? "are" : "is"} Ready.
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-gray-400 text-[13px] line-through">
+                    <span className="text-[13px] font-semibold text-[#1f1a16] strike-diagonal">
                       {formatRs(totalOriginal)}
                     </span>
                     <span className="text-[#b8964e] text-base sm:text-lg font-extrabold">
