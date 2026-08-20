@@ -486,10 +486,16 @@ export default function DiscoveryBoxPage() {
                 {DISCOUNT_PERCENT}
               </span>
               <span className="self-stretch flex flex-col justify-between items-start -ml-1 -my-1 md:-my-3">
-                <span className="text-5xl md:text-8xl font-bold leading-none">
+                <span
+                  className="text-5xl md:text-8xl font-bold leading-none"
+                  style={{ transform: "translateY(0.35em)" }}
+                >
                   %
                 </span>
-                <span className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none">
+                <span
+                  className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none"
+                  style={{ transform: "translateY(0.6em)" }}
+                >
                   OFF
                 </span>
               </span>
@@ -619,10 +625,10 @@ export default function DiscoveryBoxPage() {
             {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
               <p className="w-full lg:flex-1 mx-auto text-base sm:text-lg text-[#4a4540] leading-relaxed text-center">
-                To fill your Discovery Box — Choose any{" "}
-                <strong className="text-[#b8964e]">5 fragrances</strong>
+                To fill your Discovery Box — Choose any
                 <br />
-                from the collection below.
+                <strong className="text-[#b8964e]">5 fragrances</strong> from the
+                collection below.
               </p>
             )}
 
