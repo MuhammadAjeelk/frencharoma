@@ -509,7 +509,10 @@ export default function DiscoveryBoxPage() {
               <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-bold text-white inline-block border-b-2 border-[#c9a25a] pb-1">
                 Discovery Box
               </h1>
-              <p className="text-[#c9a25a] font-semibold mt-2.5 text-sm md:text-lg font-[family-name:var(--font-playfair)] italic">
+              <p
+                className="text-[#c9a25a] font-semibold mt-2.5 text-sm md:text-lg italic"
+                style={{ fontFamily: 'Calibri, "Segoe UI", Candara, Optima, "Trebuchet MS", sans-serif' }}
+              >
                 Discover Fragrances Before You Buy ...
               </p>
               <div className="flex items-center gap-2 my-3 justify-center">
@@ -625,10 +628,10 @@ export default function DiscoveryBoxPage() {
             {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
               <p className="w-full lg:flex-1 mx-auto text-base sm:text-lg text-[#4a4540] leading-relaxed text-center">
-                To fill your Discovery Box — Choose any
+                To fill your Discovery Box — Choose any{" "}
+                <strong className="text-[#b8964e]">5 fragrances</strong>
                 <br />
-                <strong className="text-[#b8964e]">5 fragrances</strong> from the
-                collection below.
+                from the collection below.
               </p>
             )}
 
