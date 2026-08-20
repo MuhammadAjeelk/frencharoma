@@ -422,11 +422,11 @@ export default function DiscoveryBoxPage() {
           <span>/</span>
           <span className="text-white/60">Discovery Box</span>
         </nav>
-        <div className="max-w-7xl mx-auto px-4 pt-12 pb-8 md:py-12">
+        <div className="max-w-7xl mx-auto px-4 pt-10 pb-6 md:py-7">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
-              className="shrink-0 flex items-stretch text-[#c9a25a]"
+              className="shrink-0 flex items-stretch text-[#c9a25a] -translate-y-4 md:-translate-y-8"
               style={{ fontFamily: '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif' }}
             >
               <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-white/90">
@@ -654,26 +654,6 @@ export default function DiscoveryBoxPage() {
 
       {/* ── Grid ─────────────────────────────────────────────────────────── */}
       <div id="disc-collection" className="max-w-7xl mx-auto px-4 py-8 scroll-mt-24">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-base font-bold text-[#1a1a2e] uppercase tracking-wide">
-              Choose Your Fragrances
-            </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
-              {loading
-                ? "Loading…"
-                : hasActiveFilters
-                  ? `${visiblePerfumes.length} of ${perfumes.length} testers`
-                  : `${perfumes.length} testers available`}
-            </p>
-          </div>
-          {hasPartial && (
-            <span className="text-xs text-[#b8964e] font-semibold">
-              {BOX_SIZE - activeCount} more to fill Discovery Box {completeCount + 1}
-            </span>
-          )}
-        </div>
-
         {/* ── Filters (same component as Shop All) ── */}
         {!loading && perfumes.length > 0 && (
           <div className="mb-6">
