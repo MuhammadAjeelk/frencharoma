@@ -428,15 +428,15 @@ export default function DiscoveryBoxPage() {
               className="shrink-0 flex items-stretch text-[#c9a25a]"
               style={{ fontFamily: '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif' }}
             >
-              <span className="self-center mr-2 md:mr-3 text-2xl md:text-4xl tracking-[0.08em] text-white/90">
+              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-white/90">
                 FLAT
               </span>
-              <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72]">
+              <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
                 {DISCOUNT_PERCENT}
               </span>
-              <span className="flex flex-col justify-between items-start ml-1 md:ml-2 py-1">
-                <span className="text-4xl md:text-6xl font-bold leading-none">%</span>
-                <span className="text-2xl md:text-4xl tracking-[0.06em] text-white/90 leading-none">
+              <span className="flex flex-col justify-between items-start -ml-1">
+                <span className="text-5xl md:text-8xl font-bold leading-none">%</span>
+                <span className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none">
                   OFF
                 </span>
               </span>
