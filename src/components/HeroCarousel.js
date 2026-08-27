@@ -26,6 +26,12 @@ export default function HeroCarousel() {
       subtitle: "Pick any 5 testers at 25% off — explore before you commit.",
       href: "/collections/discovery-box",
     },
+    {
+      image: "/images/home/luxury-edition-hero.webp",
+      title: "LUXURY EDITION",
+      subtitle: "A statement of refinement — crafted to leave an impression that lasts.",
+      href: "/collections/shop-all?edition=luxury",
+    },
   ];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
