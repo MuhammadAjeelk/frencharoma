@@ -31,6 +31,16 @@ export default function HeroCarousel() {
       title: "LUXURY EDITION",
       subtitle: "A statement of refinement — crafted to leave an impression that lasts.",
       href: "/collections/shop-all?edition=luxury",
+      contain: true,
+      bg: "#efe6d8",
+    },
+    {
+      image: "/images/home/bundle-offers-hero.webp",
+      title: "BUNDLE OFFERS",
+      subtitle: "Buy 2 or more and save more — discounts auto-applied at checkout.",
+      href: "/collections/shop-all",
+      contain: true,
+      bg: "#f3ece1",
     },
   ];
 
@@ -53,15 +63,17 @@ export default function HeroCarousel() {
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
+            style={slide.contain ? { backgroundColor: slide.bg || "#efe6d8" } : undefined}
           >
             <Image
               src={slide.image}
               alt={slide.title}
               fill
-              className="object-cover"
+              className={slide.contain ? "object-contain" : "object-cover"}
               priority={index === 0}
               sizes="100vw"
             />
+            {!slide.contain && (
             <div className="absolute inset-0 flex items-center">
               <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8">
                 <div className="w-[40%] flex justify-end">
@@ -74,6 +86,10 @@ export default function HeroCarousel() {
                 </div>
               </div>
             </div>
+            )}
+            {slide.contain && (
+              <Link href={slide.href} className="absolute inset-0 z-10" aria-label={slide.title} />
+            )}
           </div>
         ))}
       </div>
