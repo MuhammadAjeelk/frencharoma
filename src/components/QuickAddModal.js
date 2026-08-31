@@ -204,7 +204,7 @@ export default function QuickAddModal({
           </p>
         )}
         {!boxMode && displaySellable.length > 0 && (
-          <p className="flex items-center gap-2 whitespace-nowrap">
+          <p className="flex flex-wrap sm:flex-nowrap items-center gap-2 whitespace-normal sm:whitespace-nowrap">
             <span className="shrink-0">Edition:</span>
             {displaySellable.map((e) => {
               const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;

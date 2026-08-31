@@ -26,7 +26,7 @@ function StatusTimeline({ status }) {
         const done = idx <= currentIdx;
         return (
           <div key={step.key} className="flex flex-col items-center z-10 flex-1">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 transition-all ${done ? "bg-black border-black" : "bg-white border-gray-300"}`}>
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-base sm:text-lg border-2 transition-all ${done ? "bg-black border-black" : "bg-white border-gray-300"}`}>
               <span className={done ? "" : "opacity-30"}>{step.icon}</span>
             </div>
             <p className={`text-[10px] sm:text-xs mt-2 text-center font-medium ${done ? "text-black" : "text-gray-400"}`}>

@@ -832,7 +832,7 @@ export default function Header() {
       {isSearchOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black z-40 lg:hidden"
+            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
             onClick={() => setIsSearchOpen(false)}
           />
           <div className="fixed inset-0 z-50 lg:hidden flex flex-col">

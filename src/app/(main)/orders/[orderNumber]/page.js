@@ -35,7 +35,7 @@ function StatusTimeline({ status }) {
         return (
           <div key={step.key} className="flex flex-col items-center z-10 flex-1">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 transition-all ${
+              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-base sm:text-lg border-2 transition-all ${
                 done ? "bg-black border-black" : "bg-white border-gray-300"
               }`}
             >
@@ -178,7 +178,7 @@ export default function OrderPage() {
         {/* Order Details */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="text-base font-bold text-gray-900 mb-4">Order Details</h2>
-          <div className="grid grid-cols-2 gap-3 text-sm mb-4">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 text-sm mb-4">
             <div>
               <p className="text-xs text-gray-500 mb-0.5">Order Number</p>
               <p className="font-mono font-bold text-gray-900">{order.orderNumber}</p>

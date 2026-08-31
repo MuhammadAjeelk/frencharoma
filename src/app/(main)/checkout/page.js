@@ -391,7 +391,7 @@ export default function CheckoutPage() {
 
             {/* Right: Order Summary */}
             <div className="lg:w-80 xl:w-96 shrink-0">
-              <div className="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 static lg:sticky lg:top-24">
                 <h2 className="text-base font-bold text-gray-900 mb-4">Order Summary</h2>
 
                 {/* Items */}

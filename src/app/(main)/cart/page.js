@@ -342,7 +342,7 @@ export default function CartPage() {
 
             {/* Order Summary (spec pt 4) */}
             <div className="lg:w-80 xl:w-96 shrink-0">
-              <div className="border border-gray-200 rounded-2xl p-6 sticky top-24">
+              <div className="border border-gray-200 rounded-2xl p-6 static lg:sticky lg:top-24">
                 <OrderSummary summary={summary} itemCount={itemCount} />
 
                 {/* Proceed to Checkout */}

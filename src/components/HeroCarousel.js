@@ -76,7 +76,7 @@ export default function HeroCarousel() {
             {!slide.contain && (
             <div className="absolute inset-0 flex items-center">
               <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8">
-                <div className="w-[40%] flex justify-end">
+                <div className="w-full flex justify-center sm:w-[40%] sm:justify-end">
                   <Link
                     href={slide.href}
                     className="bg-white text-[#1a1a2e] px-4 py-2 sm:px-5 sm:py-2.5 md:px-8 md:py-3 lg:px-10 lg:py-3.5 rounded-lg text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.14em] hover:bg-[#1a1a2e] hover:text-white transition-all duration-300 shadow-lg font-semibold border border-white/20"

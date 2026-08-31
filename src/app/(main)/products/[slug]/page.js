@@ -620,7 +620,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* ── Feature icons row ── */}
-            <div className="grid grid-cols-4 gap-2 mb-5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
               {[
                 { icon: "/images/why/free-shipping.webp", label: "Free Shipping",      sub: "Across Rs. 7,000+" },
                 { icon: "/images/why/original-oils.webp",  label: "Original French",    sub: "Perfume Oils"      },
@@ -838,13 +838,13 @@ export default function ProductDetailPage() {
               <table className="w-full border-collapse overflow-hidden rounded-xl" style={{ borderRadius: "12px" }}>
                 <thead>
                   <tr>
-                    <th className="text-white py-4 px-4 text-center font-bold text-sm sm:text-base" style={{ borderRadius: "10px 0 0 0", backgroundColor: "#1a1a2e" }}>
+                    <th className="text-white py-4 px-2 sm:px-4 text-center font-bold text-sm sm:text-base" style={{ borderRadius: "10px 0 0 0", backgroundColor: "#1a1a2e" }}>
                       Original Perfume
                     </th>
-                    <th className="bg-gray-500 text-white py-4 px-4 text-center font-bold text-sm sm:text-base">
+                    <th className="bg-gray-500 text-white py-4 px-2 sm:px-4 text-center font-bold text-sm sm:text-base">
                       Features
                     </th>
-                    <th className="text-white py-4 px-4 text-center font-bold text-sm sm:text-base" style={{ borderRadius: "0 10px 0 0", backgroundColor: "#1a1a2e" }}>
+                    <th className="text-white py-4 px-2 sm:px-4 text-center font-bold text-sm sm:text-base" style={{ borderRadius: "0 10px 0 0", backgroundColor: "#1a1a2e" }}>
                       Impression Perfume
                     </th>
                   </tr>
@@ -862,9 +862,9 @@ export default function ProductDetailPage() {
                     ["NO",                 "Tester Availability",  "YES"                 ],
                   ].map(([orig, feat, imp], i) => (
                     <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                      <td className="py-3 px-4 text-center text-gray-700 text-sm sm:text-base border border-gray-200">{orig}</td>
-                      <td className="py-3 px-4 text-center font-bold text-gray-900 text-sm sm:text-base bg-gray-100 border border-gray-200">{feat}</td>
-                      <td className="py-3 px-4 text-center text-gray-700 text-sm sm:text-base border border-gray-200">{imp}</td>
+                      <td className="py-3 px-2 sm:px-4 text-center text-gray-700 text-sm sm:text-base border border-gray-200">{orig}</td>
+                      <td className="py-3 px-2 sm:px-4 text-center font-bold text-gray-900 text-sm sm:text-base bg-gray-100 border border-gray-200">{feat}</td>
+                      <td className="py-3 px-2 sm:px-4 text-center text-gray-700 text-sm sm:text-base border border-gray-200">{imp}</td>
                     </tr>
                   ))}
                 </tbody>

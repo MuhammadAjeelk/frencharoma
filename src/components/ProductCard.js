@@ -453,7 +453,7 @@ export default function ProductCard({
           )}
           {/* Edition detail — pills (clickable → edition info) before admired */}
           {!boxMode && displaySellable.length > 0 && (
-            <p className="flex items-center gap-1.5 whitespace-nowrap pt-0.5">
+            <p className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 whitespace-normal sm:whitespace-nowrap pt-0.5">
               <span className="shrink-0">Edition:</span>
               {displaySellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
