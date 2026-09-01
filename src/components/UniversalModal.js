@@ -60,11 +60,11 @@ export default function UniversalModal({
           transform: shown ? "translateX(0)" : "translateX(100%)",
         }}
       >
-        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-[#e8e4df] px-4 sm:px-5 py-1.5 flex items-center justify-between z-30">
-          <h2 className="text-[15px] sm:text-base font-bold text-[#1a1a2e] leading-tight pr-2">{heading}</h2>
+        <div className="sticky top-0 bg-[#1c1a17] border-b-2 border-[#c9a25a] px-4 sm:px-5 py-2.5 flex items-center justify-between z-30">
+          <h2 className="font-[family-name:var(--font-playfair)] italic text-base sm:text-lg font-bold text-[#c9a25a] leading-tight pr-2">{heading}</h2>
           <button
             onClick={onClose}
-            className="group/close shrink-0 p-1.5 rounded-full text-[#6b6560] hover:text-red-500 hover:bg-red-50 active:scale-90 transition-all duration-200"
+            className="group/close shrink-0 p-1.5 rounded-full text-white/70 hover:text-red-400 hover:bg-white/10 active:scale-90 transition-all duration-200"
             aria-label="Close modal"
           >
             <svg

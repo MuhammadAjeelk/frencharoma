@@ -83,10 +83,10 @@ export default function BestSellers() {
 
   if (loading) {
     return (
-      <div className="py-12 md:py-16 px-4 bg-white">
+      <div className="py-14 md:py-20 px-4 bg-[#322e29]">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8" style={{ color: "#1a1a2e" }}>
-            BEST-SELLERS
+          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-center mb-8 text-[#c9a25a]">
+            Best Sellers
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(3)].map((_, i) => (
@@ -109,19 +109,15 @@ export default function BestSellers() {
 
   return (
     <>
-      <div className="py-12 md:py-16 px-4 bg-white relative overflow-visible">
+      <div className="py-14 md:py-20 px-4 bg-[#322e29] relative overflow-visible">
         <div className="max-w-7xl mx-auto overflow-visible">
-          <div className="text-center mb-8 md:mb-10">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#b8964e] animate-pulse" />
-              Try It. Love It.
-            </span>
-            <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a1a2e] via-[#3a3550] to-[#1a1a2e] bg-clip-text text-transparent">
-              BEST SELLERS
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#c9a25a]">
+              Best Sellers
             </h2>
-            <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
-            <p className="text-[13px] md:text-sm text-[#8a847e] mt-4 max-w-md mx-auto italic font-[family-name:var(--font-playfair)]">
-              The most admired fragrances in our collection.
+            <div className="mx-auto mt-3 h-[2px] w-24 bg-[#c9a25a]/70" />
+            <p className="text-sm md:text-lg text-[#d8d2c8] mt-4 font-[family-name:var(--font-playfair)]">
+              Most Loved. Most Trusted.
             </p>
           </div>
 
@@ -199,7 +195,7 @@ export default function BestSellers() {
           <div className="flex flex-col items-center gap-4">
             <a
               href="/collections/shop-all?bestSeller=true"
-              className="group inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-lg shadow-sm hover:bg-[#b8964e] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-semibold text-sm tracking-wide uppercase"
+              className="group inline-flex items-center gap-2 bg-[#1c1a17] text-white border border-[#c9a25a]/60 px-9 md:px-10 py-3 rounded-lg shadow-sm hover:bg-[#c9a25a] hover:text-[#1c1a17] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-bold text-sm tracking-[0.14em] uppercase"
             >
               View All
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
