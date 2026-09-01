@@ -281,7 +281,7 @@ export default function ProductCard({
       <div
         className={`relative overflow-hidden bg-[#f7f5f2] ${
           hoverReveal
-            ? "w-[42%] shrink-0 self-stretch aspect-auto lg:w-full lg:self-auto lg:aspect-[6.818/7.5]"
+            ? "w-1/2 shrink-0 self-stretch aspect-auto lg:w-full lg:self-auto lg:aspect-[6.818/7.5]"
             : "w-full aspect-[6.818/7.5]"
         }`}
       >
@@ -418,7 +418,7 @@ export default function ProductCard({
           </h3>
         ) : (
           <Link href={href || "#"}>
-            <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
+            <h3 className="text-sm sm:text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
               {name}
               {gm && (
                 <>
@@ -452,8 +452,8 @@ export default function ProductCard({
             </p>
           )}
           {bestFor && (
-            <p className="flex items-center gap-1.5">
-              Best For:
+            <p className="flex flex-wrap items-center gap-1.5">
+              <span className="shrink-0">Best For:</span>
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#f7f0e2] text-[#9a7b32] text-[11px] font-semibold border border-[#e8dcbf]">
                 {bestFor}
               </span>
