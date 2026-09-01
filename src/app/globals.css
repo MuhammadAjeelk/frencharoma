@@ -87,6 +87,11 @@ img { image-rendering: -webkit-optimize-contrast; }
   to { opacity: 1; }
 }
 
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
 .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
 .animate-fadeInUp { animation: fadeInUp 0.4s ease-out; }
 

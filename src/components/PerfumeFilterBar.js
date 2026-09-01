@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 // ── Filter options (shared by Shop All + Discovery Box) ─────────────────────
 export const GENDER_OPTIONS = [
@@ -252,160 +253,232 @@ export default function PerfumeFilterBar({
         .slice(0, 8)
     : [];
 
-  return (
-    <div className="rounded-xl border border-[#e8e4df] bg-white p-3 md:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-      <div className="flex flex-wrap items-center gap-2.5">
-        <span className="text-[10px] font-bold text-[#b8964e] uppercase tracking-[0.18em] mr-1 shrink-0">
-          Filters
-        </span>
+  // Right-side filter drawer (mobile/tablet) + applied-filter count badge
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
 
-        <FilterDropdown
-          label="Gender"
-          options={GENDER_OPTIONS}
-          value={gender}
-          onChange={setGender}
-        />
-        <FilterDropdown
-          label="Collections"
-          options={EDITION_OPTIONS}
-          value={edition}
-          onChange={setEdition}
-        />
-        <FilterDropdown
-          label="Seasons"
-          options={SEASON_OPTIONS}
-          value={season}
-          onChange={setSeason}
-        />
-        {setScentFamily && (
-          <FilterDropdown
-            label="Fragrance"
-            options={familyOptions}
-            value={scentFamily || "all"}
-            onChange={(v) => setScentFamily(v === "all" ? "" : v)}
-          />
-        )}
+  const activeCount = [
+    gender !== "all",
+    edition !== "all",
+    season !== "all",
+    !!scentFamily,
+    featured && featured !== "all",
+    (brand || "").trim() !== "",
+  ].filter(Boolean).length;
 
+  // Filter controls, reused inline (desktop) and inside the drawer (mobile).
+  const dropdowns = (
+    <>
+      <FilterDropdown label="Gender" options={GENDER_OPTIONS} value={gender} onChange={setGender} />
+      <FilterDropdown label="Collections" options={EDITION_OPTIONS} value={edition} onChange={setEdition} />
+      <FilterDropdown label="Seasons" options={SEASON_OPTIONS} value={season} onChange={setSeason} />
+      {setScentFamily && (
         <FilterDropdown
-          label="Shop All"
-          standalone
-          options={FEATURED_OPTIONS}
-          value={featured || "all"}
-          onChange={setFeatured}
+          label="Fragrance"
+          options={familyOptions}
+          value={scentFamily || "all"}
+          onChange={(v) => setScentFamily(v === "all" ? "" : v)}
         />
+      )}
+      <FilterDropdown label="Shop All" standalone options={FEATURED_OPTIONS} value={featured || "all"} onChange={setFeatured} />
+    </>
+  );
 
-        {/* Brand search */}
-        <div className="relative min-w-[170px]">
-          <input
-            type="text"
-            placeholder="Brand..."
-            value={brand}
-            onChange={(e) => {
-              setBrand(e.target.value);
+  const brandSearch = (
+    <div className="relative min-w-[170px]">
+      <input
+        type="text"
+        placeholder="Brand..."
+        value={brand}
+        onChange={(e) => {
+          setBrand(e.target.value);
+          setBrandActive(-1);
+        }}
+        onFocus={() => setBrandFocused(true)}
+        onBlur={() => setTimeout(() => setBrandFocused(false), 150)}
+        onKeyDown={(e) => {
+          if (!brandFocused || brandMatches.length === 0) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setBrandActive((i) => (i + 1) % brandMatches.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setBrandActive((i) => (i - 1 + brandMatches.length) % brandMatches.length);
+          } else if (e.key === "Enter") {
+            if (brandActive >= 0 && brandActive < brandMatches.length) {
+              e.preventDefault();
+              setBrand(brandMatches[brandActive]);
+              setBrandFocused(false);
               setBrandActive(-1);
-            }}
-            onFocus={() => setBrandFocused(true)}
-            onBlur={() => setTimeout(() => setBrandFocused(false), 150)}
-            onKeyDown={(e) => {
-              if (!brandFocused || brandMatches.length === 0) return;
-              if (e.key === "ArrowDown") {
-                e.preventDefault();
-                setBrandActive((i) => (i + 1) % brandMatches.length);
-              } else if (e.key === "ArrowUp") {
-                e.preventDefault();
-                setBrandActive(
-                  (i) => (i - 1 + brandMatches.length) % brandMatches.length,
-                );
-              } else if (e.key === "Enter") {
-                if (brandActive >= 0 && brandActive < brandMatches.length) {
-                  e.preventDefault();
-                  setBrand(brandMatches[brandActive]);
-                  setBrandFocused(false);
-                  setBrandActive(-1);
-                }
-              } else if (e.key === "Escape") {
-                setBrandFocused(false);
-                setBrandActive(-1);
-              }
-            }}
-            className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
-              brand
-                ? "border-[#1a1a2e] text-[#1f1a16]"
-                : "border-[#e8e4df] text-[#4a4540] hover:border-[#1a1a2e] focus:border-[#1a1a2e]"
-            }`}
-          />
-          <svg
-            className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z"
-            />
+            }
+          } else if (e.key === "Escape") {
+            setBrandFocused(false);
+            setBrandActive(-1);
+          }
+        }}
+        className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full focus:outline-none transition-colors duration-200 ${
+          brand
+            ? "border-[#1a1a2e] text-[#1f1a16]"
+            : "border-[#e8e4df] text-[#4a4540] hover:border-[#1a1a2e] focus:border-[#1a1a2e]"
+        }`}
+      />
+      <svg className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z" />
+      </svg>
+      {brand && (
+        <button onClick={() => setBrand("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black">
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-          {brand && (
+        </button>
+      )}
+      {brandFocused && brandMatches.length > 0 && (
+        <div className="absolute left-0 top-full mt-1.5 w-full min-w-[180px] max-w-[calc(100vw-2rem)] bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.08)] z-40 py-1.5 max-h-60 overflow-y-auto scrollbar-always">
+          {brandMatches.map((b, i) => (
             <button
-              onClick={() => setBrand("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black"
+              key={b}
+              type="button"
+              onMouseDown={() => setBrand(b)}
+              onMouseEnter={() => setBrandActive(i)}
+              className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors underline-offset-4 decoration-1 ${
+                i === brandActive
+                  ? "bg-[#faf8f5] text-[#1a1a2e] font-bold underline"
+                  : "text-[#6b6560] hover:bg-[#faf8f5] hover:text-[#1a1a2e] hover:font-bold hover:underline"
+              }`}
             >
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              {b}
             </button>
-          )}
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
-          {/* Brand suggestions */}
-          {brandFocused && brandMatches.length > 0 && (
-            <div className="absolute left-0 top-full mt-1.5 w-full min-w-[180px] max-w-[calc(100vw-2rem)] bg-white border border-[#e8e4df] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.08)] z-40 py-1.5 max-h-60 overflow-y-auto scrollbar-always">
-              {brandMatches.map((b, i) => (
+  const clearButton = (
+    <button
+      onClick={onReset}
+      disabled={!hasControlChanges}
+      className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
+        hasControlChanges
+          ? "hover-vibrate border-red-500 text-red-600 hover:bg-red-50 hover:underline underline-offset-4 decoration-1"
+          : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
+      }`}
+    >
+      Clear Filters
+    </button>
+  );
+
+  return (
+    <>
+      {/* Desktop — inline filter bar (unchanged) */}
+      <div className="hidden lg:block rounded-xl border border-[#e8e4df] bg-white p-3 md:p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span className="text-[10px] font-bold text-[#b8964e] uppercase tracking-[0.18em] mr-1 shrink-0">
+            Filters
+          </span>
+          {dropdowns}
+          {brandSearch}
+          {extraControls}
+          <div className="flex-1" />
+          {clearButton}
+        </div>
+      </div>
+
+      {/* Mobile/tablet — a Filters button (with applied count) opens a right drawer */}
+      <div className="lg:hidden flex items-center gap-2.5">
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(true)}
+          className="relative inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-[#1a1a2e] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] shadow-sm active:scale-95 transition-transform"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h18M6 12h12M10 19h4" />
+          </svg>
+          Filters
+          {activeCount > 0 && (
+            <span className="ml-0.5 min-w-[20px] h-5 px-1 inline-flex items-center justify-center rounded-full bg-[#b8964e] text-white text-[11px] font-bold leading-none">
+              {activeCount}
+            </span>
+          )}
+        </button>
+        {hasControlChanges && (
+          <button
+            onClick={onReset}
+            className="text-[11px] px-3.5 py-2.5 rounded-full border border-red-500 text-red-600 font-semibold hover:bg-red-50 transition-colors"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      {/* Right-side filter drawer (mobile/tablet) */}
+      {mounted &&
+        drawerOpen &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 bg-black/40 z-[60] lg:hidden"
+              onClick={() => setDrawerOpen(false)}
+            />
+            <div className="fixed inset-y-0 right-0 w-[86vw] max-w-sm bg-white z-[70] lg:hidden flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.18)] animate-[slideInRight_0.28s_ease-out]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#e8e4df]">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-[#1a1a2e] uppercase tracking-[0.14em]">
+                    Filters
+                  </span>
+                  {activeCount > 0 && (
+                    <span className="min-w-[20px] h-5 px-1 inline-flex items-center justify-center rounded-full bg-[#b8964e] text-white text-[11px] font-bold leading-none">
+                      {activeCount}
+                    </span>
+                  )}
+                </div>
                 <button
-                  key={b}
-                  type="button"
-                  onMouseDown={() => setBrand(b)}
-                  onMouseEnter={() => setBrandActive(i)}
-                  className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors underline-offset-4 decoration-1 ${
-                    i === brandActive
-                      ? "bg-[#faf8f5] text-[#1a1a2e] font-bold underline"
-                      : "text-[#6b6560] hover:bg-[#faf8f5] hover:text-[#1a1a2e] hover:font-bold hover:underline"
+                  onClick={() => setDrawerOpen(false)}
+                  aria-label="Close filters"
+                  className="p-1.5 rounded-full text-[#6b6560] hover:text-red-500 hover:bg-red-50 active:scale-90 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-3.5">
+                {dropdowns}
+                {brandSearch}
+                {extraControls}
+              </div>
+
+              <div className="flex items-center gap-3 px-5 py-4 border-t border-[#e8e4df]">
+                <button
+                  onClick={onReset}
+                  disabled={!hasControlChanges}
+                  className={`flex-1 py-3 rounded-full border text-sm font-semibold transition-colors ${
+                    hasControlChanges
+                      ? "border-red-500 text-red-600 hover:bg-red-50"
+                      : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
                   }`}
                 >
-                  {b}
+                  Clear
                 </button>
-              ))}
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="flex-1 py-3 rounded-full bg-[#1a1a2e] text-white text-sm font-bold hover:bg-[#b8964e] transition-colors"
+                >
+                  Show Results
+                </button>
+              </div>
             </div>
-          )}
-        </div>
-
-        {extraControls}
-
-        <div className="flex-1" />
-
-        <button
-          onClick={onReset}
-          disabled={!hasControlChanges}
-          className={`text-[11px] px-3.5 py-2 rounded-full border transition-all duration-200 shrink-0 font-semibold ${
-            hasControlChanges
-              ? "hover-vibrate border-red-500 text-red-600 hover:bg-red-50 hover:underline underline-offset-4 decoration-1"
-              : "border-[#f0ece7] text-[#ccc8c2] cursor-default"
-          }`}
-        >
-          Clear Filters
-        </button>
-      </div>
-    </div>
+          </>,
+          document.body,
+        )}
+    </>
   );
 }
