@@ -430,7 +430,7 @@ export default function ProductCard({
           </Link>
         )}
 
-        <div className="space-y-1 text-[11px] sm:text-xs text-[#4a4540]">
+        <div className="space-y-1.5 text-[11px] sm:text-xs text-[#4a4540]">
           {impressionName && (
             <p className="line-clamp-1">
               Inspired by:{" "}
@@ -461,7 +461,7 @@ export default function ProductCard({
           )}
           {/* Edition detail — pills (clickable → edition info) before admired */}
           {!boxMode && displaySellable.length > 0 && (
-            <p className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 whitespace-normal sm:whitespace-nowrap pt-0.5">
+            <p className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 whitespace-normal sm:whitespace-nowrap">
               <span className="shrink-0">Edition:</span>
               {displaySellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
@@ -477,7 +477,7 @@ export default function ProductCard({
               })}
             </p>
           )}
-          <div className="pt-0.5">
+          <div>
             <span>
               Globally Admired by:{" "}
               <span className="font-bold text-[#1f1a16]">{admire}%</span>{" "}
@@ -493,7 +493,7 @@ export default function ProductCard({
         />
 
         {/* Price */}
-        <div className="flex items-baseline justify-center gap-8 flex-wrap mb-2.5">
+        <div className="flex items-baseline justify-center gap-x-6 gap-y-0.5 flex-wrap mb-2.5">
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
