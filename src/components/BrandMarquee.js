@@ -61,13 +61,13 @@ function BrandBox({ brand }) {
       <span className="relative block w-full h-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/icons/brands-labels/${brand.slug}-dark.png?v=8`}
+          src={`/icons/brands-labels/${brand.slug}-dark.png?v=9`}
           alt={brand.name}
           className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 group-hover/box:opacity-0"
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/icons/brands-labels/${brand.slug}-gold.png?v=8`}
+          src={`/icons/brands-labels/${brand.slug}-gold.png?v=9`}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover/box:opacity-100 drop-shadow-[0_2px_8px_rgba(201,162,90,0.2)]"
