@@ -52,10 +52,15 @@ export default function ShopByEditions() {
               <span className="absolute top-3 left-1/2 -translate-x-1/2 bg-[#1c1a17]/90 text-[#c9a25a] text-[11px] sm:text-xs font-bold tracking-[0.16em] px-5 py-1.5 rounded-md border border-[#c9a25a]/60 whitespace-nowrap">
                 {e.label}
               </span>
-              {/* Bottom tagline banner */}
-              <span className="absolute bottom-0 inset-x-0 bg-[#1c1a17]/85 text-[#e9dcc0] text-[10px] sm:text-[11px] font-semibold tracking-[0.1em] text-center py-2.5">
-                {e.tag}
-              </span>
+              {/* Bottom — animated line draws left→right on hover, tagline centered on it */}
+              <div className="absolute inset-x-0 bottom-0 px-5 pb-5">
+                <div className="relative h-4">
+                  <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#c9a25a] w-10 group-hover:w-full transition-[width] duration-[650ms] ease-out" />
+                  <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2.5 py-0.5 rounded bg-black/50 backdrop-blur-[2px] text-[#c9a25a] text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.14em] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+                    {e.tag}
+                  </span>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
