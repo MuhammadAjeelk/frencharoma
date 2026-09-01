@@ -11,7 +11,7 @@ export default function ShopCard({ name, image, href, tagline }) {
   return (
     <Link
       href={href}
-      className="group relative block w-full max-w-[300px] rounded-2xl overflow-hidden border border-[#e8e4df] hover:border-[#c9a25a]/60 shadow-[0_6px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.22)] transition-all duration-500"
+      className="group relative block w-full max-w-[320px] rounded-2xl overflow-hidden border-2 border-[#c9a25a] hover:border-[#e0bd72] shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500"
     >
       <div className="relative w-full aspect-[4/5]">
         <Image

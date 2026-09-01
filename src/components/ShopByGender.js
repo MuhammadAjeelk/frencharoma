@@ -2,9 +2,24 @@ import Image from "next/image";
 import Link from "next/link";
 
 const GENDERS = [
-  { name: "Men", tag: "BOLD & REFINED", img: "/images/home/new/gender-men.webp", href: "/collections/shop-all?gender=men" },
-  { name: "Women", tag: "ELEGANT & TIMELESS", img: "/images/home/new/gender-women.webp", href: "/collections/shop-all?gender=women" },
-  { name: "Unisex", tag: "BEYOND BOUNDARIES", img: "/images/home/new/gender-unisex.webp", href: "/collections/shop-all?gender=unisex" },
+  {
+    name: "Men",
+    tag: "Bold & Refined",
+    img: "/images/home/new/gender-men.webp",
+    href: "/collections/shop-all?gender=men",
+  },
+  {
+    name: "Women",
+    tag: "Elegant & Timeless",
+    img: "/images/home/new/gender-women.webp",
+    href: "/collections/shop-all?gender=women",
+  },
+  {
+    name: "Unisex",
+    tag: "Beyond Boundaries",
+    img: "/images/home/new/gender-unisex.webp",
+    href: "/collections/shop-all?gender=unisex",
+  },
 ];
 
 export default function ShopByGender() {
@@ -36,14 +51,22 @@ export default function ShopByGender() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width:640px) 90vw, 30vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
               </div>
-              <span className="absolute top-3 left-4 font-[family-name:var(--font-playfair)] italic text-xl sm:text-2xl text-[#f0e6cf] drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+
+              <span className="absolute top-3 left-4 font-[family-name:var(--font-playfair)] italic text-xl sm:text-2xl text-[#c9a25a] drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
                 {g.name}
               </span>
-              <span className="absolute bottom-0 inset-x-0 bg-[#1c1a17]/85 text-[#c9a25a] text-[10px] sm:text-[11px] font-bold tracking-[0.16em] text-center py-2">
-                {g.tag}
-              </span>
+
+              {/* Animated line — draws left→right on hover with the tagline centered on it */}
+              <div className="absolute inset-x-0 bottom-0 px-5 pb-5">
+                <div className="relative h-4">
+                  <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#c9a25a] w-0 group-hover:w-full transition-[width] duration-[650ms] ease-out" />
+                  <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2.5 py-0.5 rounded bg-black/45 backdrop-blur-[2px] text-[#c9a25a] text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.22em] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+                    {g.tag}
+                  </span>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
