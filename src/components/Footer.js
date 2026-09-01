@@ -51,12 +51,27 @@ export default function Footer() {
 
   return (
     <>
-      <footer ref={footerRef} className="bg-[#1a1a2e] text-white/80 py-12 md:py-16 px-4 sm:px-6">
+      <footer ref={footerRef} className="bg-[#211e1a] text-white/80 py-12 md:py-16 px-4 sm:px-6 border-t-4 border-[#c9a25a]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 mb-10">
+          {/* Centered brand header */}
+          <div className="text-center mb-10 md:mb-12">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-4xl font-bold text-[#c9a25a]">
+              French Aromas
+            </h2>
+            <p className="mt-2 text-[13px] md:text-sm text-white/55 font-[family-name:var(--font-playfair)] italic">
+              Luxury impressions, crafted to leave an impression that lasts.
+            </p>
+            <div className="mx-auto mt-4 flex items-center justify-center gap-2">
+              <span className="h-px w-16 bg-[#c9a25a]/40" />
+              <span className="w-1.5 h-1.5 rotate-45 bg-[#c9a25a]" />
+              <span className="h-px w-16 bg-[#c9a25a]/40" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 mb-10 text-center md:text-left">
             {/* Popular Collection */}
             <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#b8964e]">Popular Collection</h3>
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Popular Collection</h3>
               <ul className="space-y-2.5">
                 {popularCollection.map((item, index) => (
                   <li key={index}>
@@ -70,7 +85,7 @@ export default function Footer() {
 
             {/* Support */}
             <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#b8964e]">Support</h3>
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Support</h3>
               <ul className="space-y-2.5">
                 {support.map((item, index) => (
                   <li key={index}>
@@ -84,7 +99,7 @@ export default function Footer() {
 
             {/* Address */}
             <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#b8964e]">Address</h3>
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Address</h3>
               <div className="space-y-2 text-[13px] text-white/60">
                 <p className="font-medium text-white/80">Divina Perfumes L.L.C.</p>
                 <p>Gold Souq, Gate No. 2, Deira, Dubai, UAE.</p>
@@ -92,7 +107,7 @@ export default function Footer() {
                   href="https://maps.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[#b8964e] hover:text-[#d4ad5e] transition-colors mt-1"
+                  className="inline-flex items-center gap-1.5 text-[#c9a25a] hover:text-[#e0bd72] transition-colors mt-1"
                 >
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
@@ -104,7 +119,7 @@ export default function Footer() {
 
             {/* Contact */}
             <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#b8964e]">Contact</h3>
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Contact</h3>
               <div className="space-y-2 text-[13px] text-white/60">
                 <p>
                   <span className="text-white/80 font-medium">Email:</span>{" "}
@@ -134,10 +149,10 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email"
-                  className="flex-1 px-4 py-2.5 bg-white/10 border border-white/15 rounded-lg focus:outline-none focus:border-[#b8964e] text-[13px] text-white placeholder-white/30 transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-white/10 border border-white/15 rounded-lg focus:outline-none focus:border-[#c9a25a] text-[13px] text-white placeholder-white/30 transition-colors"
                   required
                 />
-                <button type="submit" className="bg-[#b8964e] text-white px-5 py-2.5 rounded-lg hover:bg-[#d4ad5e] transition-colors shrink-0 font-semibold text-[13px]" aria-label="Subscribe">
+                <button type="submit" className="bg-[#c9a25a] text-white px-5 py-2.5 rounded-lg hover:bg-[#e0bd72] transition-colors shrink-0 font-semibold text-[13px]" aria-label="Subscribe">
                   Subscribe
                 </button>
               </form>
@@ -147,7 +162,7 @@ export default function Footer() {
       </footer>
 
       {/* Bottom Bar */}
-      <div className="bg-[#141425] border-t border-white/5 py-5 px-4 sm:px-6">
+      <div className="bg-[#17140f] border-t border-white/5 py-5 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-5">
             <p className="text-[12px] text-white/40 text-center md:text-left">
@@ -179,17 +194,17 @@ export default function Footer() {
 
             {/* Social Media */}
             <div className="flex items-center gap-3">
-              <a href="https://www.facebook.com/lineadebellaofficial" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#b8964e] transition-colors" aria-label="Facebook">
+              <a href="https://www.facebook.com/lineadebellaofficial" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#c9a25a] transition-colors" aria-label="Facebook">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M18 10.049C18 5.603 14.419 2 10 2s-8 3.603-8 8.049C2 14.067 4.925 17.396 8.75 18v-5.624H6.719v-2.328h2.03V8.275c0-2.017 1.195-3.132 3.023-3.132.874 0 1.79.158 1.79.158v1.98h-1.009c-.994 0-1.303.621-1.303 1.258v1.51h2.219l-.355 2.326H11.25V18c3.825-.604 6.75-3.933 6.75-7.951" />
                 </svg>
               </a>
-              <a href="https://www.instagram.com/linea_debella/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#b8964e] transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/linea_debella/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#c9a25a] transition-colors" aria-label="Instagram">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M13.23 3.492c-.84-.037-1.096-.046-3.23-.046-2.144 0-2.39.01-3.238.055-.776.027-1.195.164-1.487.273a2.4 2.4 0 0 0-.912.593 2.5 2.5 0 0 0-.602.922c-.11.282-.238.702-.274 1.486-.046.84-.046 1.095-.046 3.23s.01 2.39.046 3.229c.004.51.097 1.016.274 1.495.145.365.319.639.602.913.282.282.538.456.92.602.474.176.974.268 1.479.273.848.046 1.103.046 3.238.046s2.39-.01 3.23-.046c.784-.036 1.203-.164 1.486-.273.374-.146.648-.329.921-.602.283-.283.447-.548.602-.922.177-.476.27-.979.274-1.486.037-.84.046-1.095.046-3.23s-.01-2.39-.055-3.229c-.027-.784-.164-1.204-.274-1.495a2.4 2.4 0 0 0-.593-.913 2.6 2.6 0 0 0-.92-.602c-.284-.11-.703-.237-1.488-.273Zm.427 4.806a4.105 4.105 0 1 1 5.805 5.805 4.105 4.105 0 0 1-5.805-5.805m1.882 5.371a2.668 2.668 0 1 0 2.042-4.93 2.668 2.668 0 0 0-2.042 4.93m5.922-5.942a.958.958 0 1 1-1.355-1.355.958.958 0 0 1 1.355 1.355" clipRule="evenodd" />
                 </svg>
               </a>
-              <a href="https://www.tiktok.com/@lineadebella" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#b8964e] transition-colors" aria-label="TikTok">
+              <a href="https://www.tiktok.com/@lineadebella" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#c9a25a] transition-colors" aria-label="TikTok">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10.511 1.705h2.74s-.157 3.51 3.795 3.768v2.711s-2.114.129-3.796-1.158l.028 5.606A5.073 5.073 0 1 1 8.213 7.56h.708v2.785a2.298 2.298 0 1 0 1.618 2.205z" />
                 </svg>
@@ -203,7 +218,7 @@ export default function Footer() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#1a1a2e] text-white rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#b8964e] transition-colors duration-200 animate-fadeIn"
+          className="fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#211e1a] text-white rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#c9a25a] transition-colors duration-200 animate-fadeIn"
           aria-label="Scroll to top"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

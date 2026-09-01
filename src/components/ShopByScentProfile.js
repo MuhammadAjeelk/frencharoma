@@ -2,16 +2,56 @@ import Image from "next/image";
 import Link from "next/link";
 
 const SCENTS = [
-  { name: "Fresh", tag: "Bright – Clean – Refreshing", img: "/images/home/new/scent-fresh.webp" },
-  { name: "Fruity", tag: "Juicy – Vibrant – Playful", img: "/images/home/new/scent-fruity.webp" },
-  { name: "Floral", tag: "Elegant – Romantic – Delicate", img: "/images/home/new/scent-floral.webp" },
-  { name: "Spicy", tag: "Bold – Warm – Intense", img: "/images/home/new/scent-spicy.webp" },
-  { name: "Woody", tag: "Warm – Earthy – Sophisticated", img: "/images/home/new/scent-woody.webp" },
-  { name: "Musky", tag: "Soft – Sensual – Alluring", img: "/images/home/new/scent-musky.webp" },
-  { name: "Aromatic", tag: "Herbal – Refined – Invigorating", img: "/images/home/new/scent-aromatic.webp" },
-  { name: "Leather", tag: "Rich – Smoky – Sophisticated", img: "/images/home/new/scent-leather.webp" },
-  { name: "Oriental (Amber)", tag: "Sweet – Warm – Indulgent", img: "/images/home/new/scent-oriental.webp" },
-  { name: "Chypre", tag: "Elegant – Sophisticated – Timeless", img: "/images/home/new/scent-chypre.webp" },
+  {
+    name: "Fresh",
+    tag: "Bright – Clean – Refreshing",
+    img: "/images/home/new/scent-fresh.webp",
+  },
+  {
+    name: "Fruity",
+    tag: "Juicy – Vibrant – Playful",
+    img: "/images/home/new/scent-fruity.webp",
+  },
+  {
+    name: "Floral",
+    tag: "Elegant – Romantic – Delicate",
+    img: "/images/home/new/scent-floral.webp",
+  },
+  {
+    name: "Spicy",
+    tag: "Bold – Warm – Intense",
+    img: "/images/home/new/scent-spicy.webp",
+  },
+  {
+    name: "Woody",
+    tag: "Warm – Earthy – Sophisticated",
+    img: "/images/home/new/scent-woody.webp",
+  },
+  {
+    name: "Musky",
+    tag: "Soft – Sensual – Alluring",
+    img: "/images/home/new/scent-musky.webp",
+  },
+  {
+    name: "Aromatic",
+    tag: "Herbal – Refined – Invigorating",
+    img: "/images/home/new/scent-aromatic.webp",
+  },
+  {
+    name: "Leather",
+    tag: "Rich – Smoky – Sophisticated",
+    img: "/images/home/new/scent-leather.webp",
+  },
+  {
+    name: "Oriental (Amber)",
+    tag: "Sweet – Warm – Indulgent",
+    img: "/images/home/new/scent-oriental.webp",
+  },
+  {
+    name: "Chypre",
+    tag: "Elegant – Sophisticated – Timeless",
+    img: "/images/home/new/scent-chypre.webp",
+  },
 ];
 
 export default function ShopByScentProfile() {
@@ -30,7 +70,7 @@ export default function ShopByScentProfile() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 justify-center gap-3.5 sm:gap-5">
           {SCENTS.map((s) => (
             <Link
               key={s.name}

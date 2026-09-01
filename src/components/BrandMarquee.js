@@ -61,7 +61,7 @@ function BrandBox({ brand }) {
       <span className="relative block w-full h-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/icons/brands-labels/${brand.slug}.png`}
+          src={`/icons/brands-labels/${brand.slug}-dark.png`}
           alt={brand.name}
           className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 group-hover/box:opacity-0"
         />
