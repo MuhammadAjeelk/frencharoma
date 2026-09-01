@@ -16,22 +16,6 @@ export default function HeroCarousel() {
       contain: true,
       bg: "#e7e0d1",
     },
-    {
-      image: "/images/home/luxury-edition-hero.webp",
-      title: "LUXURY EDITION",
-      subtitle: "A statement of refinement — crafted to leave an impression that lasts.",
-      href: "/collections/shop-all?edition=luxury",
-      contain: true,
-      bg: "#efe6d8",
-    },
-    {
-      image: "/images/home/bundle-offers-hero.webp",
-      title: "BUNDLE OFFERS",
-      subtitle: "Buy 2 or more and save more — discounts auto-applied at checkout.",
-      href: "/collections/shop-all",
-      contain: true,
-      bg: "#f3ece1",
-    },
   ];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -46,7 +30,7 @@ export default function HeroCarousel() {
 
   return (
     <div className="relative w-full">
-      <div className="relative w-full h-[250px] sm:h-[400px] md:h-[500px] lg:h-[700px] overflow-hidden">
+      <div className="relative w-full aspect-[16/9] overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={index}
@@ -59,7 +43,7 @@ export default function HeroCarousel() {
               src={slide.image}
               alt={slide.title}
               fill
-              className={slide.contain ? "object-contain" : "object-cover"}
+              className="object-cover"
               priority={index === 0}
               sizes="100vw"
             />
@@ -85,7 +69,7 @@ export default function HeroCarousel() {
       </div>
 
       {/* Controls */}
-      <div className="bg-white py-4 sm:py-5 md:py-6">
+      <div className={`bg-white py-4 sm:py-5 md:py-6 ${slides.length > 1 ? "" : "hidden"}`}>
         <div className="flex items-center justify-center gap-5 sm:gap-7 lg:gap-10">
           <button onClick={prevSlide} className="text-[#1a1a2e] hover:text-[#b8964e] transition-colors p-1" aria-label="Previous slide">
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
