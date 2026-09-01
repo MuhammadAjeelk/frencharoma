@@ -9,22 +9,12 @@ export default function HeroCarousel() {
 
   const slides = [
     {
-      image: "https://www.linea-debella.com/cdn/shop/files/luxury_in_every_perfume_spray.webp?v=1767521658&width=1500",
+      image: "/images/home/hero-best-sellers.webp",
       title: "BEST SELLERS",
-      subtitle: "Discover our most loved fragrances — handpicked by thousands.",
+      subtitle: "Most Loved. Most Trusted.",
       href: "/collections/shop-all?bestSeller=true",
-    },
-    {
-      image: "https://www.linea-debella.com/cdn/shop/files/DIVE-INTO-LUXURY.jpg?v=1755525359&width=3000",
-      title: "SPECIAL OFFERS",
-      subtitle: "Up to 50% off on select perfumes — limited time, limited stock.",
-      href: "/collections/shop-all?specialOffer=true",
-    },
-    {
-      image: "https://www.linea-debella.com/cdn/shop/files/luxury_in_every_perfume_spray.webp?v=1767521658&width=1500",
-      title: "DISCOVERY BOX",
-      subtitle: "Pick any 5 testers at 25% off — explore before you commit.",
-      href: "/collections/discovery-box",
+      contain: true,
+      bg: "#e7e0d1",
     },
     {
       image: "/images/home/luxury-edition-hero.webp",
