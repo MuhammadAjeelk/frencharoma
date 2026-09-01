@@ -184,9 +184,11 @@ export default function ProductCard({
         setShowBanners(false);
       }}
       onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
-      className={`group relative isolate rounded-xl overflow-hidden bg-white border-[2.5px] flex flex-col transition-all duration-300 ${
-        boxMode && boxSoldOut ? "opacity-60" : ""
-      } ${boxMode && !boxSoldOut ? "cursor-pointer" : ""}`}
+      className={`group relative isolate rounded-xl overflow-hidden bg-white border-[2.5px] flex transition-all duration-300 ${
+        hoverReveal ? "flex-row lg:flex-col" : "flex-col"
+      } ${boxMode && boxSoldOut ? "opacity-60" : ""} ${
+        boxMode && !boxSoldOut ? "cursor-pointer" : ""
+      }`}
       style={{
         borderColor: hovered && gm ? gm.hex : "#e8e4df",
         boxShadow: hovered && !(boxMode && boxSoldOut) ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
@@ -276,7 +278,13 @@ export default function ProductCard({
       )}
 
       {/* Product Image */}
-      <div className="relative w-full aspect-[6.818/7.5] overflow-hidden bg-[#f7f5f2]">
+      <div
+        className={`relative overflow-hidden bg-[#f7f5f2] ${
+          hoverReveal
+            ? "w-[42%] shrink-0 self-stretch aspect-auto lg:w-full lg:self-auto lg:aspect-[6.818/7.5]"
+            : "w-full aspect-[6.818/7.5]"
+        }`}
+      >
         {boxMode ? (
           <div className="block w-full h-full">
             <Image
@@ -375,7 +383,7 @@ export default function ProductCard({
       <div
         className={
           hoverReveal
-            ? "absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 flex flex-col bg-[#f4f2ef] rounded-t-xl shadow-[0_-6px_24px_rgba(0,0,0,0.10)] transition-transform duration-500 ease-out translate-y-0 lg:translate-y-full lg:group-hover:translate-y-0"
+            ? "relative flex-1 min-w-0 z-20 p-3 lg:p-4 flex flex-col bg-[#f4f2ef] lg:absolute lg:inset-x-0 lg:bottom-0 lg:rounded-t-xl lg:shadow-[0_-6px_24px_rgba(0,0,0,0.10)] lg:transition-transform lg:duration-500 lg:ease-out lg:translate-y-full lg:group-hover:translate-y-0"
             : "p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]"
         }
       >
@@ -389,7 +397,7 @@ export default function ProductCard({
               e.stopPropagation();
               onQuickView();
             }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md hover:bg-[#faf8f5] transition-all duration-200 whitespace-nowrap opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 hidden lg:flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md hover:bg-[#faf8f5] transition-all duration-200 whitespace-nowrap lg:opacity-0 lg:group-hover:opacity-100"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
