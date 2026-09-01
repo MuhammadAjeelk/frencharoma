@@ -147,19 +147,15 @@ export default function BrandMarquee() {
   }, []);
 
   return (
-    <div className="pt-12 md:pt-16 pb-24 md:pb-36 bg-gradient-to-b from-white via-[#faf8f5] to-white border-b border-[#f0ece7] overflow-hidden">
+    <div className="pt-14 md:pt-20 pb-16 md:pb-24 bg-[#d4c6ab] overflow-hidden">
       {/* Heading */}
       <div className="max-w-7xl mx-auto px-4 mb-9 md:mb-12 text-center">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#b8964e]/10 border border-[#b8964e]/30 text-[#b8964e] text-[10px] font-bold uppercase tracking-[0.22em]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#b8964e] animate-pulse" />
-          Inspired Collections
-        </span>
-        <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a1a2e] via-[#3a3550] to-[#1a1a2e] bg-clip-text text-transparent">
-          SHOP BY BRAND
+        <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#2a2620]">
+          Shop By Brand
         </h2>
-        <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#b8964e] to-transparent" />
-        <p className="text-[13px] md:text-sm text-[#8a847e] mt-4 max-w-md mx-auto italic font-[family-name:var(--font-playfair)]">
-          Discover fragrances inspired by the world&rsquo;s most iconic brands.
+        <div className="mx-auto mt-3 h-[2px] w-24 bg-[#2a2620]/60" />
+        <p className="mt-4 text-[#4a4335] font-[family-name:var(--font-playfair)] text-sm md:text-lg">
+          Discover your favorite houses.
         </p>
       </div>
 

@@ -1,38 +1,24 @@
 import HeroCarousel from "@/components/HeroCarousel";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import BrandMarquee from "@/components/BrandMarquee";
 import ShopByGender from "@/components/ShopByGender";
-import ShopByCategory from "@/components/ShopByCategory";
+import ShopByEditions from "@/components/ShopByEditions";
 import BestSellers from "@/components/BestSellers";
-import SpecialOffers from "@/components/SpecialOffers";
-import Discovery from "@/components/Discovery";
-import WhyChooseUs from "@/components/WhyChooseUs";
+import ShopBySeason from "@/components/ShopBySeason";
+import ShopByScentProfile from "@/components/ShopByScentProfile";
 import Reveal from "@/components/Reveal";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#322e29]">
       <HeroCarousel />
-      <Reveal>
-        <BrandMarquee />
-      </Reveal>
-      <Reveal>
-        <ShopByGender />
-      </Reveal>
-      <Reveal>
-        <ShopByCategory />
-      </Reveal>
-      <Reveal>
-        <BestSellers />
-      </Reveal>
-      <Reveal>
-        <SpecialOffers />
-      </Reveal>
-      <Reveal>
-        <Discovery />
-      </Reveal>
-      <Reveal>
-        <WhyChooseUs />
-      </Reveal>
+      <Reveal><WhyChooseUs /></Reveal>
+      <Reveal><BrandMarquee /></Reveal>
+      <Reveal><ShopByGender /></Reveal>
+      <Reveal><ShopByEditions /></Reveal>
+      <Reveal><BestSellers /></Reveal>
+      <Reveal><ShopBySeason /></Reveal>
+      <Reveal><ShopByScentProfile /></Reveal>
     </div>
   );
 }

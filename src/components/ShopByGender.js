@@ -1,81 +1,59 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import ShopCard from "./ShopCard";
+
+const GENDERS = [
+  { name: "Men", tag: "BOLD & REFINED", img: "/images/home/new/gender-men.webp", href: "/collections/shop-all?gender=men" },
+  { name: "Women", tag: "ELEGANT & TIMELESS", img: "/images/home/new/gender-women.webp", href: "/collections/shop-all?gender=women" },
+  { name: "Unisex", tag: "BEYOND BOUNDARIES", img: "/images/home/new/gender-unisex.webp", href: "/collections/shop-all?gender=unisex" },
+];
 
 export default function ShopByGender() {
-  const genders = [
-    {
-      name: "Men",
-      tagline: "Bold & Refined",
-      image: "/images/home/gender-men.webp",
-      href: "/collections/shop-all?gender=men",
-    },
-    {
-      name: "Women",
-      tagline: "Elegant & Timeless",
-      image: "/images/home/gender-women.webp",
-      href: "/collections/shop-all?gender=women",
-    },
-    {
-      name: "Unisex",
-      tagline: "Beyond Boundaries",
-      image: "/images/home/gender-unisex.webp",
-      href: "/collections/shop-all?gender=unisex",
-    },
-  ];
-
   return (
-    <section className="relative py-16 md:py-24 px-4 overflow-hidden bg-[#141118]">
-      {/* Sophisticated background — sets the section apart from the page */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(201,162,90,0.16),transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_60%_at_50%_120%,rgba(201,162,90,0.10),transparent_55%)]" />
-
-      <div className="relative max-w-7xl mx-auto">
-        {/* Heading — styled like Shop By Brand, tuned for the dark backdrop */}
+    <section className="bg-[#322e29] py-14 md:py-20 px-4">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10 md:mb-14">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#c9a25a]/15 border border-[#c9a25a]/40 text-[#e8cf9f] text-[10px] font-bold uppercase tracking-[0.22em]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a25a] animate-pulse" />
-            Find Your Signature
-          </span>
-          <h2 className="mt-3 text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white via-[#f2dca8] to-white bg-clip-text text-transparent">
-            SHOP BY GENDER
+          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#c9a25a]">
+            Shop By Gender
           </h2>
-          <div className="mx-auto mt-3 h-[3px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#c9a25a] to-transparent" />
-          <p className="text-[13px] md:text-sm text-[#b8b2ad] mt-4 max-w-lg mx-auto italic font-[family-name:var(--font-playfair)]">
-            Every fragrance tells a story — find the one that reflects yours.
+          <div className="mx-auto mt-3 h-[2px] w-24 bg-[#c9a25a]/70" />
+          <p className="mt-4 text-[#d8d2c8] font-[family-name:var(--font-playfair)] text-sm md:text-lg">
+            Find the scent that reflects you.
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center items-stretch gap-5 md:gap-7">
-          {genders.map((gender, index) => (
-            <ShopCard
-              key={index}
-              name={gender.name}
-              tagline={gender.tagline}
-              image={gender.image}
-              href={gender.href}
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
+          {GENDERS.map((g) => (
+            <Link
+              key={g.name}
+              href={g.href}
+              className="group relative block rounded-xl overflow-hidden border-2 border-[#c9a25a] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1.5"
+            >
+              <div className="relative w-full aspect-square">
+                <Image
+                  src={g.img}
+                  alt={g.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width:640px) 90vw, 30vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
+              </div>
+              <span className="absolute top-3 left-4 font-[family-name:var(--font-playfair)] italic text-xl sm:text-2xl text-[#f0e6cf] drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+                {g.name}
+              </span>
+              <span className="absolute bottom-0 inset-x-0 bg-[#1c1a17]/85 text-[#c9a25a] text-[10px] sm:text-[11px] font-bold tracking-[0.16em] text-center py-2">
+                {g.tag}
+              </span>
+            </Link>
           ))}
         </div>
 
-        {/* View All — deliberately not golden; a clean invert-fill on hover */}
-        <div className="flex justify-center mt-11 md:mt-14">
+        <div className="flex justify-center mt-10">
           <Link
             href="/collections/shop-all"
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg border border-white/35 px-9 md:px-11 py-3 text-white font-semibold text-sm tracking-wide uppercase transition-colors duration-300 hover:text-[#141118]"
+            className="inline-flex items-center gap-2 bg-[#1c1a17] text-white border border-[#c9a25a]/60 px-9 py-3 rounded-lg text-sm font-bold uppercase tracking-[0.14em] hover:bg-[#c9a25a] hover:text-[#1c1a17] transition-colors"
           >
-            <span className="absolute inset-0 -z-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-            <span className="relative z-10">View All</span>
-            <svg
-              className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
-            </svg>
+            View All
           </Link>
         </div>
       </div>
