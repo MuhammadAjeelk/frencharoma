@@ -366,9 +366,9 @@ export default function ProductCard({
           <div className="absolute inset-0 z-10 bg-[#f4f2ef]/55 pointer-events-none" />
         )}
 
-        {/* Best Seller pill — bottom-left */}
+        {/* Best Seller pill — bottom-left (hidden on mobile to avoid overlap) */}
         {isBestSeller && (
-          <span className="absolute bottom-2 left-2 z-10 bg-[#b8964e] text-white rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md transition-opacity duration-200 group-hover:opacity-0">
+          <span className="hidden lg:block absolute bottom-2 left-2 z-10 bg-[#b8964e] text-white rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md transition-opacity duration-200 group-hover:opacity-0">
             Best Sellers
           </span>
         )}
