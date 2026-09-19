@@ -10,7 +10,7 @@ import Reveal from "@/components/Reveal";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#322e29]">
+    <div className="min-h-screen bg-[#373838]">
       <HeroCarousel />
       <Reveal><WhyChooseUs /></Reveal>
       <Reveal><BrandMarquee /></Reveal>

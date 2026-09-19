@@ -9,6 +9,25 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import DesktopNav, { NavList } from "@/components/PrimaryNav";
 
+function MaskIcon({ src, className = "w-5 h-5" }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`${className} inline-block bg-current`}
+      style={{
+        WebkitMaskImage: `url(${src})`,
+        maskImage: `url(${src})`,
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskPosition: "center",
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+      }}
+    />
+  );
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -125,7 +144,7 @@ export default function Header() {
   return (
     <>
       {/* Running announcement bar */}
-      <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#e6ddc9] bg-[#f6efe2]">
+      <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#bda98f] bg-[#d1c0ab]">
         <div className="flex w-max animate-marquee py-2">
           {[0, 1].map((dup) => (
             <div
@@ -135,7 +154,7 @@ export default function Header() {
             >
               {marqueeItems.map((item, i) => (
                 <span key={i} className="flex items-center">
-                  <span className="px-6 text-[13px] font-medium tracking-wide text-[#4a3f2a] whitespace-nowrap">
+                  <span className="px-6 text-[13px] font-medium tracking-wide text-black whitespace-nowrap">
                     {item}
                   </span>
                   <svg
@@ -158,7 +177,7 @@ export default function Header() {
         </div>
       </div>
 
-      <header className="header relative z-50 border-b border-[#e6ddc9] bg-[#f6efe2]">
+      <header className="header relative z-50 border-b border-[#bda98f] bg-[#373838]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
           <div className="flex items-center justify-between py-1.5 lg:py-2">
@@ -167,26 +186,22 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden p-2 focus:outline-none"
+                className="lg:hidden p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors"
                 aria-label="Menu"
               >
-                <img src="/icons/menu.svg" alt="Menu" className="w-5 h-5" />
+                <MaskIcon src="/icons/menu.svg" />
               </button>
 
               {/* Desktop Search */}
               <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 py-2 focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200 whitespace-nowrap ${
+                  className={`flex items-center gap-2 py-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 whitespace-nowrap ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
                 >
-                  <img
-                    src="/icons/search.svg"
-                    alt="Search"
-                    className="w-5 h-5"
-                  />
+                  <MaskIcon src="/icons/search.svg" />
                   <span className="text-[13px] font-medium uppercase tracking-[0.12em]">
                     Search
                   </span>
@@ -329,16 +344,10 @@ export default function Header() {
               {/* Mobile Search Button */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none hover:opacity-70"
+                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors"
                 aria-label="Search"
               >
-                <Image
-                  src="/icons/search.svg"
-                  alt="Search"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
-                />
+                <MaskIcon src="/icons/search.svg" />
               </button>
             </div>
 
@@ -348,11 +357,11 @@ export default function Header() {
             >
               <Link href="/">
                 <Image
-                  src="/logo.png"
+                  src="/logo-dark.png"
                   alt="French Aromas"
                   width={96}
                   height={36}
-                  className="h-auto w-auto max-w-[92px] mix-blend-multiply transition-transform duration-300 hover:scale-105"
+                  className="h-auto w-auto max-w-[92px] transition-transform duration-300 hover:scale-105"
                   priority
                 />
               </Link>
@@ -363,7 +372,7 @@ export default function Header() {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className="group hidden lg:block relative focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200"
+                className="group hidden lg:block relative focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200"
                 aria-label="Wishlist"
               >
                 <svg
@@ -393,7 +402,7 @@ export default function Header() {
               <div className="group hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className="flex items-center focus:outline-none text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200"
+                  className="flex items-center focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200"
                   aria-label="Account"
                 >
                   <svg
@@ -500,7 +509,7 @@ export default function Header() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className="group flex items-center focus:outline-none relative text-[#1a1a2e] hover:text-[#b8964e] transition-colors duration-200"
+                className="group flex items-center focus:outline-none relative text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200"
                 aria-label="Cart"
               >
                 <svg
@@ -517,7 +526,7 @@ export default function Header() {
                   />
                 </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-[#c2a268] text-[#1c1a17] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
                     {itemCount > 99 ? "99+" : itemCount}
                   </span>
                 )}
@@ -528,8 +537,12 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center py-2 border-t border-[#e6ddc9]/70">
+        </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden lg:block bg-[#d1c0ab] border-t border-[#bda98f]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <nav className="flex items-center justify-center py-2">
             <Suspense
               fallback={
                 <NavList
@@ -550,7 +563,8 @@ export default function Header() {
                 brands={brands}
               />
             </Suspense>
-          </nav>
+            </nav>
+          </div>
         </div>
       </header>
 

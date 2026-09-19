@@ -33,7 +33,7 @@ export function NavList({
                 <Link
                   href={item.href && item.href !== "#" ? item.href : "#"}
                   onClick={() => setOpenDropdown(null)}
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-black underline underline-offset-[6px] decoration-2" : "text-black hover:underline hover:underline-offset-[6px] hover:decoration-2"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
@@ -100,7 +100,7 @@ export function NavList({
             ) : item.brandDropdown ? (
               <>
                 <button
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-black underline underline-offset-[6px] decoration-2" : "text-black hover:underline hover:underline-offset-[6px] hover:decoration-2"}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
@@ -139,7 +139,7 @@ export function NavList({
             ) : (
               <Link
                 href={item.href}
-                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-[#b8964e]" : "text-[#1f1a16] hover:text-[#b8964e]"}`}
+                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-black underline underline-offset-[6px] decoration-2" : "text-black hover:underline hover:underline-offset-[6px] hover:decoration-2"}`}
               >
                 {item.name}
               </Link>

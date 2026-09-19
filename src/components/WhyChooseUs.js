@@ -92,46 +92,64 @@ function renderInline(text, key) {
   );
 }
 
+// The trust strip under the hero — icon + two-line label, divided, in one row.
+// `icon` maps to /images/home/new/wc-<n>.webp and to the FEATURES entry for the modal.
+const STRIP = [
+  { icon: 1, lines: ["French", "Ingredients"] },
+  { icon: 2, lines: ["High", "Concentration"] },
+  { icon: 3, lines: ["Long-Lasting", "12 to 24 hrs"] },
+  { icon: 4, lines: ["Long-Lasting", "12 to 24 hrs"] },
+  { icon: 7, lines: [], wide: true }, // the truck art already reads FREE SHIPPING
+];
+
 export default function WhyChooseUs() {
   const [openIndex, setOpenIndex] = useState(null);
   const active = openIndex != null ? FEATURES[openIndex] : null;
 
   return (
-    <section className="bg-[#322e29] py-14 md:py-20 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-10 md:mb-14">
-          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#c9a25a]">
-            Why Choose French Aromas?
-          </h2>
-          <div className="mx-auto mt-3 h-[2px] w-24 bg-[#c9a25a]/70" />
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
-          {FEATURES.map((f, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setOpenIndex(i)}
-              className="group flex flex-col items-center text-center rounded-xl border border-[#c9a25a]/55 bg-[#3a352e] px-4 py-6 sm:py-7 transition-all duration-300 hover:-translate-y-1 hover:border-[#c9a25a] hover:bg-[#413b33]"
+    <section className="bg-[#373838] py-7 md:py-10 px-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-7">
+        {STRIP.map((item, i) => {
+          const feature = FEATURES.find((f) => f.icon === item.icon);
+          return (
+            <div
+              key={item.icon}
+              className={`flex items-center justify-center px-2 md:px-4 ${
+                i < STRIP.length - 1 ? "md:border-r md:border-[#555555]" : ""
+              }`}
             >
-              <div className="relative w-14 h-14 md:w-16 md:h-16 mb-3 transition-transform duration-300 group-hover:scale-110">
-                <Image
-                  src={`/images/home/new/wc-${f.icon}.webp`}
-                  alt={f.title}
-                  fill
-                  className="object-contain"
-                  sizes="64px"
-                />
-              </div>
-              <h3 className="text-[12px] sm:text-sm font-bold tracking-wide text-[#e9dcc0] leading-snug">
-                {f.title}
-              </h3>
-              <p className="mt-1.5 text-[10px] sm:text-[11px] text-[#a89f8d] leading-snug">
-                {f.blurb}
-              </p>
-            </button>
-          ))}
-        </div>
+              <button
+                type="button"
+                onClick={() => setOpenIndex(FEATURES.indexOf(feature))}
+                aria-label={feature?.title}
+                className="group flex items-center gap-3 md:gap-4 focus:outline-none"
+              >
+                <span
+                  className={`relative shrink-0 h-12 w-12 md:h-14 ${
+                    item.wide ? "md:w-20" : "md:w-14"
+                  } transition-transform duration-300 group-hover:scale-110`}
+                >
+                  <Image
+                    src={`/images/home/new/wc-${item.icon}.webp`}
+                    alt={feature?.title || ""}
+                    fill
+                    className="object-contain"
+                    sizes="80px"
+                  />
+                </span>
+                {item.lines.length > 0 && (
+                  <span className="text-left text-[15px] md:text-[17px] leading-tight text-[#d1ae6d] transition-colors duration-200 group-hover:text-[#e3c489]">
+                    {item.lines.map((line) => (
+                      <span key={line} className="block whitespace-nowrap">
+                        {line}
+                      </span>
+                    ))}
+                  </span>
+                )}
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       <UniversalModal

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 // The brand pills — each has a white label (default) and a gold label (hover)
@@ -149,22 +150,47 @@ export default function BrandMarquee() {
   return (
     <div className="pt-14 md:pt-20 pb-16 md:pb-24 bg-[#d4c6ab] overflow-hidden">
       {/* Heading */}
-      <div className="max-w-7xl mx-auto px-4 mb-9 md:mb-12 text-center">
-        <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#2a2620]">
-          Shop By Brand
-        </h2>
-        <div className="mx-auto mt-3 h-[2px] w-24 bg-[#2a2620]/60" />
-        <p className="mt-4 text-[#4a4335] font-[family-name:var(--font-playfair)] text-sm md:text-lg">
-          Discover your favorite houses.
-        </p>
+      <div className="relative max-w-7xl mx-auto px-4 mb-9 md:mb-12">
+        <div className="text-center">
+          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#211d18]">
+            Shop By Brand
+          </h2>
+          <div className="mx-auto mt-4 h-[2px] md:h-[3px] w-24 md:w-36 bg-[#211d18]" />
+          <p className="mt-5 text-[#211d18] font-[family-name:var(--font-playfair)] text-lg md:text-[28px] leading-snug">
+            Discover your favorite houses.
+          </p>
+        </div>
+
+        <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-4 md:bottom-0">
+          <Link
+            href="/collections/shop-all?view=brands"
+            className="group/all inline-flex items-center gap-2.5 rounded-lg border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#2a2620] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]"
+          >
+            View All
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
+            </svg>
+          </Link>
+        </div>
       </div>
 
-      {/* Slider — full-bleed edge to edge */}
-      <div
-        className="group relative w-full"
-        onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => setHovering(false)}
-      >
+      {/* Collage, with the brand slider riding across its lower third */}
+      <div className="px-3 sm:px-5 lg:px-8">
+        <div className="relative w-full overflow-hidden">
+          <Image
+            src="/images/home/new/brand-collage-v2.webp"
+            alt="Fragrance houses we carry"
+            width={2000}
+            height={1211}
+            className="block w-full h-auto select-none"
+            sizes="100vw"
+          />
+
+          <div
+            className="group absolute inset-x-0 top-[85%] -translate-y-1/2 z-20"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+          >
         {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
         <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[94px] sm:h-[106px] bg-black border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
@@ -189,10 +215,10 @@ export default function BrandMarquee() {
           type="button"
           aria-label="Previous brand"
           onClick={() => step("prev")}
-          className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-r from-black via-black to-black/90"
+          className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
         >
           <svg
-            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
@@ -203,16 +229,18 @@ export default function BrandMarquee() {
           type="button"
           aria-label="Next brand"
           onClick={() => step("next")}
-          className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-gradient-to-l from-black via-black to-black/90"
+          className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
         >
           <svg
-            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#5f5f4f] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
             <path d="M8 3 L18 12 L8 21 Z" />
           </svg>
         </button>
+          </div>
+        </div>
       </div>
     </div>
   );

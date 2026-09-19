@@ -9,17 +9,18 @@ export default function HeroCarousel() {
 
   const slides = [
     {
-      image: "/images/home/hero-best-sellers.webp",
+      image: "/images/home/hero-shop-all-v2.webp",
+      title: "SHOP ALL",
+      href: "/collections/shop-all",
+      bg: "#f1e6d9",
+    },
+    {
+      image: "/images/home/hero-best-sellers-v2.webp",
       title: "BEST SELLERS",
-      subtitle: "Most Loved. Most Trusted.",
       href: "/collections/shop-all?bestSeller=true",
-      contain: true,
-      bg: "#e7e0d1",
+      bg: "#e9d9c6",
     },
   ];
-
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,72 +31,45 @@ export default function HeroCarousel() {
 
   return (
     <div className="relative w-full">
-      <div className="relative w-full aspect-[16/9] overflow-hidden">
+      <div className="relative w-full aspect-2400/1358 overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
-            style={slide.contain ? { backgroundColor: slide.bg || "#efe6d8" } : undefined}
+            style={{ backgroundColor: slide.bg }}
           >
             <Image
               src={slide.image}
               alt={slide.title}
               fill
-              className="object-cover"
+              className="object-cover object-center"
               priority={index === 0}
               sizes="100vw"
             />
-            {!slide.contain && (
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8">
-                <div className="w-full flex justify-center sm:w-[40%] sm:justify-end">
-                  <Link
-                    href={slide.href}
-                    className="bg-white text-[#1a1a2e] px-4 py-2 sm:px-5 sm:py-2.5 md:px-8 md:py-3 lg:px-10 lg:py-3.5 rounded-lg text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.14em] hover:bg-[#1a1a2e] hover:text-white transition-all duration-300 shadow-lg font-semibold border border-white/20"
-                  >
-                    SHOP NOW
-                  </Link>
-                </div>
-              </div>
-            </div>
-            )}
-            {slide.contain && (
-              <Link href={slide.href} className="absolute inset-0 z-10" aria-label={slide.title} />
-            )}
+            <Link href={slide.href} className="absolute inset-0 z-10" aria-label={slide.title} />
           </div>
         ))}
-      </div>
 
-      {/* Controls */}
-      <div className={`bg-white py-4 sm:py-5 md:py-6 ${slides.length > 1 ? "" : "hidden"}`}>
-        <div className="flex items-center justify-center gap-5 sm:gap-7 lg:gap-10">
-          <button onClick={prevSlide} className="text-[#1a1a2e] hover:text-[#b8964e] transition-colors p-1" aria-label="Previous slide">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div className="flex items-center gap-3 sm:gap-4">
+        {/* Dots — centered over the bottom of the image */}
+        {slides.length > 1 && (
+          <div className="absolute inset-x-0 bottom-3 sm:bottom-4 md:bottom-6 z-20 flex items-center justify-center gap-2.5 sm:gap-3">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`transition-all duration-300 rounded-full ${
+                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border transition-colors duration-300 ${
                   index === currentSlide
-                    ? "w-6 h-1.5 bg-[#1a1a2e]"
-                    : "w-1.5 h-1.5 bg-[#ccc8c2] hover:bg-[#8a847e]"
+                    ? "bg-[#2f2b26] border-[#2f2b26]"
+                    : "bg-transparent border-[#2f2b26]/60 hover:bg-[#2f2b26]/40"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
+                aria-current={index === currentSlide}
               />
             ))}
           </div>
-          <button onClick={nextSlide} className="text-[#1a1a2e] hover:text-[#b8964e] transition-colors p-1" aria-label="Next slide">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

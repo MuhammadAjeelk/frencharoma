@@ -5,26 +5,26 @@ const GENDERS = [
   {
     name: "Men",
     tag: "Bold & Refined",
-    img: "/images/home/new/gender-men.webp",
+    img: "/images/home/new/gender-men-v2.webp",
     href: "/collections/shop-all?gender=men",
   },
   {
     name: "Women",
     tag: "Elegant & Timeless",
-    img: "/images/home/new/gender-women.webp",
+    img: "/images/home/new/gender-women-v2.webp",
     href: "/collections/shop-all?gender=women",
   },
   {
     name: "Unisex",
     tag: "Beyond Boundaries",
-    img: "/images/home/new/gender-unisex.webp",
+    img: "/images/home/new/gender-unisex-v2.webp",
     href: "/collections/shop-all?gender=unisex",
   },
 ];
 
 export default function ShopByGender() {
   return (
-    <section className="bg-[#322e29] py-14 md:py-20 px-4">
+    <section className="bg-[#373838] py-14 md:py-20 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10 md:mb-14">
           <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#c9a25a]">
@@ -43,7 +43,7 @@ export default function ShopByGender() {
               href={g.href}
               className="group relative block rounded-xl overflow-hidden border-2 border-[#c9a25a] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1.5"
             >
-              <div className="relative w-full aspect-square">
+              <div className="relative w-full aspect-[550/477]">
                 <Image
                   src={g.img}
                   alt={g.name}
@@ -53,10 +53,6 @@ export default function ShopByGender() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
               </div>
-
-              <span className="absolute top-3 left-4 font-[family-name:var(--font-playfair)] italic text-xl sm:text-2xl text-[#c9a25a] drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
-                {g.name}
-              </span>
 
               {/* Animated line — draws left→right on hover with the tagline centered on it */}
               <div className="absolute inset-x-0 bottom-0 px-5 pb-5">

@@ -56,7 +56,7 @@ const SCENTS = [
 
 export default function ShopByScentProfile() {
   return (
-    <section className="relative bg-[#322e29] py-14 md:py-20 px-4 overflow-hidden">
+    <section className="relative bg-[#373838] py-14 md:py-20 px-4 overflow-hidden">
       {/* faint mandala watermark */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_20%_30%,#c9a25a_0,transparent_40%),radial-gradient(circle_at_80%_75%,#c9a25a_0,transparent_40%)]" />
       <div className="relative max-w-7xl mx-auto">
