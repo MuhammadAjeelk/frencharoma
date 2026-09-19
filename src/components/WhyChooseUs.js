@@ -115,7 +115,7 @@ export default function WhyChooseUs() {
             <div
               key={item.icon}
               className={`flex items-center justify-center px-2 md:px-4 ${
-                i < STRIP.length - 1 ? "md:border-r md:border-[#555555]" : ""
+                i < STRIP.length - 1 ? "md:border-r md:border-black" : ""
               }`}
             >
               <button

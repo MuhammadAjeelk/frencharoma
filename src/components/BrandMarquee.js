@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // The brand pills — each has a white label (default) and a gold label (hover)
-// in /public/icons/brands-labels/<slug>.png and <slug>-gold.png.
+// in /public/icons/brands-labels/<slug>-dark.webp and <slug>-gold.webp.
 const BRANDS = [
   { name: "Ajmal", slug: "ajmal" },
   { name: "Azzaro", slug: "azzaro" },
@@ -62,13 +62,13 @@ function BrandBox({ brand }) {
       <span className="relative block w-full h-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/icons/brands-labels/${brand.slug}-dark.png?v=9`}
+          src={`/icons/brands-labels/${brand.slug}-dark.webp?v=11`}
           alt={brand.name}
           className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 group-hover/box:opacity-0"
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/icons/brands-labels/${brand.slug}-gold.png?v=9`}
+          src={`/icons/brands-labels/${brand.slug}-gold.webp?v=11`}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover/box:opacity-100 drop-shadow-[0_2px_8px_rgba(201,162,90,0.2)]"
@@ -156,7 +156,7 @@ export default function BrandMarquee() {
             Shop By Brand
           </h2>
           <div className="mx-auto mt-4 h-[2px] md:h-[3px] w-24 md:w-36 bg-[#211d18]" />
-          <p className="mt-5 text-[#211d18] font-[family-name:var(--font-playfair)] text-lg md:text-[28px] leading-snug">
+          <p className="mt-5 text-[#7b6a55] font-[family-name:var(--font-playfair)] text-lg md:text-[28px] leading-snug">
             Discover your favorite houses.
           </p>
         </div>
@@ -167,8 +167,19 @@ export default function BrandMarquee() {
             className="group/all inline-flex items-center gap-2.5 rounded-lg border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#2a2620] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]"
           >
             View All
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
+            <svg
+              className="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5"
+              />
             </svg>
           </Link>
         </div>
@@ -191,54 +202,54 @@ export default function BrandMarquee() {
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
           >
-        {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[94px] sm:h-[106px] bg-black border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
-        </div>
+            {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[94px] sm:h-[106px] bg-black border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
+            </div>
 
-        {/* Moving pills — clipped to the band (no edge shades) */}
-        <div className="relative z-10 h-[94px] sm:h-[106px] flex items-center overflow-hidden">
-          <div
-            ref={trackRef}
-            className="flex w-max will-change-transform"
-            style={{ transform: "translate3d(0,0,0)" }}
-          >
-            {loop.map((brand, index) => (
-              <BrandBox key={`${brand.slug}-${index}`} brand={brand} />
-            ))}
-          </div>
-        </div>
+            {/* Moving pills — clipped to the band (no edge shades) */}
+            <div className="relative z-10 h-[94px] sm:h-[106px] flex items-center overflow-hidden">
+              <div
+                ref={trackRef}
+                className="flex w-max will-change-transform"
+                style={{ transform: "translate3d(0,0,0)" }}
+              >
+                {loop.map((brand, index) => (
+                  <BrandBox key={`${brand.slug}-${index}`} brand={brand} />
+                ))}
+              </div>
+            </div>
 
-        {/* Black end-caps — pills come and go behind them; the triangle arrow
+            {/* Black end-caps — pills come and go behind them; the triangle arrow
             sits on each cap. One click = one pill. */}
-        <button
-          type="button"
-          aria-label="Previous brand"
-          onClick={() => step("prev")}
-          className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
-        >
-          <svg
-            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path d="M16 3 L6 12 L16 21 Z" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Next brand"
-          onClick={() => step("next")}
-          className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
-        >
-          <svg
-            className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path d="M8 3 L18 12 L8 21 Z" />
-          </svg>
-        </button>
+            <button
+              type="button"
+              aria-label="Previous brand"
+              onClick={() => step("prev")}
+              className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
+            >
+              <svg
+                className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M16 3 L6 12 L16 21 Z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Next brand"
+              onClick={() => step("next")}
+              className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
+            >
+              <svg
+                className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M8 3 L18 12 L8 21 Z" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
