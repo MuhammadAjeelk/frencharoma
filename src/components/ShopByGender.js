@@ -55,9 +55,9 @@ export default function ShopByGender() {
             <Link
               key={g.name}
               href={g.href}
-              className="group relative block border border-[#d1ae6d] p-0.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1.5"
+              className="group relative block border-2 border-[#d1ae6d] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1.5"
             >
-              <div className="relative w-full aspect-[550/477] overflow-hidden border border-[#d1ae6d]">
+              <div className="relative w-full aspect-[550/477] overflow-hidden border-2 border-[#d1ae6d]">
                 <Image
                   src={g.img}
                   alt={g.name}
