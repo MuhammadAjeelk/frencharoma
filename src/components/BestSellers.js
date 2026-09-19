@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import ProductCard from "./ProductCard";
+import BestSellerCard from "./BestSellerCard";
 import UniversalModal from "./UniversalModal";
 import QuickAddModal from "./QuickAddModal";
 import { genderHeading } from "@/lib/gender";
 
 export default function BestSellers() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(3);
+  const [visibleCount, setVisibleCount] = useState(4);
   const [perfumes, setPerfumes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function BestSellers() {
 
   useEffect(() => {
     const update = () => {
-      if (window.innerWidth >= 1024) setVisibleCount(3);
+      if (window.innerWidth >= 1024) setVisibleCount(4);
       else if (window.innerWidth >= 640) setVisibleCount(2);
       else setVisibleCount(1);
     };
@@ -111,20 +111,34 @@ export default function BestSellers() {
     <>
       <div className="py-14 md:py-20 px-4 bg-[#373838] relative overflow-visible">
         <div className="max-w-7xl mx-auto overflow-visible">
-          <div className="text-center mb-10 md:mb-14">
-            <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#c9a25a]">
-              Best Sellers
-            </h2>
-            <div className="mx-auto mt-3 h-[2px] w-24 bg-[#c9a25a]/70" />
-            <p className="text-sm md:text-lg text-[#d8d2c8] mt-4 font-[family-name:var(--font-playfair)]">
-              Most Loved. Most Trusted.
-            </p>
+          <div className="relative mb-10 md:mb-14">
+            <div className="text-center">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
+                Best Sellers
+              </h2>
+              <div className="mx-auto mt-2 h-[2px] md:h-[3px] w-24 md:w-36 bg-[#c9a25a]" />
+              <p className="mt-5 text-lg md:text-[28px] leading-snug text-[#d2c1ac] font-[family-name:var(--font-playfair)]">
+                Most Loved. Most Trusted.
+              </p>
+            </div>
+
+            <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
+              <a
+                href="/collections/shop-all?bestSeller=true"
+                className="inline-flex items-center gap-2.5 rounded-md border border-[#d2c1ac]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#efe7db] transition-colors hover:bg-[#d2c1ac] hover:text-[#211d18]"
+              >
+                View All
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
+                </svg>
+              </a>
+            </div>
           </div>
 
           <div className="relative mb-10 md:mb-14 overflow-visible">
             <button
               onClick={handlePrevious}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] hover:shadow-md transition-all duration-200"
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[#d1c0ab] border border-[#bda98f] shadow-sm text-[#2b2620] hover:bg-[#c2a268] hover:text-[#1c1a17] hover:shadow-md transition-all duration-200"
               aria-label="Previous products"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -147,10 +161,12 @@ export default function BestSellers() {
                             ? "100%"
                             : visibleCount === 2
                             ? "calc((100% - 12px) / 2)"
-                            : "calc((100% - 24px) / 3)",
+                            : visibleCount === 3
+                            ? "calc((100% - 24px) / 3)"
+                            : "calc((100% - 36px) / 4)",
                       }}
                     >
-                      <ProductCard
+                      <BestSellerCard
                         name={perfume.name}
                         brand={brandLabel}
                         image={perfume.images?.main || ""}
@@ -161,14 +177,9 @@ export default function BestSellers() {
                         gender={perfume.gender || ""}
                         scentFamily={perfume.scentFamily || ""}
                         avgRating={perfume.avgRating || 0}
-                        reviewCount={perfume.reviewCount || 0}
-                        isBestSeller={Boolean(perfume.isBestSeller)}
                         discountPercent={perfume.discountPercent || 0}
                         globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
-                        isSpecialOffer={Boolean(perfume.isSpecialOffer || hasSpecialOfferTag)}
-                        tags={perfume.tags || []}
                         href={`/products/${perfume.slug}`}
-                        hoverReveal
                         onQuickView={() => {
                           setSelectedPerfume(perfume);
                           setModalOpen(true);
@@ -182,7 +193,7 @@ export default function BestSellers() {
 
             <button
               onClick={handleNext}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-white border border-[#e8e4df] shadow-sm text-[#4a4540] hover:border-[#b8964e] hover:text-[#b8964e] hover:shadow-md transition-all duration-200"
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[#d1c0ab] border border-[#bda98f] shadow-sm text-[#2b2620] hover:bg-[#c2a268] hover:text-[#1c1a17] hover:shadow-md transition-all duration-200"
               aria-label="Next products"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -191,18 +202,6 @@ export default function BestSellers() {
             </button>
           </div>
 
-          {/* View All */}
-          <div className="flex flex-col items-center gap-4">
-            <a
-              href="/collections/shop-all?bestSeller=true"
-              className="group inline-flex items-center gap-2 bg-[#1c1a17] text-white border border-[#c9a25a]/60 px-9 md:px-10 py-3 rounded-lg shadow-sm hover:bg-[#c9a25a] hover:text-[#1c1a17] hover:shadow-lg hover:scale-[1.03] transition-all duration-200 font-bold text-sm tracking-[0.14em] uppercase"
-            >
-              View All
-              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5-5 5M6 12h12" />
-              </svg>
-            </a>
-          </div>
         </div>
       </div>
 
