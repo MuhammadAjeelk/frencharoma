@@ -93,13 +93,14 @@ function renderInline(text, key) {
 }
 
 // The trust strip under the hero — icon + two-line label, divided, in one row.
-// `icon` maps to /images/home/new/wc-<n>.webp and to the FEATURES entry for the modal.
+// Each strip item is a single supplied asset with its label baked in; `icon`
+// only links the tile back to its FEATURES entry for the detail modal.
 const STRIP = [
-  { icon: 1, lines: ["French", "Ingredients"] },
-  { icon: 2, lines: ["High", "Concentration"] },
-  { icon: 3, lines: ["Long-Lasting", "12 to 24 hrs"] },
-  { icon: 4, lines: ["Long-Lasting", "12 to 24 hrs"] },
-  { icon: 7, lines: [], wide: true }, // the truck art already reads FREE SHIPPING
+  { icon: 1, src: "/images/home/trust/french-ingredients.webp", w: 770, h: 340 },
+  { icon: 2, src: "/images/home/trust/high-concentration.webp", w: 874, h: 345 },
+  { icon: 3, src: "/images/home/trust/long-lasting.webp", w: 972, h: 346 },
+  { icon: 4, src: "/images/home/trust/affordable-luxury.webp", w: 893, h: 346 },
+  { icon: 7, src: "/images/home/trust/free-shipping.webp", w: 581, h: 344 },
 ];
 
 export default function WhyChooseUs() {
@@ -122,30 +123,15 @@ export default function WhyChooseUs() {
                 type="button"
                 onClick={() => setOpenIndex(FEATURES.indexOf(feature))}
                 aria-label={feature?.title}
-                className="group flex items-center gap-3 md:gap-4 focus:outline-none"
+                className="group focus:outline-none"
               >
-                <span
-                  className={`relative shrink-0 h-12 w-12 md:h-14 ${
-                    item.wide ? "md:w-20" : "md:w-14"
-                  } transition-transform duration-300 group-hover:scale-110`}
-                >
-                  <Image
-                    src={`/images/home/new/wc-${item.icon}.webp`}
-                    alt={feature?.title || ""}
-                    fill
-                    className="object-contain"
-                    sizes="80px"
-                  />
-                </span>
-                {item.lines.length > 0 && (
-                  <span className="text-left text-[15px] md:text-[17px] leading-tight text-[#d1ae6d] transition-colors duration-200 group-hover:text-[#e3c489]">
-                    {item.lines.map((line) => (
-                      <span key={line} className="block whitespace-nowrap">
-                        {line}
-                      </span>
-                    ))}
-                  </span>
-                )}
+                <Image
+                  src={item.src}
+                  alt={feature?.title || ""}
+                  width={item.w}
+                  height={item.h}
+                  className="h-14 md:h-[68px] w-auto transition-transform duration-300 group-hover:scale-105"
+                />
               </button>
             </div>
           );
