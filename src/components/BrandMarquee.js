@@ -203,7 +203,7 @@ export default function BrandMarquee() {
           />
 
           <div
-            className="group absolute inset-x-0 top-[85%] -translate-y-1/2 z-20"
+            className="group absolute inset-x-0 bottom-[6%] z-20"
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
           >
