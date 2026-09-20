@@ -85,17 +85,23 @@ export default function BestSellers() {
     return (
       <div className="py-10 md:py-12 bg-[#373838]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-center mb-8 text-[#c9a25a]">
-            Best Sellers
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="border border-gray-200 rounded-lg overflow-hidden animate-pulse">
-                <div className="aspect-square bg-gray-100" />
-                <div className="p-4 space-y-2">
-                  <div className="h-3 bg-gray-100 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
-                  <div className="h-8 bg-gray-100 rounded mt-3" />
+          <div className="text-center mb-8">
+            <div className="inline-block">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                Best Sellers
+              </h2>
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+            </div>
+          </div>
+          {/* Placeholder count matches the four cards the carousel shows */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="border border-[#4a4a4a] overflow-hidden animate-pulse">
+                <div className="aspect-square bg-[#454545]" />
+                <div className="bg-[#d5c7b4]/20 p-4 space-y-2">
+                  <div className="h-3 bg-[#4f4f4f] w-3/4" />
+                  <div className="h-3 bg-[#4f4f4f] w-1/2" />
+                  <div className="h-8 bg-[#4f4f4f] mt-3" />
                 </div>
               </div>
             ))}

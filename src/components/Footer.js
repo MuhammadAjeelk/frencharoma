@@ -1,14 +1,37 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+
+// The rule under a heading: solid through the middle, fading at both ends.
+// Same device the homepage sections use, sized to whatever sits above it.
+function Rule({ className = "" }) {
+  return (
+    <div
+      className={`h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)] ${className}`}
+    />
+  );
+}
+
+function Column({ title, children }) {
+  return (
+    <div>
+      <div className="inline-block">
+        <h3 className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a25a]">
+          {title}
+        </h3>
+        <Rule className="mt-1.5" />
+      </div>
+      <div className="mt-4">{children}</div>
+    </div>
+  );
+}
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const footerRef = useRef(null);
 
-  const popularCollection = [
+  const shop = [
     { name: "Best Sellers", href: "/collections/shop-all?bestSeller=true" },
     { name: "Shop All", href: "/collections/shop-all" },
     { name: "Special Offers", href: "/collections/shop-all?specialOffer=true" },
@@ -31,141 +54,141 @@ export default function Footer() {
     setEmail("");
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   useEffect(() => {
     const handleScroll = () => {
       if (typeof window === "undefined") return;
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      const footerStart = documentHeight - windowHeight;
-      setShowScrollTop(scrollY >= footerStart - 500 || scrollY >= documentHeight * 0.75);
+      setShowScrollTop(window.scrollY >= documentHeight * 0.75);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const linkClass =
+    "text-[13px] text-[#cbbfae] hover:text-[#e3c489] transition-colors duration-200";
+
   return (
     <>
-      <footer ref={footerRef} className="bg-[#211e1a] text-white/80 py-12 md:py-16 px-4 sm:px-6 border-t-4 border-[#c9a25a]">
-        <div className="max-w-7xl mx-auto">
-          {/* Centered brand header */}
-          <div className="text-center mb-10 md:mb-12">
-            <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-4xl font-bold text-[#c9a25a]">
-              French Aromas
-            </h2>
-            <p className="mt-2 text-[13px] md:text-sm text-white/55 font-[family-name:var(--font-playfair)] italic">
+      <footer className="bg-[#373838] border-t-2 border-[#c9a25a] py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Masthead */}
+          <div className="text-center">
+            <div className="inline-block">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-4xl font-normal text-[#c9a25a]">
+                French Aromas
+              </h2>
+              <Rule className="mt-2" />
+            </div>
+            <p className="mt-4 font-[family-name:var(--font-playfair)] text-base md:text-lg text-[#cbbfae]">
               Luxury impressions, crafted to leave an impression that lasts.
             </p>
-            <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-              <span className="h-px w-16 bg-[#c9a25a]/40" />
-              <span className="w-1.5 h-1.5 rotate-45 bg-[#c9a25a]" />
-              <span className="h-px w-16 bg-[#c9a25a]/40" />
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 mb-10 text-center md:text-left">
-            {/* Popular Collection */}
-            <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Popular Collection</h3>
+          {/* Two navigation columns, then how to reach the shop */}
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <Column title="Shop">
               <ul className="space-y-2.5">
-                {popularCollection.map((item, index) => (
-                  <li key={index}>
-                    <Link href={item.href} className="text-[13px] text-white/60 hover:text-white transition-colors duration-200">
+                {shop.map((item) => (
+                  <li key={item.name}>
+                    <Link href={item.href} className={linkClass}>
                       {item.name}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </Column>
 
-            {/* Support */}
-            <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Support</h3>
+            <Column title="Support">
               <ul className="space-y-2.5">
-                {support.map((item, index) => (
-                  <li key={index}>
-                    <Link href={item.href} className="text-[13px] text-white/60 hover:text-white transition-colors duration-200">
+                {support.map((item) => (
+                  <li key={item.name}>
+                    <Link href={item.href} className={linkClass}>
                       {item.name}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </Column>
 
-            {/* Address */}
-            <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Address</h3>
-              <div className="space-y-2 text-[13px] text-white/60">
-                <p className="font-medium text-white/80">Divina Perfumes L.L.C.</p>
+            <Column title="Visit us">
+              <div className="space-y-1.5 text-[13px] text-[#cbbfae]">
+                <p className="text-[#efe7db]">Divina Perfumes L.L.C.</p>
                 <p>Gold Souq, Gate No. 2, Deira, Dubai, UAE.</p>
                 <Link
                   href="https://maps.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[#c9a25a] hover:text-[#e0bd72] transition-colors mt-1"
+                  className="inline-flex items-center gap-1.5 pt-1 text-[#c9a25a] hover:text-[#e3c489] transition-colors"
                 >
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  Get Location
+                  Open in Maps
                 </Link>
+                <p className="pt-3 text-[#efe7db]">Open daily, except Sunday</p>
+                <p>09:00 AM – 2:00 PM</p>
+                <p>4:00 PM – 10:00 PM</p>
               </div>
-            </div>
+            </Column>
 
-            {/* Contact */}
-            <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] mb-5 text-[#c9a25a]">Contact</h3>
-              <div className="space-y-2 text-[13px] text-white/60">
-                <p>
-                  <span className="text-white/80 font-medium">Email:</span>{" "}
-                  <a href="mailto:divinaperfume@gmail.com" className="hover:text-white transition-colors">divinaperfume@gmail.com</a>
-                </p>
-                <p>
-                  <span className="text-white/80 font-medium">Call & WhatsApp:</span>{" "}
-                  <a href="tel:+971581031864" className="hover:text-white transition-colors">+971581031864</a>
-                </p>
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <p className="text-white/80 font-medium mb-1">Hours:</p>
-                  <p>09:00 AM – 2:00 PM</p>
-                  <p>4:00 PM – 10:00 PM</p>
-                  <p className="text-white/40 text-[12px] mt-0.5">(Sunday Closed)</p>
-                </div>
+            <Column title="Talk to us">
+              <div className="space-y-1.5 text-[13px] text-[#cbbfae]">
+                <a href="mailto:divinaperfume@gmail.com" className="block hover:text-[#e3c489] transition-colors">
+                  divinaperfume@gmail.com
+                </a>
+                <a href="tel:+971581031864" className="block hover:text-[#e3c489] transition-colors">
+                  +971 58 103 1864
+                </a>
+                <p className="pt-1 text-[#a99d8c]">Call or WhatsApp</p>
               </div>
-            </div>
+            </Column>
           </div>
 
-          {/* Subscription Section */}
-          <div className="border-t border-white/10 pt-8 mt-2">
-            <div className="max-w-md mx-auto md:mx-0">
-              <p className="text-[13px] font-medium text-white/80 mb-3 text-center md:text-left">Subscribe for Offers & Deals</p>
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
-                  className="flex-1 px-4 py-2.5 bg-white/10 border border-white/15 rounded-lg focus:outline-none focus:border-[#c9a25a] text-[13px] text-white placeholder-white/30 transition-colors"
-                  required
-                />
-                <button type="submit" className="bg-[#c9a25a] text-white px-5 py-2.5 rounded-lg hover:bg-[#e0bd72] transition-colors shrink-0 font-semibold text-[13px]" aria-label="Subscribe">
-                  Subscribe
-                </button>
-              </form>
+          {/* Newsletter — the double gold frame from the gender cards */}
+          <div className="mt-12 border border-[#c9a25a]/60 p-1.5">
+            <div className="border border-[#c9a25a]/30 px-5 py-6 sm:px-8 sm:py-7">
+              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a25a]">
+                    Offers and new arrivals, now and then.
+                  </p>
+                  <p className="mt-1 text-[13px] text-[#a99d8c]">
+                    No more than a couple of emails a month.
+                  </p>
+                </div>
+                <form onSubmit={handleSubscribe} className="flex w-full max-w-md gap-2">
+                  <label htmlFor="footer-email" className="sr-only">
+                    Email address
+                  </label>
+                  <input
+                    id="footer-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    className="flex-1 min-w-0 bg-[#211d18] border border-[#c9a25a]/40 px-4 py-2.5 text-[13px] text-[#efe7db] placeholder-[#a99d8c]/60 focus:outline-none focus:border-[#c9a25a] transition-colors"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="shrink-0 border border-[#c9a25a] bg-[#c9a25a] px-6 py-2.5 text-[13px] font-semibold text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] transition-colors"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Bottom Bar */}
-      <div className="bg-[#17140f] border-t border-white/5 py-5 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
+      <div className="bg-[#2e2e2e] border-t border-[#c9a25a]/20 py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-5">
-            <p className="text-[12px] text-white/40 text-center md:text-left">
+            <p className="text-[12px] text-[#a99d8c] text-center md:text-left">
               &copy; 2026, French Aromas | Divina Perfumes
             </p>
 
@@ -210,16 +233,16 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
+
           </div>
         </div>
       </div>
 
-      {/* Scroll to Top */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#211e1a] text-white rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#c9a25a] transition-colors duration-200 animate-fadeIn"
-          aria-label="Scroll to top"
+          className="fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#373838] border border-[#c9a25a] text-[#c9a25a] flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] hover:bg-[#c9a25a] hover:text-[#211d18] transition-colors duration-200"
+          aria-label="Back to top"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />

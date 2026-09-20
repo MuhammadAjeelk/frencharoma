@@ -20,7 +20,9 @@ export default function Reveal({ children, className = "", delay = 0 }) {
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      // Positive bottom margin expands the root, so a section starts its
+      // entrance ~20% of a viewport before it actually scrolls in.
+      { threshold: 0, rootMargin: "0px 0px 20% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
