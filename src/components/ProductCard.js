@@ -291,7 +291,7 @@ export default function ProductCard({
               src={image}
               alt={name}
               fill
-              className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              className="object-cover"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </div>
@@ -301,7 +301,7 @@ export default function ProductCard({
               src={image}
               alt={name}
               fill
-              className="object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              className="object-cover"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </Link>
