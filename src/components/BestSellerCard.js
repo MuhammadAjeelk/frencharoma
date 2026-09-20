@@ -171,9 +171,9 @@ export default function BestSellerCard({
               e.stopPropagation();
               onQuickView();
             }}
-            className="absolute left-1/2 bottom-3 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 text-[12px] font-semibold text-[#1a1a2e] shadow-lg whitespace-nowrap opacity-0 translate-y-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0"
+            className="absolute left-1/2 bottom-3 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 rounded-full border border-[#d1ae6d]/70 bg-[#1f1a16]/90 backdrop-blur-[2px] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#d1ae6d] shadow-md whitespace-nowrap opacity-0 translate-y-1.5 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" />
               <circle cx="12" cy="12" r="2.6" />
             </svg>
@@ -233,7 +233,7 @@ export default function BestSellerCard({
           onClick={handleCart}
           disabled={!cardEdition}
           aria-label={inCartQty > 0 ? "Added to cart" : "Add to cart"}
-          className={`absolute bottom-4 right-3 z-20 inline-flex flex-row-reverse items-center justify-center h-[52px] min-w-[52px] rounded-full px-0 gap-0 group-hover:px-4 group-hover:gap-2 shadow-[0_6px_16px_rgba(0,0,0,0.28)] transition-all duration-300 ${
+          className={`group/cart absolute bottom-4 right-3 z-20 inline-flex flex-row-reverse items-center justify-center h-11 min-w-[44px] rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
             !cardEdition
               ? "bg-[#a8a099] cursor-not-allowed"
               : inCartQty > 0
@@ -241,14 +241,14 @@ export default function BestSellerCard({
               : "bg-[#e0342c]"
           } text-white`}
         >
-          <svg viewBox="0 0 24 24" className="w-6 h-6 shrink-0" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 shrink-0" fill="currentColor" aria-hidden="true">
             <path d="M7 4h-3a1 1 0 100 2h2.2l2.3 9.2A2 2 0 0010.4 17h7.2a2 2 0 001.9-1.4l2-6.6H8.2l-.5-2A1 1 0 007 4zm3.5 15a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2zm7 0a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z" />
           </svg>
-          <span className="max-w-0 overflow-hidden whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.08em] opacity-0 transition-all duration-300 group-hover:max-w-[130px] group-hover:opacity-100">
+          <span className="max-w-0 overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.06em] opacity-0 transition-all duration-200 group-hover/cart:max-w-[110px] group-hover/cart:opacity-100">
             {inCartQty > 0 ? "Added to Cart" : "Add to Cart"}
           </span>
           {inCartQty > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[20px] h-[20px] px-1 rounded-full bg-white/25 text-[11px] font-bold leading-none">
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-white/25 text-[10px] font-bold leading-none">
               {inCartQty}
             </span>
           )}
