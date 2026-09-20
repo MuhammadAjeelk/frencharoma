@@ -153,11 +153,14 @@ export default function BrandMarquee() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-9 md:mb-12">
         <div className="relative">
         <div className="text-center">
-          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#211d18]">
-            Shop By Brand
-          </h2>
-          <div className="mx-auto mt-4 h-[2px] md:h-[3px] w-24 md:w-36 bg-[#211d18]" />
-          <p className="mt-5 text-[#7b6a55] font-[family-name:var(--font-playfair)] text-lg md:text-[28px] leading-snug">
+          <div className="inline-block">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#211d18]">
+              Shop By Brand
+            </h2>
+            {/* rule spans the title only — solid in the middle, fading at the ends */}
+            <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#211d18_25%,#211d18_75%,transparent_100%)]" />
+          </div>
+          <p className="mt-5 text-[#7b6a55] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
             Discover your favorite houses.
           </p>
         </div>

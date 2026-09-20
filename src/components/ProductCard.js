@@ -191,7 +191,10 @@ export default function ProductCard({
       }`}
       style={{
         borderColor: hovered && gm ? gm.hex : "#e8e4df",
-        boxShadow: hovered && !(boxMode && boxSoldOut) ? "0 10px 34px rgba(0,0,0,0.10)" : "none",
+        boxShadow:
+          hovered && !(boxMode && boxSoldOut)
+            ? "0 0 0 1px rgba(209,174,109,0.40), 0 14px 38px rgba(209,174,109,0.20)"
+            : "none",
       }}
     >
       {/* Diagonal discount ribbon — top-left corner (non-box cards) */}
@@ -291,7 +294,7 @@ export default function ProductCard({
               src={image}
               alt={name}
               fill
-              className="object-cover"
+              className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </div>
@@ -301,7 +304,7 @@ export default function ProductCard({
               src={image}
               alt={name}
               fill
-              className="object-cover"
+              className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </Link>

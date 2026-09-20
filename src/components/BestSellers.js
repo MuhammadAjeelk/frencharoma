@@ -113,11 +113,14 @@ export default function BestSellers() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible">
           <div className="relative mb-10 md:mb-14">
             <div className="text-center">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
+              <div className="inline-block">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
                 Best Sellers
               </h2>
-              <div className="mx-auto mt-2 h-[2px] md:h-[3px] w-24 md:w-36 bg-[#c9a25a]" />
-              <p className="mt-5 text-lg md:text-[28px] leading-snug text-[#d2c1ac] font-[family-name:var(--font-playfair)]">
+              {/* rule spans the title only — solid in the middle, fading at the ends */}
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+            </div>
+              <p className="mt-5 text-base md:text-xl leading-snug text-[#d2c1ac] font-[family-name:var(--font-playfair)]">
                 Most Loved. Most Trusted.
               </p>
             </div>

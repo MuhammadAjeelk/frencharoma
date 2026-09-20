@@ -116,7 +116,7 @@ export default function BestSellerCard({
         replay(cartRef.current, "heartbeat");
         replay(qvRef.current, "vibrating");
       }}
-      className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#d5c7b4] shadow-[0_10px_28px_rgba(0,0,0,0.30)]"
+      className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#d5c7b4] shadow-[0_10px_28px_rgba(0,0,0,0.30)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
     >
       {/* Image */}
       <div className="relative w-full aspect-square overflow-hidden">
@@ -126,7 +126,7 @@ export default function BestSellerCard({
               src={image}
               alt={name}
               fill
-              className="object-cover"
+              className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
               sizes="(max-width:640px) 90vw, 25vw"
             />
           ) : null}

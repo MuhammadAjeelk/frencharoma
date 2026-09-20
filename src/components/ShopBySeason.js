@@ -32,14 +32,31 @@ export default function ShopBySeason() {
   return (
     <section className="bg-[#d4c6ab] py-10 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-14">
-          <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#2a2620]">
-            Shop By Season
-          </h2>
-          <div className="mx-auto mt-3 h-[2px] w-24 bg-[#2a2620]/60" />
-          <p className="mt-4 text-[#4a4335] font-[family-name:var(--font-playfair)] text-sm md:text-lg">
-            Discover the perfect expression for every time of year.
-          </p>
+        <div className="relative mb-10 md:mb-14">
+          <div className="text-center">
+            <div className="inline-block">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#211d18]">
+              Shop By Season
+              </h2>
+              {/* rule spans the title only — solid in the middle, fading at the ends */}
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#211d18_25%,#211d18_75%,transparent_100%)]" />
+            </div>
+            <p className="mt-5 text-[#211d18] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
+              Discover the perfect expression for every time of year.
+            </p>
+          </div>
+
+          <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
+            <Link
+              href="/collections/shop-all"
+              className="inline-flex items-center gap-2.5 rounded-md border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#211d18] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]"
+            >
+              View All
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
+              </svg>
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
@@ -71,14 +88,6 @@ export default function ShopBySeason() {
           ))}
         </div>
 
-        <div className="flex justify-center mt-10">
-          <Link
-            href="/collections/shop-all"
-            className="inline-flex items-center gap-2 bg-[#2a2620] text-white border border-[#c9a25a]/60 px-9 py-3 rounded-lg text-sm font-bold uppercase tracking-[0.14em] hover:bg-[#c9a25a] hover:text-[#1c1a17] transition-colors"
-          >
-            View All
-          </Link>
-        </div>
       </div>
     </section>
   );

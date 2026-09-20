@@ -28,11 +28,14 @@ export default function ShopByGender() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative mb-10 md:mb-14">
           <div className="text-center">
-            <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
+            <div className="inline-block">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
               Shop By Gender
-            </h2>
-            <div className="mx-auto mt-2 h-[2px] md:h-[3px] w-24 md:w-36 bg-[#c9a25a]" />
-            <p className="mt-5 text-[#d2c1ac] font-[family-name:var(--font-playfair)] text-lg md:text-[28px] leading-snug">
+              </h2>
+              {/* rule spans the title only — solid in the middle, fading at the ends */}
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+            </div>
+            <p className="mt-5 text-[#d2c1ac] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
               Find the scent that reflects you.
             </p>
           </div>
@@ -55,14 +58,14 @@ export default function ShopByGender() {
             <Link
               key={g.name}
               href={g.href}
-              className="group relative block border-2 border-[#d1ae6d] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1.5"
+              className="group relative block border-2 border-[#d1ae6d] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
             >
               <div className="relative w-full aspect-[550/477] overflow-hidden border-2 border-[#d1ae6d]">
                 <Image
                   src={g.img}
                   alt={g.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
                   sizes="(max-width:640px) 90vw, 30vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
