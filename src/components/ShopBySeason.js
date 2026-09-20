@@ -30,8 +30,8 @@ const SEASONS = [
 
 export default function ShopBySeason() {
   return (
-    <section className="bg-[#d4c6ab] py-14 md:py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-[#d4c6ab] py-10 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-14">
           <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#2a2620]">
             Shop By Season
@@ -42,7 +42,7 @@ export default function ShopBySeason() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
           {SEASONS.map((s) => (
             <Link
               key={s.label}

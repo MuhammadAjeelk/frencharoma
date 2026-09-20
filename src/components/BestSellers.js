@@ -83,8 +83,8 @@ export default function BestSellers() {
 
   if (loading) {
     return (
-      <div className="py-14 md:py-20 px-4 bg-[#373838]">
-        <div className="max-w-7xl mx-auto">
+      <div className="py-10 md:py-12 bg-[#373838]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-center mb-8 text-[#c9a25a]">
             Best Sellers
           </h2>
@@ -109,8 +109,8 @@ export default function BestSellers() {
 
   return (
     <>
-      <div className="py-14 md:py-20 px-4 bg-[#373838] relative overflow-visible">
-        <div className="max-w-7xl mx-auto overflow-visible">
+      <div className="py-10 md:py-12 bg-[#373838] relative overflow-visible">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible">
           <div className="relative mb-10 md:mb-14">
             <div className="text-center">
               <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">

@@ -18,10 +18,10 @@ const EDITIONS = [
 
 export default function ShopByEditions() {
   return (
-    <section className="relative bg-[#d4c6ab] py-14 md:py-20 px-4 overflow-hidden">
+    <section className="relative bg-[#d4c6ab] py-10 md:py-12 overflow-hidden">
       {/* faint lotus watermark */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(circle_at_15%_50%,#2a2620_0,transparent_35%),radial-gradient(circle_at_85%_55%,#2a2620_0,transparent_35%)]" />
-      <div className="relative max-w-5xl mx-auto">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-14">
           <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-bold text-[#2a2620]">
             Shop By Editions

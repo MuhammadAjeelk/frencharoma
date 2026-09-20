@@ -148,9 +148,10 @@ export default function BrandMarquee() {
   }, []);
 
   return (
-    <div className="pt-14 md:pt-20 pb-16 md:pb-24 bg-[#d4c6ab] overflow-hidden">
+    <div className="pt-10 md:pt-12 pb-12 md:pb-14 bg-[#d4c6ab] overflow-hidden">
       {/* Heading */}
-      <div className="relative max-w-7xl mx-auto px-4 mb-9 md:mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-9 md:mb-12">
+        <div className="relative">
         <div className="text-center">
           <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#211d18]">
             Shop By Brand
@@ -161,7 +162,7 @@ export default function BrandMarquee() {
           </p>
         </div>
 
-        <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-4 md:bottom-0">
+        <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
           <Link
             href="/collections/shop-all?view=brands"
             className="group/all inline-flex items-center gap-2.5 rounded-lg border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#2a2620] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]"
@@ -183,10 +184,11 @@ export default function BrandMarquee() {
             </svg>
           </Link>
         </div>
+        </div>
       </div>
 
       {/* Collage, with the brand slider riding across its lower third */}
-      <div className="px-3 sm:px-5 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative w-full overflow-hidden">
           <Image
             src="/images/home/new/brand-collage-v2.webp"

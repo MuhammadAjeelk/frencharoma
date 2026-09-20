@@ -24,8 +24,8 @@ const GENDERS = [
 
 export default function ShopByGender() {
   return (
-    <section className="bg-[#373838] py-14 md:py-20 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-[#373838] py-10 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative mb-10 md:mb-14">
           <div className="text-center">
             <h2 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">

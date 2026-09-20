@@ -108,8 +108,8 @@ export default function WhyChooseUs() {
   const active = openIndex != null ? FEATURES[openIndex] : null;
 
   return (
-    <section className="bg-[#373838] py-7 md:py-10 px-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-7">
+    <section className="bg-[#373838] py-7 md:py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-7">
         {STRIP.map((item, i) => {
           const feature = FEATURES.find((f) => f.icon === item.icon);
           return (
