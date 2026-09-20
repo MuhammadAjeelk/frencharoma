@@ -3,27 +3,18 @@ import Link from "next/link";
 
 const SEASONS = [
   {
-    label: "SUMMER & SPRING",
-    desc: "Uplifting summer scents with remarkable freshness and lasting presence.",
-    img: "/images/home/new/season-summer.webp",
-    bg: "#e8efd9",
-    border: "#c4d3a3",
-    href: "/collections/shop-all?tags=spring,summer",
-  },
-  {
     label: "WINTER & AUTUMN",
-    desc: "Deep, warm, and alluring fragrances for unforgettable winter moments.",
-    img: "/images/home/new/season-winter.webp",
-    bg: "#f3e7d2",
-    border: "#dcc59c",
+    img: "/images/home/new/season-winter-v2.webp",
     href: "/collections/shop-all?tags=autumn,winter",
   },
   {
+    label: "SUMMER & SPRING",
+    img: "/images/home/new/season-summer-v2.webp",
+    href: "/collections/shop-all?tags=spring,summer",
+  },
+  {
     label: "ALL SEASONS (VERSATILE)",
-    desc: "Versatile fragrances crafted to complement every moment, mood, and season.",
-    img: "/images/home/new/season-all.webp",
-    bg: "#dcebf3",
-    border: "#a8cbdd",
+    img: "/images/home/new/season-all-v2.webp",
     href: "/collections/shop-all?tags=all-seasons",
   },
 ];
@@ -64,23 +55,15 @@ export default function ShopBySeason() {
             <Link
               key={s.label}
               href={s.href}
-              className="group rounded-xl overflow-hidden border-2 shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-y-1.5"
-              style={{ backgroundColor: s.bg, borderColor: s.border }}
+              className="group block overflow-hidden border border-[#2a2620] shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
             >
-              <div className="px-4 pt-4 text-center">
-                <span className="inline-block bg-[#2a2620] text-[#c9a25a] text-[10px] sm:text-[11px] font-bold tracking-[0.12em] px-4 py-1.5 rounded-md border border-[#c9a25a]/50">
-                  {s.label}
-                </span>
-                <p className="mt-3 text-[11px] sm:text-xs text-[#4a4335] leading-snug font-[family-name:var(--font-playfair)] px-1">
-                  {s.desc}
-                </p>
-              </div>
+              {/* title and copy are part of the artwork */}
               <div className="relative w-full aspect-square">
                 <Image
                   src={s.img}
                   alt={s.label}
                   fill
-                  className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
                   sizes="(max-width:640px) 90vw, 30vw"
                 />
               </div>

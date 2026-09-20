@@ -5,52 +5,52 @@ const SCENTS = [
   {
     name: "Fresh",
     tag: "Bright – Clean – Refreshing",
-    img: "/images/home/new/scent-fresh.webp",
+    img: "/images/home/new/scent-fresh-v2.webp",
   },
   {
     name: "Fruity",
     tag: "Juicy – Vibrant – Playful",
-    img: "/images/home/new/scent-fruity.webp",
+    img: "/images/home/new/scent-fruity-v2.webp",
   },
   {
     name: "Floral",
     tag: "Elegant – Romantic – Delicate",
-    img: "/images/home/new/scent-floral.webp",
+    img: "/images/home/new/scent-floral-v2.webp",
   },
   {
     name: "Spicy",
     tag: "Bold – Warm – Intense",
-    img: "/images/home/new/scent-spicy.webp",
+    img: "/images/home/new/scent-spicy-v2.webp",
   },
   {
     name: "Woody",
     tag: "Warm – Earthy – Sophisticated",
-    img: "/images/home/new/scent-woody.webp",
+    img: "/images/home/new/scent-woody-v2.webp",
   },
   {
     name: "Musky",
     tag: "Soft – Sensual – Alluring",
-    img: "/images/home/new/scent-musky.webp",
+    img: "/images/home/new/scent-musky-v2.webp",
   },
   {
     name: "Aromatic",
     tag: "Herbal – Refined – Invigorating",
-    img: "/images/home/new/scent-aromatic.webp",
+    img: "/images/home/new/scent-aromatic-v2.webp",
   },
   {
     name: "Leather",
     tag: "Rich – Smoky – Sophisticated",
-    img: "/images/home/new/scent-leather.webp",
+    img: "/images/home/new/scent-leather-v2.webp",
   },
   {
     name: "Oriental (Amber)",
     tag: "Sweet – Warm – Indulgent",
-    img: "/images/home/new/scent-oriental.webp",
+    img: "/images/home/new/scent-oriental-v2.webp",
   },
   {
     name: "Chypre",
     tag: "Elegant – Sophisticated – Timeless",
-    img: "/images/home/new/scent-chypre.webp",
+    img: "/images/home/new/scent-chypre-v2.webp",
   },
 ];
 
@@ -88,26 +88,21 @@ export default function ShopByScentProfile() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 justify-center gap-3.5 sm:gap-5">
-          {SCENTS.map((s) => (
+          {SCENTS.map((s, i) => (
             <Link
               key={s.name}
               href={`/collections/shop-all?scentFamily=${encodeURIComponent(s.name)}`}
-              className="group rounded-2xl bg-[#efece3] border border-[#e2dccb] overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.25)] transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+              className={`group block overflow-hidden border border-[#c9a25a] shadow-[0_6px_20px_rgba(0,0,0,0.25)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
+                i === SCENTS.length - 1 && SCENTS.length % 3 === 1 ? "sm:col-start-2" : ""
+              }`}
             >
-              <div className="px-3 pt-4 text-center">
-                <h3 className="font-[family-name:var(--font-playfair)] italic text-lg sm:text-2xl font-bold text-[#2a2620] leading-none">
-                  {s.name}
-                </h3>
-                <p className="mt-1.5 text-[9px] sm:text-[11px] tracking-wide text-[#8a7f6b] uppercase">
-                  {s.tag}
-                </p>
-              </div>
+              {/* name and tagline are part of the artwork */}
               <div className="relative w-full aspect-square">
                 <Image
                   src={s.img}
                   alt={s.name}
                   fill
-                  className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
                   sizes="(max-width:640px) 45vw, 30vw"
                 />
               </div>
