@@ -96,11 +96,11 @@ function renderInline(text, key) {
 // Each strip item is a single supplied asset with its label baked in; `icon`
 // only links the tile back to its FEATURES entry for the detail modal.
 const STRIP = [
-  { icon: 1, src: "/images/home/trust/french-ingredients.webp", w: 770, h: 340 },
-  { icon: 2, src: "/images/home/trust/high-concentration.webp", w: 874, h: 345 },
-  { icon: 3, src: "/images/home/trust/long-lasting.webp", w: 972, h: 346 },
-  { icon: 4, src: "/images/home/trust/affordable-luxury.webp", w: 893, h: 346 },
-  { icon: 7, src: "/images/home/trust/free-shipping.webp", w: 581, h: 344 },
+  { icon: 1, src: "/images/home/trust/french-ingredients.webp", w: 770, h: 340, icon_src: "/images/home/trust/french-ingredients-icon.webp", iw: 174, ih: 240 },
+  { icon: 2, src: "/images/home/trust/high-concentration.webp", w: 874, h: 345, icon_src: "/images/home/trust/high-concentration-icon.webp", iw: 155, ih: 240 },
+  { icon: 3, src: "/images/home/trust/long-lasting.webp", w: 972, h: 346, icon_src: "/images/home/trust/long-lasting-icon.webp", iw: 275, ih: 240 },
+  { icon: 4, src: "/images/home/trust/affordable-luxury.webp", w: 893, h: 346, icon_src: "/images/home/trust/affordable-luxury-icon.webp", iw: 269, ih: 240 },
+  { icon: 7, src: "/images/home/trust/free-shipping.webp", w: 581, h: 344, icon_src: "/images/home/trust/free-shipping.webp", iw: 581, ih: 344 },
 ];
 
 export default function WhyChooseUs() {
@@ -109,7 +109,7 @@ export default function WhyChooseUs() {
 
   return (
     <section className="bg-[#373838] py-7 md:py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-7">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-5 gap-x-1 sm:gap-x-2">
         {STRIP.map((item, i) => {
           const feature = FEATURES.find((f) => f.icon === item.icon);
           return (
@@ -126,11 +126,18 @@ export default function WhyChooseUs() {
                 className="group focus:outline-none"
               >
                 <Image
+                  src={item.icon_src}
+                  alt={feature?.title || ""}
+                  width={item.iw}
+                  height={item.ih}
+                  className="h-9 sm:h-11 w-auto md:hidden transition-transform duration-300 group-hover:scale-105"
+                />
+                <Image
                   src={item.src}
                   alt={feature?.title || ""}
                   width={item.w}
                   height={item.h}
-                  className="h-14 md:h-[68px] w-auto transition-transform duration-300 group-hover:scale-105"
+                  className="hidden md:block md:h-[68px] w-auto transition-transform duration-300 group-hover:scale-105"
                 />
               </button>
             </div>
