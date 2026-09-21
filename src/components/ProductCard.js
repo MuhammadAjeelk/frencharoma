@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
-import Image from "next/image";
+import RetryImage from "./ui/RetryImage";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
@@ -169,14 +169,17 @@ export default function ProductCard({
   };
 
   // A perfume with no image still has to fill its frame - next/image throws on
-  // an empty src, so the placeholder stands in for it.
-  const artwork = image ? (
-    <Image
+  // an empty src, so the placeholder stands in for it. A load that fails is
+  // retried a few times before it falls back to the same placeholder.
+  const [imageDead, setImageDead] = useState(false);
+  const artwork = image && !imageDead ? (
+    <RetryImage
       src={image}
       alt={name}
       fill
       className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+      onExhausted={() => setImageDead(true)}
     />
   ) : (
     <span

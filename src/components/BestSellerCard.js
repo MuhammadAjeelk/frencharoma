@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
-import Image from "next/image";
+import RetryImage from "./ui/RetryImage";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
@@ -129,7 +129,7 @@ export default function BestSellerCard({
       <div className="relative w-full aspect-square overflow-hidden">
         <Link href={href || "#"} className="absolute inset-0 z-0">
           {image ? (
-            <Image
+            <RetryImage
               src={image}
               alt={name}
               fill
