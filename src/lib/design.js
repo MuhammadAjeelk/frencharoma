@@ -72,3 +72,8 @@ export const FIELD_DARK =
 // so it survives the `focus:outline-none` these controls already carry.
 export const FOCUS_RING =
   "focus-visible:ring-2 focus-visible:ring-[#e3c489] focus-visible:ring-offset-0";
+
+// The same ring for controls sitting on a light panel (#efe7db / #d4c6ab),
+// where the gold above all but disappears. Modals use this one.
+export const FOCUS_RING_LIGHT =
+  "focus-visible:ring-2 focus-visible:ring-[#211d18] focus-visible:ring-offset-0";
