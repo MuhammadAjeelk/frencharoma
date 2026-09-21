@@ -116,7 +116,7 @@ export default function WhyChooseUs() {
             <div
               key={item.icon}
               className={`flex items-center justify-center px-2 md:px-4 ${
-                i < STRIP.length - 1 ? "md:border-r md:border-black" : ""
+                i < STRIP.length - 1 ? "lg:border-r lg:border-black" : ""
               }`}
             >
               <button
@@ -130,14 +130,14 @@ export default function WhyChooseUs() {
                   alt={feature?.title || ""}
                   width={item.iw}
                   height={item.ih}
-                  className="h-9 sm:h-11 w-auto md:hidden transition-transform duration-300 group-hover:scale-105"
+                  className="h-8 sm:h-9 md:h-10 w-auto lg:hidden transition-transform duration-300 group-hover:scale-105"
                 />
                 <Image
                   src={item.src}
                   alt={feature?.title || ""}
                   width={item.w}
                   height={item.h}
-                  className="hidden md:block md:h-[68px] w-auto transition-transform duration-300 group-hover:scale-105"
+                  className="hidden lg:block lg:h-[60px] w-auto transition-transform duration-300 group-hover:scale-105"
                 />
               </button>
             </div>

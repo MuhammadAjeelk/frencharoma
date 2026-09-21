@@ -362,7 +362,7 @@ export default function Header() {
                   alt="French Aromas"
                   width={96}
                   height={36}
-                  className="h-auto w-auto max-w-[92px] transition-transform duration-300 hover:scale-105"
+                  className="w-auto h-[52px] sm:h-[62px] lg:h-[74px] max-w-[92px] object-contain transition-transform duration-300 hover:scale-105"
                   priority
                 />
               </Link>
