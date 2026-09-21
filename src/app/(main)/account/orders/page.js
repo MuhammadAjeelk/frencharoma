@@ -5,21 +5,26 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
+import { Rule } from "@/components/ui/SectionHeading";
+import { GOLD_GLOW_WITH_BORDER, viewAllClass } from "@/lib/design";
 
+// Status pills on the dark ground. Each keeps its own hue so the six stages
+// stay apart at a glance, and each pairs its text with a tint dark enough to
+// clear 4.5:1. Pills are the one place `rounded-full` survives.
 const STATUS_STYLES = {
-  pending:    "bg-yellow-50 text-yellow-700 border border-yellow-200",
-  confirmed:  "bg-blue-50 text-blue-700 border border-blue-200",
-  processing: "bg-purple-50 text-purple-700 border border-purple-200",
-  shipped:    "bg-indigo-50 text-indigo-700 border border-indigo-200",
-  delivered:  "bg-green-50 text-green-700 border border-green-200",
-  cancelled:  "bg-red-50 text-red-700 border border-red-200",
+  pending:    "bg-[#4a3a1c] text-[#e8c477] border border-[#8a6b2f]",
+  confirmed:  "bg-[#1f3a2a] text-[#8fd6a6] border border-[#3f7355]",
+  processing: "bg-[#1e3446] text-[#8cc4e8] border border-[#3c6a8a]",
+  shipped:    "bg-[#332c4a] text-[#b9a8e8] border border-[#5f5290]",
+  delivered:  "bg-[#2b4f36] text-[#b6ebc4] border border-[#57a06f]",
+  cancelled:  "bg-[#4a2624] text-[#e8927f] border border-[#8f4a3c]",
 };
 
 const PAYMENT_STATUS_STYLES = {
-  pending:   "bg-gray-50 text-gray-600 border border-gray-200",
-  submitted: "bg-yellow-50 text-yellow-700 border border-yellow-200",
-  confirmed: "bg-green-50 text-green-700 border border-green-200",
-  failed:    "bg-red-50 text-red-700 border border-red-200",
+  pending:   "bg-[#211d18] text-[#cbbfae] border border-[#6b6255]",
+  submitted: "bg-[#4a3a1c] text-[#e8c477] border border-[#8a6b2f]",
+  confirmed: "bg-[#1f3a2a] text-[#8fd6a6] border border-[#3f7355]",
+  failed:    "bg-[#4a2624] text-[#e8927f] border border-[#8f4a3c]",
 };
 
 function formatDate(dateStr) {
@@ -36,32 +41,32 @@ function OrderCard({ order }) {
   const firstImage = order.items?.[0]?.image;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <div className={`border border-[#c9a25a]/40 bg-[#2e2e2e] ${GOLD_GLOW_WITH_BORDER}`}>
       {/* Header row */}
       <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4 min-w-0">
           {/* Thumbnail */}
           {firstImage ? (
-            <div className="relative w-14 h-14 shrink-0 rounded-lg overflow-hidden bg-gray-100">
+            <div className="relative w-14 h-14 shrink-0 overflow-hidden border border-[#c9a25a]/30 bg-[#211d18]">
               <Image src={firstImage} alt="" fill className="object-cover" sizes="56px" />
             </div>
           ) : (
-            <div className="w-14 h-14 shrink-0 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-14 h-14 shrink-0 border border-[#c9a25a]/30 bg-[#211d18] flex items-center justify-center text-[#a99d8c]">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
               </svg>
             </div>
           )}
 
-          <div>
-            <p className="font-semibold text-gray-900 text-sm">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-[#efe7db]">
               Order{" "}
-              <span className="font-mono tracking-wide">{order.orderNumber}</span>
+              <span className="font-mono tracking-wide break-all">{order.orderNumber}</span>
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">{formatDate(order.createdAt)}</p>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-[#a99d8c] mt-0.5">{formatDate(order.createdAt)}</p>
+            <p className="text-xs text-[#a99d8c] mt-0.5">
               {order.items?.length} item{order.items?.length !== 1 ? "s" : ""} ·{" "}
-              <span className="font-medium text-gray-700">PKR {order.total?.toLocaleString()}</span>
+              <span className="font-medium text-[#c9a25a]">PKR {order.total?.toLocaleString()}</span>
             </p>
           </div>
         </div>
@@ -78,7 +83,7 @@ function OrderCard({ order }) {
 
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="ml-1 text-xs text-gray-500 hover:text-gray-800 underline underline-offset-2"
+            className="ml-1 text-xs text-[#c9a25a] hover:text-[#e3c489] underline underline-offset-2 transition-colors focus:outline-none focus-visible:text-[#e3c489]"
           >
             {expanded ? "Hide" : "Details"}
           </button>
@@ -87,50 +92,50 @@ function OrderCard({ order }) {
 
       {/* Tracking number */}
       {order.trackingNumber && (
-        <div className="px-5 pb-3 -mt-1">
-          <p className="text-xs text-gray-500">
+        <div className="px-4 sm:px-5 pb-3 -mt-1">
+          <p className="text-xs text-[#a99d8c]">
             Tracking:{" "}
-            <span className="font-mono font-medium text-gray-800">{order.trackingNumber}</span>
+            <span className="font-mono font-medium text-[#efe7db] break-all">{order.trackingNumber}</span>
           </p>
         </div>
       )}
 
       {/* Expanded items */}
       {expanded && (
-        <div className="border-t border-gray-100">
+        <div className="border-t border-[#c9a25a]/25">
           <div className="p-4 sm:p-5 space-y-3">
             {order.items?.map((item, i) => (
               <div key={i} className="flex items-start gap-3">
                 {item.image ? (
-                  <div className="relative w-12 h-12 shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                  <div className="relative w-12 h-12 shrink-0 overflow-hidden border border-[#c9a25a]/30 bg-[#211d18]">
                     <Image src={item.image} alt={item.name} fill className="object-cover" sizes="48px" />
                   </div>
                 ) : (
-                  <div className="w-12 h-12 shrink-0 rounded-lg bg-gray-100" />
+                  <div className="w-12 h-12 shrink-0 border border-[#c9a25a]/30 bg-[#211d18]" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-sm font-medium text-[#efe7db] truncate">{item.name}</p>
+                  <p className="text-xs text-[#a99d8c]">
                     {[item.edition, item.size].filter(Boolean).join(" · ")} · Qty {item.quantity}
                   </p>
                 </div>
-                <p className="text-sm font-semibold text-gray-800 shrink-0">
+                <p className="text-sm font-semibold text-[#cbbfae] shrink-0">
                   PKR {(item.price * item.quantity).toLocaleString()}
                 </p>
               </div>
             ))}
 
             {/* Totals */}
-            <div className="border-t border-gray-100 pt-3 space-y-1 text-sm">
-              <div className="flex justify-between text-gray-500">
+            <div className="border-t border-[#c9a25a]/25 pt-3 space-y-1 text-sm">
+              <div className="flex justify-between text-[#a99d8c]">
                 <span>Subtotal</span>
                 <span>PKR {order.subtotal?.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-gray-500">
+              <div className="flex justify-between text-[#a99d8c]">
                 <span>Shipping</span>
                 <span>{order.shippingCost === 0 ? "Free" : `PKR ${order.shippingCost?.toLocaleString()}`}</span>
               </div>
-              <div className="flex justify-between font-bold text-gray-900 pt-1 border-t border-gray-100">
+              <div className="flex justify-between font-semibold text-[#c9a25a] pt-2 border-t border-[#c9a25a]/25">
                 <span>Total</span>
                 <span>PKR {order.total?.toLocaleString()}</span>
               </div>
@@ -139,17 +144,20 @@ function OrderCard({ order }) {
             {/* Status history */}
             {order.statusHistory?.length > 0 && (
               <div className="pt-2">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                  Order Timeline
-                </p>
+                <div className="inline-block mb-3">
+                  <p className="font-[family-name:var(--font-playfair)] italic text-base text-[#c9a25a]">
+                    Order Timeline
+                  </p>
+                  <Rule className="mt-1" />
+                </div>
                 <div className="space-y-2">
                   {[...order.statusHistory].reverse().map((h, i) => (
                     <div key={i} className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-1.5 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#c9a25a] mt-1.5 shrink-0" />
                       <div>
-                        <p className="text-xs font-medium text-gray-800 capitalize">{h.status}</p>
-                        {h.note && <p className="text-xs text-gray-500">{h.note}</p>}
-                        <p className="text-xs text-gray-400">{formatDate(h.timestamp)}</p>
+                        <p className="text-xs font-medium text-[#efe7db] capitalize">{h.status}</p>
+                        {h.note && <p className="text-xs text-[#cbbfae]">{h.note}</p>}
+                        <p className="text-xs text-[#a99d8c]">{formatDate(h.timestamp)}</p>
                       </div>
                     </div>
                   ))}
@@ -161,7 +169,7 @@ function OrderCard({ order }) {
             <div className="pt-1">
               <Link
                 href={`/orders/${order.orderNumber}`}
-                className="text-xs text-black underline underline-offset-2 hover:opacity-70"
+                className="text-xs text-[#c9a25a] hover:text-[#e3c489] underline underline-offset-2 transition-colors"
               >
                 View full order page →
               </Link>
@@ -214,73 +222,81 @@ export default function MyOrdersPage() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gray-200 border-t-black rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#373838] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-[#373838] py-10 md:py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <Link
-              href="/account"
-              className="text-xs text-gray-500 hover:text-gray-800 flex items-center gap-1 mb-1"
-            >
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              My Account
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">My Orders</h1>
-          </div>
+        <div className="relative mb-8 md:mb-10">
           <Link
-            href="/track-order"
-            className="text-sm text-gray-600 hover:text-black underline underline-offset-2"
+            href="/account"
+            className="inline-flex items-center gap-1.5 text-[13px] text-[#a99d8c] hover:text-[#e3c489] transition-colors"
           >
-            Track by order number
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            My Account
           </Link>
+
+          <div className="mt-4 text-center">
+            <div className="inline-block">
+              <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                My Orders
+              </h1>
+              <Rule className="mt-2" />
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
+            <Link href="/track-order" className={viewAllClass("dark")}>
+              Track by order number
+            </Link>
+          </div>
         </div>
 
         {/* Content */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-gray-200 border-t-black rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
           </div>
         ) : error ? (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-            <p className="text-red-700 text-sm">{error}</p>
+          <div className="border border-[#8f4a3c] bg-[#4a2624]/40 p-6 text-center">
+            <p className="text-sm text-[#e8927f]">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="mt-3 text-sm text-red-600 underline"
+              className="mt-3 text-sm text-[#e8927f] hover:text-[#f2ad9e] underline underline-offset-2 transition-colors"
             >
               Try again
             </button>
           </div>
         ) : orders.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="border border-[#c9a25a]/40 bg-[#2e2e2e] px-6 py-12 text-center">
+            <div className="w-16 h-16 rounded-full border border-[#c9a25a]/40 bg-[#211d18] flex items-center justify-center mx-auto mb-5">
+              <svg className="w-8 h-8 text-[#c9a25a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">No orders yet</h2>
-            <p className="text-sm text-gray-500 mb-6">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[#c9a25a]">
+              No orders yet
+            </h2>
+            <p className="mt-3 text-sm text-[#a99d8c]">
               When you place an order, it will appear here.
             </p>
             <Link
               href="/collections/shop-all"
-              className="inline-block bg-black text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              className="mt-6 inline-block border border-[#c9a25a] bg-[#c9a25a] px-6 py-3 text-sm font-semibold text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] transition-colors"
             >
               Shop Now
             </Link>
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-gray-500">{orders.length} order{orders.length !== 1 ? "s" : ""}</p>
+            <p className="text-sm text-[#a99d8c]">{orders.length} order{orders.length !== 1 ? "s" : ""}</p>
             {orders.map((order) => (
               <OrderCard key={order._id} order={order} />
             ))}
