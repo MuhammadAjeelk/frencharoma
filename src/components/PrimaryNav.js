@@ -2,8 +2,39 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { MENU_PANEL, FOCUS_RING } from "@/lib/design";
 
 const SHOP_FLAGS = ["bestSeller", "specialOffer", "bundle", "signature", "newArrival", "search"];
+
+// The nav band is taupe with black labels; the panels that drop out of it are
+// dark, so they read as part of the same chrome as the logo bar above.
+const TAB =
+  "text-[13px] font-semibold uppercase tracking-[0.08em] text-black transition-colors duration-200";
+const TAB_ACTIVE = "underline underline-offset-[6px] decoration-2";
+const TAB_IDLE = "hover:underline hover:underline-offset-[6px] hover:decoration-2";
+
+const tabClass = (active) => `${TAB} ${active ? TAB_ACTIVE : TAB_IDLE} ${FOCUS_RING}`;
+
+// A row inside a dropdown. Square — the panel is the frame, the rows are not.
+const ROW = "transition-colors text-[#cbbfae] hover:bg-[#c9a25a]/10 hover:text-[#e3c489]";
+
+// The heading device from the homepage, sized to its own text.
+function PanelHeading({ children, className = "" }) {
+  return (
+    <div className={`px-5 pt-3 pb-1 ${className}`}>
+      <span className="inline-block">
+        <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[#c9a25a]">
+          {children}
+        </span>
+        <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+      </span>
+    </div>
+  );
+}
+
+function Bullet() {
+  return <span className="mr-2 text-[#c9a25a]">•</span>;
+}
 
 // Pure nav list — receives an isItemActive() so it can render both statically
 // (fallback: always false) and reactively (via DesktopNav below).
@@ -33,37 +64,33 @@ export function NavList({
                 <Link
                   href={item.href && item.href !== "#" ? item.href : "#"}
                   onClick={() => setOpenDropdown(null)}
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-black underline underline-offset-[6px] decoration-2" : "text-black hover:underline hover:underline-offset-[6px] hover:decoration-2"}`}
+                  className={`flex items-center gap-1 py-2 ${tabClass(active)}`}
                 >
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                 </Link>
                 {openDropdown === index && (
                   <div
-                    className={`absolute top-full left-0 mt-0 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn flex ${families.length > 0 ? "w-[520px]" : "w-64"}`}
+                    className={`absolute top-full left-0 mt-0 py-2 z-50 animate-fadeIn flex ${MENU_PANEL} ${families.length > 0 ? "w-[520px]" : "w-64"}`}
                   >
-                    <div className={families.length > 0 ? "w-1/2 border-r border-[#f0ece7]" : "w-full"}>
+                    <div className={families.length > 0 ? "w-1/2 border-r border-[#c9a25a]/25" : "w-full"}>
                       {item.submenu.map((sub, si) =>
                         sub.heading ? (
-                          <p key={si} className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
-                            {sub.heading}
-                          </p>
+                          <PanelHeading key={si}>{sub.heading}</PanelHeading>
                         ) : (
                           <Link
                             key={si}
                             href={sub.href}
                             onClick={() => setOpenDropdown(null)}
-                            className={`group/link flex items-center transition-colors hover:bg-[#faf8f5] hover:text-[#b8964e] hover:font-bold ${
+                            className={`group/link flex items-center ${ROW} ${FOCUS_RING} ${
                               sub.accent
-                                ? "px-5 py-1.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e]"
+                                ? "px-5 py-2 text-[13px] font-bold uppercase tracking-wide text-[#e3c489]"
                                 : sub.standalone
-                                  ? "px-5 pt-2 pb-1 text-[13px] font-semibold text-[#1f1a16]"
-                                  : "pl-8 pr-5 py-1 text-[13px] text-[#4a4540]"
+                                  ? "px-5 py-1.5 text-[13px] font-semibold text-[#efe7db]"
+                                  : "pl-8 pr-5 py-1 text-[13px]"
                             }`}
                           >
-                            {!sub.accent && !sub.standalone && (
-                              <span className="mr-2 text-[#b8964e]">•</span>
-                            )}
+                            {!sub.accent && !sub.standalone && <Bullet />}
                             <span className="group-hover/link:underline underline-offset-4 decoration-1">
                               {sub.name}
                             </span>
@@ -74,18 +101,16 @@ export function NavList({
 
                     {families.length > 0 && (
                       <div className="w-1/2 flex flex-col">
-                        <p className="px-5 pt-2 pb-0.5 text-[12px] font-bold text-[#1a1a2e] tracking-wide">
-                          Shop by Fragrance Family
-                        </p>
-                        <div className="overflow-y-scroll scrollbar-always max-h-72 px-1">
+                        <PanelHeading>Shop by Fragrance Family</PanelHeading>
+                        <div className="overflow-y-scroll scrollbar-always-gold max-h-72 px-1">
                           {families.map((f) => (
                             <Link
                               key={f}
                               href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
                               onClick={() => setOpenDropdown(null)}
-                              className="group/link flex items-center pl-7 pr-4 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] hover:font-bold rounded-md transition-colors"
+                              className={`group/link flex items-center pl-7 pr-4 py-1 text-[13px] ${ROW} ${FOCUS_RING}`}
                             >
-                              <span className="mr-2 text-[#b8964e]">•</span>
+                              <Bullet />
                               <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
                                 {f}
                               </span>
@@ -99,36 +124,34 @@ export function NavList({
               </>
             ) : item.brandDropdown ? (
               <>
-                <button
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-black underline underline-offset-[6px] decoration-2" : "text-black hover:underline hover:underline-offset-[6px] hover:decoration-2"}`}
-                >
+                <button className={`flex items-center gap-1 py-2 ${tabClass(active)}`}>
                   {item.name}
                   <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                 </button>
                 {openDropdown === index && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[500px] bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-4 z-50 animate-fadeIn">
-                    <div className="px-5 pb-3 border-b border-[#f0ece7] mb-3">
-                      <p className="text-[11px] font-semibold text-[#b8964e] uppercase tracking-[0.16em]">
-                        Browse by Brand (A–Z)
-                      </p>
+                  <div
+                    className={`absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[500px] pt-1 pb-4 z-50 animate-fadeIn ${MENU_PANEL}`}
+                  >
+                    <div className="pb-3 border-b border-[#c9a25a]/25 mb-3">
+                      <PanelHeading>Browse by Brand (A–Z)</PanelHeading>
                     </div>
-                    <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-scroll scrollbar-always px-3">
+                    <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-scroll scrollbar-always-gold px-3">
                       {brands.length > 0 ? (
                         brands.map((b) => (
                           <Link
                             key={b}
                             href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                            className="group/link flex items-center px-3 py-1 text-[13px] text-[#4a4540] hover:text-[#b8964e] hover:bg-[#faf8f5] hover:font-bold rounded-md transition-colors"
+                            className={`group/link flex items-center px-3 py-1 text-[13px] ${ROW} ${FOCUS_RING}`}
                             onClick={() => setOpenDropdown(null)}
                           >
-                            <span className="mr-2 text-[#b8964e]">•</span>
+                            <Bullet />
                             <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
                               {b}
                             </span>
                           </Link>
                         ))
                       ) : (
-                        <p className="col-span-3 px-3 py-2 text-[13px] text-[#a09890]">
+                        <p className="col-span-3 px-3 py-2 text-[13px] text-[#a99d8c]">
                           Loading brands...
                         </p>
                       )}
@@ -137,10 +160,7 @@ export function NavList({
                 )}
               </>
             ) : (
-              <Link
-                href={item.href}
-                className={`block py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200 ${active ? "text-black underline underline-offset-[6px] decoration-2" : "text-black hover:underline hover:underline-offset-[6px] hover:decoration-2"}`}
-              >
+              <Link href={item.href} className={`block py-2 ${tabClass(active)}`}>
                 {item.name}
               </Link>
             )}
