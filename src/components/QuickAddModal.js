@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
-import { genderMeta } from "@/lib/gender";
+import { genderMeta, genderTextClass } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
 import DiscountRibbon from "./DiscountRibbon";
 import { FOCUS_RING_LIGHT } from "@/lib/design";
@@ -192,7 +192,7 @@ export default function QuickAddModal({
         {gm && (
           <>
             {" – "}
-            <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+            <span className={`font-semibold ${genderTextClass(perfume?.gender, "light")}`}>{gm.label}</span>
           </>
         )}
       </h2>

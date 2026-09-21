@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { formatRs } from "@/lib/pricing";
-import { genderMeta, GENDER_ON_DARK } from "@/lib/gender";
+import { genderMeta, genderTextClass } from "@/lib/gender";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
@@ -668,7 +668,7 @@ export default function DiscoveryBoxPage() {
                 <div className="min-w-0 flex-1 pr-1">
                   <p className="text-[13px] font-bold text-[#efe7db] leading-tight line-clamp-2">
                     {preview.name}
-                    {gm && <span className={GENDER_ON_DARK[preview.gender]}> - ({gm.label})</span>}
+                    {gm && <span className={genderTextClass(preview.gender, "dark")}> - ({gm.label})</span>}
                   </p>
                   {preview.impressionName && (
                     <p className="text-[11px] text-[#a99d8c] mt-0.5 truncate">
