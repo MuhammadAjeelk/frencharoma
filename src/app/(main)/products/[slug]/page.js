@@ -22,29 +22,29 @@ import { getLowestPrice } from "@/lib/pricing";
 // ── Notes Pyramid ──────────────────────────────────────────────────────────
 function NotesPyramid({ notes }) {
   const layers = [
-    { label: "Top Notes",   sublabel: "First Impression",      items: notes?.top    || [], icon: "✦", bg: "bg-amber-50",  border: "border-amber-200",  text: "text-amber-800"  },
-    { label: "Heart Notes", sublabel: "Soul of the Fragrance", items: notes?.middle || [], icon: "❋", bg: "bg-rose-50",   border: "border-rose-200",   text: "text-rose-800"   },
-    { label: "Base Notes",  sublabel: "Lasting Impression",    items: notes?.base   || [], icon: "◆", bg: "bg-stone-100", border: "border-stone-300",  text: "text-stone-800"  },
+    { label: "Top Notes",   sublabel: "First Impression",      items: notes?.top    || [] },
+    { label: "Heart Notes", sublabel: "Soul of the Fragrance", items: notes?.middle || [] },
+    { label: "Base Notes",  sublabel: "Lasting Impression",    items: notes?.base   || [] },
   ];
   if (!layers.some((l) => l.items.length > 0)) {
-    return <p className="text-sm text-gray-400 italic">Fragrance notes coming soon.</p>;
+    return <p className="text-sm italic text-[#211d18]/60">Fragrance notes coming soon.</p>;
   }
   return (
     <div className="space-y-3">
       {layers.map(
         (layer) =>
           layer.items.length > 0 && (
-            <div key={layer.label} className={`rounded-xl border ${layer.bg} ${layer.border} p-4`}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className={`text-base ${layer.text}`}>{layer.icon}</span>
-                <div>
-                  <p className={`text-sm font-semibold ${layer.text}`}>{layer.label}</p>
-                  <p className="text-[10px] text-gray-400">{layer.sublabel}</p>
-                </div>
-              </div>
+            <div key={layer.label} className="border border-[#c9a25a] bg-[#d4c6ab]/40 p-4">
+              <p className="font-[family-name:var(--font-playfair)] italic text-base leading-tight text-[#211d18]">
+                {layer.label}
+              </p>
+              <p className="mb-2.5 text-[11px] text-[#211d18]/60">{layer.sublabel}</p>
               <div className="flex flex-wrap gap-1.5">
                 {layer.items.map((note) => (
-                  <span key={note} className={`text-xs px-2.5 py-1 rounded-full bg-white border ${layer.border} ${layer.text} font-medium`}>
+                  <span
+                    key={note}
+                    className="rounded-full border border-[#c9a25a]/70 bg-white px-2.5 py-1 text-xs font-medium text-[#211d18]"
+                  >
                     {note}
                   </span>
                 ))}
@@ -57,18 +57,26 @@ function NotesPyramid({ notes }) {
 }
 
 // ── Accordion Row (opens side modal) ──────────────────────────────────────
-function AccordionRow({ title, icon, onClick }) {
+function AccordionRow({ title, onClick }) {
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-[#c9a25a]/25">
       <button
         onClick={onClick}
-        className="w-full flex items-center justify-between py-4 text-left hover:bg-gray-50 transition-colors px-1 rounded"
+        className="group flex w-full items-center justify-between gap-3 px-2 py-4 text-left transition-colors hover:bg-[#c9a25a]/10"
       >
-        <div className="flex items-center gap-3">
-          {icon && <span className="text-lg leading-none">{icon}</span>}
-          <span className="text-sm font-semibold text-gray-800 uppercase tracking-wide">{title}</span>
-        </div>
-        <span className="text-gray-400 text-lg">▾</span>
+        <span className="text-sm font-semibold text-[#cbbfae] transition-colors group-hover:text-[#e3c489] break-words">
+          {title}
+        </span>
+        <svg
+          className="w-4 h-4 shrink-0 text-[#c9a25a]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
     </div>
   );
@@ -751,11 +759,10 @@ export default function ProductDetailPage() {
             )}
 
             {/* ── Accordion Rows → open side modal ── */}
-            <div className="border-b border-gray-200">
+            <div className="border-b border-[#c9a25a]/25">
 
               <AccordionRow
                 title="Fragrance Profile"
-                icon="🌸"
                 onClick={() =>
                   openModal("Fragrance Profile", <NotesPyramid notes={perfume.notes} />)
                 }
@@ -763,10 +770,9 @@ export default function ProductDetailPage() {
 
               <AccordionRow
                 title={`Why Choose ${perfume.name}?`}
-                icon="⭐"
                 onClick={() =>
                   openModal(`Why Choose ${perfume.name}?`, (
-                    <div className="space-y-3 text-sm text-gray-600 leading-relaxed">
+                    <div className="space-y-3 text-sm leading-relaxed text-[#211d18]">
                       <p>Our impression perfumes are crafted using <strong>100% original French perfume oils</strong>, ensuring the highest scent fidelity to the original fragrance.</p>
                       <p>With a concentration of up to <strong>35% perfume oil</strong>, our formulas last 12–16 hours on skin — outperforming most department-store alternatives.</p>
                       <p>Each bottle is filled with <strong>50ml</strong> of premium fragrance, providing incredible value compared to branded counterparts that cost 10× more.</p>
@@ -777,10 +783,9 @@ export default function ProductDetailPage() {
 
               <AccordionRow
                 title="Disclaimer"
-                icon="ℹ️"
                 onClick={() =>
                   openModal("Disclaimer", (
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm leading-relaxed text-[#211d18]">
                       French Aromas perfumes are original impression fragrances inspired by luxury brands. We are not affiliated with or endorsed by the original brands. Our products are independently crafted using premium French perfume oils to recreate a similar scent experience.
                     </p>
                   ))
@@ -789,10 +794,9 @@ export default function ProductDetailPage() {
 
               <AccordionRow
                 title="Shipping & Returns"
-                icon="📦"
                 onClick={() =>
                   openModal("Shipping & Returns", (
-                    <div className="space-y-3 text-sm text-gray-600 leading-relaxed">
+                    <div className="space-y-3 text-sm leading-relaxed text-[#211d18]">
                       <p><strong>Free Shipping</strong> on orders above PKR 7,000.</p>
                       <p><strong>Standard Delivery:</strong> 3–5 working days across Pakistan.</p>
                       <p><strong>Returns:</strong> We accept returns within 7 days of delivery if the product is unopened and in its original packaging.</p>
@@ -803,16 +807,15 @@ export default function ProductDetailPage() {
 
               <AccordionRow
                 title="FAQs"
-                icon="❓"
                 onClick={() =>
                   openModal("Frequently Asked Questions", (
-                    <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
+                    <div className="space-y-4 text-sm leading-relaxed text-[#211d18]">
                       <div>
-                        <p className="font-semibold text-gray-800 mb-1">Q: Why is the impression perfume so affordable compared to the original?</p>
+                        <p className="mb-1 font-semibold text-[#211d18]">Q: Why is the impression perfume so affordable compared to the original?</p>
                         <p>Our perfumes skip expensive branding & marketing costs. You only pay for the fragrance itself — crafted with the same French perfume oils.</p>
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-800 mb-1">Q: Is it also cheaper than other locally made impressions?</p>
+                        <p className="mb-1 font-semibold text-[#211d18]">Q: Is it also cheaper than other locally made impressions?</p>
                         <p>Yes — we source directly from French oil suppliers and operate with minimal overhead, making our pricing the most competitive without sacrificing quality.</p>
                       </div>
                     </div>
@@ -828,14 +831,14 @@ export default function ProductDetailPage() {
       {/* ═══════════════════════════════════════════════════════
            ORIGINAL vs. IMPRESSION COMPARISON TABLE
           ═══════════════════════════════════════════════════════ */}
-      <div className="bg-white py-14 px-4 mt-2 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
-            Original vs. Impression
-              </h2>
-          <p className="text-sm text-center text-gray-500 mb-10">
-            Experience the Essence — Choose What Fits You Best.
-          </p>
+      <div className={`bg-[#d4c6ab] ${SECTION_Y}`}>
+        <div className={GUTTER}>
+          <SectionHeading
+            tone="light"
+            title="Original vs. Impression"
+            subtitle="Experience the Essence — Choose What Fits You Best."
+            className="mb-10 md:mb-12"
+          />
 
           <div className="flex items-center gap-4 sm:gap-6">
 
@@ -847,16 +850,16 @@ export default function ProductDetailPage() {
                     src={perfume.images.main}
                     alt="Original perfume"
                     fill
-                    className="object-cover rounded-lg shadow-md"
+                    className="object-cover border border-[#d1ae6d]"
                     sizes="160px"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
-                    <span className="text-[10px] text-gray-400 text-center px-2">{brandLabel}</span>
+                  <div className="flex h-full w-full items-center justify-center border border-[#d1ae6d] bg-[#c6b596]">
+                    <span className="px-2 text-center text-[10px] text-[#211d18]/70 break-words">{brandLabel || "Original"}</span>
                   </div>
                 )}
                 {/* Price badge */}
-                <div className="absolute -top-3 -left-3 bg-red-600 text-white font-bold rounded-lg shadow-lg px-2 py-1 text-center leading-tight transform -rotate-6"
+                <div className="absolute -top-3 -left-3 border border-[#c9a25a] bg-[#211d18] px-2 py-1 text-center font-bold leading-tight text-[#e3c489]"
                   style={{ fontSize: "9px", minWidth: "64px" }}>
                   <div>Price in PKR :</div>
                   <div className="text-[11px]">Rs. {brandLabel || "—"}</div>
@@ -866,16 +869,16 @@ export default function ProductDetailPage() {
 
             {/* ── Center: Comparison table ── */}
             <div className="flex-1 overflow-x-auto">
-              <table className="w-full border-collapse overflow-hidden rounded-xl" style={{ borderRadius: "12px" }}>
+              <table className="w-full min-w-[320px] border-collapse border border-[#211d18]/25">
                 <thead>
                   <tr>
-                    <th className="text-white py-4 px-2 sm:px-4 text-center font-bold text-sm sm:text-base" style={{ borderRadius: "10px 0 0 0", backgroundColor: "#1a1a2e" }}>
+                    <th className="bg-[#211d18] px-2 py-4 text-center text-sm sm:text-base font-bold text-[#c9a25a] sm:px-4">
                       Original Perfume
                     </th>
-                    <th className="bg-gray-500 text-white py-4 px-2 sm:px-4 text-center font-bold text-sm sm:text-base">
+                    <th className="bg-[#373838] px-2 py-4 text-center text-sm sm:text-base font-bold text-[#d4c6ab] sm:px-4">
                       Features
                     </th>
-                    <th className="text-white py-4 px-2 sm:px-4 text-center font-bold text-sm sm:text-base" style={{ borderRadius: "0 10px 0 0", backgroundColor: "#1a1a2e" }}>
+                    <th className="bg-[#211d18] px-2 py-4 text-center text-sm sm:text-base font-bold text-[#c9a25a] sm:px-4">
                       Impression Perfume
                     </th>
                   </tr>
@@ -892,10 +895,10 @@ export default function ProductDetailPage() {
                     ["NO",                 "Return Policy",        "YES"                 ],
                     ["NO",                 "Tester Availability",  "YES"                 ],
                   ].map(([orig, feat, imp], i) => (
-                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                      <td className="py-3 px-2 sm:px-4 text-center text-gray-700 text-sm sm:text-base border border-gray-200">{orig}</td>
-                      <td className="py-3 px-2 sm:px-4 text-center font-bold text-gray-900 text-sm sm:text-base bg-gray-100 border border-gray-200">{feat}</td>
-                      <td className="py-3 px-2 sm:px-4 text-center text-gray-700 text-sm sm:text-base border border-gray-200">{imp}</td>
+                    <tr key={i} className={i % 2 === 0 ? "bg-[#ded2bc]" : "bg-[#d4c6ab]"}>
+                      <td className="border border-[#211d18]/15 px-2 py-3 text-center text-sm sm:text-base text-[#211d18] sm:px-4 break-words">{orig}</td>
+                      <td className="border border-[#211d18]/15 bg-[#c9bb9e] px-2 py-3 text-center text-sm sm:text-base font-bold text-[#211d18] sm:px-4">{feat}</td>
+                      <td className="border border-[#211d18]/15 px-2 py-3 text-center text-sm sm:text-base text-[#211d18] sm:px-4 break-words">{imp}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -910,16 +913,16 @@ export default function ProductDetailPage() {
                     src={currentImage}
                     alt={perfume.name}
                     fill
-                    className="object-cover rounded-lg shadow-md"
+                    className="object-cover border border-[#d1ae6d]"
                     sizes="160px"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
-                    <span className="text-[10px] text-gray-400 text-center px-2">{perfume.name}</span>
-                      </div>
+                  <div className="flex h-full w-full items-center justify-center border border-[#d1ae6d] bg-[#c6b596]">
+                    <span className="px-2 text-center text-[10px] text-[#211d18]/70 break-words">{perfume.name}</span>
+                  </div>
                 )}
                 {/* Price badge */}
-                <div className="absolute -top-3 -right-3 bg-red-600 text-white font-bold rounded-lg shadow-lg px-2 py-1 text-center leading-tight transform rotate-6"
+                <div className="absolute -top-3 -right-3 border border-[#c9a25a] bg-[#211d18] px-2 py-1 text-center font-bold leading-tight text-[#e3c489]"
                   style={{ fontSize: "9px", minWidth: "64px" }}>
                   <div>Price in PKR :</div>
                   <div className="text-[11px]">
