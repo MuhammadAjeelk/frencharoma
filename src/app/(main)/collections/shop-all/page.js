@@ -7,6 +7,8 @@ import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
 import QuickAddModal from "@/components/QuickAddModal";
 import { genderHeading } from "@/lib/gender";
+import { Rule } from "@/components/ui/SectionHeading";
+import { viewAllClass } from "@/lib/design";
 import PerfumeFilterBar, {
   SortSelect,
   seasonFromTags,
@@ -278,50 +280,12 @@ function ShopAllContent() {
   // ────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <div className="min-h-screen bg-linear-to-b from-[#f8f5ef] via-white to-white">
-        {/* ── Page Header ── */}
-        {/* <div className="relative py-12 md:py-16 text-center overflow-hidden bg-linear-to-b from-[#f3efe8] to-[#f7f5f2] border-b border-[#e8e4df]">
-          <div className="absolute -left-16 -top-16 w-56 h-56 bg-[#d8c7ae]/25 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -right-12 bottom-0 w-64 h-64 bg-[#eadbc6]/30 rounded-full blur-3xl pointer-events-none" />
-          <nav className="relative flex justify-center items-center gap-2 text-[11px] text-[#8a847e] mb-4 uppercase tracking-widest">
-            <Link href="/" className="hover:text-[#1f1a16] transition-colors">
-              Home
-            </Link>
-            <span className="text-[#ccc8c2]">/</span>
-            <Link
-              href="/collections/shop-all"
-              className="hover:text-[#1f1a16] transition-colors"
-            >
-              Shop
-            </Link>
-            {featured !== "all" ? (
-              <>
-                <span className="text-[#ccc8c2]">/</span>
-                <span className="text-[#1f1a16] font-semibold">
-                  {getFeaturedLabel(featured)}
-                </span>
-              </>
-            ) : hasControlChanges ? (
-              <>
-                <span className="text-[#ccc8c2]">/</span>
-                <span className="text-[#1f1a16] font-semibold">Refined</span>
-              </>
-            ) : null}
-          </nav>
-          <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-[0.04em] text-[#1a1a2e]">
-            All Perfumes
-          </h1>
-          <div className="relative mt-2 w-10 h-[2px] bg-[#b8964e] mx-auto" />
-          <p className="relative mt-3 text-sm md:text-base text-[#6b6560] tracking-wide">
-            Discover signature impressions curated by mood, season and style.
-          </p>
-        </div> */}
-
+      <div className="min-h-screen bg-[#373838]">
         {/* Scroll anchor for brand-logo clicks (?view=products) */}
         <div ref={gridTopRef} className="scroll-mt-0" />
 
         {/* ── Sticky Filter Bar ── */}
-        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#e8e4df]/80">
+        <div className="sticky top-0 z-40 bg-[#373838]/95 backdrop-blur-md border-b border-[#c9a25a]/35">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
             <PerfumeFilterBar
               gender={gender}
@@ -349,36 +313,36 @@ function ShopAllContent() {
             <nav className="flex items-center gap-2 text-[13px] flex-wrap min-w-0">
               <Link
                 href="/"
-                className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
+                className="text-[#a99d8c] hover:text-[#e3c489] transition-colors"
               >
                 Home
               </Link>
-              <span className="text-[#ccc8c2]">/</span>
+              <span className="text-[#6f6a60]">/</span>
               {filterCrumbs.length > 0 ? (
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
+                  className="text-[#a99d8c] hover:text-[#e3c489] transition-colors"
                 >
                   Shop All
                 </button>
               ) : (
-                <span className="font-semibold text-[#1f1a16]">Shop All</span>
+                <span className="font-semibold text-[#efe7db]">Shop All</span>
               )}
               {filterCrumbs.map((c, i) => {
                 const isLast = i === filterCrumbs.length - 1;
                 return (
                   <span key={i} className="flex items-center gap-2">
-                    <span className="text-[#ccc8c2]">/</span>
+                    <span className="text-[#6f6a60]">/</span>
                     {isLast ? (
-                      <span className="font-semibold text-[#1f1a16]">
+                      <span className="font-semibold text-[#efe7db]">
                         {c.label}
                       </span>
                     ) : (
                       <button
                         type="button"
                         onClick={() => trimCrumbsAfter(i)}
-                        className="text-[#8a847e] hover:text-[#1f1a16] transition-colors"
+                        className="text-[#a99d8c] hover:text-[#e3c489] transition-colors"
                       >
                         {c.label}
                       </button>
@@ -391,17 +355,17 @@ function ShopAllContent() {
           </div>
 
           {/* Count */}
-          <p className="text-[13px] text-[#6b6560] mb-4 text-right">
+          <p className="text-[13px] text-[#a99d8c] mb-4 text-right">
             {loading ? (
-              <span className="inline-block w-16 h-4 bg-[#f0ece7] rounded animate-pulse" />
+              <span className="inline-block w-16 h-4 bg-[#4a4a4a] animate-pulse" />
             ) : (
               <>
                 Showing{" "}
-                <span className="font-semibold text-[#1f1a16]">
+                <span className="font-semibold text-[#e3c489]">
                   {perfumes.length.toLocaleString()}
                 </span>{" "}
                 of{" "}
-                <span className="font-semibold text-[#1f1a16]">
+                <span className="font-semibold text-[#e3c489]">
                   {total.toLocaleString()}
                 </span>{" "}
                 products
@@ -411,17 +375,17 @@ function ShopAllContent() {
 
           {/* ── Loading skeleton ── */}
           {loading && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
               {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
-                  className="border border-gray-200 rounded-lg overflow-hidden animate-pulse"
+                  className="border border-[#4a4a4a] overflow-hidden animate-pulse"
                 >
-                  <div className="aspect-[6.818/7.5] bg-gray-100" />
-                  <div className="p-3 space-y-2">
-                    <div className="h-3 bg-gray-100 rounded w-3/4" />
-                    <div className="h-3 bg-gray-100 rounded w-1/2" />
-                    <div className="h-8 bg-gray-100 rounded mt-3" />
+                  <div className="aspect-[6.818/7.5] bg-[#454545]" />
+                  <div className="bg-[#d5c7b4]/15 p-3 space-y-2">
+                    <div className="h-3 bg-[#4f4f4f] w-3/4" />
+                    <div className="h-3 bg-[#4f4f4f] w-1/2" />
+                    <div className="h-8 bg-[#4f4f4f] mt-3" />
                   </div>
                 </div>
               ))}
@@ -432,7 +396,7 @@ function ShopAllContent() {
           {!loading && perfumes.length === 0 && (
             <div className="flex flex-col items-center justify-center py-28 text-center">
               <svg
-                className="w-16 h-16 text-gray-200 mb-4"
+                className="w-16 h-16 text-[#c9a25a]/45 mb-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -444,17 +408,17 @@ function ShopAllContent() {
                   d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                No perfumes found
-              </h3>
-              <p className="text-sm text-gray-400 mb-6">
+              <div className="inline-block">
+                <h3 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                  No perfumes found
+                </h3>
+                <Rule className="mt-2" />
+              </div>
+              <p className="mt-5 mb-6 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[#d2c1ac]">
                 Try adjusting your filters or search term.
               </p>
               {hasControlChanges && (
-                <button
-                  onClick={clearFilters}
-                  className="text-sm border border-black text-black px-5 py-2 rounded hover:bg-black hover:text-white transition-colors"
-                >
+                <button onClick={clearFilters} className={viewAllClass("dark")}>
                   Reset Filters
                 </button>
               )}
@@ -511,12 +475,12 @@ function ShopAllContent() {
             className="flex justify-center items-center py-10 mt-4 min-h-[80px]"
           >
             {loadingMore && (
-              <div className="w-8 h-8 border-2 border-gray-200 border-t-black rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-[#5a5750] border-t-[#c9a25a] rounded-full animate-spin" />
             )}
             {!hasMore && !loading && perfumes.length > 0 && (
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-[#a99d8c]">
                 Showing all{" "}
-                <span className="font-semibold text-gray-600">
+                <span className="font-semibold text-[#e3c489]">
                   {total.toLocaleString()}
                 </span>{" "}
                 perfumes
@@ -548,21 +512,21 @@ function ShopAllContent() {
 
 function ShopAllFallback() {
   return (
-    <div className="min-h-screen bg-linear-to-b from-[#f8f5ef] via-white to-white">
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="h-8 w-48 bg-gray-100 rounded animate-pulse mb-8" />
-        <div className="h-16 w-full bg-gray-100 rounded-2xl animate-pulse mb-8" />
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+    <div className="min-h-screen bg-[#373838]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="h-8 w-48 bg-[#4a4a4a] animate-pulse mb-8" />
+        <div className="h-16 w-full bg-[#4a4a4a] animate-pulse mb-8" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="border border-gray-200 rounded-lg overflow-hidden animate-pulse"
+              className="border border-[#4a4a4a] overflow-hidden animate-pulse"
             >
-              <div className="aspect-[6.818/7.5] bg-gray-100" />
-              <div className="p-3 space-y-2">
-                <div className="h-3 bg-gray-100 rounded w-3/4" />
-                <div className="h-3 bg-gray-100 rounded w-1/2" />
-                <div className="h-8 bg-gray-100 rounded mt-3" />
+              <div className="aspect-[6.818/7.5] bg-[#454545]" />
+              <div className="bg-[#d5c7b4]/15 p-3 space-y-2">
+                <div className="h-3 bg-[#4f4f4f] w-3/4" />
+                <div className="h-3 bg-[#4f4f4f] w-1/2" />
+                <div className="h-8 bg-[#4f4f4f] mt-3" />
               </div>
             </div>
           ))}

@@ -9,6 +9,7 @@ import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib
 import { genderMeta } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
 import DiscountRibbon from "./DiscountRibbon";
+import { COLORS } from "@/lib/design";
 
 // Edition banner styling — Luxury = solid gold, Premium = solid silver, Classic = neutral.
 const EDITION_STYLE = {
@@ -160,6 +161,35 @@ export default function ProductCard({
     setEditionInfoOpen(true);
   };
 
+  // A perfume with no image still has to fill its frame - next/image throws on
+  // an empty src, so the placeholder stands in for it.
+  const artwork = image ? (
+    <Image
+      src={image}
+      alt={name}
+      fill
+      className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
+      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+    />
+  ) : (
+    <span
+      className="absolute inset-0 flex items-center justify-center bg-[#c3b39a]"
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        className="w-10 h-10 text-[#8c7f6d]"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.2}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10 2.75h4v2.5h-4z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.2 5.25h5.6l1.7 2.4v13.1a.5.5 0 01-.5.5H8a.5.5 0 01-.5-.5V7.65z" />
+        <path strokeLinecap="round" d="M8.2 12.4h7.6" />
+      </svg>
+    </span>
+  );
+
   const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -184,16 +214,16 @@ export default function ProductCard({
         setShowBanners(false);
       }}
       onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
-      className={`group relative isolate rounded-xl overflow-hidden bg-white border-[2.5px] flex transition-all duration-300 ${
+      className={`group relative isolate overflow-hidden bg-[#d5c7b4] border-2 flex transition-[box-shadow,border-color] duration-300 ${
         hoverReveal ? "flex-row lg:flex-col" : "flex-col"
       } ${boxMode && boxSoldOut ? "opacity-60" : ""} ${
         boxMode && !boxSoldOut ? "cursor-pointer" : ""
       }`}
       style={{
-        borderColor: hovered && gm ? gm.hex : "#e8e4df",
+        borderColor: hovered && gm ? gm.hex : COLORS.goldBright,
         boxShadow:
           hovered && !(boxMode && boxSoldOut)
-            ? "0 0 0 1px rgba(209,174,109,0.40), 0 14px 38px rgba(209,174,109,0.20)"
+            ? "0 0 0 1px rgba(209,174,109,0.45), 0 14px 38px rgba(209,174,109,0.22)"
             : "none",
       }}
     >
@@ -203,16 +233,16 @@ export default function ProductCard({
       {/* Badges - top-left (box mode: selection number / sold out / discount) */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
         {boxMode && boxSelected && !boxSoldOut && (
-          <span className="w-6 h-6 rounded-full bg-[#b8964e] text-white flex items-center justify-center text-[11px] font-bold shadow">
+          <span className="w-6 h-6 rounded-full bg-[#c9a25a] text-[#211d18] flex items-center justify-center text-[11px] font-bold shadow">
             {boxSelectionIndex + 1}
           </span>
         )}
         {boxMode && boxSoldOut ? (
-          <span className="bg-gray-800/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
+          <span className="rounded-full border border-[#d1ae6d]/60 bg-[#211d18]/90 px-2.5 py-1 text-[10px] font-bold tracking-wide text-[#e3c489]">
             Sold out
           </span>
         ) : boxMode && disc > 0 ? (
-          <span className="bg-[#1a1a2e] text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wide">
+          <span className="rounded-full bg-[#211d18] px-2.5 py-1 text-[10px] sm:text-[11px] font-bold tracking-wide text-[#e3c489]">
             -{disc}% OFF
           </span>
         ) : null}
@@ -223,7 +253,7 @@ export default function ProductCard({
         <button
           onClick={handleWishlistToggle}
           aria-label="Delete from wishlist"
-          className="group/wish absolute top-2 right-2 z-30 flex items-center h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-red-50 transition-colors duration-200 overflow-hidden"
+          className="group/wish absolute top-2 right-2 z-30 flex items-center h-8 rounded-full bg-[#e3d5c0] shadow-sm hover:bg-[#f2ded9] transition-colors duration-200 overflow-hidden"
         >
           <span className="relative w-8 h-8 shrink-0 flex items-center justify-center">
             {/* Red heart (default) */}
@@ -261,11 +291,11 @@ export default function ProductCard({
       ) : (
         <button
           onClick={handleWishlistToggle}
-          className="group/heart absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+          className="group/heart absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-[#e3d5c0] hover:bg-[#efe3d2] hover:scale-110 transition-all duration-200 shadow-sm"
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
           <svg
-            className={`w-[18px] h-[18px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#9a9590] group-hover/heart:text-[#e11d48]"}`}
+            className={`w-[18px] h-[18px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#7d7161] group-hover/heart:text-[#e11d48]"}`}
             fill={wishlisted ? "currentColor" : "none"}
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -282,31 +312,17 @@ export default function ProductCard({
 
       {/* Product Image */}
       <div
-        className={`relative overflow-hidden bg-[#f7f5f2] ${
+        className={`relative overflow-hidden bg-[#c3b39a] ${
           hoverReveal
             ? "w-1/2 shrink-0 self-stretch aspect-auto lg:w-full lg:self-auto lg:aspect-[6.818/7.5]"
             : "w-full aspect-[6.818/7.5]"
         }`}
       >
         {boxMode ? (
-          <div className="block w-full h-full">
-            <Image
-              src={image}
-              alt={name}
-              fill
-              className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            />
-          </div>
+          <div className="block w-full h-full">{artwork}</div>
         ) : (
           <Link href={href || "#"} className="block w-full h-full">
-            <Image
-              src={image}
-              alt={name}
-              fill
-              className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            />
+            {artwork}
           </Link>
         )}
 
@@ -321,7 +337,7 @@ export default function ProductCard({
                 e.stopPropagation();
                 onAddToBox?.();
               }}
-              className="flex flex-col items-center leading-tight bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-xl text-[11px] font-bold text-red-600 shadow-md hover:bg-white"
+              className="flex flex-col items-center leading-tight rounded-md bg-[#f0e7d7]/95 backdrop-blur-sm px-4 py-1.5 text-[11px] font-bold text-[#b3261e] shadow-md hover:bg-[#f7f0e4]"
             >
               <span>Click to Remove</span>
               <span>from Discovery Box</span>
@@ -338,7 +354,7 @@ export default function ProductCard({
                   e.stopPropagation();
                   onQuickView();
                 }}
-                className="flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#d1ae6d]/70 bg-[#1f1a16]/90 backdrop-blur-[2px] px-3.5 py-1.5 text-[11px] font-semibold text-[#d1ae6d] shadow-md whitespace-nowrap"
               >
                 <svg
                   className="w-3.5 h-3.5"
@@ -366,18 +382,18 @@ export default function ProductCard({
 
         {/* Dull overlay when this tester is already in the discovery box */}
         {boxMode && boxSelected && !boxSoldOut && (
-          <div className="absolute inset-0 z-10 bg-[#f4f2ef]/55 pointer-events-none" />
+          <div className="absolute inset-0 z-10 bg-[#d5c7b4]/60 pointer-events-none" />
         )}
 
         {/* Best Seller pill — bottom-left (hidden on mobile to avoid overlap) */}
         {isBestSeller && (
-          <span className="hidden lg:block absolute bottom-2 left-2 z-10 bg-[#b8964e] text-white rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md transition-opacity duration-200 group-hover:opacity-0">
+          <span className="hidden lg:block absolute bottom-2 left-2 z-10 rounded-full bg-[#cbb99a] px-3 py-1 text-[11px] font-semibold tracking-wide text-[#2b2620] shadow-md transition-opacity duration-200 group-hover:opacity-0">
             Best Sellers
           </span>
         )}
 
         {/* Size pill (like the 5ml tester pill) */}
-        <span className="absolute bottom-2 right-2 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#6b6560] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
+        <span className="absolute bottom-2 right-2 z-10 rounded-full bg-[#efe9df] px-2 py-0.5 text-[10px] font-semibold text-[#3a352f] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
           {sizeLabel}
         </span>
       </div>
@@ -386,8 +402,8 @@ export default function ProductCard({
       <div
         className={
           hoverReveal
-            ? "relative flex-1 min-w-0 z-20 p-3 lg:p-4 flex flex-col bg-[#f4f2ef] lg:absolute lg:inset-x-0 lg:bottom-0 lg:rounded-t-xl lg:shadow-[0_-6px_24px_rgba(0,0,0,0.10)] lg:transition-transform lg:duration-500 lg:ease-out lg:translate-y-full lg:group-hover:translate-y-0"
-            : "p-3 sm:p-4 flex flex-col flex-1 bg-[#f4f2ef]"
+            ? "relative flex-1 min-w-0 z-20 p-3 lg:p-4 flex flex-col bg-[#d5c7b4] lg:absolute lg:inset-x-0 lg:bottom-0 lg:border-t lg:border-[#d1ae6d] lg:shadow-[0_-6px_24px_rgba(0,0,0,0.28)] lg:transition-transform lg:duration-500 lg:ease-out lg:translate-y-full lg:group-hover:translate-y-0"
+            : "p-3 sm:p-4 flex flex-col flex-1 bg-[#d5c7b4]"
         }
       >
         {/* Quick View — sits on the image, just above the reveal panel */}
@@ -400,7 +416,7 @@ export default function ProductCard({
               e.stopPropagation();
               onQuickView();
             }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 hidden lg:flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-[#1a1a2e] shadow-md hover:bg-[#faf8f5] transition-all duration-200 whitespace-nowrap lg:opacity-0 lg:group-hover:opacity-100"
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 hidden lg:flex items-center gap-1.5 rounded-full border border-[#d1ae6d]/70 bg-[#1f1a16]/90 backdrop-blur-[2px] px-3.5 py-1.5 text-[11px] font-semibold text-[#d1ae6d] shadow-md hover:bg-[#1f1a16] transition-all duration-200 whitespace-nowrap lg:opacity-0 lg:group-hover:opacity-100"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -410,7 +426,7 @@ export default function ProductCard({
           </button>
         )}
         {boxMode ? (
-          <h3 className="text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
+          <h3 className="text-base font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center">
             {name}
             {gm && (
               <>
@@ -421,7 +437,7 @@ export default function ProductCard({
           </h3>
         ) : (
           <Link href={href || "#"}>
-            <h3 className="text-sm sm:text-base font-bold text-[#1f1a16] leading-snug mb-2 line-clamp-2 text-center">
+            <h3 className="text-sm sm:text-base font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center">
               {name}
               {gm && (
                 <>
@@ -433,11 +449,11 @@ export default function ProductCard({
           </Link>
         )}
 
-        <div className="space-y-1.5 text-[11px] sm:text-xs text-[#4a4540]">
+        <div className="space-y-1.5 text-[11px] sm:text-xs text-[#3a352f]">
           {impressionName && (
             <p className="line-clamp-1">
               Inspired by:{" "}
-              <span className="font-semibold text-[#1f1a16]">
+              <span className="font-semibold text-[#211d18]">
                 {impressionName}
               </span>
             </p>
@@ -445,19 +461,19 @@ export default function ProductCard({
           {brandLabel && (
             <p className="line-clamp-1">
               Brand:{" "}
-              <span className="font-semibold text-[#1f1a16]">{brandLabel}</span>
+              <span className="font-semibold text-[#211d18]">{brandLabel}</span>
             </p>
           )}
           {scentFamily && (
             <p className="line-clamp-1">
               Fragrance Family:{" "}
-              <span className="font-semibold text-[#1f1a16]">{scentFamily}</span>
+              <span className="font-semibold text-[#211d18]">{scentFamily}</span>
             </p>
           )}
           {bestFor && (
             <p className="flex flex-wrap items-center gap-1.5">
               <span className="shrink-0">Best For:</span>
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#f7f0e2] text-[#9a7b32] text-[11px] font-semibold border border-[#e8dcbf]">
+              <span className="inline-block px-2.5 py-0.5 rounded-full border border-[#c9a25a]/60 bg-[#efe3c9] text-[11px] font-semibold text-[#6b5421]">
                 {bestFor}
               </span>
             </p>
@@ -472,7 +488,7 @@ export default function ProductCard({
                   <button
                     key={e.key}
                     onClick={openEditionInfo(e.key)}
-                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide shadow-sm transition-transform duration-200 hover:scale-105 ${st.bar} ${st.text}`}
+                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide shadow-sm transition-[filter] duration-200 hover:brightness-110 ${st.bar} ${st.text}`}
                   >
                     {st.label}
                   </button>
@@ -483,16 +499,16 @@ export default function ProductCard({
           <div>
             <span>
               Globally Admired by:{" "}
-              <span className="font-bold text-[#1f1a16]">{admire}%</span>{" "}
-              <span className="text-[#6b6560]">Satisfied Users</span>
+              <span className="font-bold text-[#211d18]">{admire}%</span>{" "}
+              <span className="text-[#6b6052]">Satisfied Users</span>
             </span>
           </div>
         </div>
 
         {/* Gender-coloured divider */}
         <div
-          className="h-[3px] rounded-full my-2.5"
-          style={{ backgroundColor: gm ? gm.hex : "#d9d3cb" }}
+          className="h-[3px] my-2.5"
+          style={{ backgroundColor: gm ? gm.hex : "#b9a88c" }}
         />
 
         {/* Price */}
@@ -500,16 +516,16 @@ export default function ProductCard({
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
-                <span className="text-[15px] font-normal text-[#a09890] strike-diagonal">
+                <span className="text-[15px] font-normal text-[#8c7f6d] strike-diagonal">
                   {formatRs(headlinePrice)}
                 </span>
               )}
-              <span className="text-[15px] font-semibold text-[#1f1a16]">
+              <span className="text-[15px] font-bold text-[#b5179e]">
                 {formatRs(finalOf(headlinePrice))}
               </span>
             </>
           ) : (
-            <span className="text-sm text-[#a09890]">Unavailable</span>
+            <span className="text-sm text-[#8c7f6d]">Unavailable</span>
           )}
         </div>
 
@@ -527,7 +543,7 @@ export default function ProductCard({
                       ev.stopPropagation();
                       addEdition(e);
                     }}
-                    className={`hover-vibrate w-full flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-9 gap-y-1 rounded-lg px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:shadow`}
+                    className={`hover-vibrate w-full flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-9 gap-y-1 rounded-md px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:shadow`}
                   >
                     <span className="text-[11px] sm:text-xs font-bold leading-none">
                       {st.label}{" "}
@@ -555,14 +571,14 @@ export default function ProductCard({
               onMouseEnter={() => !boxSoldOut && vibrate(cartRef.current)}
               onClick={handleCta}
               disabled={boxSoldOut}
-              className={`w-full py-2.5 px-3 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+              className={`w-full py-2.5 px-3 rounded-md text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
                 boxSoldOut
-                  ? "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+                  ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
                   : boxSwapTarget
-                  ? "bg-amber-500 text-white hover:bg-amber-600"
+                  ? "bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489]"
                   : boxSelected
-                  ? "bg-[#efe9db] text-[#8a6f2e] hover:bg-[#e7dfcb]"
-                  : "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                  ? "border border-[#c9a25a] bg-[#e9dcc4] text-[#6b5421] hover:bg-[#f1e7d4]"
+                  : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
               }`}
             >
               {boxSoldOut
@@ -579,14 +595,14 @@ export default function ProductCard({
               onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
               onClick={handleCta}
               disabled={!cardEdition}
-              className={`w-full py-3 px-3 min-h-[46px] flex items-center justify-center rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+              className={`w-full py-3 px-3 min-h-[46px] flex items-center justify-center rounded-md text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
                 !cardEdition
-                  ? "bg-[#e8e4df] text-[#a09890] cursor-not-allowed"
+                  ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
                   : showBanners
-                  ? "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                  ? "bg-[#2e2820] text-[#e3c489] hover:bg-[#3a332a]"
                   : inCartQty > 0
                   ? "bg-[#1d3a8f] text-white hover:bg-[#16306f]"
-                  : "bg-[#1a1a2e] text-white hover:bg-[#2d2d44]"
+                  : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
               }`}
             >
               {!cardEdition ? (
