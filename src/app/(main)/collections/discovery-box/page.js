@@ -120,12 +120,12 @@ function EmptySlot({ index, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group/slot relative w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 border border-dashed border-[#c9a25a]/45 bg-[#211d18] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[#e3c489] hover:bg-[#2a251d] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
+      className="group/slot relative w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16 border border-dashed border-[#c9a25a]/45 bg-[#211d18] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[#e3c489] hover:bg-[#2a251d] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
     >
-      <span className="text-sm sm:text-base font-bold text-[#a99d8c]/70 transition-opacity duration-150 group-hover/slot:opacity-0">
+      <span className="text-[11px] sm:text-base font-bold max-sm:leading-none text-[#a99d8c]/70 transition-opacity duration-150 group-hover/slot:opacity-0">
         {index + 1}
       </span>
-      <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-[11px] font-bold uppercase tracking-wide text-[#e3c489] opacity-0 transition-opacity duration-150 group-hover/slot:opacity-100">
+      <span className="absolute inset-0 flex items-center justify-center text-[9px] sm:text-[11px] font-bold uppercase tracking-wide text-[#e3c489] opacity-0 transition-opacity duration-150 group-hover/slot:opacity-100">
         Empty
       </span>
     </button>
@@ -150,7 +150,7 @@ function FilledSlot({
       onClick={onScrollTo}
       onMouseEnter={(e) => onPreview?.(perfume, e.currentTarget)}
       onMouseLeave={() => onPreviewEnd?.()}
-      className={`relative w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 overflow-hidden border-2 ${border} bg-[#211d18] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
+      className={`relative w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16 overflow-hidden border-2 ${border} bg-[#211d18] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
     >
       {get5mlImage(perfume) ? (
         <Image
@@ -454,13 +454,13 @@ export default function DiscoveryBoxPage() {
   const activeBox = (
     <div
       data-box
-      className="shrink-0 border-2 border-dashed border-[#c9a25a]/60 bg-[#373838] p-2.5"
+      className="shrink-0 border-2 border-dashed border-[#c9a25a]/60 bg-[#373838] p-1.5 sm:p-2.5"
     >
-      <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
-        <span className="text-[13px] sm:text-sm font-bold text-[#c9a25a] whitespace-nowrap">
+      <div className="flex items-center justify-between gap-2 sm:gap-3 mb-1 sm:mb-1.5 px-0.5">
+        <span className="text-[11px] sm:text-sm font-bold max-sm:leading-tight text-[#c9a25a] whitespace-nowrap">
           Discovery Box {completeCount + 1}
         </span>
-        <span className="text-[11px] sm:text-xs font-bold text-[#a99d8c] whitespace-nowrap">
+        <span className="text-[10px] sm:text-xs font-bold max-sm:leading-tight text-[#a99d8c] whitespace-nowrap">
           {activeCount}/{BOX_SIZE}
         </span>
       </div>
@@ -564,7 +564,7 @@ export default function DiscoveryBoxPage() {
         ref={barRef}
         className="sticky top-0 z-30 border-b-2 border-[#c9a25a] bg-[#2e2e2e] shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-3.5 lg:py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-1.5 sm:py-3.5 lg:py-4">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4">
             {/* Left arrow — only once 2+ boxes are ready */}
             {completeCount >= 2 && (
@@ -587,7 +587,7 @@ export default function DiscoveryBoxPage() {
             {/* Far-left = new box, ready boxes move to the right */}
             <div
               ref={rowRef}
-              className="flex items-stretch gap-3 flex-1 min-w-0 overflow-x-auto scrollbar-thin py-1"
+              className="flex items-stretch gap-2 sm:gap-3 flex-1 min-w-0 overflow-x-auto scrollbar-thin py-0.5 sm:py-1"
             >
               {activeBox}
 
@@ -597,17 +597,17 @@ export default function DiscoveryBoxPage() {
                   <div
                     key={bi}
                     data-box
-                    className="shrink-0 border-2 border-[#d1ae6d] bg-[#211d18] p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.25)]"
+                    className="shrink-0 border-2 border-[#d1ae6d] bg-[#211d18] p-1.5 sm:p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.25)]"
                   >
-                    <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
-                      <span className="text-[13px] sm:text-sm font-bold text-[#e3c489] whitespace-nowrap">
+                    <div className="flex items-center justify-between gap-2 sm:gap-3 mb-1 sm:mb-1.5 px-0.5">
+                      <span className="text-[11px] sm:text-sm font-bold max-sm:leading-tight text-[#e3c489] whitespace-nowrap">
                         Discovery Box {bi + 1} ✓
                       </span>
-                      <span className="flex items-baseline gap-1.5 whitespace-nowrap">
-                        <span className="text-[11px] font-semibold text-[#a99d8c] strike-diagonal">
+                      <span className="flex items-baseline gap-1 sm:gap-1.5 whitespace-nowrap">
+                        <span className="text-[10px] sm:text-[11px] font-semibold max-sm:leading-tight text-[#a99d8c] strike-diagonal">
                           {formatRs(orig)}
                         </span>
-                        <span className="text-[12px] sm:text-[13px] font-bold text-[#7dd18d]">
+                        <span className="text-[11px] sm:text-[13px] font-bold max-sm:leading-tight text-[#7dd18d]">
                           {formatRs(discounted(orig))}
                         </span>
                       </span>
@@ -653,7 +653,7 @@ export default function DiscoveryBoxPage() {
 
             {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
-              <p className="w-full lg:flex-1 mx-auto text-base sm:text-lg text-[#cbbfae] leading-relaxed text-center">
+              <p className="w-full lg:flex-1 mx-auto text-[11px] sm:text-lg text-[#cbbfae] leading-snug sm:leading-relaxed text-center">
                 To fill your Discovery Box — Choose any{" "}
                 <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong>
                 <br />
@@ -663,27 +663,27 @@ export default function DiscoveryBoxPage() {
 
             {/* Ready — inline summary + Add Ready Box to Cart */}
             {completeCount >= 1 && (
-              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-2 border border-[#d1ae6d] bg-[#211d18] px-4 py-2.5">
+              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-1.5 sm:gap-2 border border-[#d1ae6d] bg-[#211d18] px-3 py-2 sm:px-4 sm:py-2.5">
                 <div className="min-w-0">
-                  <p className="text-[#efe7db] font-bold text-[13px] sm:text-sm whitespace-nowrap">
+                  <p className="text-[#efe7db] font-bold text-[11px] sm:text-sm max-sm:leading-tight whitespace-nowrap">
                     {completeCount} Discovery Box{completeCount > 1 ? "es" : ""}{" "}
                     {completeCount > 1 ? "are" : "is"} Ready.
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-[13px] font-semibold text-[#a99d8c] strike-diagonal">
+                    <span className="text-[11px] sm:text-[13px] font-semibold max-sm:leading-tight text-[#a99d8c] strike-diagonal">
                       {formatRs(totalOriginal)}
                     </span>
-                    <span className="text-[#c9a25a] text-base sm:text-lg font-bold">
+                    <span className="text-[#c9a25a] text-sm sm:text-lg font-bold max-sm:leading-tight">
                       {formatRs(totalDiscounted)}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#7dd18d] font-semibold whitespace-nowrap">
+                  <p className="text-[10px] sm:text-[11px] max-sm:leading-tight text-[#7dd18d] font-semibold whitespace-nowrap">
                     You Saved {formatRs(savings)} (Flat {DISCOUNT_PERCENT}% Off)
                   </p>
                 </div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full inline-flex items-center justify-center gap-2 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] font-bold text-[12px] sm:text-[13px] px-4 py-2.5 transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
+                  className="w-full inline-flex items-center justify-center gap-2 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] font-bold text-[11px] sm:text-[13px] px-3 sm:px-4 py-2.5 transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
                 >
                   {addedToCart
                     ? "✓ Added!"
@@ -708,7 +708,7 @@ export default function DiscoveryBoxPage() {
 
           {/* Click-an-empty-slot hint — shown close to the box */}
           {hint && (
-            <p className="mt-2.5 text-center text-[13px] font-bold text-[#e3c489] animate-fadeIn">
+            <p className="mt-1.5 sm:mt-2.5 text-center text-[11px] sm:text-[13px] max-sm:leading-snug font-bold text-[#e3c489] animate-fadeIn">
               Select Fragrances from the collection below ↓
             </p>
           )}
