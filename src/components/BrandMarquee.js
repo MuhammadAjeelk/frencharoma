@@ -56,7 +56,7 @@ function BrandBox({ brand }) {
   return (
     <Link
       href={`/collections/shop-all?search=${encodeURIComponent(brand.name)}&view=products`}
-      className="group/box relative shrink-0 mx-2 sm:mx-2.5 flex items-center justify-center h-[72px] w-[146px] sm:h-[82px] sm:w-[166px]"
+      className="group/box relative shrink-0 mx-1 sm:mx-2 md:mx-2.5 flex items-center justify-center h-[42px] w-[88px] sm:h-[64px] sm:w-[132px] md:h-[82px] md:w-[166px]"
       aria-label={brand.name}
     >
       <span className="relative block w-full h-full">
@@ -208,12 +208,12 @@ export default function BrandMarquee() {
             onMouseLeave={() => setHovering(false)}
           >
             {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
-            <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[94px] sm:h-[106px] bg-black border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[58px] sm:h-[86px] md:h-[106px] bg-black border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
             </div>
 
             {/* Moving pills — clipped to the band (no edge shades) */}
-            <div className="relative z-10 h-[94px] sm:h-[106px] flex items-center overflow-hidden">
+            <div className="relative z-10 h-[58px] sm:h-[86px] md:h-[106px] flex items-center overflow-hidden">
               <div
                 ref={trackRef}
                 className="flex w-max will-change-transform"
@@ -231,10 +231,10 @@ export default function BrandMarquee() {
               type="button"
               aria-label="Previous brand"
               onClick={() => step("prev")}
-              className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
+              className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[58px] sm:h-[86px] md:h-[106px] w-8 sm:w-12 md:w-16 flex items-center justify-center border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[#c9a25a] bg-[#373838]"
             >
               <svg
-                className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                className="w-5 h-8 sm:w-8 sm:h-12 md:w-11 md:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
@@ -245,10 +245,10 @@ export default function BrandMarquee() {
               type="button"
               aria-label="Next brand"
               onClick={() => step("next")}
-              className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[94px] sm:h-[106px] w-12 sm:w-16 flex items-center justify-center border-y-[5px] border-[#c9a25a] bg-[#373838]"
+              className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[58px] sm:h-[86px] md:h-[106px] w-8 sm:w-12 md:w-16 flex items-center justify-center border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[#c9a25a] bg-[#373838]"
             >
               <svg
-                className="w-8 h-12 sm:w-11 sm:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                className="w-5 h-8 sm:w-8 sm:h-12 md:w-11 md:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
