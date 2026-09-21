@@ -9,22 +9,26 @@ import { getSellableEditions, getCardEdition, getBestFor, isSignatureScent, form
 import { genderMeta, genderTextClass } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
 import DiscountRibbon from "./DiscountRibbon";
+import FitText from "./ui/FitText";
 import { COLORS } from "@/lib/design";
 
 // Edition banner styling — Luxury = solid gold, Premium = solid silver, Classic = neutral.
 const EDITION_STYLE = {
   luxury: {
     label: "Luxury Edition",
+    short: "Luxury",
     bar: "bg-[#c9a24a]",
     text: "text-[#141414]",
   },
   premium: {
     label: "Premium Edition",
+    short: "Premium",
     bar: "bg-[#c3c3ca]",
     text: "text-[#2b2b2b]",
   },
   classic: {
     label: "Classic Edition",
+    short: "Classic",
     bar: "bg-[#d8cbb8]",
     text: "text-[#3a352f]",
   },
@@ -217,8 +221,15 @@ export default function ProductCard({
         setShowBanners(false);
       }}
       onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
-      className={`group relative isolate h-full overflow-hidden bg-[#d5c7b4] border-2 flex transition-[box-shadow,border-color] duration-300 ${
-        hoverReveal ? "flex-row lg:flex-col" : "flex-col"
+      className={`group relative isolate h-full overflow-hidden bg-[#d5c7b4] border-2 transition-[box-shadow,border-color] duration-300 ${
+        hoverReveal
+          ? "flex flex-row lg:flex-col"
+          : // Below sm the details outgrew the artwork — at a 135px card the
+            // image was only 35% of the height. Two equal rows hold it at half,
+            // with min-content on the second row so the copy can never be
+            // squeezed. sm and up keeps the flex column, where the image is
+            // already the larger share.
+            "grid grid-rows-[minmax(0,1fr)_minmax(min-content,1fr)] sm:flex sm:flex-col"
       } ${boxMode && boxSoldOut ? "opacity-60" : ""} ${
         boxMode && !boxSoldOut ? "cursor-pointer" : ""
       }`}
@@ -231,7 +242,7 @@ export default function ProductCard({
       }}
     >
       {/* Diagonal discount ribbon — top-left corner (non-box cards) */}
-      {!boxMode && disc > 0 && <DiscountRibbon percent={disc} />}
+      {!boxMode && disc > 0 && <DiscountRibbon percent={disc} compact={compact} />}
 
       {/* Badges - top-left (box mode: selection number / sold out / discount) */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
@@ -318,13 +329,23 @@ export default function ProductCard({
         className={`relative overflow-hidden bg-[#c3b39a] ${
           hoverReveal
             ? "w-1/2 shrink-0 self-stretch aspect-auto lg:w-full lg:self-auto lg:aspect-[6.818/7.5]"
-            : "w-full aspect-[6.818/7.5]"
+            : "w-full min-w-0"
         }`}
       >
+        {/* The ratio lives on a spacer rather than on this box. Below sm the
+            box has to stretch to fill its grid row, and Chrome honours a
+            box's own aspect-ratio over stretch alignment — so the ratio here
+            would pin the artwork at 45% of the card instead of half. As a
+            spacer it still sets the row's floor: the image is never shorter
+            than the artwork's natural ratio, only taller. */}
+        {!hoverReveal && (
+          <div className="w-full aspect-[6.818/7.5]" aria-hidden="true" />
+        )}
+
         {boxMode ? (
-          <div className="block w-full h-full">{artwork}</div>
+          <div className="absolute inset-0">{artwork}</div>
         ) : (
-          <Link href={href || "#"} className="block w-full h-full">
+          <Link href={href || "#"} className="absolute inset-0">
             {artwork}
           </Link>
         )}
@@ -406,7 +427,10 @@ export default function ProductCard({
         className={
           hoverReveal
             ? "relative flex-1 min-w-0 z-20 p-3 lg:p-4 flex flex-col bg-[#d5c7b4] lg:absolute lg:inset-x-0 lg:bottom-0 lg:border-t lg:border-[#d1ae6d] lg:shadow-[0_-6px_24px_rgba(0,0,0,0.28)] lg:transition-transform lg:duration-500 lg:ease-out lg:translate-y-full lg:group-hover:translate-y-0"
-            : "p-3 sm:p-4 flex flex-col flex-1 bg-[#d5c7b4]"
+            : // min-w-0 matters: as a grid item this box defaults to a
+              // min-content floor, and the nowrap title would push that past
+              // the card's own width.
+              "p-2.5 sm:p-4 flex flex-col flex-1 min-h-0 min-w-0 bg-[#d5c7b4]"
         }
       >
         {/* Quick View — sits on the image, just above the reveal panel */}
@@ -428,19 +452,14 @@ export default function ProductCard({
             Quick View
           </button>
         )}
-        {boxMode ? (
-          <h3 className={`font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center ${compact ? "text-[12px]" : "text-base"}`}>
-            {name}
-            {gm && (
-              <>
-                {" – "}
-                <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{gm.label}</span>
-              </>
-            )}
-          </h3>
-        ) : (
-          <Link href={href || "#"}>
-            <h3 className={`font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center ${compact ? "text-[12px]" : "text-sm sm:text-base"}`}>
+        {(() => {
+          const title = (
+            <FitText
+              as="h3"
+              fit={`${name}|${gm?.label || ""}|${compact}`}
+              floor={compact ? 9 : 12}
+              className={`font-bold text-[#211d18] leading-snug mb-2 text-center ${compact ? "text-[12px]" : "text-sm sm:text-base"}`}
+            >
               {name}
               {gm && (
                 <>
@@ -448,34 +467,35 @@ export default function ProductCard({
                   <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{gm.label}</span>
                 </>
               )}
-            </h3>
-          </Link>
-        )}
+            </FitText>
+          );
+          return boxMode ? title : <Link href={href || "#"}>{title}</Link>;
+        })()}
 
         <div className={`text-[#3a352f] ${compact ? "space-y-0.5 text-[10px]" : "space-y-1.5 text-[11px] sm:text-xs"}`}>
           {impressionName && (
-            <p className="line-clamp-1">
+            <FitText fit={impressionName} floor={compact ? 8 : 10}>
               {!isSignatureScent(impressionName) && "Inspired by: "}
               <span className="font-semibold text-[#211d18]">
                 {impressionName}
               </span>
-            </p>
+            </FitText>
           )}
           {brandLabel && (
-            <p className="line-clamp-1">
+            <FitText fit={brandLabel} floor={compact ? 8 : 10}>
               Brand:{" "}
               <span className="font-semibold text-[#211d18]">{brandLabel}</span>
-            </p>
+            </FitText>
           )}
           {scentFamily && (
-            <p className="line-clamp-1">
+            <FitText fit={scentFamily} floor={compact ? 8 : 10}>
               Fragrance Family:{" "}
               <span className="font-semibold text-[#211d18]">{scentFamily}</span>
-            </p>
+            </FitText>
           )}
           {bestFor && (
             <p className="flex flex-wrap items-center gap-1.5">
-              <span className="shrink-0">Best For:</span>
+              {!compact && <span className="shrink-0">Best For:</span>}
               <span className={`inline-block rounded-full border border-[#c9a25a]/60 bg-[#efe3c9] font-semibold text-[#6b5421] ${compact ? "px-1.5 py-0 text-[9px]" : "px-2.5 py-0.5 text-[11px]"}`}>
                 {bestFor}
               </span>
@@ -483,28 +503,35 @@ export default function ProductCard({
           )}
           {/* Edition detail — pills (clickable → edition info) before admired */}
           {!boxMode && displaySellable.length > 0 && (
-            <p className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 whitespace-normal sm:whitespace-nowrap">
-              <span className="shrink-0">Edition:</span>
+            <p className="flex flex-nowrap items-center gap-1.5 whitespace-nowrap">
+              {!compact && <span className="shrink-0">Edition:</span>}
               {displaySellable.map((e) => {
                 const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
                 return (
                   <button
                     key={e.key}
                     onClick={openEditionInfo(e.key)}
-                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide shadow-sm transition-[filter] duration-200 hover:brightness-110 ${st.bar} ${st.text}`}
+                    className={`shrink-0 rounded-full font-bold tracking-wide shadow-sm transition-[filter] duration-200 hover:brightness-110 ${st.bar} ${st.text} ${compact ? "px-1.5 py-0 text-[9px]" : "px-2 py-0.5 text-[10px]"}`}
                   >
-                    {st.label}
+                    {compact ? st.short : st.label}
                   </button>
                 );
               })}
             </p>
           )}
           <div>
-            <span>
-              Globally Admired by:{" "}
-              <span className="font-bold text-[#211d18]">{admire}%</span>{" "}
-              <span className="text-[#6b6052]">Satisfied Users</span>
-            </span>
+            {compact ? (
+              <span>
+                <span className="font-bold text-[#211d18]">{admire}%</span>{" "}
+                <span className="text-[#6b6052]">Admired</span>
+              </span>
+            ) : (
+              <span>
+                Globally Admired by:{" "}
+                <span className="font-bold text-[#211d18]">{admire}%</span>{" "}
+                <span className="text-[#6b6052]">Satisfied Users</span>
+              </span>
+            )}
           </div>
         </div>
 
@@ -512,15 +539,15 @@ export default function ProductCard({
             line up across a row even when one card's meta runs a line longer
             (the "Four Seasons (Versatile)" pill wraps, "Winter & Autumn" does
             not). Without this the whole card grew by that one line. */}
-        <div className="mt-auto pt-2.5">
+        <div className={`mt-auto ${compact ? "pt-1.5" : "pt-2.5"}`}>
           {/* Gender-coloured divider */}
           <div
-            className="h-[3px] mb-2.5"
+            className={`h-[3px] ${compact ? "mb-1.5" : "mb-2.5"}`}
             style={{ backgroundColor: gm ? gm.hex : "#b9a88c" }}
           />
 
           {/* Price */}
-          <div className="flex items-baseline justify-center gap-x-6 gap-y-0.5 flex-wrap mb-2.5">
+          <div className={`flex items-baseline justify-center gap-y-0.5 flex-wrap ${compact ? "gap-x-2 mb-1.5" : "gap-x-6 mb-2.5"}`}>
             {headlinePrice != null ? (
               <>
                 {disc > 0 && (
