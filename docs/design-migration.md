@@ -98,25 +98,25 @@ riskiest page is attempted only once the system is proven on simpler ones.
       `SpecialOffers`, `WhatMakesUsSpecial` — removes 32 old-token hits for free
 - [ ] Confirm nothing imports them first
 
-### Phase 1 — Global chrome
-- [ ] `Header.js` (15 old-token hits), `PrimaryNav.js` (15)
-- [ ] Mobile nav drawer / search overlay
-- [ ] Check: header is the one element on every page; regressions here are sitewide
+### Phase 1 — Global chrome ✅
+- [x] `Header.js` (15 old-token hits), `PrimaryNav.js` (15)
+- [x] Mobile nav drawer / search overlay
+- [x] Check: header is the one element on every page; regressions here are sitewide
 
-### Phase 2 — ProductCard
-- [ ] `ProductCard.js` (13) — used by shop-all, wishlist, search results
-- [ ] Keep `hoverReveal`, `boxMode`, edition pills, wishlist toggle, quick view
-- [ ] Check: all three consumers render correctly after the change
+### Phase 2 — ProductCard ✅
+- [x] `ProductCard.js` (13) — used by shop-all, wishlist, search results
+- [x] Keep `hoverReveal`, `boxMode`, edition pills, wishlist toggle, quick view
+- [x] Check: all three consumers render correctly after the change
 
-### Phase 3 — Collections
-- [ ] `PerfumeFilterBar.js` (31 — largest single offender)
-- [ ] `collections/shop-all/page.js` (5, 581 lines)
-- [ ] Check: every filter, sort, URL param and empty state still works
+### Phase 3 — Collections ✅
+- [x] `PerfumeFilterBar.js` (31 — largest single offender)
+- [x] `collections/shop-all/page.js` (5, 581 lines)
+- [x] Check: every filter, sort, URL param and empty state still works
 
-### Phase 4 — Product detail
-- [ ] `products/[slug]/page.js` (6, **1189 lines — highest risk**)
-- [ ] Gallery, edition selector, size selector, add-to-cart, reviews, related
-- [ ] Split into sub-commits if it grows past one reviewable diff
+### Phase 4 — Product detail ✅
+- [x] `products/[slug]/page.js` (6, **1189 lines — highest risk**)
+- [x] Gallery, edition selector, size selector, add-to-cart, reviews, related
+- [x] Split into sub-commits — landed as 5 if it grows past one reviewable diff
 
 ### Phase 5 — Cart and modals
 - [ ] `cart/page.js` (9), `OrderSummary.js` (2)
@@ -179,7 +179,9 @@ Things a re-skin quietly breaks if nobody looks:
   Next keys its cache on URL, not contents.
 - **Modals and portals** — render outside the section, so they inherit no ground
   colour. Each needs its own.
-- **Admin** — shares `ProductCard` and some components. Phase 2 must not break it.
+- ~~Admin shares `ProductCard`~~ — **wrong, corrected 2026-09-21.** Verified: admin
+  imports only `admin/AdminLayoutClient`, `admin/PerfumeForm` and `admin/TagInput`.
+  `ProductCard`'s only consumers are shop-all, wishlist and discovery-box.
 
 ---
 
@@ -192,5 +194,61 @@ Old-token hits outside `(admin)`, by phase. Baseline taken at spec time.
 | Start | 180 | — |
 | 0 — Foundation | 180 | 148 |
 | 8 — Wishlist + Discovery Box | 148 | 117 |
+| 1 — Global chrome | 117 | 87 |
+| 2 + 3 — Card, filters, shop-all | 87 | 38 |
+| 4 — Product detail | 38 | 32 |
 
 Update this table as each phase lands.
+
+
+---
+
+## 7. Open decisions
+
+Raised by the phase work, needing a call rather than a fix.
+
+### Corner radius is inconsistent, and the rule may be wrong
+
+`BestSellerCard` uses `rounded-2xl`; `ProductCard` is now square, per hard rule 5.
+The homepage carousel and the shop grid therefore differ.
+
+This is not simply a mistake to correct in one direction. The rule came from the
+gender cards, where pointed corners were asked for explicitly — but the Best
+Sellers reference artwork shows a rounded card. So the system genuinely has both,
+contextually. Either pick one and apply it everywhere, or write the rule as
+"square for framed sections, rounded for product cards" and make `ProductCard`
+match `BestSellerCard`.
+
+**Blocked on a decision.** Do not silently change either card.
+
+### Carried-over defects found during the phases
+
+Genuine bugs, none of them styling, all deferred because fixing them means
+touching behaviour:
+
+1. **Product page: the comparison table's left badge prints the brand, not a
+   price** — renders "Rs. French Aromas" on every product.
+2. **Product page: `"Ex Nihilo"` is hardcoded** as the original brand for every
+   product. Looks like leftover sample data.
+3. **Fragrance notes render one pill per layer, not per note** — the API returns
+   `notes.top` as a single comma-joined string. Data shape, or the admin form
+   that writes it.
+4. **`discovery-box` passes `extraChips` to `PerfumeFilterBar`, which has no such
+   prop** — the "In stock only" chip has never rendered.
+5. **Discovery box slot remove is a `<span onClick>` inside a `<button>`** — not
+   focusable, so a keyboard user cannot remove a tester.
+6. **Mobile nav drawer does not lock body scroll** while open.
+7. **A selected out-of-stock size chip gets no out-of-stock styling.**
+8. **`boxSwapTarget` and `hoverReveal` are dead props**; `FilterDropdown`'s
+   `standalone` is never read.
+9. **Pre-existing next/image warning** on every card: `fill` with an unpositioned
+   parent.
+
+### Fixed in passing
+
+- **The unlayered `:focus-visible` rule in `globals.css`** beat every Tailwind
+  focus utility sitewide and painted the retired navy around focused controls.
+  `focus:outline-none` was doing nothing anywhere on the site.
+- **`<Image src={image}>` with no guard** — an empty string throws and takes the
+  whole product grid down. Both shop-all and wishlist can pass one.
+- **Counter badges clipped `99+`**; **`text-red-600` failed contrast on dark**.
