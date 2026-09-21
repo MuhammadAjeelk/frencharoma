@@ -660,20 +660,20 @@ export default function ProductDetailPage() {
             {/* ── Feature icons row ── */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
               {[
-                { icon: "/images/why/free-shipping.webp", label: "Free Shipping",      sub: "Across Rs. 7,000+" },
-                { icon: "/images/why/original-oils.webp",  label: "Original French",    sub: "Perfume Oils"      },
-                { icon: "/images/why/concentration.webp",  label: "High Concentration", sub: "of Perfume Oils"   },
-                { icon: "/images/why/surprise-gift.webp",  label: "Sample Gift",        sub: "in Every Box"      },
+                { icon: "/images/home/trust/free-shipping.webp",           label: "Free Shipping",      sub: "Across Rs. 7,000+" },
+                { icon: "/images/home/trust/french-ingredients-icon.webp", label: "Original French",    sub: "Perfume Oils"      },
+                { icon: "/images/home/trust/high-concentration-icon.webp", label: "High Concentration", sub: "of Perfume Oils"   },
+                { icon: "/images/home/new/wc-6.webp",                      label: "Sample Gift",        sub: "in Every Box"      },
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="flex flex-col items-center gap-1.5 border border-[#d1ae6d] bg-[#d4c6ab] px-1 py-3 text-center"
+                  className="flex flex-col items-center gap-1.5 border border-[#d1ae6d] bg-[#2e2e2e] px-1 py-3 text-center"
                 >
                   <span className="relative w-8 h-8 sm:w-9 sm:h-9">
                     <Image src={b.icon} alt={b.label} fill className="object-contain" sizes="36px" />
                   </span>
-                  <p className="text-[9px] sm:text-[10px] font-semibold leading-tight text-[#211d18]">{b.label}</p>
-                  <p className="text-[8px] sm:text-[9px] leading-tight text-[#211d18]/70">{b.sub}</p>
+                  <p className="text-[9px] sm:text-[10px] font-semibold leading-tight text-[#efe7db]">{b.label}</p>
+                  <p className="text-[8px] sm:text-[9px] leading-tight text-[#cbbfae]">{b.sub}</p>
                 </div>
               ))}
                 </div>
