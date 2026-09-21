@@ -115,7 +115,6 @@ export default function Footer() {
 
             <Column title="Visit us">
               <div className="space-y-1.5 text-[13px] text-[#cbbfae]">
-                <p className="text-[#efe7db]">Divina Perfumes L.L.C.</p>
                 <p>Gold Souq, Gate No. 2, Deira, Dubai, UAE.</p>
                 <Link
                   href="https://maps.google.com"
@@ -189,7 +188,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-5">
             <p className="text-[12px] text-[#a99d8c] text-center md:text-left">
-              &copy; 2026, French Aromas | Divina Perfumes
+              &copy; 2026, French Aromas
             </p>
 
             {/* Payment Methods */}
