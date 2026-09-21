@@ -1,21 +1,20 @@
-// Gender display metadata.
+// Gender display metadata — the label is colour-coded per gender, which is the
+// design intent: men blue, women pink, unisex purple.
 //
-// The label used to be colour-coded per gender — men blue, women pink, unisex
-// purple — so the three read as three different things on a grid of cards. It
-// is one label doing one job, so it now takes one colour.
-//
-// The blue is deeper than the homepage's original #2f7fd4 because that tone
-// measures 2.48:1 on the #d5c7b4 card panel, well under the 4.5:1 bar. This one
-// is 4.79:1 and keeps the same character. GENDER_ON_DARK is the variant for
-// near-black grounds, where the deep blue would disappear.
-export const GENDER_LABEL_HEX = "#1b4f9c";
-export const GENDER_LABEL = "text-[#1b4f9c]";
-export const GENDER_ON_DARK = "text-[#7fb2f0]";
+// The hues are darker than the originals (#1d6fe0 / #e11d63 / #7c3aed) because
+// those measured 2.8-3.4:1 against the #d5c7b4 card panel, under the 4.5:1 bar.
+// These keep the same three hues and clear it. ON_DARK holds the light twins for
+// near-black grounds, where the darkened versions would disappear.
+export const GENDER_ON_DARK = {
+  men: "text-[#7fb2f0]",
+  women: "text-[#f584ab]",
+  unisex: "text-[#b99af5]",
+};
 
 export const GENDER_META = {
-  men:    { label: "For Men",    hex: GENDER_LABEL_HEX, text: GENDER_LABEL },
-  women:  { label: "For Women",  hex: GENDER_LABEL_HEX, text: GENDER_LABEL },
-  unisex: { label: "For Unisex", hex: GENDER_LABEL_HEX, text: GENDER_LABEL },
+  men:    { label: "For Men",    hex: "#1b4f9c", text: "text-[#1b4f9c]" },
+  women:  { label: "For Women",  hex: "#a8114a", text: "text-[#a8114a]" },
+  unisex: { label: "For Unisex", hex: "#5b2bb0", text: "text-[#5b2bb0]" },
 };
 
 export const genderMeta = (g) => GENDER_META[g] || null;
@@ -26,8 +25,8 @@ export const genderSuffix = (g) => {
   return m ? ` – ${m.label}` : "";
 };
 
-// Heading node: name in the default colour + the gender suffix in the single
-// label blue, matching the perfume cards.
+// Heading node: name in the default colour + a colour-coded gender suffix
+// (blue / pink / purple) matching the perfume cards.
 export const genderHeading = (name, g) => {
   const m = GENDER_META[g];
   return (

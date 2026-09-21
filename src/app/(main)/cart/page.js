@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
-import { genderMeta } from "@/lib/gender";
+import { genderMeta, GENDER_ON_DARK } from "@/lib/gender";
 import OrderSummary from "@/components/OrderSummary";
 import { Rule } from "@/components/ui/SectionHeading";
 import { GUTTER, FIELD_DARK, FOCUS_RING, FOCUS_RING_LIGHT } from "@/lib/design";
@@ -13,15 +13,6 @@ const EDITION_LABEL = {
   luxury: "Luxury Edition",
   premium: "Premium Edition",
   classic: "Classic Edition",
-};
-
-// The shared gender hues in src/lib/gender.js are tuned for light cards and sit
-// under 3:1 against the #373838 ground, so the cart draws lightened twins of the
-// same three colours. Folding a dark variant into gender.js is a Phase 9 job.
-const GENDER_ON_DARK = {
-  men: "text-[#7db4f2]",
-  women: "text-[#f2789f]",
-  unisex: "text-[#b79af5]",
 };
 
 const rs = (n) => `Rs. ${Math.round(n).toLocaleString()}`;

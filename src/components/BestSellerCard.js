@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { getSellableEditions, getCardEdition, formatRs } from "@/lib/pricing";
-import { genderMeta, GENDER_LABEL } from "@/lib/gender";
+import { genderMeta } from "@/lib/gender";
 import DiscountRibbon from "./DiscountRibbon";
 import EditionChoiceModal from "./EditionChoiceModal";
 
@@ -196,7 +196,7 @@ export default function BestSellerCard({
         <Link href={href || "#"} className="text-center">
           <h3 className="text-[15px] font-bold leading-tight text-[#1f1a16] whitespace-nowrap overflow-hidden text-ellipsis">
             {name}
-            {gm && <span className={`font-semibold ${GENDER_LABEL}`}>{` - ${gm.label}`}</span>}
+            {gm && <span className={`font-semibold ${gm.text}`}>{` - ${gm.label}`}</span>}
           </h3>
         </Link>
 
