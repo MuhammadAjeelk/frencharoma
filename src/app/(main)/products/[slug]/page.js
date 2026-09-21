@@ -945,14 +945,14 @@ export default function ProductDetailPage() {
            YOU MAY ALSO LIKE
           ═══════════════════════════════════════════════════════ */}
           {relatedPerfumes.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 pb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-center uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
-            You May Also Like...
-              </h2>
-          <p className="text-sm text-center text-gray-500 mb-8">
-            Which perfumes according to scent notes
-          </p>
-         
+        <div className={`${GUTTER} ${SECTION_Y}`}>
+          <SectionHeading
+            tone="dark"
+            title="You May Also Like..."
+            subtitle="Which perfumes according to scent notes"
+            className="mb-10 md:mb-12"
+          />
+
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
                 {relatedPerfumes.map((rp) => {
                   const rpPrice = getLowestPrice(rp.editions);
@@ -962,23 +962,23 @@ export default function ProductDetailPage() {
                   return (
                     <div
                       key={rp._id}
-                  className="group border border-gray-200 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow flex flex-col"
+                  className={`group flex flex-col bg-[#2e2e2e] ${CARD_FRAME} ${GOLD_GLOW_WITH_BORDER}`}
                     >
                       <Link
                         href={`/products/${rp.slug}`}
-                        className="block relative w-full aspect-square overflow-hidden bg-gray-50"
+                        className="relative block w-full aspect-square overflow-hidden bg-[#373838]"
                       >
                     {rp.images?.main ? (
                           <Image
                         src={rp.images.main}
                             alt={rp.name}
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            className={`object-cover ${PHOTO_HOVER}`}
                         sizes="(max-width: 640px) 50vw, 25vw"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <svg className="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <div className="w-full h-full flex items-center justify-center bg-[#373838]">
+                        <svg className="w-10 h-10 text-[#c9a25a]/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                               />
@@ -986,24 +986,24 @@ export default function ProductDetailPage() {
                           </div>
                         )}
                       </Link>
-                      <div className="p-3 flex flex-col flex-1">
+                      <div className="flex flex-1 flex-col p-3">
                         {rpBrand && (
-                      <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-0.5">{rpBrand}</p>
+                          <p className="mb-0.5 text-[10px] text-[#a99d8c] line-clamp-1">{rpBrand}</p>
                         )}
                         <Link href={`/products/${rp.slug}`}>
-                          <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-gray-600 transition-colors">
+                          <h3 className="mb-2 text-xs sm:text-sm font-semibold text-[#cbbfae] line-clamp-2 transition-colors hover:text-[#e3c489]">
                             {rp.name}
                           </h3>
                         </Link>
                         <div className="flex-1" />
                         {rpPrice !== null && (
-                          <p className="text-sm font-bold text-gray-900 mb-2">
-                        PKR {rpPrice.toLocaleString()}
+                          <p className="mb-2 text-sm font-bold text-[#e3c489]">
+                            PKR {rpPrice.toLocaleString()}
                           </p>
                         )}
                         <Link
                           href={`/products/${rp.slug}`}
-                      className="block text-center border border-black text-black py-1.5 rounded-lg hover:bg-black hover:text-white transition-colors text-xs font-medium"
+                          className="block border border-[#c9a25a] py-1.5 text-center text-xs font-semibold text-[#c9a25a] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18]"
                         >
                           View Details
                         </Link>
@@ -1019,14 +1019,17 @@ export default function ProductDetailPage() {
       {/* ═══════════════════════════════════════════════════════
            FREQUENTLY ASKED QUESTIONS
           ═══════════════════════════════════════════════════════ */}
-      <div className="bg-white py-12 px-4 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
-            Frequently Asked Questions (FAQs)
-          </h2>
-          <p className="text-sm text-center text-gray-500 mb-8">Common questions about our impression perfumes</p>
+      <div className={`bg-[#d4c6ab] ${SECTION_Y}`}>
+        <div className={GUTTER}>
+          <div className="max-w-3xl mx-auto">
+          <SectionHeading
+            tone="light"
+            title="Frequently Asked Questions (FAQs)"
+            subtitle="Common questions about our impression perfumes"
+            className="mb-10 md:mb-12"
+          />
 
-          <div className="space-y-0 border border-gray-200 rounded-xl overflow-hidden">
+          <div className="border border-[#211d18]/25">
             {[
               {
                 q: "Why is the impression perfume so affordable compared to the original?",
@@ -1049,26 +1052,28 @@ export default function ProductDetailPage() {
                 a: "Yes! Free shipping on all orders above PKR 7,000. Standard delivery takes 3-5 working days across Pakistan.",
               },
             ].map((faq, i) => (
-              <div key={i} className={i > 0 ? "border-t border-gray-200" : ""}>
+              <div key={i} className={i > 0 ? "border-t border-[#211d18]/20" : ""}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between py-4 px-5 text-left hover:bg-gray-50 transition-colors"
+                  aria-expanded={openFaq === i}
+                  className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-[#211d18]/5"
                 >
-                  <span className="text-sm font-semibold text-gray-800 pr-4">{faq.q}</span>
+                  <span className="text-sm font-semibold text-[#211d18]">{faq.q}</span>
                   <svg
-                    className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    className={`w-4 h-4 shrink-0 text-[#211d18]/60 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 {openFaq === i && (
-                  <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed animate-fadeIn">
+                  <div className="px-5 pb-4 text-sm leading-relaxed text-[#211d18]/85 animate-fadeIn">
                     {faq.a}
                   </div>
                 )}
               </div>
             ))}
+          </div>
           </div>
         </div>
       </div>
@@ -1076,32 +1081,37 @@ export default function ProductDetailPage() {
       {/* ═══════════════════════════════════════════════════════
            CUSTOMER REVIEWS
           ═══════════════════════════════════════════════════════ */}
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div className={`${GUTTER} ${SECTION_Y}`}>
+        <div className="max-w-5xl mx-auto">
+        <div className="flex flex-col gap-5 mb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold uppercase tracking-wide mb-1" style={{ color: "#1a1a2e" }}>
-              Customer Reviews
-            </h2>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center">
+            <div className="inline-block">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                Customer Reviews
+              </h2>
+              <Rule color="#c9a25a" className="mt-2" />
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-0.5" aria-hidden="true">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <svg
                     key={star}
-                    className={`w-4 h-4 ${star <= Math.round(avgRating) ? "text-yellow-400 fill-yellow-400" : "text-gray-200 fill-gray-200"}`}
+                    className={`w-4 h-4 ${star <= Math.round(avgRating) ? "text-[#e3c489] fill-[#e3c489]" : "text-[#5c554b] fill-[#5c554b]"}`}
                     viewBox="0 0 20 20"
                   >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
               </div>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[#a99d8c]">
                 {avgRating > 0 ? `${avgRating} out of 5` : "No reviews yet"} ({reviewTotal} review{reviewTotal !== 1 ? "s" : ""})
               </span>
             </div>
           </div>
           <button
             onClick={() => setShowReviewForm(!showReviewForm)}
-            className="px-5 py-2.5 border-2 border-black text-black rounded-lg font-semibold text-sm hover:bg-black hover:text-white transition-colors"
+            aria-expanded={showReviewForm}
+            className="shrink-0 self-start border border-[#c9a25a] px-5 py-2.5 text-sm font-semibold tracking-[0.04em] text-[#c9a25a] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18] sm:self-auto"
           >
             Write a Review
           </button>
@@ -1109,8 +1119,8 @@ export default function ProductDetailPage() {
 
         {/* Review Form */}
         {showReviewForm && (
-          <form onSubmit={handleReviewSubmit} className="mb-8 bg-gray-50 rounded-xl p-5 border border-gray-200 animate-fadeIn">
-            <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide mb-4">Write Your Review</h3>
+          <form onSubmit={handleReviewSubmit} className="mb-8 border border-[#c9a25a]/40 bg-[#2e2e2e] p-5 animate-fadeIn">
+            <h3 className="mb-4 font-[family-name:var(--font-playfair)] italic text-lg font-normal text-[#c9a25a]">Write Your Review</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <input
                 type="text"
@@ -1118,28 +1128,30 @@ export default function ProductDetailPage() {
                 value={reviewForm.name}
                 onChange={(e) => setReviewForm((f) => ({ ...f, name: e.target.value }))}
                 required
-                className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-black"
+                className="w-full border border-[#c9a25a]/40 bg-[#373838] px-4 py-2.5 text-sm text-[#cbbfae] placeholder-[#8b8377] transition-colors focus:outline-none focus:border-[#e3c489]"
               />
               <input
                 type="text"
                 placeholder="Review Title (optional)"
                 value={reviewForm.title}
                 onChange={(e) => setReviewForm((f) => ({ ...f, title: e.target.value }))}
-                className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-black"
+                className="w-full border border-[#c9a25a]/40 bg-[#373838] px-4 py-2.5 text-sm text-[#cbbfae] placeholder-[#8b8377] transition-colors focus:outline-none focus:border-[#e3c489]"
               />
             </div>
             <div className="mb-4">
-              <p className="text-xs font-semibold text-gray-700 mb-2">Rating *</p>
+              <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Rating *</p>
               <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
                     onClick={() => setReviewForm((f) => ({ ...f, rating: star }))}
-                    className="focus:outline-none"
+                    aria-label={`Rate ${star} out of 5`}
+                    aria-pressed={reviewForm.rating === star}
+                    className="p-1 focus:outline-none"
                   >
                     <svg
-                      className={`w-6 h-6 transition-colors ${star <= reviewForm.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                      className={`w-6 h-6 transition-colors ${star <= reviewForm.rating ? "text-[#e3c489] fill-[#e3c489]" : "text-[#5c554b] fill-[#5c554b]"}`}
                       viewBox="0 0 20 20"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -1153,13 +1165,13 @@ export default function ProductDetailPage() {
               value={reviewForm.body}
               onChange={(e) => setReviewForm((f) => ({ ...f, body: e.target.value }))}
               rows={4}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-black mb-4 resize-none"
+              className="w-full border border-[#c9a25a]/40 bg-[#373838] px-4 py-2.5 text-sm text-[#cbbfae] placeholder-[#8b8377] transition-colors focus:outline-none focus:border-[#e3c489] mb-4 resize-none"
             />
             <div className="flex gap-3">
-              <button type="button" onClick={() => setShowReviewForm(false)} className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+              <button type="button" onClick={() => setShowReviewForm(false)} className="border border-[#c9a25a]/50 px-5 py-2.5 text-sm font-medium text-[#cbbfae] transition-colors hover:border-[#e3c489] hover:text-[#e3c489]">
                 Cancel
               </button>
-              <button type="submit" disabled={reviewSubmitting || !reviewForm.name} className="px-5 py-2.5 bg-black text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-40">
+              <button type="submit" disabled={reviewSubmitting || !reviewForm.name} className="border border-[#c9a25a] bg-[#c9a25a] px-5 py-2.5 text-sm font-semibold text-[#211d18] transition-colors hover:border-[#e3c489] hover:bg-[#e3c489] disabled:cursor-not-allowed disabled:border-[#5a564f] disabled:bg-[#45443f] disabled:text-[#8b8377]">
                 {reviewSubmitting ? "Submitting..." : "Submit Review"}
               </button>
             </div>
@@ -1170,22 +1182,22 @@ export default function ProductDetailPage() {
         {reviews.length > 0 ? (
           <div className="space-y-4">
             {reviews.map((review) => (
-              <div key={review._id} className="border border-gray-200 rounded-xl p-4 sm:p-5">
+              <div key={review._id} className="border border-[#c9a25a]/30 bg-[#2e2e2e] p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-gray-900">{review.name}</span>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-[#e3c489] break-words">{review.name}</span>
                       {review.isVerifiedPurchase && (
-                        <span className="text-[10px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                        <span className="rounded-full border border-[#7cc47f]/60 bg-[#7cc47f]/12 px-2 py-0.5 text-[10px] font-semibold text-[#7cc47f]">
                           Verified
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5" aria-hidden="true">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <svg
                           key={star}
-                          className={`w-3.5 h-3.5 ${star <= review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200 fill-gray-200"}`}
+                          className={`w-3.5 h-3.5 ${star <= review.rating ? "text-[#e3c489] fill-[#e3c489]" : "text-[#5c554b] fill-[#5c554b]"}`}
                           viewBox="0 0 20 20"
                         >
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -1193,20 +1205,21 @@ export default function ProductDetailPage() {
                       ))}
                     </div>
                   </div>
-                  <span className="text-xs text-gray-400 shrink-0">
+                  <span className="shrink-0 text-xs text-[#a99d8c]">
                     {new Date(review.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                   </span>
                 </div>
-                {review.title && <p className="text-sm font-semibold text-gray-800 mb-1">{review.title}</p>}
-                {review.body && <p className="text-sm text-gray-600 leading-relaxed">{review.body}</p>}
+                {review.title && <p className="mb-1 text-sm font-semibold text-[#cbbfae] break-words">{review.title}</p>}
+                {review.body && <p className="text-sm leading-relaxed text-[#cbbfae] break-words">{review.body}</p>}
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 border border-dashed border-gray-200 rounded-xl">
-            <p className="text-sm text-gray-400">No reviews yet. Be the first to share your experience!</p>
+          <div className="border border-dashed border-[#c9a25a]/40 py-10 text-center">
+            <p className="text-sm text-[#a99d8c]">No reviews yet. Be the first to share your experience!</p>
           </div>
         )}
+        </div>
       </div>
 
       {/* ── Side Modal ── */}
