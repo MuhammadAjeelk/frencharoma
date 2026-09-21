@@ -7,6 +7,15 @@ import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import UniversalModal from "@/components/UniversalModal";
+import SectionHeading, { Rule } from "@/components/ui/SectionHeading";
+import {
+  GUTTER,
+  SECTION_Y,
+  CARD_FRAME,
+  GOLD_GLOW_WITH_BORDER,
+  PHOTO_HOVER,
+  viewAllClass,
+} from "@/lib/design";
 import { getLowestPrice } from "@/lib/pricing";
 
 
@@ -265,8 +274,8 @@ export default function ProductDetailPage() {
   // ── Loading ────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-gray-200 border-t-black rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#373838]">
+        <div className="w-10 h-10 rounded-full border-2 border-[#c9a25a]/25 border-t-[#c9a25a] animate-spin" />
       </div>
     );
   }
@@ -274,11 +283,21 @@ export default function ProductDetailPage() {
   // ── Not found ──────────────────────────────────────────────────────────
   if (notFound || !perfume) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-2xl font-bold text-gray-800 mb-3">Product Not Found</h1>
-        <p className="text-gray-500 mb-6">This perfume might have been removed or is no longer available.</p>
-        <Link href="/collections/shop-all" className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition-colors font-semibold">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#373838] px-4 text-center">
+        <div className="inline-block">
+          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+            Product Not Found
+          </h1>
+          <Rule color="#c9a25a" className="mt-2" />
+        </div>
+        <p className="mt-5 mb-8 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[#d2c1ac]">
+          This perfume might have been removed or is no longer available.
+        </p>
+        <Link href="/collections/shop-all" className={viewAllClass("dark")}>
           Browse All Perfumes
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
+          </svg>
         </Link>
       </div>
     );
@@ -291,53 +310,54 @@ export default function ProductDetailPage() {
     : null;
 
   return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#373838]">
 
-      {/* ── Breadcrumb ───────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 py-3">
-          <nav className="flex items-center gap-2 text-xs text-gray-500">
-          <Link href="/" className="hover:text-gray-800 transition-colors">Home</Link>
-            <span>/</span>
-          <Link href="/collections/shop-all" className="hover:text-gray-800 transition-colors">Shop All</Link>
-            <span>/</span>
-          <span className="text-gray-900 font-medium truncate max-w-xs">{perfume.name}</span>
-          </nav>
-        </div>
+      {/* ── Breadcrumb ───────────────────────────────────────── */}
+      <div className={`${GUTTER} py-3`}>
+        <nav className="flex items-center gap-2 text-xs text-[#a99d8c]">
+          <Link href="/" className="transition-colors hover:text-[#e3c489]">Home</Link>
+          <span aria-hidden="true">/</span>
+          <Link href="/collections/shop-all" className="transition-colors hover:text-[#e3c489]">Shop All</Link>
+          <span aria-hidden="true">/</span>
+          <span className="font-medium text-[#cbbfae] truncate max-w-[9rem] sm:max-w-xs">{perfume.name}</span>
+        </nav>
+      </div>
 
-      {/* ── Main Product Section ─────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 pb-10">
+      {/* ── Main Product Section ───────────────────────────────── */}
+      <div className={`${GUTTER} pb-10 md:pb-12`}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 items-start">
 
           {/* ───── LEFT: Image Gallery (sticky on desktop) ───── */}
           <div className="flex flex-col gap-3 lg:sticky lg:top-6 lg:self-start">
 
             {/* Main image + nav arrows */}
-            <div className="group relative overflow-hidden bg-gray-50 w-full aspect-[6.818/7.5]">
+            <div className={`group relative w-full aspect-[6.818/7.5] bg-[#2e2e2e] ${CARD_FRAME} ${GOLD_GLOW_WITH_BORDER}`}>
               {currentImage ? (
-                  <Image
+                <Image
                   src={currentImage}
-                    alt={perfume.name}
-                    fill
-                  className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  alt={perfume.name}
+                  fill
+                  className={`object-contain ${PHOTO_HOVER}`}
                   sizes="(max-width: 1024px) 100vw, 45vw"
-                    priority
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                  <svg className="w-20 h-20 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-2.5 px-4 text-center">
+                  <svg className="w-16 h-16 text-[#c9a25a]/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                )}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <span className="text-xs text-[#a99d8c]">Photography coming soon</span>
+                </div>
+              )}
 
               {/* Prev / Next arrows */}
               {displayImages.length > 1 && (
                 <>
                   <button
                     onClick={() => setActiveImgIndex((i) => (i - 1 + displayImages.length) % displayImages.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center hover:bg-white transition-all duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-[#c9a25a] bg-[#2e2e2e]/90 text-[#c9a25a] backdrop-blur-[2px] transition-colors duration-200 hover:bg-[#c9a25a] hover:text-[#211d18] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
                     aria-label="Previous image"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -346,7 +366,7 @@ export default function ProductDetailPage() {
                   </button>
                   <button
                     onClick={() => setActiveImgIndex((i) => (i + 1) % displayImages.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center hover:bg-white transition-all duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-[#c9a25a] bg-[#2e2e2e]/90 text-[#c9a25a] backdrop-blur-[2px] transition-colors duration-200 hover:bg-[#c9a25a] hover:text-[#211d18] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
                     aria-label="Next image"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -364,10 +384,12 @@ export default function ProductDetailPage() {
                   <button
                     key={idx}
                     onClick={() => setActiveImgIndex(idx)}
-                    className={`shrink-0 w-16 sm:w-[76px] aspect-[6.818/7.5] overflow-hidden bg-gray-50 transition-opacity duration-200 ${
+                    aria-label={`Show image ${idx + 1} of ${displayImages.length}`}
+                    aria-current={activeImgIndex === idx ? "true" : undefined}
+                    className={`shrink-0 w-16 sm:w-[76px] aspect-[6.818/7.5] overflow-hidden border bg-[#2e2e2e] transition-colors duration-200 ${
                       activeImgIndex === idx
-                        ? "opacity-100"
-                        : "opacity-50 hover:opacity-100"
+                        ? "border-[#e3c489]"
+                        : "border-[#c9a25a]/35 hover:border-[#c9a25a]"
                     }`}
                   >
                     <Image
@@ -375,7 +397,9 @@ export default function ProductDetailPage() {
                       alt={`View ${idx + 1}`}
                       width={76}
                       height={84}
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full object-cover transition-opacity duration-200 ${
+                        activeImgIndex === idx ? "opacity-100" : "opacity-60 hover:opacity-100"
+                      }`}
                     />
                   </button>
                 ))}
