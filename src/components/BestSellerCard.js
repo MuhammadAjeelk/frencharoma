@@ -139,7 +139,7 @@ export default function BestSellerCard({
           ) : null}
         </Link>
 
-        {disc > 0 && <DiscountRibbon percent={disc} />}
+        {disc > 0 && <DiscountRibbon percent={disc} compact={compact} />}
 
         <button
           type="button"
