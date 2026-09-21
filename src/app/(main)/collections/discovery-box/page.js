@@ -9,6 +9,8 @@ import { genderMeta } from "@/lib/gender";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
+import { Rule } from "@/components/ui/SectionHeading";
+import { GUTTER } from "@/lib/design";
 import PerfumeFilterBar, {
   SortSelect,
   matchesSeasonGroup,
@@ -118,12 +120,12 @@ function EmptySlot({ index, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group/slot relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg border border-dashed border-[#d8ccb0] bg-white flex items-center justify-center shrink-0 transition-all duration-200 hover:border-[#b8964e] hover:bg-[#fbf6ea] hover:scale-105"
+      className="group/slot relative w-14 h-14 sm:w-16 sm:h-16 border border-dashed border-[#c9a25a]/45 bg-[#211d18] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[#e3c489] hover:bg-[#2a251d] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
     >
-      <span className="text-sm sm:text-base font-bold text-gray-300 transition-opacity duration-150 group-hover/slot:opacity-0">
+      <span className="text-sm sm:text-base font-bold text-[#a99d8c]/70 transition-opacity duration-150 group-hover/slot:opacity-0">
         {index + 1}
       </span>
-      <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-[11px] font-bold uppercase tracking-wide text-[#b8964e] opacity-0 transition-opacity duration-150 group-hover/slot:opacity-100">
+      <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-[11px] font-bold uppercase tracking-wide text-[#e3c489] opacity-0 transition-opacity duration-150 group-hover/slot:opacity-100">
         Empty
       </span>
     </button>
@@ -139,32 +141,36 @@ function FilledSlot({
   onPreviewEnd,
   tone = "active",
 }) {
-  const border = tone === "done" ? "border-green-400" : "border-[#b8964e]";
+  // A sealed box frames its testers in solid gold; the box still being filled
+  // keeps a quieter ring so the two read apart at a glance.
+  const border = tone === "done" ? "border-[#d1ae6d]" : "border-[#c9a25a]/60";
   return (
     <button
       type="button"
       onClick={onScrollTo}
       onMouseEnter={(e) => onPreview?.(perfume, e.currentTarget)}
       onMouseLeave={() => onPreviewEnd?.()}
-      className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 ${border} group shrink-0 transition-transform duration-200 hover:scale-105`}
+      className={`relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden border-2 ${border} bg-[#211d18] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
     >
       {get5mlImage(perfume) ? (
         <Image
           src={get5mlImage(perfume)}
           alt={perfume.name}
           fill
-          className="object-cover"
+          className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
           sizes="64px"
         />
       ) : (
-        <div className="w-full h-full bg-gray-100" />
+        <div className="w-full h-full bg-[#373838]" />
       )}
+      {/* Phones have no hover, so the × stays visible below sm — otherwise a
+          tester could be added on a phone and never taken back out. */}
       <span
         onClick={(e) => {
           e.stopPropagation();
           onRemove();
         }}
-        className="absolute top-0 right-0 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-bl flex items-center justify-center text-[13px] leading-none opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-0 right-0 w-5 h-5 bg-[#e0342c] hover:bg-[#c0261f] text-white flex items-center justify-center text-[13px] leading-none opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity"
         aria-label="Remove"
       >
         ×
@@ -428,13 +434,13 @@ export default function DiscoveryBoxPage() {
   const activeBox = (
     <div
       data-box
-      className="shrink-0 rounded-xl border-2 border-dashed border-[#b8964e]/60 bg-[#fbf8f1] p-2.5"
+      className="shrink-0 border-2 border-dashed border-[#c9a25a]/60 bg-[#373838] p-2.5"
     >
       <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
-        <span className="text-[13px] sm:text-sm font-bold text-[#b8964e] whitespace-nowrap">
+        <span className="text-[13px] sm:text-sm font-bold text-[#c9a25a] whitespace-nowrap">
           Discovery Box {completeCount + 1}
         </span>
-        <span className="text-[11px] sm:text-xs font-bold text-gray-400 whitespace-nowrap">
+        <span className="text-[11px] sm:text-xs font-bold text-[#a99d8c] whitespace-nowrap">
           {activeCount}/{BOX_SIZE}
         </span>
       </div>
@@ -458,18 +464,18 @@ export default function DiscoveryBoxPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#faf8f5]">
+    <div className="min-h-screen bg-[#373838]">
       {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
-      <div className="relative bg-[#1a1a2e] text-white border-y-[6px] border-[#c9a25a]">
+      <div className="relative bg-[#2e2e2e] text-[#efe7db] border-y-[6px] border-[#c9a25a]">
         {/* Breadcrumb overlaid so it doesn't offset the vertically-centred logo */}
-        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-white/40">
-          <Link href="/" className="hover:text-white/70">
+        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-[#a99d8c]">
+          <Link href="/" className="transition-colors hover:text-[#e3c489]">
             Home
           </Link>
           <span>/</span>
-          <span className="text-white/60">Discovery Box</span>
+          <span className="text-[#cbbfae]">Discovery Box</span>
         </nav>
-        <div className="max-w-7xl mx-auto px-4 pt-10 pb-6 md:py-7">
+        <div className={`${GUTTER} pt-10 pb-6 md:py-7`}>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
@@ -479,7 +485,7 @@ export default function DiscoveryBoxPage() {
                   '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif',
               }}
             >
-              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-white/90">
+              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-[#efe7db]">
                 FLAT
               </span>
               <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
@@ -493,7 +499,7 @@ export default function DiscoveryBoxPage() {
                   %
                 </span>
                 <span
-                  className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none"
+                  className="text-3xl md:text-5xl tracking-[0.06em] text-[#efe7db] leading-none"
                   style={{ transform: "translateY(0.6em)" }}
                 >
                   OFF
@@ -506,13 +512,13 @@ export default function DiscoveryBoxPage() {
 
             {/* Right — title, subtitle, description */}
             <div className="max-w-2xl text-center">
-              <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-bold text-white inline-block border-b-2 border-[#c9a25a] pb-1">
-                Discovery Box
-              </h1>
-              <p
-                className="text-[#c9a25a] font-semibold mt-2.5 text-sm md:text-lg italic"
-                style={{ fontFamily: 'Calibri, "Segoe UI", Candara, Optima, "Trebuchet MS", sans-serif' }}
-              >
+              <div className="inline-block">
+                <h1 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
+                  Discovery Box
+                </h1>
+                <Rule className="mt-2" />
+              </div>
+              <p className="font-[family-name:var(--font-playfair)] italic text-[#d2c1ac] mt-3 text-base md:text-xl leading-snug">
                 Discover Fragrances Before You Buy ...
               </p>
               <div className="flex items-center gap-2 my-3 justify-center">
@@ -520,11 +526,11 @@ export default function DiscoveryBoxPage() {
                 <span className="w-2 h-2 rotate-45 bg-[#c9a25a]" />
                 <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
               </div>
-              <p className="text-white/70 text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
+              <p className="text-[#cbbfae] text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
                 Build your discovery box with any{" "}
-                <strong className="text-[#c9a25a]">5 fragrances</strong> in 5ml
+                <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong> in 5ml
                 bottles and enjoy a{" "}
-                <strong className="text-[#c9a25a]">Flat 40% OFF</strong> —
+                <strong className="font-semibold text-[#c9a25a]">Flat 40% OFF</strong> —
                 Explore, compare, and discover your favorites—More you explore,
                 more you love our Fragrances.
               </p>
@@ -536,9 +542,9 @@ export default function DiscoveryBoxPage() {
       {/* ── Sticky box builder ───────────────────────────────────────────── */}
       <div
         ref={barRef}
-        className="sticky top-0 z-30 border-b border-gray-200 bg-white shadow-sm"
+        className="sticky top-0 z-30 border-b-2 border-[#c9a25a] bg-[#2e2e2e] shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3.5 sm:py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-3.5 sm:py-4">
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             {/* Left arrow — only once 2+ boxes are ready */}
             {completeCount >= 2 && (
@@ -549,7 +555,7 @@ export default function DiscoveryBoxPage() {
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
                 <svg
-                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200"
+                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -571,17 +577,17 @@ export default function DiscoveryBoxPage() {
                   <div
                     key={bi}
                     data-box
-                    className="shrink-0 rounded-xl border-2 border-green-300 bg-green-50/70 p-2.5"
+                    className="shrink-0 border-2 border-[#d1ae6d] bg-[#211d18] p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.25)]"
                   >
                     <div className="flex items-center justify-between gap-3 mb-1.5 px-0.5">
-                      <span className="text-[13px] sm:text-sm font-bold text-green-700 whitespace-nowrap">
+                      <span className="text-[13px] sm:text-sm font-bold text-[#e3c489] whitespace-nowrap">
                         Discovery Box {bi + 1} ✓
                       </span>
                       <span className="flex items-baseline gap-1.5 whitespace-nowrap">
-                        <span className="text-[11px] font-semibold text-[#1f1a16] strike-diagonal">
+                        <span className="text-[11px] font-semibold text-[#a99d8c] strike-diagonal">
                           {formatRs(orig)}
                         </span>
-                        <span className="text-[12px] sm:text-[13px] font-bold text-green-700">
+                        <span className="text-[12px] sm:text-[13px] font-bold text-[#7dd18d]">
                           {formatRs(discounted(orig))}
                         </span>
                       </span>
@@ -616,7 +622,7 @@ export default function DiscoveryBoxPage() {
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
                 <svg
-                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#5f5f4f] group-hover/cap:fill-[#b8964e] transition-colors duration-200"
+                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -627,9 +633,9 @@ export default function DiscoveryBoxPage() {
 
             {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
-              <p className="w-full lg:flex-1 mx-auto text-base sm:text-lg text-[#4a4540] leading-relaxed text-center">
+              <p className="w-full lg:flex-1 mx-auto text-base sm:text-lg text-[#cbbfae] leading-relaxed text-center">
                 To fill your Discovery Box — Choose any{" "}
-                <strong className="text-[#b8964e]">5 fragrances</strong>
+                <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong>
                 <br />
                 from the collection below.
               </p>
@@ -637,27 +643,27 @@ export default function DiscoveryBoxPage() {
 
             {/* Ready — inline summary + Add Ready Box to Cart */}
             {completeCount >= 1 && (
-              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-2 rounded-xl border border-green-200 bg-green-50/70 px-4 py-2.5">
+              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-2 border border-[#d1ae6d] bg-[#211d18] px-4 py-2.5">
                 <div className="min-w-0">
-                  <p className="text-[#1a1a2e] font-extrabold text-[13px] sm:text-sm whitespace-nowrap">
+                  <p className="text-[#efe7db] font-bold text-[13px] sm:text-sm whitespace-nowrap">
                     {completeCount} Discovery Box{completeCount > 1 ? "es" : ""}{" "}
                     {completeCount > 1 ? "are" : "is"} Ready.
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-[13px] font-semibold text-[#1f1a16] strike-diagonal">
+                    <span className="text-[13px] font-semibold text-[#a99d8c] strike-diagonal">
                       {formatRs(totalOriginal)}
                     </span>
-                    <span className="text-[#b8964e] text-base sm:text-lg font-extrabold">
+                    <span className="text-[#c9a25a] text-base sm:text-lg font-bold">
                       {formatRs(totalDiscounted)}
                     </span>
                   </div>
-                  <p className="text-[11px] text-green-600 font-semibold whitespace-nowrap">
+                  <p className="text-[11px] text-[#7dd18d] font-semibold whitespace-nowrap">
                     You Saved {formatRs(savings)} (Flat {DISCOUNT_PERCENT}% Off)
                   </p>
                 </div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[#1a1a2e] text-white font-bold text-[12px] sm:text-[13px] px-4 py-2.5 rounded-xl hover:bg-[#b8964e] transition-colors"
+                  className="w-full inline-flex items-center justify-center gap-2 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] font-bold text-[12px] sm:text-[13px] px-4 py-2.5 transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
                 >
                   {addedToCart
                     ? "✓ Added!"
@@ -682,7 +688,7 @@ export default function DiscoveryBoxPage() {
 
           {/* Click-an-empty-slot hint — shown close to the box */}
           {hint && (
-            <p className="mt-2.5 text-center text-[13px] font-bold text-[#b8964e] animate-fadeIn">
+            <p className="mt-2.5 text-center text-[13px] font-bold text-[#e3c489] animate-fadeIn">
               Select Fragrances from the collection below ↓
             </p>
           )}
@@ -697,9 +703,9 @@ export default function DiscoveryBoxPage() {
             return (
               <div
                 style={{ left: previewLeft }}
-                className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 max-w-[92vw] flex items-center gap-2.5 rounded-xl border border-[#e8e4df] bg-white p-2.5 shadow-2xl animate-fadeIn"
+                className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 w-[330px] max-w-[92vw] flex items-center gap-2.5 border border-[#d1ae6d] bg-[#211d18] p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.35),0_18px_44px_rgba(0,0,0,0.55)] animate-fadeIn"
               >
-                <div className="relative w-[72px] h-[72px] rounded-lg overflow-hidden bg-[#f7f5f2] shrink-0">
+                <div className="relative w-[72px] h-[72px] overflow-hidden border border-[#d1ae6d]/50 bg-[#373838] shrink-0">
                   {get5mlImage(preview) ? (
                     <Image
                       src={get5mlImage(preview)}
@@ -710,33 +716,35 @@ export default function DiscoveryBoxPage() {
                     />
                   ) : null}
                 </div>
-                <div className="min-w-0 pr-1">
-                  <p className="text-[13px] font-bold text-[#1f1a16] leading-tight whitespace-nowrap">
+                {/* Names run long — the popover is width-capped and the copy
+                    clamps rather than pushing past the sticky bar. */}
+                <div className="min-w-0 flex-1 pr-1">
+                  <p className="text-[13px] font-bold text-[#efe7db] leading-tight line-clamp-2">
                     {preview.name}
                     {gm && <span className={gm.text}> - ({gm.label})</span>}
                   </p>
                   {preview.impressionName && (
-                    <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
+                    <p className="text-[11px] text-[#a99d8c] mt-0.5 truncate">
                       Impression of:{" "}
-                      <span className="font-bold text-[#1f1a16]">
+                      <span className="font-bold text-[#e8dccb]">
                         {preview.impressionName}
                       </span>
                     </p>
                   )}
                   {brandLabel && (
-                    <p className="text-[11px] text-gray-500 mt-0.5 whitespace-nowrap">
+                    <p className="text-[11px] text-[#a99d8c] mt-0.5 truncate">
                       Brand:{" "}
-                      <span className="font-bold text-[#1f1a16]">
+                      <span className="font-bold text-[#e8dccb]">
                         {brandLabel}
                       </span>
                     </p>
                   )}
                   {price != null && (
                     <p className="mt-1 flex items-center gap-2">
-                      <span className="text-[13px] font-bold text-red-500 strike-diagonal whitespace-nowrap">
+                      <span className="text-[13px] font-semibold text-[#a99d8c] strike-diagonal whitespace-nowrap">
                         {formatRs(price)}
                       </span>
-                      <span className="text-[13px] font-bold text-green-600 whitespace-nowrap">
+                      <span className="text-[13px] font-bold text-[#7dd18d] whitespace-nowrap">
                         {formatRs(discounted(price))}
                       </span>
                     </p>
@@ -750,7 +758,7 @@ export default function DiscoveryBoxPage() {
       {/* ── Grid ─────────────────────────────────────────────────────────── */}
       <div
         id="disc-collection"
-        className="max-w-7xl mx-auto px-4 py-8 scroll-mt-24"
+        className={`${GUTTER} py-10 md:py-12 scroll-mt-24`}
       >
         {/* ── Filters (same component as Shop All) ── */}
         {!loading && perfumes.length > 0 && (
@@ -776,8 +784,8 @@ export default function DiscoveryBoxPage() {
                   aria-pressed={onlyInStock}
                   className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
                     onlyInStock
-                      ? "border-[#1a1a2e] bg-[#1a1a2e] text-white"
-                      : "border-[#e8e4df] bg-white text-[#4a4540] hover:border-[#1a1a2e] hover:text-[#1a1a2e]"
+                      ? "border-[#c9a25a] bg-[#c9a25a] text-[#211d18]"
+                      : "border-[#c9a25a]/40 text-[#4a4540] hover:border-[#c9a25a] hover:text-[#211d18]"
                   }`}
                 >
                   In stock only
@@ -801,18 +809,18 @@ export default function DiscoveryBoxPage() {
           </div>
         )}
 
-        {/* Loading skeleton */}
+        {/* Loading skeleton — 12 so the last row is full at 2, 3 and 4 columns */}
         {loading && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[...Array(10)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-gray-200 overflow-hidden animate-pulse"
+                className="border border-[#d1ae6d]/40 bg-[#2e2e2e] overflow-hidden animate-pulse"
               >
-                <div className="aspect-[6.818/7.5] bg-gray-100" />
+                <div className="aspect-[6.818/7.5] bg-[#3f3f3f]" />
                 <div className="p-3 space-y-2">
-                  <div className="h-3 bg-gray-100 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                  <div className="h-3 bg-[#3f3f3f] w-3/4" />
+                  <div className="h-3 bg-[#3f3f3f] w-1/2" />
                 </div>
               </div>
             ))}
@@ -821,17 +829,17 @@ export default function DiscoveryBoxPage() {
 
         {/* Empty state */}
         {!loading && perfumes.length === 0 && (
-          <div className="text-center py-20">
+          <div className="border border-[#d1ae6d] bg-[#2e2e2e] px-6 py-16 text-center">
             <div className="text-4xl mb-4">🎁</div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            <h3 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[#c9a25a] mb-2">
               No testers available yet
             </h3>
-            <p className="text-sm text-gray-400 mb-6">
+            <p className="text-sm text-[#a99d8c] mb-6">
               We&apos;re stocking up. Check back soon!
             </p>
             <Link
               href="/collections/shop-all"
-              className="inline-block bg-[#1a1a2e] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#b8964e] transition-colors"
+              className="inline-flex items-center justify-center border border-[#c9a25a] bg-[#c9a25a] px-6 py-3 text-sm font-semibold text-[#211d18] transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
             >
               Browse All Perfumes
             </Link>
@@ -840,17 +848,17 @@ export default function DiscoveryBoxPage() {
 
         {/* No search/filter matches */}
         {!loading && perfumes.length > 0 && visiblePerfumes.length === 0 && (
-          <div className="text-center py-16">
+          <div className="border border-[#d1ae6d] bg-[#2e2e2e] px-6 py-14 text-center">
             <div className="text-3xl mb-3">🔍</div>
-            <h3 className="text-base font-semibold text-gray-700 mb-1">
+            <h3 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a] mb-1">
               No testers match your search
             </h3>
-            <p className="text-sm text-gray-400 mb-5">
+            <p className="text-sm text-[#a99d8c] mb-5">
               Try a different name, brand or filter.
             </p>
             <button
               onClick={resetFilters}
-              className="inline-block bg-[#1a1a2e] text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#b8964e] transition-colors"
+              className="inline-flex items-center justify-center border border-[#c9a25a] bg-[#c9a25a] px-6 py-2.5 text-sm font-semibold text-[#211d18] transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
             >
               Reset Filters
             </button>
@@ -902,14 +910,16 @@ export default function DiscoveryBoxPage() {
         onClose={() => setCheckoutPromptOpen(false)}
         heading="Finish your last box?"
       >
+        {/* UniversalModal's panel is still the old white sheet (Phase 5), so
+            this content is styled for a light ground. */}
         <div className="space-y-4">
           <p className="text-sm text-[#4a4540] leading-relaxed">
             You have{" "}
-            <strong className="text-[#1f1a16]">
+            <strong className="text-[#211d18]">
               {completeCount} complete box{completeCount > 1 ? "es" : ""}
             </strong>{" "}
             ready ({DISCOUNT_PERCENT}% off), plus a box that&apos;s only{" "}
-            <strong className="text-[#1f1a16]">
+            <strong className="text-[#211d18]">
               {activeCount}/{BOX_SIZE}
             </strong>{" "}
             filled.
@@ -923,14 +933,14 @@ export default function DiscoveryBoxPage() {
           <div className="flex flex-col gap-2 pt-1">
             <button
               onClick={commitBoxes}
-              className="w-full py-3 rounded-lg bg-[#1a1a2e] text-white font-semibold text-sm hover:bg-[#b8964e] transition-colors"
+              className="w-full py-3 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] font-semibold text-sm transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
             >
               Checkout {completeCount} completed box
               {completeCount > 1 ? "es" : ""} →
             </button>
             <button
               onClick={() => setCheckoutPromptOpen(false)}
-              className="w-full py-3 rounded-lg border border-[#e8e4df] text-[#1f1a16] font-semibold text-sm hover:bg-[#faf8f5] transition-colors"
+              className="w-full py-3 border border-[#211d18]/30 text-[#211d18] font-semibold text-sm transition-colors hover:bg-[#211d18] hover:text-[#d4c6ab] hover:border-[#211d18]"
             >
               Keep building — finish this box
             </button>
