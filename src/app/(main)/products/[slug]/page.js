@@ -411,47 +411,50 @@ export default function ProductDetailPage() {
             <div className="flex flex-col">
 
             {/* Name + gender */}
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight uppercase tracking-wide mb-1">
-              {perfume.name}
-              {genderLabel && (
-                <span className="ml-2 text-base font-normal text-gray-500 normal-case tracking-normal">
-                  (For {genderLabel})
-                </span>
-              )}
+            <div className="inline-block max-w-full mb-3">
+              <h1 className="font-[family-name:var(--font-playfair)] italic font-normal text-2xl sm:text-3xl md:text-4xl leading-tight text-[#c9a25a] break-words">
+                {perfume.name}
+                {genderLabel && (
+                  <span className="ml-2 align-middle not-italic font-[family-name:var(--font-geist-sans)] text-sm sm:text-base text-[#a99d8c] whitespace-nowrap">
+                    (For {genderLabel})
+                  </span>
+                )}
               </h1>
+              <Rule color="#c9a25a" className="mt-2" />
+            </div>
 
             {hasSpecialOffer && (
               <div className="mb-2">
-                <span className="inline-flex items-center gap-1 text-xs font-bold bg-rose-100 text-rose-700 px-3 py-1 rounded-full uppercase tracking-wide border border-rose-200">
-                  🏷️ Special Offer
+                <span className="inline-flex items-center rounded-full border border-[#c9a25a] bg-[#c9a25a]/15 px-3 py-1 text-xs font-bold text-[#e3c489]">
+                  Special Offer
                 </span>
               </div>
             )}
 
             {/* Inspired by */}
             {brandLabel && (
-              <p className="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-widest">
-                Inspired By: <span className="text-gray-800">{brandLabel}</span>
+              <p className="mb-1 text-sm text-[#a99d8c] break-words">
+                Inspired By: <span className="font-semibold text-[#cbbfae]">{brandLabel}</span>
               </p>
             )}
 
             {perfume.impressionName && (
-              <p className="text-sm text-gray-600 mb-1">
-                Impression: <span className="font-semibold text-gray-800">{perfume.impressionName}</span>
+              <p className="mb-1 text-sm text-[#a99d8c] break-words">
+                Impression: <span className="font-semibold text-[#cbbfae]">{perfume.impressionName}</span>
               </p>
             )}
 
             {/* Scent family / concentration */}
-                {perfume.scentFamily && (
-              <p className="text-sm text-gray-600 mb-1">
-                Concentration: <span className="font-semibold">{perfume.scentFamily}</span>
-                </p>
-              )}
+            {perfume.scentFamily && (
+              <p className="mb-1 text-sm text-[#a99d8c] break-words">
+                Concentration: <span className="font-semibold text-[#cbbfae]">{perfume.scentFamily}</span>
+              </p>
+            )}
 
             {/* Globally Admired */}
-            <p className="text-sm text-gray-600 mb-3">
+            <p className="mb-3 text-sm text-[#a99d8c]">
               Globally Admired:{" "}
-              <span className="font-bold text-gray-900">
+              <span className="font-bold text-[#e3c489]">
                 {Math.min(100, Math.max(60, Number(perfume.globalAdmirePercent) || 60))}%
               </span>
             </p>
@@ -471,25 +474,23 @@ export default function ProductDetailPage() {
               return seasonTags.length > 0 ? (
                 <div className="flex flex-wrap gap-2 mb-3">
                   {seasonTags.map((tag) => (
-                  <span
-                    key={tag}
-                      className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200 uppercase tracking-wide"
-                  >
+                    <span
+                      key={tag}
+                      className="rounded-full border border-[#c9a25a]/45 bg-[#2e2e2e] px-3 py-1 text-xs font-medium text-[#cbbfae]"
+                    >
                       {SEASON_LABELS[tag]}
-                  </span>
-                ))}
-              </div>
+                    </span>
+                  ))}
+                </div>
               ) : null;
             })()}
 
-            <div className="h-px bg-gray-100 my-3" />
+            <div className="h-px bg-[#c9a25a]/25 my-4" />
 
             {/* ── Edition Selector ── */}
             {enabledEditions.length > 0 && (
               <div className="mb-4">
-                  <p className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-2">
-                  Choose Edition
-                </p>
+                <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Choose Edition</p>
 
                 <div className="flex flex-wrap gap-2 mb-2">
                   {enabledEditions.map((ed) => {
@@ -508,17 +509,18 @@ export default function ProductDetailPage() {
                       <button
                         key={ed.key}
                         onClick={() => handleEditionChange(ed)}
-                        className={`flex flex-col items-center px-4 py-2.5 rounded-lg border-2 transition-all min-w-[110px] capitalize ${
+                        aria-pressed={isSelected}
+                        className={`flex min-w-[118px] flex-col items-center border px-4 py-2.5 capitalize transition-colors ${
                           isSelected
-                            ? "bg-black text-white border-black"
-                            : "bg-white text-gray-700 border-gray-300 hover:border-black"
+                            ? "border-[#e3c489] bg-[#c9a25a] text-[#211d18]"
+                            : "border-[#c9a25a]/45 text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
                         }`}
                       >
-                        <span className="text-xs font-bold uppercase tracking-wide">{ed.key} Edition</span>
+                        <span className="text-xs font-bold">{ed.key} Edition</span>
                         {minPrice < Infinity && (
-                          <span className={`text-xs mt-0.5 font-semibold ${isSelected ? "text-gray-300" : "text-gray-500"}`}>
+                          <span className={`mt-0.5 text-xs font-semibold ${isSelected ? "text-[#211d18]/75" : "text-[#a99d8c]"}`}>
                             PKR {dispPrice.toLocaleString()}
-                            {disc > 0 && <span className="ml-1 line-through opacity-60">{minPrice.toLocaleString()}</span>}
+                            {disc > 0 && <span className="ml-1 line-through opacity-70">{minPrice.toLocaleString()}</span>}
                           </span>
                         )}
                       </button>
@@ -530,8 +532,8 @@ export default function ProductDetailPage() {
 
             {/* ── Stock indicator ── */}
             <div className="flex items-center gap-2 mb-4">
-              <span className={`w-2.5 h-2.5 rounded-full ${inStock ? "bg-green-500" : "bg-red-400"}`} />
-              <span className={`text-sm font-semibold ${inStock ? "text-green-700" : "text-red-500"}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${inStock ? "bg-[#7cc47f]" : "bg-[#e07a72]"}`} aria-hidden="true" />
+              <span className={`text-sm font-semibold ${inStock ? "text-[#7cc47f]" : "text-[#e07a72]"}`}>
                         {inStock
                   ? "In Stock"
                   : selectedVariant
@@ -543,7 +545,7 @@ export default function ProductDetailPage() {
             {/* ── Size selector ── */}
             {selectedEdition && (
               <div className="mb-4">
-                <p className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-2">Size:</p>
+                <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Size</p>
                   <div className="flex flex-wrap gap-2">
                     {(selectedEdition.variants || [])
                       .filter((v) => v.isActive)
@@ -552,13 +554,14 @@ export default function ProductDetailPage() {
                           key={v.size}
                           onClick={() => { setSelectedVariant(v); setActiveImgIndex(0); }}
                         title={v.stock === 0 ? `${v.size} — out of stock` : undefined}
-                        className={`px-5 py-2 rounded-full border-2 text-sm font-bold transition-all ${
-                            selectedVariant?.size === v.size
-                            ? "bg-black text-white border-black shadow"
-                              : v.stock === 0
-                              ? "border-gray-200 text-gray-400 bg-gray-50 line-through hover:border-gray-400"
-                              : "border-gray-300 text-gray-700 hover:border-black hover:bg-gray-50"
-                          }`}
+                        aria-pressed={selectedVariant?.size === v.size}
+                        className={`rounded-full border px-5 py-2 text-sm font-bold transition-colors ${
+                          selectedVariant?.size === v.size
+                            ? "border-[#e3c489] bg-[#c9a25a] text-[#211d18]"
+                            : v.stock === 0
+                            ? "border-[#5a564f] text-[#8b8377] line-through hover:border-[#8b8377]"
+                            : "border-[#c9a25a]/45 text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
+                        }`}
                       >
                         {v.size}
                         </button>
@@ -573,47 +576,49 @@ export default function ProductDetailPage() {
               const orig = selectedVariant.price;
               const final = disc > 0 ? Math.round(orig * (1 - disc / 100)) : orig;
               return (
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-4">
+                  <span className="text-2xl sm:text-3xl font-bold text-[#e3c489]">
                     PKR {final.toLocaleString()}
                   </span>
                   {disc > 0 && (
                     <>
-                      <span className="text-base text-gray-400 line-through">
+                      <span className="text-base text-[#a99d8c] line-through">
                         PKR {orig.toLocaleString()}
-                    </span>
-                      <span className="text-xs font-bold bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                      </span>
+                      <span className="rounded-full border border-[#e07a72]/60 bg-[#e07a72]/15 px-2.5 py-0.5 text-xs font-bold text-[#e8877f]">
                         -{disc}% OFF
                       </span>
                     </>
-                    )}
-                  </div>
+                  )}
+                </div>
               );
             })()}
 
             {/* ── Quantity ── */}
             <div className="mb-4">
-              <p className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-2">Quantity:</p>
-              <div className="flex items-center border border-gray-300 rounded-lg w-fit overflow-hidden">
-                  <button
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-4 py-2.5 text-gray-600 hover:bg-gray-50 font-bold text-lg leading-none"
-                  >
-                    −
-                  </button>
-                <span className="px-5 py-2.5 text-gray-900 font-bold min-w-[40px] text-center">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() =>
-                      setQuantity((q) =>
-                        selectedVariant ? Math.min(selectedVariant.stock, q + 1) : q + 1
-                      )
-                    }
-                  className="px-4 py-2.5 text-gray-600 hover:bg-gray-50 font-bold text-lg leading-none"
-                  >
-                    +
-                  </button>
+              <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Quantity</p>
+              <div className="flex w-fit items-center border border-[#c9a25a]/45">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  aria-label="Decrease quantity"
+                  className="px-4 py-2.5 text-lg font-bold leading-none text-[#cbbfae] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18]"
+                >
+                  −
+                </button>
+                <span className="min-w-[48px] border-x border-[#c9a25a]/45 px-5 py-2.5 text-center font-bold text-[#e3c489]">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() =>
+                    setQuantity((q) =>
+                      selectedVariant ? Math.min(selectedVariant.stock, q + 1) : q + 1
+                    )
+                  }
+                  aria-label="Increase quantity"
+                  className="px-4 py-2.5 text-lg font-bold leading-none text-[#cbbfae] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18]"
+                >
+                  +
+                </button>
               </div>
             </div>
 
@@ -623,7 +628,8 @@ export default function ProductDetailPage() {
                 <select
                   value={selectedSample}
                   onChange={(e) => setSelectedSample(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 appearance-none bg-white focus:outline-none focus:border-gray-500 cursor-pointer"
+                  aria-label="Choose a free 5-ml sample"
+                  className="w-full cursor-pointer appearance-none border border-[#c9a25a]/45 bg-[#2e2e2e] px-4 py-2.5 pr-10 text-sm text-[#cbbfae] transition-colors focus:outline-none focus:border-[#e3c489]"
                 >
                   <option value="">Choose free 5-ml sample from the list</option>
                   <option value="none">No sample, thanks</option>
@@ -633,12 +639,12 @@ export default function ProductDetailPage() {
                   <option value="amber-noir">Amber Noir</option>
                 </select>
                 <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 text-[#c9a25a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
-              <p className="text-[10px] text-gray-400 mt-1 leading-tight">
+              <p className="mt-1.5 text-[10px] leading-tight text-[#a99d8c]">
                 This list will show different testers for each individual perfume. According to perfume categories.
               </p>
             </div>
@@ -653,13 +659,13 @@ export default function ProductDetailPage() {
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="flex flex-col items-center text-center gap-1.5 py-3 px-1 bg-gray-50 rounded-xl border border-gray-100"
+                  className="flex flex-col items-center gap-1.5 border border-[#d1ae6d] bg-[#d4c6ab] px-1 py-3 text-center"
                 >
                   <span className="relative w-8 h-8 sm:w-9 sm:h-9">
                     <Image src={b.icon} alt={b.label} fill className="object-contain" sizes="36px" />
                   </span>
-                  <p className="text-[9px] sm:text-[10px] font-semibold text-gray-800 leading-tight">{b.label}</p>
-                  <p className="text-[8px] sm:text-[9px] text-gray-500 leading-tight">{b.sub}</p>
+                  <p className="text-[9px] sm:text-[10px] font-semibold leading-tight text-[#211d18]">{b.label}</p>
+                  <p className="text-[8px] sm:text-[9px] leading-tight text-[#211d18]/70">{b.sub}</p>
                 </div>
               ))}
                 </div>
@@ -668,11 +674,11 @@ export default function ProductDetailPage() {
                 <button
                   disabled={!inStock || !selectedVariant}
               onClick={handleAddToCart}
-              className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest uppercase transition-all mb-3 ${
-                    inStock && selectedVariant
-                  ? "bg-black text-white hover:bg-gray-800 shadow hover:shadow-md"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
+              className={`mb-3 w-full border py-4 text-sm font-bold uppercase tracking-[0.1em] transition-colors ${
+                inStock && selectedVariant
+                  ? "border-[#c9a25a] bg-[#c9a25a] text-[#211d18] hover:border-[#e3c489] hover:bg-[#e3c489]"
+                  : "cursor-not-allowed border-[#5a564f] bg-[#45443f] text-[#8b8377]"
+              }`}
                 >
               {cartAdded
                 ? "✓ Added to Cart!"
@@ -687,10 +693,10 @@ export default function ProductDetailPage() {
                 <button
               disabled={!inStock || !selectedVariant}
               onClick={handleBuyNow}
-              className={`w-full py-4 rounded-xl font-bold text-sm tracking-widest uppercase transition-all mb-3 border-2 ${
+              className={`mb-3 w-full border py-4 text-sm font-bold uppercase tracking-[0.1em] transition-colors ${
                 inStock && selectedVariant
-                  ? "border-black text-black hover:bg-black hover:text-white"
-                  : "border-gray-200 text-gray-300 cursor-not-allowed"
+                  ? "border-[#c9a25a] text-[#c9a25a] hover:bg-[#c9a25a] hover:text-[#211d18]"
+                  : "cursor-not-allowed border-[#5a564f] text-[#8b8377]"
               }`}
                 >
                   Buy Now
@@ -707,14 +713,15 @@ export default function ProductDetailPage() {
                   price: getLowestPrice(perfume.editions) || 0,
                 })
               }
-              className={`w-full py-3 rounded-xl font-semibold text-sm tracking-wide transition-all mb-5 border flex items-center justify-center gap-2 ${
+              aria-pressed={isInWishlist(perfume.slug)}
+              className={`mb-5 flex w-full items-center justify-center gap-2 border py-3 text-sm font-semibold tracking-[0.04em] transition-colors ${
                 isInWishlist(perfume.slug)
-                  ? "border-red-300 text-red-600 bg-red-50"
-                  : "border-gray-300 text-gray-600 hover:border-black hover:text-black"
+                  ? "border-[#e07a72] bg-[#e07a72]/12 text-[#e8877f]"
+                  : "border-[#c9a25a]/50 text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
               }`}
             >
               <svg
-                className={`w-4 h-4 ${isInWishlist(perfume.slug) ? "fill-red-500 text-red-500" : ""}`}
+                className={`w-4 h-4 ${isInWishlist(perfume.slug) ? "fill-[#e07a72] text-[#e07a72]" : ""}`}
                 fill={isInWishlist(perfume.slug) ? "currentColor" : "none"}
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -727,7 +734,7 @@ export default function ProductDetailPage() {
 
             {/* ── Short description ── */}
             {perfume.description && (
-              <div className="mb-4 text-sm text-gray-600 leading-relaxed">
+              <div className="mb-4 text-sm leading-relaxed text-[#cbbfae]">
                 <p>
                   {descExpanded ? perfume.description : shortDesc}
                   {needsReadMore && !descExpanded && "…"}
@@ -735,7 +742,7 @@ export default function ProductDetailPage() {
                 {needsReadMore && (
                   <button
                     onClick={() => setDescExpanded((o) => !o)}
-                    className="text-gray-500 underline text-xs mt-1 hover:text-black transition-colors"
+                    className="mt-1 text-xs text-[#c9a25a] underline underline-offset-2 transition-colors hover:text-[#e3c489]"
                   >
                     {descExpanded ? "Show Less" : "Read More..."}
                   </button>
