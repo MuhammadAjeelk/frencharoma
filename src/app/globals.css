@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* The canvas behind the page — what shows in the rubber-band area when you
+     overscroll past the top or bottom. Every page sits on a dark ground, so a
+     white canvas flashed on every bounce. */
+  --background: #373838;
   --foreground: #111111;
   --primary: #faf8f5;
   --accent: #211d18;
@@ -22,13 +25,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #ffffff;
+    --background: #373838;
     --foreground: #111111;
     --primary: #faf8f5;
   }
 }
 
 html {
+  /* Set here as well as on body: Safari takes the overscroll colour from the
+     root element. */
+  background: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
