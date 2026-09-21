@@ -9,6 +9,8 @@ import { genderMeta } from "@/lib/gender";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
+import { Rule } from "@/components/ui/SectionHeading";
+import { GUTTER } from "@/lib/design";
 import PerfumeFilterBar, {
   SortSelect,
   matchesSeasonGroup,
@@ -458,18 +460,18 @@ export default function DiscoveryBoxPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#faf8f5]">
+    <div className="min-h-screen bg-[#373838]">
       {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
-      <div className="relative bg-[#1a1a2e] text-white border-y-[6px] border-[#c9a25a]">
+      <div className="relative bg-[#2e2e2e] text-[#efe7db] border-y-[6px] border-[#c9a25a]">
         {/* Breadcrumb overlaid so it doesn't offset the vertically-centred logo */}
-        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-white/40">
-          <Link href="/" className="hover:text-white/70">
+        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-[#a99d8c]">
+          <Link href="/" className="transition-colors hover:text-[#e3c489]">
             Home
           </Link>
           <span>/</span>
-          <span className="text-white/60">Discovery Box</span>
+          <span className="text-[#cbbfae]">Discovery Box</span>
         </nav>
-        <div className="max-w-7xl mx-auto px-4 pt-10 pb-6 md:py-7">
+        <div className={`${GUTTER} pt-10 pb-6 md:py-7`}>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
@@ -479,7 +481,7 @@ export default function DiscoveryBoxPage() {
                   '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif',
               }}
             >
-              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-white/90">
+              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-[#efe7db]">
                 FLAT
               </span>
               <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
@@ -493,7 +495,7 @@ export default function DiscoveryBoxPage() {
                   %
                 </span>
                 <span
-                  className="text-3xl md:text-5xl tracking-[0.06em] text-white/90 leading-none"
+                  className="text-3xl md:text-5xl tracking-[0.06em] text-[#efe7db] leading-none"
                   style={{ transform: "translateY(0.6em)" }}
                 >
                   OFF
@@ -506,13 +508,13 @@ export default function DiscoveryBoxPage() {
 
             {/* Right — title, subtitle, description */}
             <div className="max-w-2xl text-center">
-              <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-bold text-white inline-block border-b-2 border-[#c9a25a] pb-1">
-                Discovery Box
-              </h1>
-              <p
-                className="text-[#c9a25a] font-semibold mt-2.5 text-sm md:text-lg italic"
-                style={{ fontFamily: 'Calibri, "Segoe UI", Candara, Optima, "Trebuchet MS", sans-serif' }}
-              >
+              <div className="inline-block">
+                <h1 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
+                  Discovery Box
+                </h1>
+                <Rule className="mt-2" />
+              </div>
+              <p className="font-[family-name:var(--font-playfair)] italic text-[#d2c1ac] mt-3 text-base md:text-xl leading-snug">
                 Discover Fragrances Before You Buy ...
               </p>
               <div className="flex items-center gap-2 my-3 justify-center">
@@ -520,11 +522,11 @@ export default function DiscoveryBoxPage() {
                 <span className="w-2 h-2 rotate-45 bg-[#c9a25a]" />
                 <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
               </div>
-              <p className="text-white/70 text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
+              <p className="text-[#cbbfae] text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
                 Build your discovery box with any{" "}
-                <strong className="text-[#c9a25a]">5 fragrances</strong> in 5ml
+                <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong> in 5ml
                 bottles and enjoy a{" "}
-                <strong className="text-[#c9a25a]">Flat 40% OFF</strong> —
+                <strong className="font-semibold text-[#c9a25a]">Flat 40% OFF</strong> —
                 Explore, compare, and discover your favorites—More you explore,
                 more you love our Fragrances.
               </p>
