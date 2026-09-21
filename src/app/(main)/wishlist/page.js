@@ -6,6 +6,8 @@ import { useWishlist } from "@/context/WishlistContext";
 import ProductCard from "@/components/ProductCard";
 import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
+import { Rule } from "@/components/ui/SectionHeading";
+import { GUTTER } from "@/lib/design";
 import { genderSuffix } from "@/lib/gender";
 
 const hasSpecialOfferTag = (p) =>
@@ -33,8 +35,8 @@ export default function WishlistPage() {
 
   if (!hydrated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-gray-200 border-t-black rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#373838] flex items-center justify-center">
+        <div className="w-10 h-10 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
       </div>
     );
   }
@@ -42,25 +44,27 @@ export default function WishlistPage() {
   const loading = catalog === null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#373838]">
       {/* pt-14/pt-20 adds breathing room between the menu bar and the heading */}
-      <div className="max-w-7xl mx-auto px-4 pt-14 md:pt-20 pb-12">
-        <h1
-          className="text-2xl md:text-3xl font-bold uppercase tracking-wide mb-2"
-          style={{ color: "#1a1a2e" }}
-        >
-          My Wishlist
-        </h1>
-        <p className="text-sm text-gray-500 mb-8">
-          {items.length === 0
-            ? "Your wishlist is empty. Browse our collection and save your favourites."
-            : `${items.length} item${items.length !== 1 ? "s" : ""} saved`}
-        </p>
+      <div className={`${GUTTER} pt-14 md:pt-20 pb-12`}>
+        <div className="text-center">
+          <div className="inline-block">
+            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+              My Wishlist
+            </h1>
+            <Rule className="mt-2" />
+          </div>
+          <p className="mt-5 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[#d2c1ac]">
+            {items.length === 0
+              ? "Your wishlist is empty. Browse our collection and save your favourites."
+              : `${items.length} item${items.length !== 1 ? "s" : ""} saved`}
+          </p>
+        </div>
 
         {items.length === 0 ? (
-          <div className="text-center py-16">
+          <div className="mt-10 border border-[#d1ae6d] bg-[#2e2e2e] px-6 py-14 text-center">
             <svg
-              className="w-16 h-16 mx-auto text-gray-200 mb-4"
+              className="w-16 h-16 mx-auto text-[#c9a25a]/45 mb-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -72,21 +76,21 @@ export default function WishlistPage() {
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[#c9a25a] mb-2">
               No items yet
-            </h3>
-            <p className="text-sm text-gray-400 mb-6">
+            </h2>
+            <p className="text-sm text-[#a99d8c] mb-6">
               Heart the perfumes you love and they&apos;ll appear here.
             </p>
             <Link
               href="/collections/shop-all"
-              className="inline-block bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition-colors font-semibold text-sm"
+              className="inline-flex items-center justify-center border border-[#c9a25a] bg-[#c9a25a] px-6 py-3 text-sm font-semibold text-[#211d18] transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
             >
               Browse Perfumes
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {items.map((item) => {
               const p = catalog?.[item.slug];
 
@@ -128,12 +132,12 @@ export default function WishlistPage() {
                 return (
                   <div
                     key={item.slug}
-                    className="rounded-xl border border-gray-200 overflow-hidden animate-pulse"
+                    className="border border-[#d1ae6d]/40 bg-[#2e2e2e] overflow-hidden animate-pulse"
                   >
-                    <div className="aspect-[6.818/7.5] bg-gray-100" />
+                    <div className="aspect-[6.818/7.5] bg-[#3f3f3f]" />
                     <div className="p-3 space-y-2">
-                      <div className="h-3 bg-gray-100 rounded w-3/4" />
-                      <div className="h-3 bg-gray-100 rounded w-1/2" />
+                      <div className="h-3 bg-[#3f3f3f] w-3/4" />
+                      <div className="h-3 bg-[#3f3f3f] w-1/2" />
                     </div>
                   </div>
                 );
@@ -142,26 +146,37 @@ export default function WishlistPage() {
               return (
                 <div
                   key={item.slug}
-                  className="relative rounded-xl border border-gray-200 overflow-hidden bg-white flex flex-col"
+                  className="group relative border border-[#d1ae6d] overflow-hidden bg-[#2e2e2e] flex flex-col"
                 >
                   <button
                     onClick={() => removeItem(item.slug)}
-                    className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm hover:bg-red-50 transition-colors shadow-sm"
+                    className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full border border-[#d1ae6d]/70 bg-[#211d18]/90 backdrop-blur-sm transition-colors hover:border-[#e0342c] hover:bg-[#e0342c]"
                     aria-label="Delete from wishlist"
                   >
-                    <svg className="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    <svg
+                      className="w-4 h-4 fill-[#e0342c] text-[#e0342c] transition-colors"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
                     </svg>
                   </button>
-                  <div className="aspect-[6.818/7.5] bg-gray-50 flex items-center justify-center text-gray-300 text-xs px-3 text-center">
+                  <div className="aspect-[6.818/7.5] bg-[#373838] flex items-center justify-center text-[#a99d8c] text-xs px-3 text-center">
                     Currently unavailable
                   </div>
                   <div className="p-3 flex flex-col flex-1">
-                    <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">
+                    <h3 className="text-sm font-semibold text-[#efe7db] line-clamp-2 break-words">
                       {item.name}
                     </h3>
                     {item.brand && (
-                      <p className="text-xs text-gray-500 mt-0.5">{item.brand}</p>
+                      <p className="text-xs text-[#a99d8c] mt-0.5 line-clamp-2 break-words">
+                        {item.brand}
+                      </p>
                     )}
                   </div>
                 </div>
