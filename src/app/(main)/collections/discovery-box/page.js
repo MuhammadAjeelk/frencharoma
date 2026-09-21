@@ -120,7 +120,7 @@ function EmptySlot({ index, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group/slot relative w-14 h-14 sm:w-16 sm:h-16 border border-dashed border-[#c9a25a]/45 bg-[#211d18] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[#e3c489] hover:bg-[#2a251d] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
+      className="group/slot relative w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 border border-dashed border-[#c9a25a]/45 bg-[#211d18] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[#e3c489] hover:bg-[#2a251d] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
     >
       <span className="text-sm sm:text-base font-bold text-[#a99d8c]/70 transition-opacity duration-150 group-hover/slot:opacity-0">
         {index + 1}
@@ -150,7 +150,7 @@ function FilledSlot({
       onClick={onScrollTo}
       onMouseEnter={(e) => onPreview?.(perfume, e.currentTarget)}
       onMouseLeave={() => onPreviewEnd?.()}
-      className={`relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden border-2 ${border} bg-[#211d18] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
+      className={`relative w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 overflow-hidden border-2 ${border} bg-[#211d18] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
     >
       {get5mlImage(perfume) ? (
         <Image
@@ -187,6 +187,17 @@ export default function DiscoveryBoxPage() {
   const { addItem } = useCart();
 
   const [perfumes, setPerfumes] = useState([]);
+
+  // Phones get the compact card so the grid does not render desktop type at
+  // ~173px. Mount-guarded so SSR and the first client paint agree.
+  const [isPhone, setIsPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const sync = () => setIsPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]); // flat list of picked IDs, grouped into boxes of 5
   const [addedToCart, setAddedToCart] = useState(false);
@@ -488,27 +499,27 @@ export default function DiscoveryBoxPage() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
-              className="shrink-0 flex items-stretch text-[#c9a25a] -translate-y-4 md:-translate-y-8"
+              className="shrink-0 flex items-stretch text-[#c9a25a] -translate-y-1 md:-translate-y-8"
               style={{
                 fontFamily:
                   '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif',
               }}
             >
-              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-[#efe7db]">
+              <span className="self-center text-base sm:text-xl md:text-4xl tracking-[0.08em] text-[#efe7db]">
                 FLAT
               </span>
-              <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
+              <span className="text-[4rem] sm:text-[5.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
                 {DISCOUNT_PERCENT}
               </span>
               <span className="self-stretch flex flex-col justify-between items-start -ml-1 -my-1 md:-my-3">
                 <span
-                  className="text-5xl md:text-8xl font-bold leading-none"
+                  className="text-2xl sm:text-3xl md:text-8xl font-bold leading-none"
                   style={{ transform: "translateY(0.35em)" }}
                 >
                   %
                 </span>
                 <span
-                  className="text-3xl md:text-5xl tracking-[0.06em] text-[#efe7db] leading-none"
+                  className="text-lg sm:text-xl md:text-5xl tracking-[0.06em] text-[#efe7db] leading-none"
                   style={{ transform: "translateY(0.6em)" }}
                 >
                   OFF
@@ -553,8 +564,8 @@ export default function DiscoveryBoxPage() {
         ref={barRef}
         className="sticky top-0 z-30 border-b-2 border-[#c9a25a] bg-[#2e2e2e] shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-3.5 sm:py-4">
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-3.5 lg:py-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4">
             {/* Left arrow — only once 2+ boxes are ready */}
             {completeCount >= 2 && (
               <button
@@ -564,7 +575,7 @@ export default function DiscoveryBoxPage() {
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
                 <svg
-                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
+                  className="w-5 h-8 sm:w-8 sm:h-12 lg:w-10 lg:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -631,7 +642,7 @@ export default function DiscoveryBoxPage() {
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
                 <svg
-                  className="w-8 h-12 sm:w-10 sm:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
+                  className="w-5 h-8 sm:w-8 sm:h-12 lg:w-10 lg:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -884,6 +895,7 @@ export default function DiscoveryBoxPage() {
                 className="scroll-mt-40"
               >
                 <ProductCard
+                  compact={isPhone}
                   name={p.name}
                   brand={p.brands?.[0] || p.brand}
                   image={get5mlImage(p)}

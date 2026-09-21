@@ -31,6 +31,9 @@ const EDITION_STYLE = {
 };
 
 export default function ProductCard({
+  // Phone grids render this at ~173px, where the desktop type and controls
+  // overflow. `compact` scales them, matching BestSellerCard.
+  compact = false,
   name,
   brand,
   image,
@@ -426,7 +429,7 @@ export default function ProductCard({
           </button>
         )}
         {boxMode ? (
-          <h3 className="text-base font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center">
+          <h3 className={`font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center ${compact ? "text-[12px]" : "text-base"}`}>
             {name}
             {gm && (
               <>
@@ -437,7 +440,7 @@ export default function ProductCard({
           </h3>
         ) : (
           <Link href={href || "#"}>
-            <h3 className="text-sm sm:text-base font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center">
+            <h3 className={`font-bold text-[#211d18] leading-snug mb-2 line-clamp-2 text-center ${compact ? "text-[12px]" : "text-sm sm:text-base"}`}>
               {name}
               {gm && (
                 <>
@@ -449,7 +452,7 @@ export default function ProductCard({
           </Link>
         )}
 
-        <div className="space-y-1.5 text-[11px] sm:text-xs text-[#3a352f]">
+        <div className={`text-[#3a352f] ${compact ? "space-y-0.5 text-[10px]" : "space-y-1.5 text-[11px] sm:text-xs"}`}>
           {impressionName && (
             <p className="line-clamp-1">
               Inspired by:{" "}
@@ -473,7 +476,7 @@ export default function ProductCard({
           {bestFor && (
             <p className="flex flex-wrap items-center gap-1.5">
               <span className="shrink-0">Best For:</span>
-              <span className="inline-block px-2.5 py-0.5 rounded-full border border-[#c9a25a]/60 bg-[#efe3c9] text-[11px] font-semibold text-[#6b5421]">
+              <span className={`inline-block rounded-full border border-[#c9a25a]/60 bg-[#efe3c9] font-semibold text-[#6b5421] ${compact ? "px-1.5 py-0 text-[9px]" : "px-2.5 py-0.5 text-[11px]"}`}>
                 {bestFor}
               </span>
             </p>
@@ -516,11 +519,11 @@ export default function ProductCard({
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
-                <span className="text-[15px] font-normal text-[#8c7f6d] strike-diagonal">
+                <span className={`font-normal text-[#8c7f6d] strike-diagonal ${compact ? "text-[11px]" : "text-[15px]"}`}>
                   {formatRs(headlinePrice)}
                 </span>
               )}
-              <span className="text-[15px] font-bold text-[#b5179e]">
+              <span className={`font-bold text-[#b5179e] ${compact ? "text-[12px]" : "text-[15px]"}`}>
                 {formatRs(finalOf(headlinePrice))}
               </span>
             </>
@@ -571,7 +574,7 @@ export default function ProductCard({
               onMouseEnter={() => !boxSoldOut && vibrate(cartRef.current)}
               onClick={handleCta}
               disabled={boxSoldOut}
-              className={`w-full py-2.5 px-3 rounded-md text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+              className={`w-full rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-1.5 px-2 text-[9px]" : "py-2.5 px-3 text-[11px] sm:text-xs"} ${
                 boxSoldOut
                   ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
                   : boxSwapTarget
@@ -595,7 +598,7 @@ export default function ProductCard({
               onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
               onClick={handleCta}
               disabled={!cardEdition}
-              className={`w-full py-3 px-3 min-h-[46px] flex items-center justify-center rounded-md text-[11px] sm:text-xs font-semibold tracking-wide uppercase transition-colors ${
+              className={`w-full flex items-center justify-center rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-2 px-2 min-h-[34px] text-[9px]" : "py-3 px-3 min-h-[46px] text-[11px] sm:text-xs"} ${
                 !cardEdition
                   ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
                   : showBanners
