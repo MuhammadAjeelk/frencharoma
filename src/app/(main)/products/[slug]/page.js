@@ -419,7 +419,7 @@ export default function ProductDetailPage() {
             <div className="flex flex-col">
 
             {/* Name + gender */}
-            <div className="inline-block max-w-full mb-3">
+            <div className="self-start max-w-full mb-3">
               <h1 className="font-[family-name:var(--font-playfair)] italic font-normal text-2xl sm:text-3xl md:text-4xl leading-tight text-[#c9a25a] break-words">
                 {perfume.name}
                 {genderLabel && (
