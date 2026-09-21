@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
-import BestSellerCard from "@/components/BestSellerCard";
 import QuickAddModal from "@/components/QuickAddModal";
 import { genderHeading } from "@/lib/gender";
 import { Rule } from "@/components/ui/SectionHeading";
@@ -27,9 +26,10 @@ const PAGE_SIZE = 20;
 
 // ── Main Page ──────────────────────────────────────────────────────────────
 function ShopAllContent() {
-  // Phones get the Best Sellers card from the homepage; the grid keeps
-  // ProductCard from sm up. Mount-guarded so SSR and the first client paint
-  // agree — a bare window check would hydration-mismatch.
+  // Phones get the compact ProductCard — the same card Discovery Box uses —
+  // so the grid does not render desktop type at ~170px. Mount-guarded so SSR
+  // and the first client paint agree; a bare window check would
+  // hydration-mismatch.
   const [isPhone, setIsPhone] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
@@ -449,11 +449,9 @@ function ShopAllContent() {
                 const hasSpecialOfferTag = (perfume.tags || []).some((t) =>
                   /special\s*-?\s*offer/i.test(t),
                 );
-                const Card = isPhone ? BestSellerCard : ProductCard;
                 return (
-                  <Card
+                  <ProductCard
                     key={perfume._id}
-                    badge={perfume.isBestSeller ? "Best Sellers" : null}
                     compact={isPhone}
                     name={perfume.name}
                     brand={brandLabel}
@@ -465,8 +463,6 @@ function ShopAllContent() {
                     gender={perfume.gender || ""}
                     scentFamily={perfume.scentFamily || ""}
                     activeEdition={edition !== "all" ? edition : null}
-                    avgRating={perfume.avgRating || 0}
-                    reviewCount={perfume.reviewCount || 0}
                     isBestSeller={Boolean(perfume.isBestSeller)}
                     discountPercent={perfume.discountPercent || 0}
                     globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
