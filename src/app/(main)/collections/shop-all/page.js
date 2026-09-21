@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import UniversalModal from "@/components/UniversalModal";
 import ProductCard from "@/components/ProductCard";
+import BestSellerCard from "@/components/BestSellerCard";
 import QuickAddModal from "@/components/QuickAddModal";
 import { genderHeading } from "@/lib/gender";
 import { Rule } from "@/components/ui/SectionHeading";
@@ -26,6 +27,18 @@ const PAGE_SIZE = 20;
 
 // ── Main Page ──────────────────────────────────────────────────────────────
 function ShopAllContent() {
+  // Phones get the Best Sellers card from the homepage; the grid keeps
+  // ProductCard from sm up. Mount-guarded so SSR and the first client paint
+  // agree — a bare window check would hydration-mismatch.
+  const [isPhone, setIsPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const sync = () => setIsPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const DEFAULT_SORT = "global-admire-desc";
@@ -436,9 +449,11 @@ function ShopAllContent() {
                 const hasSpecialOfferTag = (perfume.tags || []).some((t) =>
                   /special\s*-?\s*offer/i.test(t),
                 );
+                const Card = isPhone ? BestSellerCard : ProductCard;
                 return (
-                  <ProductCard
+                  <Card
                     key={perfume._id}
+                    badge={perfume.isBestSeller ? "Best Sellers" : null}
                     name={perfume.name}
                     brand={brandLabel}
                     image={perfume.images?.main || ""}

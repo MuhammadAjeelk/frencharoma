@@ -52,6 +52,9 @@ export default function BestSellerCard({
   avgRating = 0,
   globalAdmirePercent = 60,
   onQuickView,
+  // The corner pill. Defaults to "Best Sellers" for the homepage carousel;
+  // shop-all passes null for anything that is not actually a best seller.
+  badge = "Best Sellers",
 }) {
   const { addItem, perfumeQty } = useCart();
   const { isInWishlist, toggleItem } = useWishlist();
@@ -181,9 +184,11 @@ export default function BestSellerCard({
           </button>
         )}
 
-        <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#cbb99a] px-2.5 py-0.5 text-[11px] font-medium text-[#2b2620] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
-          Best Sellers
-        </span>
+        {badge && (
+          <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#cbb99a] px-2.5 py-0.5 text-[11px] font-medium text-[#2b2620] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
+            {badge}
+          </span>
+        )}
         {cardEdition?.variant?.size && (
           <span className="absolute bottom-3 right-3 z-10 rounded-full bg-[#efe9df] px-2 py-0.5 text-[11px] font-medium text-[#3a352f] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
             {cardEdition.variant.size}
