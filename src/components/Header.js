@@ -131,7 +131,6 @@ export default function Header() {
     { name: "SHOP BY BRAND", href: "#", brandDropdown: true },
     { name: "SPECIAL OFFERS", href: "/collections/shop-all?specialOffer=true" },
     { name: "DISCOVERY BOX", href: "/collections/discovery-box" },
-    { name: "BLOGS", href: "/blogs/blog" },
   ];
 
 
