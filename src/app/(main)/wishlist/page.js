@@ -19,6 +19,18 @@ export default function WishlistPage() {
   const [modalPerfume, setModalPerfume] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  // Removing an item does not touch the modal's own state, so a Quick View
+  // left open over a product that has just been un-wishlisted would outlive
+  // its card. Close it when its product leaves the list — whether that was
+  // the card's remove button or the heart inside the modal.
+  useEffect(() => {
+    if (!modalOpen || !modalPerfume) return;
+    if (!items.some((i) => i.slug === modalPerfume.slug)) {
+      setModalOpen(false);
+      setModalPerfume(null);
+    }
+  }, [items, modalOpen, modalPerfume]);
+
   // Load full perfume data so wishlist cards match the Shop All cards.
   useEffect(() => {
     fetch("/api/perfumes?limit=500")

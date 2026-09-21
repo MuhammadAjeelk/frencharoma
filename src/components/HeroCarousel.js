@@ -3,34 +3,42 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { FOCUS_RING } from "@/lib/design";
 
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      image: "/images/home/hero-shop-all-v3.webp",
+      image: "/images/home/hero-shop-all-v4.webp",
       title: "SHOP ALL",
       href: "/collections/shop-all",
       bg: "#f1e6d9",
     },
     {
-      image: "/images/home/hero-best-sellers-v3.webp",
+      image: "/images/home/hero-best-sellers-v4.webp",
       title: "BEST SELLERS",
       href: "/collections/shop-all?bestSeller=true",
       bg: "#e9d9c6",
     },
     {
-      image: "/images/home/hero-special-offers-v3.webp",
+      image: "/images/home/hero-special-offers-v4.webp",
       title: "SPECIAL OFFERS",
       href: "/collections/shop-all?specialOffer=true",
       bg: "#e7d3bb",
     },
     {
-      image: "/images/home/hero-bundle-offers-v3.webp",
+      image: "/images/home/hero-bundle-offers-v4.webp",
       title: "BUNDLE OFFERS",
       href: "/collections/shop-all",
       bg: "#eddcc4",
+    },
+    {
+      image: "/images/home/hero-discovery-box-v4.webp",
+      title: "DISCOVERY BOX",
+      href: "/collections/discovery-box",
+      cta: "Explore Collection",
+      bg: "#f0e2cd",
     },
   ];
 
@@ -62,6 +70,19 @@ export default function HeroCarousel() {
               sizes="100vw"
             />
             <Link href={slide.href} className="absolute inset-0 z-10" aria-label={slide.title} />
+
+            {/* Shop Now — the artwork no longer carries it */}
+            <div className="absolute left-[17%] top-[89%] z-20 -translate-x-1/2 -translate-y-1/2">
+              <Link
+                href={slide.href}
+                className={`inline-flex items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-[#211d18] text-[#efe7db] border border-[#c9a25a] shadow-[0_4px_14px_rgba(0,0,0,0.3)] font-semibold uppercase tracking-[0.12em] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18] px-2.5 py-1 text-[8px] sm:px-4 sm:py-1.5 sm:text-[10px] lg:px-6 lg:py-2.5 lg:text-xs ${FOCUS_RING}`}
+              >
+                {slide.cta || "Shop Now"}
+                <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
+                </svg>
+              </Link>
+            </div>
           </div>
         ))}
 
