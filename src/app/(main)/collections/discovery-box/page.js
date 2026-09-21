@@ -892,7 +892,7 @@ export default function DiscoveryBoxPage() {
               <div
                 key={p._id}
                 id={`disc-card-${p._id}`}
-                className="scroll-mt-40"
+                className="scroll-mt-40 h-full"
               >
                 <ProductCard
                   compact={isPhone}

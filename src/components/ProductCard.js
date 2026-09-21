@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
-import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
+import { getSellableEditions, getCardEdition, getBestFor, isSignatureScent, formatRs } from "@/lib/pricing";
 import { genderMeta, genderTextClass } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
 import DiscountRibbon from "./DiscountRibbon";
@@ -217,7 +217,7 @@ export default function ProductCard({
         setShowBanners(false);
       }}
       onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
-      className={`group relative isolate overflow-hidden bg-[#d5c7b4] border-2 flex transition-[box-shadow,border-color] duration-300 ${
+      className={`group relative isolate h-full overflow-hidden bg-[#d5c7b4] border-2 flex transition-[box-shadow,border-color] duration-300 ${
         hoverReveal ? "flex-row lg:flex-col" : "flex-col"
       } ${boxMode && boxSoldOut ? "opacity-60" : ""} ${
         boxMode && !boxSoldOut ? "cursor-pointer" : ""
@@ -455,7 +455,7 @@ export default function ProductCard({
         <div className={`text-[#3a352f] ${compact ? "space-y-0.5 text-[10px]" : "space-y-1.5 text-[11px] sm:text-xs"}`}>
           {impressionName && (
             <p className="line-clamp-1">
-              Inspired by:{" "}
+              {!isSignatureScent(impressionName) && "Inspired by: "}
               <span className="font-semibold text-[#211d18]">
                 {impressionName}
               </span>
@@ -508,122 +508,128 @@ export default function ProductCard({
           </div>
         </div>
 
-        {/* Gender-coloured divider */}
-        <div
-          className="h-[3px] my-2.5"
-          style={{ backgroundColor: gm ? gm.hex : "#b9a88c" }}
-        />
+        {/* Footer group — pinned to the bottom so the divider, price and CTA
+            line up across a row even when one card's meta runs a line longer
+            (the "Four Seasons (Versatile)" pill wraps, "Winter & Autumn" does
+            not). Without this the whole card grew by that one line. */}
+        <div className="mt-auto pt-2.5">
+          {/* Gender-coloured divider */}
+          <div
+            className="h-[3px] mb-2.5"
+            style={{ backgroundColor: gm ? gm.hex : "#b9a88c" }}
+          />
 
-        {/* Price */}
-        <div className="flex items-baseline justify-center gap-x-6 gap-y-0.5 flex-wrap mb-2.5">
-          {headlinePrice != null ? (
-            <>
-              {disc > 0 && (
-                <span className={`font-normal text-[#8c7f6d] strike-diagonal ${compact ? "text-[11px]" : "text-[15px]"}`}>
-                  {formatRs(headlinePrice)}
-                </span>
-              )}
-              <span className={`font-bold text-[#b5179e] ${compact ? "text-[12px]" : "text-[15px]"}`}>
-                {formatRs(finalOf(headlinePrice))}
-              </span>
-            </>
-          ) : (
-            <span className="text-sm text-[#8c7f6d]">Unavailable</span>
-          )}
-        </div>
-
-        <div className="mt-auto relative">
-          {/* Edition banners — float above the button so the card keeps its height */}
-          {showBanners && hasChoice && (
-            <div className="absolute bottom-full left-0 right-0 mb-2 z-30 flex flex-col gap-1.5 drop-shadow-xl animate-fadeIn">
-              {sellable.map((e) => {
-                const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
-                return (
-                  <button
-                    key={e.key}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      ev.stopPropagation();
-                      addEdition(e);
-                    }}
-                    className={`hover-vibrate w-full flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-9 gap-y-1 rounded-md px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:shadow`}
-                  >
-                    <span className="text-[11px] sm:text-xs font-bold leading-none">
-                      {st.label}{" "}
-                      <span className="font-medium opacity-80">
-                        ({e.variant.size})
-                      </span>
-                    </span>
-                    <span className="text-[11px] sm:text-xs font-bold flex items-center gap-2 leading-none">
-                      {disc > 0 && (
-                        <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">
-                          {formatRs(e.variant.price)}
-                        </span>
-                      )}
-                      <span className="whitespace-nowrap">{formatRs(finalOf(e.variant.price))}</span>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {boxMode ? (
-            <button
-              ref={cartRef}
-              onMouseEnter={() => !boxSoldOut && vibrate(cartRef.current)}
-              onClick={handleCta}
-              disabled={boxSoldOut}
-              className={`w-full rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-1.5 px-2 text-[9px]" : "py-2.5 px-3 text-[11px] sm:text-xs"} ${
-                boxSoldOut
-                  ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
-                  : boxSwapTarget
-                  ? "bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489]"
-                  : boxSelected
-                  ? "border border-[#c9a25a] bg-[#e9dcc4] text-[#6b5421] hover:bg-[#f1e7d4]"
-                  : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
-              }`}
-            >
-              {boxSoldOut
-                ? "Sold Out"
-                : boxSwapTarget
-                ? "Tap a box to place"
-                : boxSelected
-                ? "✓ In Box — Remove"
-                : "Add to Box"}
-            </button>
-          ) : (
-            <button
-              ref={cartRef}
-              onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
-              onClick={handleCta}
-              disabled={!cardEdition}
-              className={`w-full flex items-center justify-center rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-2 px-2 min-h-[34px] text-[9px]" : "py-3 px-3 min-h-[46px] text-[11px] sm:text-xs"} ${
-                !cardEdition
-                  ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
-                  : showBanners
-                  ? "bg-[#2e2820] text-[#e3c489] hover:bg-[#3a332a]"
-                  : inCartQty > 0
-                  ? "bg-[#1d3a8f] text-white hover:bg-[#16306f]"
-                  : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
-              }`}
-            >
-              {!cardEdition ? (
-                "Unavailable"
-              ) : showBanners ? (
-                "Choose Your Edition"
-              ) : inCartQty > 0 ? (
-                <span className="inline-flex items-center justify-center gap-3">
-                  Added to Cart
-                  <span className="inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full bg-white/25 text-white text-[10px] font-bold leading-none">
-                    {inCartQty}
+          {/* Price */}
+          <div className="flex items-baseline justify-center gap-x-6 gap-y-0.5 flex-wrap mb-2.5">
+            {headlinePrice != null ? (
+              <>
+                {disc > 0 && (
+                  <span className={`font-normal text-[#8c7f6d] strike-diagonal ${compact ? "text-[11px]" : "text-[15px]"}`}>
+                    {formatRs(headlinePrice)}
                   </span>
+                )}
+                <span className={`font-bold text-[#b5179e] ${compact ? "text-[12px]" : "text-[15px]"}`}>
+                  {formatRs(finalOf(headlinePrice))}
                 </span>
-              ) : (
-                "Add to Cart"
-              )}
-            </button>
-          )}
+              </>
+            ) : (
+              <span className="text-sm text-[#8c7f6d]">Unavailable</span>
+            )}
+          </div>
+
+          <div className="relative">
+            {/* Edition banners — float above the button so the card keeps its height */}
+            {showBanners && hasChoice && (
+              <div className="absolute bottom-full left-0 right-0 mb-2 z-30 flex flex-col gap-1.5 drop-shadow-xl animate-fadeIn">
+                {sellable.map((e) => {
+                  const st = EDITION_STYLE[e.key] || EDITION_STYLE.classic;
+                  return (
+                    <button
+                      key={e.key}
+                      onClick={(ev) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        addEdition(e);
+                      }}
+                      className={`hover-vibrate w-full flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-9 gap-y-1 rounded-md px-3 py-3 min-h-[46px] ${st.bar} ${st.text} shadow-sm hover:shadow`}
+                    >
+                      <span className="text-[11px] sm:text-xs font-bold leading-none">
+                        {st.label}{" "}
+                        <span className="font-medium opacity-80">
+                          ({e.variant.size})
+                        </span>
+                      </span>
+                      <span className="text-[11px] sm:text-xs font-bold flex items-center gap-2 leading-none">
+                        {disc > 0 && (
+                          <span className="strike-diagonal opacity-70 font-medium whitespace-nowrap">
+                            {formatRs(e.variant.price)}
+                          </span>
+                        )}
+                        <span className="whitespace-nowrap">{formatRs(finalOf(e.variant.price))}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {boxMode ? (
+              <button
+                ref={cartRef}
+                onMouseEnter={() => !boxSoldOut && vibrate(cartRef.current)}
+                onClick={handleCta}
+                disabled={boxSoldOut}
+                className={`w-full rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-1.5 px-2 text-[9px]" : "py-2.5 px-3 text-[11px] sm:text-xs"} ${
+                  boxSoldOut
+                    ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
+                    : boxSwapTarget
+                    ? "bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489]"
+                    : boxSelected
+                    ? "border border-[#c9a25a] bg-[#e9dcc4] text-[#6b5421] hover:bg-[#f1e7d4]"
+                    : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
+                }`}
+              >
+                {boxSoldOut
+                  ? "Sold Out"
+                  : boxSwapTarget
+                  ? "Tap a box to place"
+                  : boxSelected
+                  ? "✓ In Box — Remove"
+                  : "Add to Box"}
+              </button>
+            ) : (
+              <button
+                ref={cartRef}
+                onMouseEnter={() => cardEdition && vibrate(cartRef.current)}
+                onClick={handleCta}
+                disabled={!cardEdition}
+                className={`w-full flex items-center justify-center rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-2 px-2 min-h-[34px] text-[9px]" : "py-3 px-3 min-h-[46px] text-[11px] sm:text-xs"} ${
+                  !cardEdition
+                    ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
+                    : showBanners
+                    ? "bg-[#2e2820] text-[#e3c489] hover:bg-[#3a332a]"
+                    : inCartQty > 0
+                    ? "bg-[#1d3a8f] text-white hover:bg-[#16306f]"
+                    : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
+                }`}
+              >
+                {!cardEdition ? (
+                  "Unavailable"
+                ) : showBanners ? (
+                  "Choose Your Edition"
+                ) : inCartQty > 0 ? (
+                  <span className="inline-flex items-center justify-center gap-3">
+                    Added to Cart
+                    <span className="inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full bg-white/25 text-white text-[10px] font-bold leading-none">
+                      {inCartQty}
+                    </span>
+                  </span>
+                ) : (
+                  "Add to Cart"
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
