@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import { FOCUS_RING } from "@/lib/design";
 
 // Centre-of-page chooser shown when a perfume sells in more than one edition.
 // Picking one adds it and hands over to AddedToCartPopup, so the panel swaps
@@ -45,14 +46,16 @@ export default function EditionChoiceModal({
       aria-modal="true"
       aria-label="Choose an edition"
     >
-      <div className="fixed inset-0 bg-black/45 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/55 backdrop-blur-[2px]" onClick={onClose} />
 
-      <div className="relative z-10 w-full max-w-md bg-white rounded-2xl shadow-[0_24px_70px_rgba(0,0,0,0.28)] animate-fadeIn overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#e8e4df]">
-          <h2 className="text-base font-bold text-[#1a1a2e]">Choose Your Edition</h2>
+      <div className="relative z-10 w-full max-w-md bg-[#efe7db] border border-[#c9a25a] shadow-[0_24px_70px_rgba(0,0,0,0.38)] animate-fadeIn overflow-hidden">
+        <div className="flex items-center justify-between gap-3 bg-[#373838] border-b-2 border-[#c9a25a] px-5 py-3">
+          <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[#c9a25a]">
+            Choose Your Edition
+          </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#6b6560] hover:text-red-500 transition-colors"
+            className={`shrink-0 p-1.5 rounded-full text-[#cbbfae] hover:text-[#211d18] hover:bg-[#c9a25a] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
@@ -62,8 +65,8 @@ export default function EditionChoiceModal({
         </div>
 
         <div className="px-5 py-4">
-          <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-100">
-            <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 shrink-0">
+          <div className="flex items-center gap-3 pb-4 mb-4 border-b border-[#c9a25a]/30">
+            <div className="relative w-14 h-14 overflow-hidden border border-[#c9a25a]/60 bg-[#d4c6ab]/40 shrink-0">
               {image ? <Image src={image} alt={name} fill className="object-cover" sizes="56px" /> : null}
             </div>
             <p className="text-sm font-bold text-[#1f1a16] leading-snug line-clamp-2">{name}</p>
@@ -76,7 +79,7 @@ export default function EditionChoiceModal({
                 <button
                   key={e.key}
                   onClick={() => onChoose?.(e)}
-                  className={`hover-vibrate w-full flex items-center justify-between gap-3 rounded-xl px-4 py-3.5 text-left shadow-sm hover:shadow-md transition-shadow ${st.bar || "bg-[#efe9db]"} ${st.text || "text-[#1f1a16]"}`}
+                  className={`hover-vibrate w-full flex items-center justify-between gap-3 border border-[#c9a25a]/50 px-4 py-3.5 text-left shadow-sm hover:shadow-md transition-shadow ${st.bar || "bg-[#efe9db]"} ${st.text || "text-[#1f1a16]"}`}
                 >
                   <span className="text-[13px] font-bold leading-tight">
                     {st.label || e.key}

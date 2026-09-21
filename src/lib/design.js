@@ -77,3 +77,10 @@ export const FOCUS_RING =
 // where the gold above all but disappears. Modals use this one.
 export const FOCUS_RING_LIGHT =
   "focus-visible:ring-2 focus-visible:ring-[#211d18] focus-visible:ring-offset-0";
+
+// A gold ring on a gold fill is 1.42:1 — invisible. Solid-gold CTAs need the
+// ring offset off the button and drawn in ink. Spelled out rather than composed
+// from FOCUS_RING, because layering a second ring-offset utility leaves both in
+// the class list and Tailwind's stylesheet order decides the winner, not yours.
+export const FOCUS_RING_ON_GOLD =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#211d18] focus-visible:ring-offset-2 focus-visible:ring-offset-[#373838]";

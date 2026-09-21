@@ -147,7 +147,7 @@ export default function BestSellers() {
           <div className="relative mb-10 md:mb-14 overflow-visible">
             <button
               onClick={handlePrevious}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[#d1c0ab] border border-[#bda98f] shadow-sm text-[#2b2620] hover:bg-[#c2a268] hover:text-[#1c1a17] hover:shadow-md transition-all duration-200"
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[#d1c0ab] border border-[#bda98f] shadow-sm text-[#2b2620] hover:bg-[#c2a268] hover:text-[#211d18] hover:shadow-md transition-all duration-200"
               aria-label="Previous products"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -202,7 +202,7 @@ export default function BestSellers() {
 
             <button
               onClick={handleNext}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[#d1c0ab] border border-[#bda98f] shadow-sm text-[#2b2620] hover:bg-[#c2a268] hover:text-[#1c1a17] hover:shadow-md transition-all duration-200"
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[#d1c0ab] border border-[#bda98f] shadow-sm text-[#2b2620] hover:bg-[#c2a268] hover:text-[#211d18] hover:shadow-md transition-all duration-200"
               aria-label="Next products"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
