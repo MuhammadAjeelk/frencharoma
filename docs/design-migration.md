@@ -134,10 +134,21 @@ riskiest page is attempted only once the system is proven on simpler ones.
 - [ ] `orders/[orderNumber]`, `track-order`
 - [ ] Check: form validation and error messaging survive intact
 
-### Phase 8 — Wishlist and Discovery Box
-- [ ] `wishlist/page.js` (1)
-- [ ] `collections/discovery-box/page.js` (30, 964 lines)
-- [ ] Check: box selection, swap, sold-out states, tester rules
+### Phase 8 — Wishlist and Discovery Box ✅
+- [x] `wishlist/page.js` — empty state, skeleton, unavailable-item fallback
+- [x] `collections/discovery-box/page.js` — banner, sticky builder, grid, states
+- [x] Checked: partial box, full box, sealed box, sold-out testers, no-match panel
+
+**Follow-ups raised by this phase:**
+- The slot remove control is a `<span onClick>` inside a `<button>`, so it is
+  not focusable — a keyboard user cannot remove a tester. Needs a markup change,
+  deferred out of a styling-only phase.
+- `boxSwapTarget` is a dead prop: `ProductCard` implements the state, nothing
+  passes it.
+- `src/lib/gender.js` colours are ~3.3:1 on near-black — marginal contrast.
+- `.scrollbar-thin` in `globals.css` uses a black thumb, invisible on dark.
+- The checkout-prompt content inside `UniversalModal` is styled for a light
+  sheet; it needs revisiting once Phase 5 darkens that modal.
 
 ### Phase 9 — Sweep
 - [ ] Delete unused assets: old `wc-*`, `scent-*`, `season-*`, `edition-*`,
@@ -179,5 +190,7 @@ Old-token hits outside `(admin)`, by phase. Baseline taken at spec time.
 | Phase | Baseline | After |
 |---|---|---|
 | Start | 180 | — |
+| 0 — Foundation | 180 | 148 |
+| 8 — Wishlist + Discovery Box | 148 | 117 |
 
 Update this table as each phase lands.
