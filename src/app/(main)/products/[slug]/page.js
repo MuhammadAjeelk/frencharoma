@@ -16,7 +16,7 @@ import {
   PHOTO_HOVER,
   viewAllClass,
 } from "@/lib/design";
-import { getLowestPrice } from "@/lib/pricing";
+import { getLowestPrice, isSignatureScent } from "@/lib/pricing";
 
 
 // ── Notes Pyramid ──────────────────────────────────────────────────────────
@@ -448,7 +448,8 @@ export default function ProductDetailPage() {
 
             {perfume.impressionName && (
               <p className="mb-1 text-sm text-[#a99d8c] break-words">
-                Impression: <span className="font-semibold text-[#cbbfae]">{perfume.impressionName}</span>
+                {!isSignatureScent(perfume.impressionName) && "Impression: "}
+                <span className="font-semibold text-[#cbbfae]">{perfume.impressionName}</span>
               </p>
             )}
 

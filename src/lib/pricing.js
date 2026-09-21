@@ -85,6 +85,13 @@ export function getCardEdition(editions) {
 }
 
 // Single "Best For" season label derived from tags.
+// "Signature Scent" is French Aromas' own composition, not an impression of
+// another house, so the "Inspired by" lead-in is dropped and the name stands
+// on its own wherever an impression is printed.
+export function isSignatureScent(name) {
+  return /^\s*signature\s*scent\s*$/i.test(name || "");
+}
+
 export function getBestFor(tags) {
   const t = tags || [];
   if (t.includes("all-seasons")) return "Four Seasons (Versatile)";

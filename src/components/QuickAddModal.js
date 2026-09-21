@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
+import { getSellableEditions, getCardEdition, getBestFor, isSignatureScent, formatRs } from "@/lib/pricing";
 import { genderMeta, genderTextClass } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
 import DiscountRibbon from "./DiscountRibbon";
@@ -198,7 +198,12 @@ export default function QuickAddModal({
       </h2>
 
       <div className="space-y-1 text-sm text-[#3f3931]">
-        {perfume.impressionName && <p>Inspired by: <span className="font-semibold text-[#211d18]">{perfume.impressionName}</span></p>}
+        {perfume.impressionName && (
+          <p>
+            {!isSignatureScent(perfume.impressionName) && "Inspired by: "}
+            <span className="font-semibold text-[#211d18]">{perfume.impressionName}</span>
+          </p>
+        )}
         {brandLabel && <p>Brand: <span className="font-semibold text-[#211d18]">{brandLabel}</span></p>}
         {perfume.scentFamily && (
           <p>Fragrance Family: <span className="font-semibold text-[#211d18]">{perfume.scentFamily}</span></p>

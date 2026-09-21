@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
-import { getSellableEditions, getCardEdition, formatRs } from "@/lib/pricing";
+import { getSellableEditions, getCardEdition, isSignatureScent, formatRs } from "@/lib/pricing";
 import { genderMeta, genderTextClass } from "@/lib/gender";
 import DiscountRibbon from "./DiscountRibbon";
 import EditionChoiceModal from "./EditionChoiceModal";
@@ -210,7 +210,11 @@ export default function BestSellerCard({
         </Link>
 
         <div className={`space-y-0.5 text-[#3a352f] ${compact ? "text-[10px]" : "text-[12px]"}`}>
-          {impressionName && <p className="line-clamp-1">Inspired by: {impressionName}</p>}
+          {impressionName && (
+            <p className="line-clamp-1">
+              {isSignatureScent(impressionName) ? impressionName : `Inspired by: ${impressionName}`}
+            </p>
+          )}
           {brand && <p className="line-clamp-1">Brand: {brand}</p>}
           {scentFamily && <p className="line-clamp-1">Fragrance: {scentFamily}</p>}
         </div>
