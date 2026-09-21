@@ -8,6 +8,13 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import DesktopNav, { NavList } from "@/components/PrimaryNav";
+import {
+  MENU_PANEL,
+  MENU_ITEM,
+  MENU_ITEM_DANGER,
+  FIELD_DARK,
+  FOCUS_RING,
+} from "@/lib/design";
 
 function MaskIcon({ src, className = "w-5 h-5" }) {
   return (
@@ -144,7 +151,7 @@ export default function Header() {
   return (
     <>
       {/* Running announcement bar */}
-      <div className="w-full overflow-hidden border-t-2 border-t-[#b8964e]/70 border-b border-b-[#bda98f] bg-[#d1c0ab]">
+      <div className="w-full overflow-hidden border-t-2 border-t-[#c9a25a]/70 border-b border-b-[#bda98f] bg-[#d1c0ab]">
         <div className="flex w-max animate-marquee py-2">
           {[0, 1].map((dup) => (
             <div
@@ -158,7 +165,7 @@ export default function Header() {
                     {item}
                   </span>
                   <svg
-                    className="w-4 h-4 text-[#b8964e] shrink-0"
+                    className="w-4 h-4 text-[#c9a25a] shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -186,7 +193,7 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors"
+                className={`lg:hidden p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors ${FOCUS_RING}`}
                 aria-label="Menu"
               >
                 <MaskIcon src="/icons/menu.svg" />
@@ -196,7 +203,7 @@ export default function Header() {
               <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 py-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 whitespace-nowrap ${
+                  className={`flex items-center gap-2 py-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 whitespace-nowrap ${FOCUS_RING} ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
@@ -253,7 +260,7 @@ export default function Header() {
                           }
                         }}
                         placeholder="Search perfumes..."
-                        className="w-64 px-4 py-2 pl-10 pr-10 border-0 rounded-lg focus:outline-none focus:ring-0 bg-[#f1ede6] text-[13px]"
+                        className={`w-64 px-4 py-2 pl-10 pr-10 text-[13px] ${FIELD_DARK}`}
                         autoFocus
                         onBlur={() => {
                           setTimeout(() => {
@@ -261,14 +268,8 @@ export default function Header() {
                           }, 200);
                         }}
                       />
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <Image
-                          src="/icons/search.svg"
-                          alt="Search"
-                          width={20}
-                          height={20}
-                          className="w-5 h-5"
-                        />
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#c9a25a]">
+                        <MaskIcon src="/icons/search.svg" />
                       </div>
                       <button
                         type="button"
@@ -276,7 +277,7 @@ export default function Header() {
                           setIsSearchExpanded(false);
                           setSearchQuery("");
                         }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#6b6560] hover:text-red-500 transition-colors"
+                        className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#a99d8c] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                         aria-label="Close search"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
@@ -286,7 +287,7 @@ export default function Header() {
 
                       {/* Live suggestions */}
                       {searchQuery.trim() && (
-                        <div className="absolute left-0 top-full mt-1.5 w-72 bg-white border border-[#e8e4df] rounded-lg shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-20 overflow-hidden animate-fadeIn">
+                        <div className={`absolute left-0 top-full mt-1.5 w-72 z-20 overflow-hidden animate-fadeIn ${MENU_PANEL}`}>
                           {searchResults.length > 0 ? (
                             <>
                               {searchResults.map((p, i) => (
@@ -299,20 +300,20 @@ export default function Header() {
                                     setSearchActive(-1);
                                   }}
                                   onMouseEnter={() => setSearchActive(i)}
-                                  className={`flex items-center gap-3 px-3 py-2 transition-colors border-l-[3px] ${
+                                  className={`flex items-center gap-3 px-3 py-2 transition-colors border-l-[3px] ${FOCUS_RING} ${
                                     i === searchActive
-                                      ? "bg-[#b8964e]/15 border-[#b8964e]"
-                                      : "border-transparent hover:bg-[#f6efe2]"
+                                      ? "bg-[#c9a25a]/15 border-[#c9a25a]"
+                                      : "border-transparent hover:bg-[#c9a25a]/10"
                                   }`}
                                 >
-                                  <div className="relative w-9 h-9 rounded-md overflow-hidden bg-gray-50 shrink-0 border border-[#f0ece7]">
+                                  <div className="relative w-9 h-9 overflow-hidden bg-[#211d18] shrink-0 border border-[#d1ae6d]">
                                     {p.images?.main ? (
                                       <Image src={p.images.main} alt={p.name} fill className="object-cover" sizes="36px" />
                                     ) : null}
                                   </div>
                                   <div className="min-w-0">
-                                    <p className={`text-[12px] font-medium truncate ${i === searchActive ? "text-[#8a6d2a]" : "text-[#1f1a16]"}`}>{p.name}</p>
-                                    <p className="text-[11px] text-[#a09890] truncate">
+                                    <p className={`text-[12px] font-medium truncate ${i === searchActive ? "text-[#e3c489]" : "text-[#efe7db]"}`}>{p.name}</p>
+                                    <p className="text-[11px] text-[#a99d8c] truncate">
                                       {(() => {
                                         const imp = p.impressionName || p.brand || (p.brands && p.brands[0]) || "French Aromas";
                                         return /^signature\s*scent$/i.test(imp) ? imp : `Impression of: ${imp}`;
@@ -324,13 +325,13 @@ export default function Header() {
                               <Link
                                 href={`/collections/shop-all?search=${encodeURIComponent(searchQuery.trim())}`}
                                 onClick={() => setIsSearchExpanded(false)}
-                                className="block px-4 py-2.5 text-[12px] font-semibold text-[#b8964e] hover:bg-[#faf8f5] border-t border-[#f0ece7] transition-colors"
+                                className={`block px-4 py-2.5 text-[12px] font-semibold text-[#c9a25a] hover:bg-[#c9a25a]/10 hover:text-[#e3c489] border-t border-[#c9a25a]/25 transition-colors ${FOCUS_RING}`}
                               >
                                 See all results for “{searchQuery.trim()}”
                               </Link>
                             </>
                           ) : (
-                            <p className="px-4 py-3 text-[12px] text-[#a09890]">
+                            <p className="px-4 py-3 text-[12px] text-[#a99d8c]">
                               {searchLoading ? "Searching…" : `No matches for “${searchQuery.trim()}”`}
                             </p>
                           )}
@@ -344,7 +345,7 @@ export default function Header() {
               {/* Mobile Search Button */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="lg:hidden flex items-center gap-2 p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors"
+                className={`lg:hidden flex items-center gap-2 p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors ${FOCUS_RING}`}
                 aria-label="Search"
               >
                 <MaskIcon src="/icons/search.svg" />
@@ -372,7 +373,7 @@ export default function Header() {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className="group hidden lg:block relative focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200"
+                className={`group hidden lg:block relative focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 ${FOCUS_RING}`}
                 aria-label="Wishlist"
               >
                 <svg
@@ -389,11 +390,11 @@ export default function Header() {
                   />
                 </svg>
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 bg-[#c9a25a] text-[#211d18] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
                     {wishlistCount > 99 ? "99+" : wishlistCount}
                   </span>
                 )}
-                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 rounded bg-[#1a1a2e] text-white text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[#c9a25a]/40 bg-[#211d18] text-[#efe7db] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                   Wishlist
                 </span>
               </Link>
@@ -402,7 +403,7 @@ export default function Header() {
               <div className="group hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className="flex items-center focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200"
+                  className={`flex items-center focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 ${FOCUS_RING}`}
                   aria-label="Account"
                 >
                   <svg
@@ -420,30 +421,30 @@ export default function Header() {
                   </svg>
                 </button>
                 {!isAccountOpen && (
-                  <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 rounded bg-[#1a1a2e] text-white text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                  <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[#c9a25a]/40 bg-[#211d18] text-[#efe7db] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                     Account
                   </span>
                 )}
                 {isAccountOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-[#e8e4df] shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-lg py-2 z-50 animate-fadeIn">
+                  <div className={`absolute right-0 top-full mt-2 w-52 py-2 z-50 animate-fadeIn ${MENU_PANEL}`}>
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-gray-500">
+                      <div className="px-4 py-2 text-sm text-[#a99d8c]">
                         Loading...
                       </div>
                     ) : user ? (
                       <>
-                        <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                        <div className="px-4 py-2 border-b border-[#c9a25a]/25">
+                          <p className="text-sm font-medium text-[#efe7db] truncate">
                             {user.name || user.email}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-[#a99d8c] truncate">
                             {user.email}
                           </p>
                         </div>
                         {isAdmin && (
                           <Link
                             href="/admin"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                            className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                             onClick={() => setIsAccountOpen(false)}
                           >
                             Admin Panel
@@ -451,35 +452,35 @@ export default function Header() {
                         )}
                         <Link
                           href="/account"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                           onClick={() => setIsAccountOpen(false)}
                         >
                           My Account
                         </Link>
                         <Link
                           href="/account/orders"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                           onClick={() => setIsAccountOpen(false)}
                         >
                           My Orders
                         </Link>
                         <Link
                           href="/track-order"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                           onClick={() => setIsAccountOpen(false)}
                         >
                           Track Order
                         </Link>
                         <Link
                           href="/wishlist"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                           onClick={() => setIsAccountOpen(false)}
                         >
                           Wishlist
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                          className={`w-full text-left px-4 py-2 text-sm ${MENU_ITEM_DANGER} ${FOCUS_RING}`}
                         >
                           Log Out
                         </button>
@@ -488,14 +489,14 @@ export default function Header() {
                       <>
                         <Link
                           href="/account/login"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                           onClick={() => setIsAccountOpen(false)}
                         >
                           Log In
                         </Link>
                         <Link
                           href="/account/signup"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className={`block px-4 py-2 text-sm ${MENU_ITEM} ${FOCUS_RING}`}
                           onClick={() => setIsAccountOpen(false)}
                         >
                           Sign Up
@@ -509,7 +510,7 @@ export default function Header() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className="group flex items-center focus:outline-none relative text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200"
+                className={`group flex items-center focus:outline-none relative text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 ${FOCUS_RING}`}
                 aria-label="Cart"
               >
                 <svg
@@ -526,11 +527,11 @@ export default function Header() {
                   />
                 </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-[#c2a268] text-[#1c1a17] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-2 -right-2 min-w-4 h-4 px-1 bg-[#c9a25a] text-[#211d18] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
                     {itemCount > 99 ? "99+" : itemCount}
                   </span>
                 )}
-                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 rounded bg-[#1a1a2e] text-white text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[#c9a25a]/40 bg-[#211d18] text-[#efe7db] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                   Cart
                 </span>
               </Link>
@@ -572,25 +573,24 @@ export default function Header() {
       {isMenuOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
             onClick={() => setIsMenuOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-white z-50 transform transition-transform lg:hidden overflow-y-auto shadow-lg">
+          <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-[#373838] border-r border-[#c9a25a]/40 z-50 transform transition-transform lg:hidden overflow-y-auto shadow-[0_0_60px_rgba(0,0,0,0.6)]">
             <div className="p-4">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold">Menu</h2>
+                <span className="inline-block">
+                  <h2 className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a25a]">
+                    Menu
+                  </h2>
+                  <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+                </span>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 focus:outline-none"
+                  className={`p-2 focus:outline-none text-[#c9a25a] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                   aria-label="Close menu"
                 >
-                  <Image
-                    src="/icons/close.svg"
-                    alt="Close"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
+                  <MaskIcon src="/icons/close.svg" />
                 </button>
               </div>
 
@@ -606,37 +606,36 @@ export default function Header() {
                                 mobileSubOpen === index ? null : index,
                               )
                             }
-                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
+                            className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                           >
                             {item.name}
-                            <Image
+                            <MaskIcon
                               src="/icons/caret.svg"
-                              alt=""
-                              width={16}
-                              height={16}
-                              className={`w-4 h-4 transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
+                              className={`w-4 h-4 shrink-0 text-[#c9a25a] transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
                             />
                           </button>
                           {mobileSubOpen === index && (
                             <ul className="pl-4 space-y-0.5 mt-1 mb-2">
                               {item.submenu.map((sub, si) =>
                                 sub.heading ? (
-                                  <li
-                                    key={si}
-                                    className="pt-3 pb-0.5 text-[11px] font-bold uppercase tracking-wide text-gray-500"
-                                  >
-                                    {sub.heading}
+                                  <li key={si} className="pt-4 pb-1">
+                                    <span className="inline-block">
+                                      <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[#c9a25a]">
+                                        {sub.heading}
+                                      </span>
+                                      <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+                                    </span>
                                   </li>
                                 ) : (
                                   <li key={si}>
                                     <Link
                                       href={sub.href}
-                                      className={`group/link flex items-center py-2 text-sm transition-opacity hover:opacity-70 ${
+                                      className={`group/link flex items-center py-2 text-sm transition-colors hover:text-[#e3c489] ${FOCUS_RING} ${
                                         sub.accent
-                                          ? "font-bold text-[#1a1a2e] uppercase tracking-wide"
+                                          ? "font-bold text-[#e3c489] uppercase tracking-wide"
                                           : sub.standalone
-                                            ? "font-semibold"
-                                            : "pl-3"
+                                            ? "font-semibold text-[#efe7db]"
+                                            : "pl-3 text-[#cbbfae]"
                                       }`}
                                       onClick={() => {
                                         setMobileSubOpen(null);
@@ -644,7 +643,7 @@ export default function Header() {
                                       }}
                                     >
                                       {!sub.accent && !sub.standalone && (
-                                        <span className="mr-2 text-[#b8964e]">
+                                        <span className="mr-2 text-[#c9a25a]">
                                           •
                                         </span>
                                       )}
@@ -657,22 +656,27 @@ export default function Header() {
                               )}
                               {families.length > 0 && (
                                 <>
-                                  <li className="pt-3 pb-0.5 text-[11px] font-bold uppercase tracking-wide text-gray-500">
-                                    Shop by Fragrance Family
+                                  <li className="pt-4 pb-1">
+                                    <span className="inline-block">
+                                      <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[#c9a25a]">
+                                        Shop by Fragrance Family
+                                      </span>
+                                      <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+                                    </span>
                                   </li>
                                   <li>
-                                    <ul className="max-h-56 overflow-y-auto">
+                                    <ul className="max-h-56 overflow-y-auto scrollbar-always-gold">
                                       {families.map((f) => (
                                         <li key={f}>
                                           <Link
                                             href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
-                                            className="group/link flex items-center py-2 pl-3 text-sm transition-opacity hover:opacity-70"
+                                            className={`group/link flex items-center py-2 pl-3 text-sm text-[#cbbfae] transition-colors hover:text-[#e3c489] ${FOCUS_RING}`}
                                             onClick={() => {
                                               setMobileSubOpen(null);
                                               setIsMenuOpen(false);
                                             }}
                                           >
-                                            <span className="mr-2 text-[#b8964e]">
+                                            <span className="mr-2 text-[#c9a25a]">
                                               •
                                             </span>
                                             <span className="group-hover/link:underline underline-offset-4 decoration-1">
@@ -696,24 +700,21 @@ export default function Header() {
                                 mobileSubOpen === index ? null : index,
                               )
                             }
-                            className="w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide"
+                            className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                           >
                             {item.name}
-                            <Image
+                            <MaskIcon
                               src="/icons/caret.svg"
-                              alt=""
-                              width={16}
-                              height={16}
-                              className={`w-4 h-4 transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
+                              className={`w-4 h-4 shrink-0 text-[#c9a25a] transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
                             />
                           </button>
                           {mobileSubOpen === index && (
-                            <ul className="pl-4 space-y-0.5 mt-1 mb-2 max-h-64 overflow-y-auto">
+                            <ul className="pl-4 space-y-0.5 mt-1 mb-2 max-h-64 overflow-y-auto scrollbar-always-gold">
                               {brands.map((b) => (
                                 <li key={b}>
                                   <Link
                                     href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                                    className="block py-1.5 text-sm hover:opacity-70 transition-opacity"
+                                    className={`block py-1.5 text-sm text-[#cbbfae] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                                     onClick={() => {
                                       setMobileSubOpen(null);
                                       setIsMenuOpen(false);
@@ -724,7 +725,7 @@ export default function Header() {
                                 </li>
                               ))}
                               {brands.length === 0 && (
-                                <li className="py-2 text-sm text-gray-400">
+                                <li className="py-2 text-sm text-[#a99d8c]">
                                   Loading...
                                 </li>
                               )}
@@ -734,7 +735,7 @@ export default function Header() {
                       ) : (
                         <Link
                           href={item.href}
-                          className="block py-3 text-sm font-medium uppercase tracking-wide"
+                          className={`block py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.name}
@@ -746,14 +747,14 @@ export default function Header() {
               </nav>
 
               {/* Mobile Account Section */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="mt-6 pt-6 border-t border-[#c9a25a]/25">
                 <Link
                   href="/wishlist"
-                  className="flex items-center gap-2 py-3 text-sm font-medium"
+                  className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-5 h-5 shrink-0 text-[#c9a25a]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -769,19 +770,19 @@ export default function Header() {
                 </Link>
 
                 {loading ? (
-                  <div className="py-3 text-sm text-gray-500">Loading...</div>
+                  <div className="py-3 text-sm text-[#a99d8c]">Loading...</div>
                 ) : user ? (
                   <>
-                    <div className="py-3 border-b border-gray-100 mb-2">
-                      <p className="text-sm font-medium text-gray-900">
+                    <div className="py-3 border-b border-[#c9a25a]/25 mb-2">
+                      <p className="text-sm font-medium text-[#efe7db] truncate">
                         {user.name || user.email}
                       </p>
-                      <p className="text-xs text-gray-500">{user.email}</p>
+                      <p className="text-xs text-[#a99d8c] truncate">{user.email}</p>
                     </div>
                     {isAdmin && (
                       <Link
                         href="/admin"
-                        className="flex items-center gap-2 py-3 text-sm font-medium text-gray-900"
+                        className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Admin Panel
@@ -789,16 +790,10 @@ export default function Header() {
                     )}
                     <Link
                       href="/account"
-                      className="flex items-center gap-2 py-3 text-sm font-medium"
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <Image
-                        src="/icons/account.svg"
-                        alt="Account"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
+                      <MaskIcon src="/icons/account.svg" className="w-5 h-5 shrink-0 text-[#c9a25a]" />
                       My Account
                     </Link>
                     <button
@@ -806,7 +801,7 @@ export default function Header() {
                         handleLogout();
                         setIsMenuOpen(false);
                       }}
-                      className="flex items-center gap-2 py-3 text-sm font-medium text-red-600"
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#e8927f] hover:text-[#f2ad9e] transition-colors ${FOCUS_RING}`}
                     >
                       Log Out
                     </button>
@@ -815,21 +810,15 @@ export default function Header() {
                   <>
                     <Link
                       href="/account/login"
-                      className="flex items-center gap-2 py-3 text-sm font-medium"
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <Image
-                        src="/icons/account.svg"
-                        alt="Account"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
+                      <MaskIcon src="/icons/account.svg" className="w-5 h-5 shrink-0 text-[#c9a25a]" />
                       Log In
                     </Link>
                     <Link
                       href="/account/signup"
-                      className="flex items-center gap-2 py-3 text-sm font-medium"
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Sign Up
@@ -846,25 +835,24 @@ export default function Header() {
       {isSearchOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
             onClick={() => setIsSearchOpen(false)}
           />
           <div className="fixed inset-0 z-50 lg:hidden flex flex-col">
-            <div className="bg-white w-full h-full flex flex-col border-t border-gray-300">
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h2 className="text-lg font-bold text-gray-900">Search</h2>
+            <div className="bg-[#373838] w-full h-full flex flex-col border-t-2 border-[#c9a25a]">
+              <div className="flex items-center justify-between p-4 border-b border-[#c9a25a]/25">
+                <span className="inline-block">
+                  <h2 className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a25a]">
+                    Search
+                  </h2>
+                  <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+                </span>
                 <button
                   onClick={() => setIsSearchOpen(false)}
-                  className="p-2 focus:outline-none hover:opacity-70"
+                  className={`p-2 focus:outline-none text-[#c9a25a] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                   aria-label="Close search"
                 >
-                  <Image
-                    src="/icons/close.svg"
-                    alt="Close"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
+                  <MaskIcon src="/icons/close.svg" />
                 </button>
               </div>
               <div className="flex-1 p-4">
@@ -877,21 +865,15 @@ export default function Header() {
                     type="search"
                     name="search"
                     placeholder="Search perfumes..."
-                    className="w-full px-4 py-3 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 text-base"
+                    className={`w-full px-4 py-3 pl-12 pr-4 text-base ${FIELD_DARK}`}
                     autoFocus
                   />
                   <button
                     type="submit"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2"
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 text-[#c9a25a] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
                     aria-label="Search"
                   >
-                    <Image
-                      src="/icons/search.svg"
-                      alt="Search"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                    />
+                    <MaskIcon src="/icons/search.svg" />
                   </button>
                 </form>
               </div>

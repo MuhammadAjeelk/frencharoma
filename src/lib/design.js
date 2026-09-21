@@ -46,3 +46,29 @@ export const viewAllClass = (tone = "dark") =>
   tone === "dark"
     ? "inline-flex items-center gap-2.5 rounded-md border border-[#d2c1ac]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#efe7db] transition-colors hover:bg-[#d2c1ac] hover:text-[#211d18]"
     : "inline-flex items-center gap-2.5 rounded-md border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#211d18] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]";
+
+// --- Floating chrome ---------------------------------------------------
+// Dropdowns, suggestion panels, drawers and overlays render outside any
+// section, so they inherit no ground colour and have to carry their own.
+
+export const MENU_PANEL =
+  "bg-[#373838] border border-[#c9a25a]/50 shadow-[0_18px_44px_rgba(0,0,0,0.45)]";
+
+// A row inside one of those panels.
+export const MENU_ITEM =
+  "transition-colors text-[#cbbfae] hover:bg-[#c9a25a]/10 hover:text-[#e3c489]";
+
+// Destructive row (log out). Plain red fails contrast on #373838.
+export const MENU_ITEM_DANGER =
+  "transition-colors text-[#e8927f] hover:bg-[#e8927f]/10 hover:text-[#f2ad9e]";
+
+// Text input on a dark ground — the footer newsletter field's treatment.
+// The trailing `::-webkit-search-cancel-button` reset drops the browser's own
+// blue clear glyph, which cannot be recoloured and clashes on a dark field.
+export const FIELD_DARK =
+  "bg-[#211d18] border border-[#c9a25a]/40 text-[#efe7db] placeholder-[#a99d8c]/60 focus:outline-none focus:border-[#c9a25a] transition-colors [&::-webkit-search-cancel-button]:appearance-none";
+
+// Keyboard focus that stays visible on #373838. A ring rather than an outline,
+// so it survives the `focus:outline-none` these controls already carry.
+export const FOCUS_RING =
+  "focus-visible:ring-2 focus-visible:ring-[#e3c489] focus-visible:ring-offset-0";
