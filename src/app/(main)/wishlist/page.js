@@ -8,7 +8,7 @@ import UniversalModal from "@/components/UniversalModal";
 import QuickAddModal from "@/components/QuickAddModal";
 import { Rule } from "@/components/ui/SectionHeading";
 import { GUTTER } from "@/lib/design";
-import { genderSuffix } from "@/lib/gender";
+import { genderHeading } from "@/lib/gender";
 
 const hasSpecialOfferTag = (p) =>
   (p.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
@@ -191,7 +191,7 @@ export default function WishlistPage() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         wide
-        heading={`${modalPerfume?.name || ""}${genderSuffix(modalPerfume?.gender)}`}
+        heading={genderHeading(modalPerfume?.name, modalPerfume?.gender)}
       >
         {modalPerfume && (
           <QuickAddModal

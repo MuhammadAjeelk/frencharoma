@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { genderMeta } from "@/lib/gender";
+import { genderMeta, genderTextClass } from "@/lib/gender";
 import OrderSummary from "./OrderSummary";
 import { FOCUS_RING, FOCUS_RING_LIGHT } from "@/lib/design";
 
@@ -88,7 +88,7 @@ export default function AddedToCartPopup() {
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-[#211d18] leading-snug line-clamp-2">
                   {lastAdded.name}
-                  {gm && <span className={`font-semibold ${gm.text}`}>{` – ${gm.label}`}</span>}
+                  {gm && <span className={`font-semibold ${genderTextClass(lastAdded.gender, "light")}`}>{` – ${gm.label}`}</span>}
                 </p>
                 <p className="text-[11px] text-[#5c554b] mt-0.5">
                   {editionLabel}

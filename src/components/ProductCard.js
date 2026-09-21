@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { getSellableEditions, getCardEdition, getBestFor, formatRs } from "@/lib/pricing";
-import { genderMeta } from "@/lib/gender";
+import { genderMeta, genderTextClass } from "@/lib/gender";
 import EditionInfoModal from "./EditionInfoModal";
 import DiscountRibbon from "./DiscountRibbon";
 import { COLORS } from "@/lib/design";
@@ -431,7 +431,7 @@ export default function ProductCard({
             {gm && (
               <>
                 {" – "}
-                <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+                <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{gm.label}</span>
               </>
             )}
           </h3>
@@ -442,7 +442,7 @@ export default function ProductCard({
               {gm && (
                 <>
                   {" – "}
-                  <span className={`font-semibold ${gm.text}`}>{gm.label}</span>
+                  <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{gm.label}</span>
                 </>
               )}
             </h3>

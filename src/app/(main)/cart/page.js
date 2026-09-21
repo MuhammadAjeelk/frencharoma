@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
-import { genderMeta, GENDER_ON_DARK } from "@/lib/gender";
+import { genderMeta, genderTextClass } from "@/lib/gender";
 import OrderSummary from "@/components/OrderSummary";
 import { Rule } from "@/components/ui/SectionHeading";
 import { GUTTER, FIELD_DARK, FOCUS_RING, FOCUS_RING_LIGHT } from "@/lib/design";
@@ -60,7 +60,7 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
             {gm && (
               <>
                 {" – "}
-                <span className={`font-semibold ${GENDER_ON_DARK[item.gender] || "text-[#cbbfae]"}`}>
+                <span className={`font-semibold ${genderTextClass(item.gender, "dark") || "text-[#cbbfae]"}`}>
                   {gm.label}
                 </span>
               </>
