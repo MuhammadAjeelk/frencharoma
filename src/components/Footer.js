@@ -191,29 +191,6 @@ export default function Footer() {
               &copy; 2026, French Aromas
             </p>
 
-            {/* Payment Methods */}
-            <div className="flex items-center gap-2.5 flex-wrap justify-center">
-              <svg className="h-5 w-auto opacity-60" viewBox="0 0 48 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="16" rx="3" fill="#1A1F71"/>
-                <text x="24" y="11" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold" fontFamily="Arial">VISA</text>
-              </svg>
-              <svg className="h-5 w-auto opacity-60" viewBox="0 0 48 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="48" height="16" rx="3" fill="#333"/>
-                <circle cx="19" cy="8" r="5" fill="#EB001B"/>
-                <circle cx="29" cy="8" r="5" fill="#F79E1B"/>
-                <circle cx="24" cy="8" r="3.2" fill="#FF5F00"/>
-              </svg>
-              <div className="h-5 px-2 bg-red-600/80 rounded flex items-center">
-                <span className="text-white text-[8px] font-bold">JazzCash</span>
-              </div>
-              <div className="h-5 px-2 bg-green-600/80 rounded flex items-center">
-                <span className="text-white text-[8px] font-bold">EasyPaisa</span>
-              </div>
-              <div className="h-5 px-2 bg-white/20 rounded flex items-center">
-                <span className="text-white text-[8px] font-bold">COD</span>
-              </div>
-            </div>
-
             {/* Social Media */}
             <div className="flex items-center gap-3">
               <a href="https://www.facebook.com/lineadebellaofficial" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#c9a25a] transition-colors" aria-label="Facebook">
