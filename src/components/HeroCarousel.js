@@ -9,18 +9,31 @@ export default function HeroCarousel() {
 
   const slides = [
     {
-      image: "/images/home/hero-shop-all-v2.webp",
+      image: "/images/home/hero-shop-all-v3.webp",
       title: "SHOP ALL",
       href: "/collections/shop-all",
       bg: "#f1e6d9",
     },
     {
-      image: "/images/home/hero-best-sellers-v2.webp",
+      image: "/images/home/hero-best-sellers-v3.webp",
       title: "BEST SELLERS",
       href: "/collections/shop-all?bestSeller=true",
       bg: "#e9d9c6",
     },
+    {
+      image: "/images/home/hero-special-offers-v3.webp",
+      title: "SPECIAL OFFERS",
+      href: "/collections/shop-all?specialOffer=true",
+      bg: "#e7d3bb",
+    },
+    {
+      image: "/images/home/hero-bundle-offers-v3.webp",
+      title: "BUNDLE OFFERS",
+      href: "/collections/shop-all",
+      bg: "#eddcc4",
+    },
   ];
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,7 +44,7 @@ export default function HeroCarousel() {
 
   return (
     <div className="relative w-full">
-      <div className="relative w-full aspect-2400/1358 overflow-hidden">
+      <div className="relative w-full aspect-2400/1071 overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={index}

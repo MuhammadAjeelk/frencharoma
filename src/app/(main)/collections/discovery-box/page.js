@@ -465,78 +465,25 @@ export default function DiscoveryBoxPage() {
 
   return (
     <div className="min-h-screen bg-[#373838]">
-      {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
-      <div className="relative bg-[#2e2e2e] text-[#efe7db] border-y-[6px] border-[#c9a25a]">
-        {/* Breadcrumb overlaid so it doesn't offset the vertically-centred logo */}
-        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-[#a99d8c]">
-          <Link href="/" className="transition-colors hover:text-[#e3c489]">
+      {/* ── Top banner — supplied artwork, copy and the 40% badge baked in ── */}
+      <div className="relative border-b-[6px] border-[#c9a25a]">
+        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-[#3a352f]">
+          <Link href="/" className="transition-colors hover:text-[#8a6f2e]">
             Home
           </Link>
           <span>/</span>
-          <span className="text-[#cbbfae]">Discovery Box</span>
+          <span className="font-medium text-[#211d18]">Discovery Box</span>
         </nav>
-        <div className={`${GUTTER} pt-10 pb-6 md:py-7`}>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
-            {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
-            <div
-              className="shrink-0 flex items-stretch text-[#c9a25a] -translate-y-4 md:-translate-y-8"
-              style={{
-                fontFamily:
-                  '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif',
-              }}
-            >
-              <span className="self-center text-2xl md:text-4xl tracking-[0.08em] text-[#efe7db]">
-                FLAT
-              </span>
-              <span className="text-[7.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
-                {DISCOUNT_PERCENT}
-              </span>
-              <span className="self-stretch flex flex-col justify-between items-start -ml-1 -my-1 md:-my-3">
-                <span
-                  className="text-5xl md:text-8xl font-bold leading-none"
-                  style={{ transform: "translateY(0.35em)" }}
-                >
-                  %
-                </span>
-                <span
-                  className="text-3xl md:text-5xl tracking-[0.06em] text-[#efe7db] leading-none"
-                  style={{ transform: "translateY(0.6em)" }}
-                >
-                  OFF
-                </span>
-              </span>
-            </div>
-
-            {/* Gold vertical divider */}
-            <div className="hidden md:block self-stretch w-px bg-[#c9a25a]/50" />
-
-            {/* Right — title, subtitle, description */}
-            <div className="max-w-2xl text-center">
-              <div className="inline-block">
-                <h1 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
-                  Discovery Box
-                </h1>
-                <Rule className="mt-2" />
-              </div>
-              <p className="font-[family-name:var(--font-playfair)] italic text-[#d2c1ac] mt-3 text-base md:text-xl leading-snug">
-                Discover Fragrances Before You Buy ...
-              </p>
-              <div className="flex items-center gap-2 my-3 justify-center">
-                <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
-                <span className="w-2 h-2 rotate-45 bg-[#c9a25a]" />
-                <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
-              </div>
-              <p className="text-[#cbbfae] text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
-                Build your discovery box with any{" "}
-                <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong> in 5ml
-                bottles and enjoy a{" "}
-                <strong className="font-semibold text-[#c9a25a]">Flat 40% OFF</strong> —
-                Explore, compare, and discover your favorites—More you explore,
-                more you love our Fragrances.
-              </p>
-            </div>
-          </div>
-        </div>
+        <Link href="#box-builder" className="block relative w-full aspect-2400/1071">
+          <Image
+            src="/images/home/hero-discovery-box-v3.webp"
+            alt={`Discovery Box — flat ${DISCOUNT_PERCENT}% off a tester set of 5 perfumes`}
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        </Link>
       </div>
 
       {/* ── Sticky box builder ───────────────────────────────────────────── */}
