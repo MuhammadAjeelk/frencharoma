@@ -16,12 +16,12 @@ const EDITION_STYLE = {
   classic: { label: "Classic Edition", bar: "bg-[#d8cbb8]", text: "text-[#3a352f]" },
 };
 
-function Stars({ rating }) {
+function Stars({ rating, compact = false }) {
   const pct = Math.max(0, Math.min(100, (rating / 5) * 100));
   const row = (cls) => (
     <span className={`flex gap-0.5 ${cls}`}>
       {[0, 1, 2, 3, 4].map((i) => (
-        <svg key={i} viewBox="0 0 24 24" className="w-[14px] h-[14px] shrink-0" fill="currentColor">
+        <svg key={i} viewBox="0 0 24 24" className={`${compact ? "w-[11px] h-[11px]" : "w-[14px] h-[14px]"} shrink-0`} fill="currentColor">
           <path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.6 6.1 20.7l1.2-6.6L2.5 9.5l6.6-.9z" />
         </svg>
       ))}
@@ -55,6 +55,10 @@ export default function BestSellerCard({
   // The corner pill. Defaults to "Best Sellers" for the homepage carousel;
   // shop-all passes null for anything that is not actually a best seller.
   badge = "Best Sellers",
+  // The homepage shows this card one-up on a phone (~350px). A 2-up grid gives
+  // it ~180px, where the desktop type and the 44px cart button collide with the
+  // price. `compact` scales the internals for that width.
+  compact = false,
 }) {
   const { addItem, perfumeQty } = useCart();
   const { isInWishlist, toggleItem } = useWishlist();
@@ -151,11 +155,11 @@ export default function BestSellerCard({
             });
           }}
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-          className="absolute top-3 right-3 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-[#e3d5c0] shadow-sm hover:scale-110 transition-transform duration-200"
+          className={`absolute z-20 flex items-center justify-center rounded-full bg-[#e3d5c0] shadow-sm hover:scale-110 transition-transform duration-200 ${compact ? "top-2 right-2 w-7 h-7" : "top-3 right-3 w-9 h-9"}`}
         >
           <svg
             viewBox="0 0 24 24"
-            className={`w-5 h-5 ${wished ? "fill-[#e0342c] text-[#e0342c]" : "fill-none text-[#e07a72]"}`}
+            className={`${compact ? "w-4 h-4" : "w-5 h-5"} ${wished ? "fill-[#e0342c] text-[#e0342c]" : "fill-none text-[#e07a72]"}`}
             stroke="currentColor"
             strokeWidth={1.8}
           >
@@ -185,45 +189,45 @@ export default function BestSellerCard({
         )}
 
         {badge && (
-          <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#cbb99a] px-2.5 py-0.5 text-[11px] font-medium text-[#2b2620] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
+          <span className={`absolute z-10 rounded-full bg-[#cbb99a] font-medium text-[#2b2620] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 left-2 px-2 py-0 text-[9px]" : "bottom-3 left-3 px-2.5 py-0.5 text-[11px]"}`}>
             {badge}
           </span>
         )}
         {cardEdition?.variant?.size && (
-          <span className="absolute bottom-3 right-3 z-10 rounded-full bg-[#efe9df] px-2 py-0.5 text-[11px] font-medium text-[#3a352f] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
+          <span className={`absolute z-10 rounded-full bg-[#efe9df] font-medium text-[#3a352f] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 right-2 px-1.5 py-0 text-[9px]" : "bottom-3 right-3 px-2 py-0.5 text-[11px]"}`}>
             {cardEdition.variant.size}
           </span>
         )}
       </div>
 
       {/* Details */}
-      <div className="relative flex flex-col gap-1.5 px-4 pt-3 pb-4">
+      <div className={`relative flex flex-col ${compact ? "gap-1 px-2.5 pt-2 pb-3" : "gap-1.5 px-4 pt-3 pb-4"}`}>
         <Link href={href || "#"} className="text-center">
-          <h3 className="text-[15px] font-bold leading-tight text-[#1f1a16] whitespace-nowrap overflow-hidden text-ellipsis">
+          <h3 className={`font-bold leading-tight text-[#1f1a16] ${compact ? "text-[12px] line-clamp-2" : "text-[15px] whitespace-nowrap overflow-hidden text-ellipsis"}`}>
             {name}
             {gm && <span className={`font-semibold ${gm.text}`}>{` - ${gm.label}`}</span>}
           </h3>
         </Link>
 
-        <div className="space-y-0.5 text-[12px] text-[#3a352f]">
+        <div className={`space-y-0.5 text-[#3a352f] ${compact ? "text-[10px]" : "text-[12px]"}`}>
           {impressionName && <p className="line-clamp-1">Inspired by: {impressionName}</p>}
           {brand && <p className="line-clamp-1">Brand: {brand}</p>}
           {scentFamily && <p className="line-clamp-1">Fragrance: {scentFamily}</p>}
         </div>
 
-        <div className="flex items-center gap-2 pr-14">
-          <Stars rating={avgRating} />
-          <span className="text-[12px] text-[#1f1a16]">{avgRating.toFixed(1)}/5</span>
-          <span className="text-[12px] text-[#3a352f]">({globalAdmirePercent}%)</span>
+        <div className={`flex items-center ${compact ? "gap-1 pr-9" : "gap-2 pr-14"}`}>
+          <Stars rating={avgRating} compact={compact} />
+          <span className={`text-[#1f1a16] ${compact ? "text-[10px]" : "text-[12px]"}`}>{avgRating.toFixed(1)}/5</span>
+          {!compact && <span className="text-[12px] text-[#3a352f]">({globalAdmirePercent}%)</span>}
         </div>
 
-        <div className="flex items-baseline gap-2.5 pr-14">
+        <div className={`flex items-baseline ${compact ? "flex-wrap gap-x-1.5 gap-y-0 pr-9" : "gap-2.5 pr-14"}`}>
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
-                <span className="strike-diagonal text-[13px] text-[#8c7f6d]">{formatRs(headlinePrice)}</span>
+                <span className={`strike-diagonal text-[#8c7f6d] ${compact ? "text-[10px]" : "text-[13px]"}`}>{formatRs(headlinePrice)}</span>
               )}
-              <span className="text-[15px] font-bold text-[#b5179e]">{formatRs(finalOf(headlinePrice))}</span>
+              <span className={`font-bold text-[#b5179e] ${compact ? "text-[12px]" : "text-[15px]"}`}>{formatRs(finalOf(headlinePrice))}</span>
             </>
           ) : (
             <span className="text-[12px] text-[#8c7f6d]">Unavailable</span>
@@ -238,7 +242,7 @@ export default function BestSellerCard({
           onClick={handleCart}
           disabled={!cardEdition}
           aria-label={inCartQty > 0 ? "Added to cart" : "Add to cart"}
-          className={`group/cart absolute bottom-4 right-3 z-20 inline-flex flex-row-reverse items-center justify-center h-11 min-w-[44px] rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
+          className={`group/cart absolute z-20 inline-flex flex-row-reverse items-center justify-center rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 ${compact ? "bottom-2.5 right-2 h-9 min-w-[36px]" : "bottom-4 right-3 h-11 min-w-[44px]"} shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
             !cardEdition
               ? "bg-[#a8a099] cursor-not-allowed"
               : inCartQty > 0
@@ -246,7 +250,7 @@ export default function BestSellerCard({
               : "bg-[#e0342c]"
           } text-white`}
         >
-          <svg viewBox="0 0 24 24" className="w-5 h-5 shrink-0" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" className={`${compact ? "w-4 h-4" : "w-5 h-5"} shrink-0`} fill="currentColor" aria-hidden="true">
             <path d="M7 4h-3a1 1 0 100 2h2.2l2.3 9.2A2 2 0 0010.4 17h7.2a2 2 0 001.9-1.4l2-6.6H8.2l-.5-2A1 1 0 007 4zm3.5 15a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2zm7 0a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z" />
           </svg>
           <span className="max-w-0 overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.06em] opacity-0 transition-all duration-200 group-hover/cart:max-w-[110px] group-hover/cart:opacity-100">

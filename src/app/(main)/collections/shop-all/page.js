@@ -454,6 +454,7 @@ function ShopAllContent() {
                   <Card
                     key={perfume._id}
                     badge={perfume.isBestSeller ? "Best Sellers" : null}
+                    compact={isPhone}
                     name={perfume.name}
                     brand={brandLabel}
                     image={perfume.images?.main || ""}
