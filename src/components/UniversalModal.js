@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { FOCUS_RING } from "@/lib/design";
 
 export default function UniversalModal({
@@ -11,6 +12,7 @@ export default function UniversalModal({
   details,
   children,
   wide = false,
+  artwork,
 }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -68,39 +70,61 @@ export default function UniversalModal({
           transform: shown ? "translateX(0)" : "translateX(100%)",
         }}
       >
-        <div className="sticky top-0 bg-[#373838] border-b-2 border-[#c9a25a] px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 z-30">
-          <h2 className="font-[family-name:var(--font-playfair)] italic text-base sm:text-lg font-normal text-[#c9a25a] leading-tight min-w-0">
-            {heading}
-          </h2>
-          <button
-            onClick={onClose}
-            className={`group/close shrink-0 p-1.5 rounded-full text-[#cbbfae] hover:text-[#211d18] hover:bg-[#c9a25a] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
-            aria-label="Close modal"
-          >
-            <svg
-              className="w-4 h-4 sm:w-[18px] sm:h-[18px]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="p-5 sm:p-6">
-          {details && (
-            <div className="mb-6">
-              <div className="prose prose-sm max-w-none">
-                <div className="text-[14px] text-[#3f3931] whitespace-pre-line leading-relaxed">
-                  {details}
-                </div>
-              </div>
+        {artwork ? (
+          <div className="relative">
+            <Image
+              src={artwork}
+              alt={heading}
+              width={866}
+              height={1138}
+              sizes="(min-width: 768px) 500px, (min-width: 640px) 420px, 100vw"
+              className="block w-full h-auto"
+              priority
+            />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close modal"
+              className={`absolute right-[1%] top-[1%] w-[7%] aspect-square min-w-11 min-h-11 rounded-full ${FOCUS_RING}`}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="sticky top-0 bg-[#373838] border-b-2 border-[#c9a25a] px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 z-30">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-base sm:text-lg font-normal text-[#c9a25a] leading-tight min-w-0">
+                {heading}
+              </h2>
+              <button
+                onClick={onClose}
+                className={`group/close shrink-0 p-1.5 rounded-full text-[#cbbfae] hover:text-[#211d18] hover:bg-[#c9a25a] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
+                aria-label="Close modal"
+              >
+                <svg
+                  className="w-4 h-4 sm:w-[18px] sm:h-[18px]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-          )}
-          {children}
-        </div>
+
+            <div className="p-5 sm:p-6">
+              {details && (
+                <div className="mb-6">
+                  <div className="prose prose-sm max-w-none">
+                    <div className="text-[14px] text-[#3f3931] whitespace-pre-line leading-relaxed">
+                      {details}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {children}
+            </div>
+          </>
+        )}
       </div>
     </>,
     document.body,

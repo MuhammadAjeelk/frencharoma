@@ -10,11 +10,8 @@ const FEATURES = [
     icon: 1,
     title: "FRENCH INGREDIENTS",
     blurb: "Crafted with original French ingredients.",
-    heading: "Original French Perfume Oils",
-    details: [
-      "We craft our fragrances using **premium, original French perfume oils** sourced from **renowned fragrance houses** — known for **exceptional purity, depth, and long-lasting performance**.",
-      "By blending **authentic French essences** with skilled formulation, each scent delivers a **rich, luxurious experience** that lingers beautifully on the skin.",
-    ],
+    heading: "French Ingredients",
+    image: "/images/home/trust/french-ingredients-popup-v2.png",
   },
   {
     icon: 2,
@@ -149,8 +146,9 @@ export default function WhyChooseUs() {
         isOpen={openIndex != null}
         onClose={() => setOpenIndex(null)}
         heading={active?.heading || ""}
+        artwork={active?.image}
       >
-        {active && (
+        {active && !active.image && (
           <div className="space-y-3">
             {active.details.map((para, idx) => (
               <p key={idx} className="text-[14px] text-[#4a4540] leading-relaxed">
