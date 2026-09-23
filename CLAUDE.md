@@ -1,7 +1,8 @@
 # French Aromas
 
 Next.js storefront for a Dubai-based perfume house. Deployed to
-frencharoma.sparksgate.com — see `memory/deploy-workflow.md` for the process.
+frencharomas.com, with staging.frencharomas.com alongside it — see
+`memory/deploy-workflow.md` for the server, the two app dirs and the process.
 
 ## Design system
 
