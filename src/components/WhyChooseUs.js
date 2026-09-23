@@ -24,10 +24,8 @@ const FEATURES = [
     icon: 3,
     title: "LONG-LASTING",
     blurb: "Exceptionally long-lasting: 12 to 24 hours.",
-    heading: "Long-Lasting Performance",
-    details: [
-      "Designed to **last from day to night** — a **long-lasting aroma, a strong scent trail (sillage)**, and **deep layers** that unfold beautifully over time. **One spray goes a long way.**",
-    ],
+    heading: "Long-Lasting",
+    image: "/images/home/trust/long-lasting-popup-v1.png",
   },
   {
     icon: 4,
