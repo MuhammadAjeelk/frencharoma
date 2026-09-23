@@ -1,0 +1,50 @@
+name: Deploy staging
+
+# Pushing to `staging` deploys to staging.frencharomas.com.
+# Production (frencharomas.com, the `main` branch) is deliberately not wired up
+# — it is still deployed by hand.
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+# Two pushes in quick succession must not build over each other on the box.
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and restart on the staging server
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Deploy over SSH
+        env:
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          SSH_HOST: ${{ secrets.STAGING_HOST }}
+          KNOWN_HOSTS: ${{ secrets.STAGING_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY"     > ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+          # The key on the server is pinned to /usr/local/bin/deploy-staging.sh
+          # via authorized_keys, so connecting is the whole deploy — this key
+          # cannot run anything else, and no command is passed here.
+          ssh -i ~/.ssh/deploy_key \
+              -o IdentitiesOnly=yes \
+              -o UserKnownHostsFile=~/.ssh/known_hosts \
+              -o ConnectTimeout=30 \
+              root@"$SSH_HOST"
+
+      - name: Check staging is serving
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 https://staging.frencharomas.com/)
+          echo "staging.frencharomas.com returned HTTP $code"
+          # 401 is the expected answer: staging sits behind basic auth, and a
+          # 401 still proves nginx and the app are up.
+          [ "$code" = "401" ] || [ "$code" = "200" ]
