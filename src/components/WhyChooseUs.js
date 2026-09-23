@@ -17,10 +17,8 @@ const FEATURES = [
     icon: 2,
     title: "40% CONCENTRATION",
     blurb: "Enhanced richness, projection, and lasting power.",
-    heading: "Up to 40% Concentration of Fragrance Oils",
-    details: [
-      "Our perfumes are crafted with **up to 40% concentration of premium fragrance oils**, offering **richness, depth, and impressive longevity** — a more intense, refined, and enduring fragrance experience.",
-    ],
+    heading: "High Concentration",
+    image: "/images/home/trust/high-concentration-popup-v1.png",
   },
   {
     icon: 3,
