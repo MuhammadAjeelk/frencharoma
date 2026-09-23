@@ -85,8 +85,14 @@ export default function UniversalModal({
               type="button"
               onClick={onClose}
               aria-label="Close modal"
-              className={`absolute right-[1%] top-[1%] w-[7%] aspect-square min-w-11 min-h-11 rounded-full ${FOCUS_RING}`}
-            />
+              className={`group/close absolute left-[95.8%] top-[3.43%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full cursor-pointer ${FOCUS_RING}`}
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#faf9f7] text-red-600 opacity-0 transition-opacity duration-150 group-hover/close:opacity-100 group-focus-visible/close:opacity-100">
+                <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </button>
           </div>
         ) : (
           <>
