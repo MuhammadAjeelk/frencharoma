@@ -32,9 +32,7 @@ const FEATURES = [
     title: "AFFORDABLE LUXURY",
     blurb: "Imported quality, at local price.",
     heading: "Affordable Luxury",
-    details: [
-      "**Luxury shouldn't come with a luxury price tag.** Premium ingredients, rich oil concentrations, and elegant, long-lasting formulas — kept **genuinely affordable**. Feel the luxury vibes without the luxury price.",
-    ],
+    image: "/images/home/trust/affordable-luxury-popup-v1.png",
   },
   {
     icon: 5,
