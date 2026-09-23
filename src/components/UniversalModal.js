@@ -75,8 +75,8 @@ export default function UniversalModal({
             <Image
               src={artwork}
               alt={heading}
-              width={866}
-              height={1138}
+              width={1094}
+              height={1437}
               sizes="(min-width: 768px) 500px, (min-width: 640px) 420px, 100vw"
               className="block w-full h-auto"
               priority

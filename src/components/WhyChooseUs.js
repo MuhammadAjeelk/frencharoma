@@ -11,7 +11,7 @@ const FEATURES = [
     title: "FRENCH INGREDIENTS",
     blurb: "Crafted with original French ingredients.",
     heading: "French Ingredients",
-    image: "/images/home/trust/french-ingredients-popup-v2.png",
+    image: "/images/home/trust/french-ingredients-popup-v3.png",
   },
   {
     icon: 2,
