@@ -74,7 +74,7 @@ const FEATURES = [
 function renderInline(text, key) {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
     part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={`${key}-${i}`} className="font-bold text-[#1f1a16]">{part.slice(2, -2)}</strong>
+      <strong key={`${key}-${i}`} className="font-bold text-[var(--fa-ink)]">{part.slice(2, -2)}</strong>
     ) : (
       <span key={`${key}-${i}`}>{part}</span>
     ),
@@ -97,7 +97,7 @@ export default function WhyChooseUs() {
   const active = openIndex != null ? FEATURES[openIndex] : null;
 
   return (
-    <section className="bg-[#373838] py-7 md:py-10">
+    <section className="bg-[var(--fa-dark)] py-7 md:py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-5 gap-x-1 sm:gap-x-2">
         {STRIP.map((item, i) => {
           const feature = FEATURES.find((f) => f.icon === item.icon);
@@ -105,7 +105,7 @@ export default function WhyChooseUs() {
             <div
               key={item.icon}
               className={`flex items-center justify-center px-2 md:px-4 ${
-                i < STRIP.length - 1 ? "lg:border-r lg:border-black" : ""
+                i < STRIP.length - 1 ? "lg:border-r lg:border-[var(--fa-gold)]/30" : ""
               }`}
             >
               <button
@@ -143,7 +143,7 @@ export default function WhyChooseUs() {
         {active && !active.image && (
           <div className="space-y-3">
             {active.details.map((para, idx) => (
-              <p key={idx} className="text-[14px] text-[#4a4540] leading-relaxed">
+              <p key={idx} className="text-[14px] text-[var(--fa-secondary)] leading-relaxed">
                 {renderInline(para, idx)}
               </p>
             ))}

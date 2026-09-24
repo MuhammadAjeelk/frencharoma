@@ -32,18 +32,31 @@ Codified from the homepage. This is the contract every phase is checked against.
 
 ### Colour
 
-| Token | Use |
-|---|---|
-| `#373838` | Primary dark section ground |
-| `#2e2e2e` | Deeper dark (footer bottom bar) |
-| `#d4c6ab` | Light section ground |
-| `#d1c0ab` | Nav band / announcement strip |
-| `#c9a25a` | Primary gold — headings, rules, borders |
-| `#d1ae6d` | Brighter gold — card frames |
-| `#e3c489` | Gold hover |
-| `#211d18` | Warm near-black — text on light grounds |
-| `#cbbfae` | Body text on dark grounds |
-| `#a99d8c` | Muted/secondary text on dark |
+The staging storefront palette was refined from the Shop All reference in September 2026.
+The source of truth is now the semantic `--fa-*` variables in `src/app/globals.css`;
+`src/lib/design.js` exports aliases for inline styles. This color-only refinement
+preserves the existing layout, typography, image assets, routes and business logic.
+
+| Token | Value | Use |
+|---|---|---|
+| `--fa-dark` | `#281b12` | Espresso sections, header and footer |
+| `--fa-dark-deep` | `#20150e` | Announcement bar and inset dark surfaces |
+| `--fa-cream` | `#f7f2ea` | Ivory backgrounds and light panels |
+| `--fa-beige` | `#eee3d4` | Champagne cards and secondary surfaces |
+| `--fa-gold` | `#b99a66` | Antique gold accents and controls on dark surfaces |
+| `--fa-gold-hover` | `#d4b987` | Gold hover/focus on dark surfaces |
+| `--fa-gold-ink` | `#765431` | Accessible bronze text/icons on light surfaces |
+| `--fa-ink` | `#281e16` | Primary text on light surfaces |
+| `--fa-secondary` | `#68594b` | Secondary text on light surfaces |
+| `--fa-on-dark` | `#e4d7c5` | Body text on espresso |
+| `--fa-muted-dark` | `#c0ae98` | Secondary text on espresso |
+| `--fa-border` | `#d7c5ad` | Warm neutral borders/dividers |
+| `--fa-selected` | `#ead8bf` | Selected/highlighted light rows |
+| `--fa-hover` | `#f0e2d1` | Hover backgrounds on light surfaces |
+| `--fa-peach` | `#edd8ca` | Subtle peach-beige highlights |
+
+Status, error, success and gender-identification colors remain functional exceptions.
+Do not apply theme colors or filters to photography, banners, logos or designed artwork.
 
 Retired: `#1a1a2e`, `#b8964e`, `#faf8f5`, `#f7f5f2`, `#e8e4df`, `#1c1a17`,
 `#211e1a`, `#17140f`.

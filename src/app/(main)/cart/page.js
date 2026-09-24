@@ -38,11 +38,11 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
     <div className="flex flex-col sm:flex-row gap-4 py-6">
       {/* Image */}
       <Link href={`/products/${item.slug}`} className="shrink-0">
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 overflow-hidden bg-[#2e2e2e] border border-[#d1ae6d]">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 overflow-hidden bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]">
           {item.image ? (
             <Image src={item.image} alt={item.name} fill className="object-cover" sizes="112px" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-[#a99d8c]">
+            <div className="w-full h-full flex items-center justify-center text-[var(--fa-muted-dark)]">
               <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -55,12 +55,12 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
       {/* Details */}
       <div className="flex-1 min-w-0">
         <Link href={`/products/${item.slug}`}>
-          <h3 className="font-semibold text-[#efe7db] text-sm sm:text-base hover:text-[#e3c489] transition-colors leading-snug break-words">
+          <h3 className="font-semibold text-[var(--fa-cream)] text-sm sm:text-base hover:text-[var(--fa-gold-hover)] transition-colors leading-snug break-words">
             {item.name}
             {gm && (
               <>
                 {" – "}
-                <span className={`font-semibold ${genderTextClass(item.gender, "dark") || "text-[#cbbfae]"}`}>
+                <span className={`font-semibold ${genderTextClass(item.gender, "dark") || "text-[var(--fa-on-dark)]"}`}>
                   {gm.label}
                 </span>
               </>
@@ -69,40 +69,40 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
         </Link>
 
         {item.impressionName && (
-          <p className="text-xs sm:text-sm text-[#a99d8c] mt-1 break-words">
+          <p className="text-xs sm:text-sm text-[var(--fa-muted-dark)] mt-1 break-words">
             Impression of:{" "}
-            <span className="font-semibold text-[#cbbfae]">{item.impressionName}</span>
+            <span className="font-semibold text-[var(--fa-on-dark)]">{item.impressionName}</span>
           </p>
         )}
 
         <div className="flex flex-wrap items-center gap-2 mt-2">
           {editionLabel && (
-            <span className="text-[11px] font-semibold text-[#211d18] bg-[#c9a25a] px-2.5 py-0.5 rounded-full">
+            <span className="text-[11px] font-semibold text-[var(--fa-ink)] bg-[var(--fa-gold)] px-2.5 py-0.5 rounded-full">
               Edition: {editionLabel}
             </span>
           )}
           {item.size && (
-            <span className="text-[11px] font-semibold text-[#cbbfae] border border-[#c9a25a]/45 px-2.5 py-0.5 rounded-full">
+            <span className="text-[11px] font-semibold text-[var(--fa-on-dark)] border border-[var(--fa-gold)]/45 px-2.5 py-0.5 rounded-full">
               Size: {item.size}
             </span>
           )}
         </div>
 
         <div className="flex items-center gap-4 mt-3">
-          <div className="flex items-center border border-[#c9a25a]/50">
+          <div className="flex items-center border border-[var(--fa-gold)]/50">
             <button
               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-              className={`w-9 h-9 flex items-center justify-center text-lg leading-none text-[#c9a25a] hover:bg-[#c9a25a] hover:text-[#211d18] transition-colors ${FOCUS_RING}`}
+              className={`w-9 h-9 flex items-center justify-center text-lg leading-none text-[var(--fa-gold)] hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] transition-colors ${FOCUS_RING}`}
               aria-label="Decrease quantity"
             >
               −
             </button>
-            <span className="px-3 h-9 flex items-center justify-center text-sm font-semibold text-[#efe7db] min-w-[2.5rem] border-x border-[#c9a25a]/50">
+            <span className="px-3 h-9 flex items-center justify-center text-sm font-semibold text-[var(--fa-cream)] min-w-[2.5rem] border-x border-[var(--fa-gold)]/50">
               {item.quantity}
             </span>
             <button
               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-              className={`w-9 h-9 flex items-center justify-center text-lg leading-none text-[#c9a25a] hover:bg-[#c9a25a] hover:text-[#211d18] transition-colors ${FOCUS_RING}`}
+              className={`w-9 h-9 flex items-center justify-center text-lg leading-none text-[var(--fa-gold)] hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] transition-colors ${FOCUS_RING}`}
               aria-label="Increase quantity"
             >
               +
@@ -112,13 +112,13 @@ function CartItemRow({ item, updateQuantity, removeItem }) {
       </div>
 
       {/* Price breakup (spec pt 5 mock) */}
-      <div className="sm:text-right shrink-0 sm:w-44 border-t sm:border-t-0 border-[#c9a25a]/20 pt-3 sm:pt-0">
-        <div className="text-xl font-bold text-[#c9a25a] leading-tight">
+      <div className="sm:text-right shrink-0 sm:w-44 border-t sm:border-t-0 border-[var(--fa-gold)]/20 pt-3 sm:pt-0">
+        <div className="text-xl font-bold text-[var(--fa-gold)] leading-tight">
           {rs(lineSubtotal)}
         </div>
         {hasDisc && (
           <>
-            <div className="text-sm text-[#a99d8c] line-through leading-tight">
+            <div className="text-sm text-[var(--fa-muted-dark)] line-through leading-tight">
               {rs(lineOriginal)}
             </div>
             <div className="mt-1.5 text-sm font-semibold text-[#8fd3a3] leading-tight">
@@ -156,10 +156,10 @@ function DiscoveryBoxCard({ box, removeItem }) {
     <div className="py-6">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-[family-name:var(--font-playfair)] italic text-base text-[#c9a25a]">
+          <span className="font-[family-name:var(--font-playfair)] italic text-base text-[var(--fa-gold)]">
             Discovery Box {box.number}
           </span>
-          <span className="text-xs text-[#a99d8c]">
+          <span className="text-xs text-[var(--fa-muted-dark)]">
             {box.items.length} × 5ml{disc > 0 ? ` · ${disc}% off` : ""}
           </span>
         </div>
@@ -175,33 +175,33 @@ function DiscoveryBoxCard({ box, removeItem }) {
       </div>
 
       {/* Double gold frame — the device the footer newsletter panel uses */}
-      <div className="border border-[#c9a25a]/60 p-1.5">
-        <div className="border border-[#c9a25a]/30 p-3">
+      <div className="border border-[var(--fa-gold)]/60 p-1.5">
+        <div className="border border-[var(--fa-gold)]/30 p-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {box.items.map((i, idx) => (
-              <div key={i.id} className="flex items-center gap-2.5 bg-[#2e2e2e] border border-[#c9a25a]/25 p-1.5">
-                <Link href={`/products/${i.slug}`} className="relative w-12 h-12 overflow-hidden bg-[#373838] border border-[#c9a25a]/30 shrink-0">
+              <div key={i.id} className="flex items-center gap-2.5 bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/25 p-1.5">
+                <Link href={`/products/${i.slug}`} className="relative w-12 h-12 overflow-hidden bg-[var(--fa-dark)] border border-[var(--fa-gold)]/30 shrink-0">
                   {i.image ? (
                     <Image src={i.image} alt={i.name} fill className="object-cover" sizes="48px" />
                   ) : null}
-                  <span className="absolute top-0 left-0 w-4 h-4 bg-[#c9a25a] text-[#211d18] flex items-center justify-center text-[10px] font-bold leading-none">
+                  <span className="absolute top-0 left-0 w-4 h-4 bg-[var(--fa-gold)] text-[var(--fa-ink)] flex items-center justify-center text-[10px] font-bold leading-none">
                     {idx + 1}
                   </span>
                 </Link>
                 <div className="min-w-0 flex-1">
                   <Link href={`/products/${i.slug}`}>
-                    <p className="text-xs font-semibold text-[#efe7db] truncate hover:text-[#e3c489] transition-colors">{i.name}</p>
+                    <p className="text-xs font-semibold text-[var(--fa-cream)] truncate hover:text-[var(--fa-gold-hover)] transition-colors">{i.name}</p>
                   </Link>
-                  <p className="text-[11px] text-[#a99d8c]">5ml · {rs(i.price)}</p>
+                  <p className="text-[11px] text-[var(--fa-muted-dark)]">5ml · {rs(i.price)}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#c9a25a]/25">
-            <span className="text-xs text-[#a99d8c]">Box total</span>
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--fa-gold)]/25">
+            <span className="text-xs text-[var(--fa-muted-dark)]">Box total</span>
             <span className="flex items-baseline gap-2">
-              {disc > 0 && <span className="text-xs text-[#a99d8c] line-through">{rs(orig)}</span>}
-              <span className="text-sm font-bold text-[#c9a25a]">{rs(total)}</span>
+              {disc > 0 && <span className="text-xs text-[var(--fa-muted-dark)] line-through">{rs(orig)}</span>}
+              <span className="text-sm font-bold text-[var(--fa-gold)]">{rs(total)}</span>
             </span>
           </div>
         </div>
@@ -258,27 +258,27 @@ export default function CartPage() {
 
   if (!hydrated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#373838]">
-        <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--fa-dark)]">
+        <div className="w-8 h-8 border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#373838]">
+    <div className="min-h-screen bg-[var(--fa-dark)]">
       {/* Page header — the light band, the way the homepage opens a light section */}
-      <div className="bg-[#d4c6ab] py-8 md:py-12 text-center">
+      <div className="bg-[var(--fa-cream)] py-8 md:py-12 text-center">
         <div className={GUTTER}>
-          <nav className="flex justify-center items-center gap-2 text-xs text-[#211d18]/70 mb-3">
-            <Link href="/" className="hover:text-[#211d18] transition-colors">Home</Link>
+          <nav className="flex justify-center items-center gap-2 text-xs text-[var(--fa-ink)]/70 mb-3">
+            <Link href="/" className="hover:text-[var(--fa-ink)] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-[#211d18] font-medium">Cart</span>
+            <span className="text-[var(--fa-ink)] font-medium">Cart</span>
           </nav>
           <div className="inline-block">
-            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#211d18]">
+            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-ink)]">
               Your Cart
             </h1>
-            <Rule color="#211d18" className="mt-2" />
+            <Rule color="var(--fa-ink)" className="mt-2" />
           </div>
         </div>
       </div>
@@ -286,22 +286,22 @@ export default function CartPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 md:py-24 text-center">
-            <svg className="w-20 h-20 text-[#c9a25a]/40 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-20 h-20 text-[var(--fa-gold)]/40 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                 d="M3 3h2l.4 2M7 13h10l4-4H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
             <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-3xl font-normal text-[#c9a25a]">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-3xl font-normal text-[var(--fa-gold)]">
                 Your cart is empty
               </h2>
               <Rule className="mt-2" />
             </div>
-            <p className="text-[#cbbfae] mt-5 mb-7 text-sm max-w-sm">
+            <p className="text-[var(--fa-on-dark)] mt-5 mb-7 text-sm max-w-sm">
               Discover our luxury fragrances and add them to your cart.
             </p>
             <Link
               href="/collections/shop-all"
-              className={`border border-[#c9a25a] bg-[#c9a25a] px-8 py-3 text-sm font-semibold text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] transition-colors ${FOCUS_RING}`}
+              className={`border border-[var(--fa-gold)] bg-[var(--fa-gold)] px-8 py-3 text-sm font-semibold text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
             >
               Shop All Perfumes
             </Link>
@@ -322,7 +322,7 @@ export default function CartPage() {
                 </div>
               ) : (
                 summary.singleBoxOnly && (
-                  <div className="border border-[#c9a25a]/45 bg-[#43392a] px-4 py-3 mb-4">
+                  <div className="border border-[var(--fa-gold)]/45 bg-[#43392a] px-4 py-3 mb-4">
                     <p className="text-sm text-[#e6cf9e]">
                       Add any perfume or another Discovery Box to qualify for{" "}
                       <span className="font-semibold text-[#f0dcb2]">FREE shipping</span>.
@@ -331,7 +331,7 @@ export default function CartPage() {
                 )
               )}
 
-              <div className="divide-y divide-[#c9a25a]/20 border-y border-[#c9a25a]/20">
+              <div className="divide-y divide-[var(--fa-gold)]/20 border-y border-[var(--fa-gold)]/20">
                 {cartGroups.map((g) =>
                   g.type === "box" ? (
                     <DiscoveryBoxCard key={g.boxId} box={g} removeItem={removeItem} />
@@ -348,7 +348,7 @@ export default function CartPage() {
 
               {/* Order Note (spec pt 3) */}
               <div className="mt-6">
-                <label htmlFor="order-note" className="block text-sm font-semibold text-[#efe7db] mb-2">
+                <label htmlFor="order-note" className="block text-sm font-semibold text-[var(--fa-cream)] mb-2">
                   Order Note
                 </label>
                 <textarea
@@ -364,13 +364,13 @@ export default function CartPage() {
 
             {/* Order Summary (spec pt 4) — a light panel on the dark ground */}
             <div className="lg:w-80 xl:w-96 shrink-0">
-              <div className="border border-[#c9a25a] bg-[#efe7db] p-5 sm:p-6 static lg:sticky lg:top-24">
+              <div className="border border-[var(--fa-gold)] bg-[var(--fa-cream)] p-5 sm:p-6 static lg:sticky lg:top-24">
                 <OrderSummary summary={summary} itemCount={itemCount} />
 
                 {/* Proceed to Checkout */}
                 <Link
                   href="/checkout"
-                  className={`w-full mt-5 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] py-3.5 font-semibold text-sm hover:bg-[#e3c489] hover:border-[#e3c489] transition-colors text-center block ${FOCUS_RING_LIGHT}`}
+                  className={`w-full mt-5 border border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] py-3.5 font-semibold text-sm hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] transition-colors text-center block ${FOCUS_RING_LIGHT}`}
                 >
                   Proceed to Checkout
                 </Link>
@@ -378,7 +378,7 @@ export default function CartPage() {
                 {/* Continue Shopping (spec pt 2) — outlined, with the idle arrow */}
                 <Link
                   href="/collections/shop-all"
-                  className={`group w-full mt-3 border border-[#211d18]/70 text-[#211d18] py-3 font-semibold text-sm hover:bg-[#211d18] hover:text-[#efe7db] transition-colors text-center flex items-center justify-center gap-2 ${FOCUS_RING_LIGHT}`}
+                  className={`group w-full mt-3 border border-[var(--fa-ink)]/70 text-[var(--fa-ink)] py-3 font-semibold text-sm hover:bg-[var(--fa-ink)] hover:text-[var(--fa-cream)] transition-colors text-center flex items-center justify-center gap-2 ${FOCUS_RING_LIGHT}`}
                 >
                   <svg className="w-4 h-4 animate-bobX group-hover:animate-none group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -386,7 +386,7 @@ export default function CartPage() {
                   Continue Shopping
                 </Link>
 
-                <div className="mt-4 flex items-center justify-center gap-2 text-xs text-[#5c554b]">
+                <div className="mt-4 flex items-center justify-center gap-2 text-xs text-[var(--fa-secondary)]">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>

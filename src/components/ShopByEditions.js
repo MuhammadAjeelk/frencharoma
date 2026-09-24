@@ -18,20 +18,20 @@ const EDITIONS = [
 
 export default function ShopByEditions() {
   return (
-    <section className="relative bg-[#d4c6ab] py-10 md:py-12 overflow-hidden">
+    <section className="relative bg-[var(--fa-cream)] py-10 md:py-12 overflow-hidden">
       {/* faint lotus watermark */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(circle_at_15%_50%,#2a2620_0,transparent_35%),radial-gradient(circle_at_85%_55%,#2a2620_0,transparent_35%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(circle_at_15%_50%,var(--fa-ink)_0,transparent_35%),radial-gradient(circle_at_85%_55%,var(--fa-ink)_0,transparent_35%)]" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative mb-10 md:mb-14">
           <div className="text-center">
             <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#211d18]">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-ink)]">
               Shop By Editions
               </h2>
               {/* rule spans the title only — solid in the middle, fading at the ends */}
-              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#211d18_25%,#211d18_75%,transparent_100%)]" />
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-ink)_25%,var(--fa-ink)_75%,transparent_100%)]" />
             </div>
-            <p className="mt-5 text-[#211d18] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
+            <p className="mt-5 text-[var(--fa-ink)] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
               Crafted for every mood and moment.
             </p>
           </div>
@@ -39,7 +39,7 @@ export default function ShopByEditions() {
           <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
             <Link
               href="/collections/shop-all"
-              className="inline-flex items-center gap-2.5 rounded-md border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#211d18] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]"
+              className="inline-flex items-center gap-2.5 rounded-md border border-[var(--fa-hover-dark)]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[var(--fa-ink)] transition-colors hover:bg-[var(--fa-hover-dark)] hover:text-[var(--fa-cream)]"
             >
               View All
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">

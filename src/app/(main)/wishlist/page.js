@@ -47,8 +47,8 @@ export default function WishlistPage() {
 
   if (!hydrated) {
     return (
-      <div className="min-h-screen bg-[#373838] flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--fa-dark)] flex items-center justify-center">
+        <div className="w-10 h-10 border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] rounded-full animate-spin" />
       </div>
     );
   }
@@ -56,17 +56,17 @@ export default function WishlistPage() {
   const loading = catalog === null;
 
   return (
-    <div className="min-h-screen bg-[#373838]">
+    <div className="min-h-screen bg-[var(--fa-dark)]">
       {/* pt-14/pt-20 adds breathing room between the menu bar and the heading */}
       <div className={`${GUTTER} pt-14 md:pt-20 pb-12`}>
         <div className="text-center">
           <div className="inline-block">
-            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
               My Wishlist
             </h1>
             <Rule className="mt-2" />
           </div>
-          <p className="mt-5 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[#d2c1ac]">
+          <p className="mt-5 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[var(--fa-on-dark)]">
             {items.length === 0
               ? "Your wishlist is empty. Browse our collection and save your favourites."
               : `${items.length} item${items.length !== 1 ? "s" : ""} saved`}
@@ -74,9 +74,9 @@ export default function WishlistPage() {
         </div>
 
         {items.length === 0 ? (
-          <div className="mt-10 border border-[#d1ae6d] bg-[#2e2e2e] px-6 py-14 text-center">
+          <div className="mt-10 border border-[var(--fa-gold)] bg-[var(--fa-dark-deep)] px-6 py-14 text-center">
             <svg
-              className="w-16 h-16 mx-auto text-[#c9a25a]/45 mb-4"
+              className="w-16 h-16 mx-auto text-[var(--fa-gold)]/45 mb-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -88,15 +88,15 @@ export default function WishlistPage() {
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <h2 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[#c9a25a] mb-2">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[var(--fa-gold)] mb-2">
               No items yet
             </h2>
-            <p className="text-sm text-[#a99d8c] mb-6">
+            <p className="text-sm text-[var(--fa-muted-dark)] mb-6">
               Heart the perfumes you love and they&apos;ll appear here.
             </p>
             <Link
               href="/collections/shop-all"
-              className="inline-flex items-center justify-center border border-[#c9a25a] bg-[#c9a25a] px-6 py-3 text-sm font-semibold text-[#211d18] transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
+              className="inline-flex items-center justify-center border border-[var(--fa-gold)] bg-[var(--fa-gold)] px-6 py-3 text-sm font-semibold text-[var(--fa-ink)] transition-colors hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)]"
             >
               Browse Perfumes
             </Link>
@@ -144,12 +144,12 @@ export default function WishlistPage() {
                 return (
                   <div
                     key={item.slug}
-                    className="border border-[#d1ae6d]/40 bg-[#2e2e2e] overflow-hidden animate-pulse"
+                    className="border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)] overflow-hidden animate-pulse"
                   >
-                    <div className="aspect-[6.818/7.5] bg-[#3f3f3f]" />
+                    <div className="aspect-[6.818/7.5] bg-[var(--fa-dark-raised)]" />
                     <div className="p-3 space-y-2">
-                      <div className="h-3 bg-[#3f3f3f] w-3/4" />
-                      <div className="h-3 bg-[#3f3f3f] w-1/2" />
+                      <div className="h-3 bg-[var(--fa-dark-raised)] w-3/4" />
+                      <div className="h-3 bg-[var(--fa-dark-raised)] w-1/2" />
                     </div>
                   </div>
                 );
@@ -158,11 +158,11 @@ export default function WishlistPage() {
               return (
                 <div
                   key={item.slug}
-                  className="group relative border border-[#d1ae6d] overflow-hidden bg-[#2e2e2e] flex flex-col"
+                  className="group relative border border-[var(--fa-gold)] overflow-hidden bg-[var(--fa-dark-deep)] flex flex-col"
                 >
                   <button
                     onClick={() => removeItem(item.slug)}
-                    className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full border border-[#d1ae6d]/70 bg-[#211d18]/90 backdrop-blur-sm transition-colors hover:border-[#e0342c] hover:bg-[#e0342c]"
+                    className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full border border-[var(--fa-gold)]/70 bg-[var(--fa-ink)]/90 backdrop-blur-sm transition-colors hover:border-[#e0342c] hover:bg-[#e0342c]"
                     aria-label="Delete from wishlist"
                   >
                     <svg
@@ -178,15 +178,15 @@ export default function WishlistPage() {
                       />
                     </svg>
                   </button>
-                  <div className="aspect-[6.818/7.5] bg-[#373838] flex items-center justify-center text-[#a99d8c] text-xs px-3 text-center">
+                  <div className="aspect-[6.818/7.5] bg-[var(--fa-dark)] flex items-center justify-center text-[var(--fa-muted-dark)] text-xs px-3 text-center">
                     Currently unavailable
                   </div>
                   <div className="p-3 flex flex-col flex-1">
-                    <h3 className="text-sm font-semibold text-[#efe7db] line-clamp-2 break-words">
+                    <h3 className="text-sm font-semibold text-[var(--fa-cream)] line-clamp-2 break-words">
                       {item.name}
                     </h3>
                     {item.brand && (
-                      <p className="text-xs text-[#a99d8c] mt-0.5 line-clamp-2 break-words">
+                      <p className="text-xs text-[var(--fa-muted-dark)] mt-0.5 line-clamp-2 break-words">
                         {item.brand}
                       </p>
                     )}

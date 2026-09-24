@@ -127,7 +127,7 @@ export default function Header() {
   return (
     <>
       {/* Running announcement bar */}
-      <div className="w-full overflow-hidden border-t-2 border-t-[#c9a25a]/70 border-b border-b-[#bda98f] bg-[#d1c0ab]">
+      <div className="w-full overflow-hidden border-t-2 border-t-[var(--fa-gold)]/70 border-b border-b-[var(--fa-gold)]/25 bg-[var(--fa-dark-deep)]">
         <div className="flex w-max animate-marquee py-2">
           {[0, 1].map((dup) => (
             <div
@@ -137,11 +137,11 @@ export default function Header() {
             >
               {marqueeItems.map((item, i) => (
                 <span key={i} className="flex items-center">
-                  <span className="px-6 text-[13px] font-medium tracking-wide text-black whitespace-nowrap">
+                  <span className="px-6 text-[13px] font-medium tracking-wide text-[var(--fa-cream)] whitespace-nowrap">
                     {item}
                   </span>
                   <svg
-                    className="w-3.5 h-3.5 text-[#6b5421] shrink-0"
+                    className="w-3.5 h-3.5 text-[var(--fa-gold)] shrink-0"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -155,7 +155,7 @@ export default function Header() {
         </div>
       </div>
 
-      <header className="header relative z-50 border-b border-[#bda98f] bg-[#373838]">
+      <header className="header relative z-50 border-b border-[var(--fa-border)] bg-[var(--fa-dark)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Top Section */}
           <div className="flex items-center justify-between py-1.5 lg:py-2">
@@ -164,7 +164,7 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`lg:hidden p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors ${FOCUS_RING}`}
+                className={`lg:hidden p-2 focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                 aria-label="Menu"
               >
                 <MaskIcon src="/icons/menu.svg" />
@@ -174,7 +174,7 @@ export default function Header() {
               <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 py-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 whitespace-nowrap ${FOCUS_RING} ${
+                  className={`flex items-center gap-2 py-2 focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors duration-200 whitespace-nowrap ${FOCUS_RING} ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
@@ -239,7 +239,7 @@ export default function Header() {
                           }, 200);
                         }}
                       />
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#c9a25a]">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--fa-gold)]">
                         <MaskIcon src="/icons/search.svg" />
                       </div>
                       <button
@@ -248,7 +248,7 @@ export default function Header() {
                           setIsSearchExpanded(false);
                           setSearchQuery("");
                         }}
-                        className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#a99d8c] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                        className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                         aria-label="Close search"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
@@ -273,18 +273,18 @@ export default function Header() {
                                   onMouseEnter={() => setSearchActive(i)}
                                   className={`flex items-center gap-3 px-3 py-2 transition-colors border-l-[3px] ${FOCUS_RING} ${
                                     i === searchActive
-                                      ? "bg-[#c9a25a]/15 border-[#c9a25a]"
-                                      : "border-transparent hover:bg-[#c9a25a]/10"
+                                      ? "bg-[var(--fa-gold)]/15 border-[var(--fa-gold)]"
+                                      : "border-transparent hover:bg-[var(--fa-gold)]/10"
                                   }`}
                                 >
-                                  <div className="relative w-9 h-9 overflow-hidden bg-[#211d18] shrink-0 border border-[#d1ae6d]">
+                                  <div className="relative w-9 h-9 overflow-hidden bg-[var(--fa-ink)] shrink-0 border border-[var(--fa-gold)]">
                                     {p.images?.main ? (
                                       <Image src={p.images.main} alt={p.name} fill className="object-cover" sizes="36px" />
                                     ) : null}
                                   </div>
                                   <div className="min-w-0">
-                                    <p className={`text-[12px] font-medium truncate ${i === searchActive ? "text-[#e3c489]" : "text-[#efe7db]"}`}>{p.name}</p>
-                                    <p className="text-[11px] text-[#a99d8c] truncate">
+                                    <p className={`text-[12px] font-medium truncate ${i === searchActive ? "text-[var(--fa-gold-hover)]" : "text-[var(--fa-cream)]"}`}>{p.name}</p>
+                                    <p className="text-[11px] text-[var(--fa-muted-dark)] truncate">
                                       {(() => {
                                         const imp = p.impressionName || p.brand || (p.brands && p.brands[0]) || "French Aromas";
                                         return /^signature\s*scent$/i.test(imp) ? imp : `Impression of: ${imp}`;
@@ -296,13 +296,13 @@ export default function Header() {
                               <Link
                                 href={`/collections/shop-all?search=${encodeURIComponent(searchQuery.trim())}`}
                                 onClick={() => setIsSearchExpanded(false)}
-                                className={`block px-4 py-2.5 text-[12px] font-semibold text-[#c9a25a] hover:bg-[#c9a25a]/10 hover:text-[#e3c489] border-t border-[#c9a25a]/25 transition-colors ${FOCUS_RING}`}
+                                className={`block px-4 py-2.5 text-[12px] font-semibold text-[var(--fa-gold)] hover:bg-[var(--fa-gold)]/10 hover:text-[var(--fa-gold-hover)] border-t border-[var(--fa-gold)]/25 transition-colors ${FOCUS_RING}`}
                               >
                                 See all results for “{searchQuery.trim()}”
                               </Link>
                             </>
                           ) : (
-                            <p className="px-4 py-3 text-[12px] text-[#a99d8c]">
+                            <p className="px-4 py-3 text-[12px] text-[var(--fa-muted-dark)]">
                               {searchLoading ? "Searching…" : `No matches for “${searchQuery.trim()}”`}
                             </p>
                           )}
@@ -316,7 +316,7 @@ export default function Header() {
               {/* Mobile Search Button */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className={`lg:hidden flex items-center gap-2 p-2 focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors ${FOCUS_RING}`}
+                className={`lg:hidden flex items-center gap-2 p-2 focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                 aria-label="Search"
               >
                 <MaskIcon src="/icons/search.svg" />
@@ -344,7 +344,7 @@ export default function Header() {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className={`group hidden lg:block relative focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 ${FOCUS_RING}`}
+                className={`group hidden lg:block relative focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors duration-200 ${FOCUS_RING}`}
                 aria-label="Wishlist"
               >
                 <svg
@@ -361,11 +361,11 @@ export default function Header() {
                   />
                 </svg>
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 bg-[#c9a25a] text-[#211d18] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 bg-[var(--fa-gold)] text-[var(--fa-ink)] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
                     {wishlistCount > 99 ? "99+" : wishlistCount}
                   </span>
                 )}
-                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[#c9a25a]/40 bg-[#211d18] text-[#efe7db] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[var(--fa-gold)]/40 bg-[var(--fa-ink)] text-[var(--fa-cream)] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                   Wishlist
                 </span>
               </Link>
@@ -374,7 +374,7 @@ export default function Header() {
               <div className="group hidden lg:block relative" ref={accountRef}>
                 <button
                   onClick={() => setIsAccountOpen(!isAccountOpen)}
-                  className={`flex items-center focus:outline-none text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 ${FOCUS_RING}`}
+                  className={`flex items-center focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors duration-200 ${FOCUS_RING}`}
                   aria-label="Account"
                 >
                   <svg
@@ -392,23 +392,23 @@ export default function Header() {
                   </svg>
                 </button>
                 {!isAccountOpen && (
-                  <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[#c9a25a]/40 bg-[#211d18] text-[#efe7db] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                  <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[var(--fa-gold)]/40 bg-[var(--fa-ink)] text-[var(--fa-cream)] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                     Account
                   </span>
                 )}
                 {isAccountOpen && (
                   <div className={`absolute right-0 top-full mt-2 w-52 py-2 z-50 animate-fadeIn ${MENU_PANEL}`}>
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-[#a99d8c]">
+                      <div className="px-4 py-2 text-sm text-[var(--fa-muted-dark)]">
                         Loading...
                       </div>
                     ) : user ? (
                       <>
-                        <div className="px-4 py-2 border-b border-[#c9a25a]/25">
-                          <p className="text-sm font-medium text-[#efe7db] truncate">
+                        <div className="px-4 py-2 border-b border-[var(--fa-gold)]/25">
+                          <p className="text-sm font-medium text-[var(--fa-cream)] truncate">
                             {user.name || user.email}
                           </p>
-                          <p className="text-xs text-[#a99d8c] truncate">
+                          <p className="text-xs text-[var(--fa-muted-dark)] truncate">
                             {user.email}
                           </p>
                         </div>
@@ -481,7 +481,7 @@ export default function Header() {
               {/* Cart */}
               <Link
                 href="/cart"
-                className={`group flex items-center focus:outline-none relative text-[#c2a268] hover:text-[#e2c58f] transition-colors duration-200 ${FOCUS_RING}`}
+                className={`group flex items-center focus:outline-none relative text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors duration-200 ${FOCUS_RING}`}
                 aria-label="Cart"
               >
                 <svg
@@ -498,11 +498,11 @@ export default function Header() {
                   />
                 </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 min-w-4 h-4 px-1 bg-[#c9a25a] text-[#211d18] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-2 -right-2 min-w-4 h-4 px-1 bg-[var(--fa-gold)] text-[var(--fa-ink)] text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
                     {itemCount > 99 ? "99+" : itemCount}
                   </span>
                 )}
-                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[#c9a25a]/40 bg-[#211d18] text-[#efe7db] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-0.5 border border-[var(--fa-gold)]/40 bg-[var(--fa-ink)] text-[var(--fa-cream)] text-[10px] font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                   Cart
                 </span>
               </Link>
@@ -512,7 +512,7 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:block bg-[#d1c0ab] border-t border-[#bda98f]">
+        <div className="hidden lg:block bg-[var(--fa-beige)] border-t border-[var(--fa-border)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <nav className="relative flex items-center justify-center py-2">
             <Suspense
@@ -549,18 +549,18 @@ export default function Header() {
             className="fixed inset-0 bg-black/60 z-40 lg:hidden"
             onClick={() => setIsMenuOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-[#373838] border-r border-[#c9a25a]/40 z-50 transform transition-transform lg:hidden overflow-y-auto shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+          <div className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-[var(--fa-dark)] border-r border-[var(--fa-gold)]/40 z-50 transform transition-transform lg:hidden overflow-y-auto shadow-[0_0_60px_rgba(0,0,0,0.6)]">
             <div className="p-4">
               <div className="flex items-center justify-between mb-6">
                 <span className="inline-block">
-                  <h2 className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a25a]">
+                  <h2 className="font-[family-name:var(--font-playfair)] italic text-xl text-[var(--fa-gold)]">
                     Menu
                   </h2>
-                  <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+                  <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
                 </span>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className={`p-2 focus:outline-none text-[#c9a25a] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                  className={`p-2 focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                   aria-label="Close menu"
                 >
                   <MaskIcon src="/icons/close.svg" />
@@ -573,7 +573,7 @@ export default function Header() {
                     <li key={index}>
                       {item.shopMenu ? (
                         <MobileShopMenu label={item.name} families={families} status={familiesStatus}
-                          className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                          className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                           onSelect={() => { setMobileSubOpen(null); setIsMenuOpen(false); }} />
                       ) : item.brandDropdown ? (
                         <div>
@@ -583,12 +583,12 @@ export default function Header() {
                                 mobileSubOpen === index ? null : index,
                               )
                             }
-                            className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                            className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                           >
                             {item.name}
                             <MaskIcon
                               src="/icons/caret.svg"
-                              className={`w-4 h-4 shrink-0 text-[#c9a25a] transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
+                              className={`w-4 h-4 shrink-0 text-[var(--fa-gold)] transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
                             />
                           </button>
                           {mobileSubOpen === index && (
@@ -597,7 +597,7 @@ export default function Header() {
                                 <li key={b}>
                                   <Link
                                     href={`/collections/shop-all?search=${encodeURIComponent(b)}`}
-                                    className={`block py-1.5 text-sm text-[#cbbfae] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                                    className={`block py-1.5 text-sm text-[var(--fa-on-dark)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                                     onClick={() => {
                                       setMobileSubOpen(null);
                                       setIsMenuOpen(false);
@@ -608,7 +608,7 @@ export default function Header() {
                                 </li>
                               ))}
                               {brands.length === 0 && (
-                                <li className="py-2 text-sm text-[#a99d8c]">
+                                <li className="py-2 text-sm text-[var(--fa-muted-dark)]">
                                   Loading...
                                 </li>
                               )}
@@ -618,7 +618,7 @@ export default function Header() {
                       ) : (
                         <Link
                           href={item.href}
-                          className={`block py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                          className={`block py-3 text-sm font-medium uppercase tracking-wide text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.name}
@@ -630,14 +630,14 @@ export default function Header() {
               </nav>
 
               {/* Mobile Account Section */}
-              <div className="mt-6 pt-6 border-t border-[#c9a25a]/25">
+              <div className="mt-6 pt-6 border-t border-[var(--fa-gold)]/25">
                 <Link
                   href="/wishlist"
-                  className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                  className={`flex items-center gap-2 py-3 text-sm font-medium text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <svg
-                    className="w-5 h-5 shrink-0 text-[#c9a25a]"
+                    className="w-5 h-5 shrink-0 text-[var(--fa-gold)]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -653,19 +653,19 @@ export default function Header() {
                 </Link>
 
                 {loading ? (
-                  <div className="py-3 text-sm text-[#a99d8c]">Loading...</div>
+                  <div className="py-3 text-sm text-[var(--fa-muted-dark)]">Loading...</div>
                 ) : user ? (
                   <>
-                    <div className="py-3 border-b border-[#c9a25a]/25 mb-2">
-                      <p className="text-sm font-medium text-[#efe7db] truncate">
+                    <div className="py-3 border-b border-[var(--fa-gold)]/25 mb-2">
+                      <p className="text-sm font-medium text-[var(--fa-cream)] truncate">
                         {user.name || user.email}
                       </p>
-                      <p className="text-xs text-[#a99d8c] truncate">{user.email}</p>
+                      <p className="text-xs text-[var(--fa-muted-dark)] truncate">{user.email}</p>
                     </div>
                     {isAdmin && (
                       <Link
                         href="/admin"
-                        className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                        className={`flex items-center gap-2 py-3 text-sm font-medium text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Admin Panel
@@ -673,10 +673,10 @@ export default function Header() {
                     )}
                     <Link
                       href="/account"
-                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <MaskIcon src="/icons/account.svg" className="w-5 h-5 shrink-0 text-[#c9a25a]" />
+                      <MaskIcon src="/icons/account.svg" className="w-5 h-5 shrink-0 text-[var(--fa-gold)]" />
                       My Account
                     </Link>
                     <button
@@ -693,15 +693,15 @@ export default function Header() {
                   <>
                     <Link
                       href="/account/login"
-                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <MaskIcon src="/icons/account.svg" className="w-5 h-5 shrink-0 text-[#c9a25a]" />
+                      <MaskIcon src="/icons/account.svg" className="w-5 h-5 shrink-0 text-[var(--fa-gold)]" />
                       Log In
                     </Link>
                     <Link
                       href="/account/signup"
-                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                      className={`flex items-center gap-2 py-3 text-sm font-medium text-[var(--fa-cream)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Sign Up
@@ -722,17 +722,17 @@ export default function Header() {
             onClick={() => setIsSearchOpen(false)}
           />
           <div className="fixed inset-0 z-50 lg:hidden flex flex-col">
-            <div className="bg-[#373838] w-full h-full flex flex-col border-t-2 border-[#c9a25a]">
-              <div className="flex items-center justify-between p-4 border-b border-[#c9a25a]/25">
+            <div className="bg-[var(--fa-dark)] w-full h-full flex flex-col border-t-2 border-[var(--fa-gold)]">
+              <div className="flex items-center justify-between p-4 border-b border-[var(--fa-gold)]/25">
                 <span className="inline-block">
-                  <h2 className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a25a]">
+                  <h2 className="font-[family-name:var(--font-playfair)] italic text-xl text-[var(--fa-gold)]">
                     Search
                   </h2>
-                  <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+                  <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
                 </span>
                 <button
                   onClick={() => setIsSearchOpen(false)}
-                  className={`p-2 focus:outline-none text-[#c9a25a] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                  className={`p-2 focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                   aria-label="Close search"
                 >
                   <MaskIcon src="/icons/close.svg" />
@@ -753,7 +753,7 @@ export default function Header() {
                   />
                   <button
                     type="submit"
-                    className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 text-[#c9a25a] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                     aria-label="Search"
                   >
                     <MaskIcon src="/icons/search.svg" />

@@ -48,14 +48,14 @@ export default function EditionChoiceModal({
     >
       <div className="fixed inset-0 bg-black/55 backdrop-blur-[2px]" onClick={onClose} />
 
-      <div className="relative z-10 w-full max-w-md bg-[#efe7db] border border-[#c9a25a] shadow-[0_24px_70px_rgba(0,0,0,0.38)] animate-fadeIn overflow-hidden">
-        <div className="flex items-center justify-between gap-3 bg-[#373838] border-b-2 border-[#c9a25a] px-5 py-3">
-          <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[#c9a25a]">
+      <div className="relative z-10 w-full max-w-md bg-[var(--fa-cream)] border border-[var(--fa-gold)] shadow-[0_24px_70px_rgba(0,0,0,0.38)] animate-fadeIn overflow-hidden">
+        <div className="flex items-center justify-between gap-3 bg-[var(--fa-dark)] border-b-2 border-[var(--fa-gold)] px-5 py-3">
+          <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[var(--fa-gold)]">
             Choose Your Edition
           </h2>
           <button
             onClick={onClose}
-            className={`shrink-0 p-1.5 rounded-full text-[#cbbfae] hover:text-[#211d18] hover:bg-[#c9a25a] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
+            className={`shrink-0 p-1.5 rounded-full text-[var(--fa-on-dark)] hover:text-[var(--fa-ink)] hover:bg-[var(--fa-gold)] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
@@ -65,11 +65,11 @@ export default function EditionChoiceModal({
         </div>
 
         <div className="px-5 py-4">
-          <div className="flex items-center gap-3 pb-4 mb-4 border-b border-[#c9a25a]/30">
-            <div className="relative w-14 h-14 overflow-hidden border border-[#c9a25a]/60 bg-[#d4c6ab]/40 shrink-0">
+          <div className="flex items-center gap-3 pb-4 mb-4 border-b border-[var(--fa-gold)]/30">
+            <div className="relative w-14 h-14 overflow-hidden border border-[var(--fa-gold)]/60 bg-[var(--fa-cream)]/40 shrink-0">
               {image ? <Image src={image} alt={name} fill className="object-cover" sizes="56px" /> : null}
             </div>
-            <p className="text-sm font-bold text-[#1f1a16] leading-snug line-clamp-2">{name}</p>
+            <p className="text-sm font-bold text-[var(--fa-ink)] leading-snug line-clamp-2">{name}</p>
           </div>
 
           <div className="flex flex-col gap-2.5">
@@ -79,7 +79,7 @@ export default function EditionChoiceModal({
                 <button
                   key={e.key}
                   onClick={() => onChoose?.(e)}
-                  className={`hover-vibrate w-full flex items-center justify-between gap-3 border border-[#c9a25a]/50 px-4 py-3.5 text-left shadow-sm hover:shadow-md transition-shadow ${st.bar || "bg-[#efe9db]"} ${st.text || "text-[#1f1a16]"}`}
+                  className={`hover-vibrate w-full flex items-center justify-between gap-3 border border-[var(--fa-gold)]/50 px-4 py-3.5 text-left shadow-sm hover:shadow-md transition-shadow ${st.bar || "bg-[var(--fa-beige)]"} ${st.text || "text-[var(--fa-ink)]"}`}
                 >
                   <span className="text-[13px] font-bold leading-tight">
                     {st.label || e.key}

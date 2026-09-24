@@ -17,20 +17,20 @@ const EDITION_STYLE = {
   luxury: {
     label: "Luxury Edition",
     short: "Luxury",
-    bar: "bg-[#c9a24a]",
-    text: "text-[#141414]",
+    bar: "bg-[var(--fa-gold)]",
+    text: "text-[var(--fa-ink)]",
   },
   premium: {
     label: "Premium Edition",
     short: "Premium",
-    bar: "bg-[#c3c3ca]",
-    text: "text-[#2b2b2b]",
+    bar: "bg-[var(--fa-premium)]",
+    text: "text-[var(--fa-ink)]",
   },
   classic: {
     label: "Classic Edition",
     short: "Classic",
-    bar: "bg-[#d8cbb8]",
-    text: "text-[#3a352f]",
+    bar: "bg-[var(--fa-beige)]",
+    text: "text-[var(--fa-secondary)]",
   },
 };
 
@@ -183,12 +183,12 @@ export default function ProductCard({
     />
   ) : (
     <span
-      className="absolute inset-0 flex items-center justify-center bg-[#c3b39a]"
+      className="absolute inset-0 flex items-center justify-center bg-[var(--fa-beige)]"
       aria-hidden="true"
     >
       <svg
         viewBox="0 0 24 24"
-        className="w-10 h-10 text-[#8c7f6d]"
+        className="w-10 h-10 text-[var(--fa-secondary)]"
         fill="none"
         stroke="currentColor"
         strokeWidth={1.2}
@@ -224,7 +224,7 @@ export default function ProductCard({
         setShowBanners(false);
       }}
       onClick={boxMode && !boxSoldOut ? () => onAddToBox?.() : undefined}
-      className={`group relative isolate h-full overflow-hidden bg-[#d5c7b4] border-2 transition-[box-shadow,border-color] duration-300 ${
+      className={`group relative isolate h-full overflow-hidden bg-[var(--fa-beige)] border-2 transition-[box-shadow,border-color] duration-300 ${
         hoverReveal
           ? "flex flex-row lg:flex-col"
           : // Below sm the details outgrew the artwork — at a 135px card the
@@ -250,16 +250,16 @@ export default function ProductCard({
       {/* Badges - top-left (box mode: selection number / sold out / discount) */}
       <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
         {boxMode && boxSelected && !boxSoldOut && (
-          <span className="w-6 h-6 rounded-full bg-[#c9a25a] text-[#211d18] flex items-center justify-center text-[11px] font-bold shadow">
+          <span className="w-6 h-6 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] flex items-center justify-center text-[11px] font-bold shadow">
             {boxSelectionIndex + 1}
           </span>
         )}
         {boxMode && boxSoldOut ? (
-          <span className="rounded-full border border-[#d1ae6d]/60 bg-[#211d18]/90 px-2.5 py-1 text-[10px] font-bold tracking-wide text-[#e3c489]">
+          <span className="rounded-full border border-[var(--fa-gold)]/60 bg-[var(--fa-ink)]/90 px-2.5 py-1 text-[10px] font-bold tracking-wide text-[var(--fa-gold-hover)]">
             Sold out
           </span>
         ) : boxMode && disc > 0 ? (
-          <span className="rounded-full bg-[#211d18] px-2.5 py-1 text-[10px] sm:text-[11px] font-bold tracking-wide text-[#e3c489]">
+          <span className="rounded-full bg-[var(--fa-ink)] px-2.5 py-1 text-[10px] sm:text-[11px] font-bold tracking-wide text-[var(--fa-gold-hover)]">
             -{disc}% OFF
           </span>
         ) : null}
@@ -270,7 +270,7 @@ export default function ProductCard({
         <button
           onClick={handleWishlistToggle}
           aria-label="Delete from wishlist"
-          className="group/wish absolute top-2 right-2 z-30 flex items-center h-8 rounded-full bg-[#e3d5c0] shadow-sm hover:bg-[#f2ded9] transition-colors duration-200 overflow-hidden"
+          className="group/wish absolute top-2 right-2 z-30 flex items-center h-8 rounded-full bg-[var(--fa-beige)] shadow-sm hover:bg-[var(--fa-peach)] transition-colors duration-200 overflow-hidden"
         >
           <span className="relative w-8 h-8 shrink-0 flex items-center justify-center">
             {/* Red heart (default) */}
@@ -308,7 +308,7 @@ export default function ProductCard({
       ) : (
         <button
           onClick={handleWishlistToggle}
-          className="group/heart absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-[#e3d5c0] hover:bg-[#efe3d2] hover:scale-110 transition-all duration-200 shadow-sm"
+          className="group/heart absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-[var(--fa-beige)] hover:bg-[var(--fa-hover)] hover:scale-110 transition-all duration-200 shadow-sm"
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
           <svg
@@ -329,7 +329,7 @@ export default function ProductCard({
 
       {/* Product Image */}
       <div
-        className={`relative overflow-hidden bg-[#c3b39a] ${
+        className={`relative overflow-hidden bg-[var(--fa-beige)] ${
           hoverReveal
             ? "w-1/2 shrink-0 self-stretch aspect-auto lg:w-full lg:self-auto lg:aspect-[6.818/7.5]"
             : "w-full min-w-0"
@@ -364,7 +364,7 @@ export default function ProductCard({
                 e.stopPropagation();
                 onAddToBox?.();
               }}
-              className="flex flex-col items-center leading-tight rounded-md bg-[#f0e7d7]/95 backdrop-blur-sm px-4 py-1.5 text-[11px] font-bold text-[#b3261e] shadow-md hover:bg-[#f7f0e4]"
+              className="flex flex-col items-center leading-tight rounded-md bg-[var(--fa-beige)]/95 backdrop-blur-sm px-4 py-1.5 text-[11px] font-bold text-[#b3261e] shadow-md hover:bg-[var(--fa-cream)]"
             >
               <span>Click to Remove</span>
               <span>from Discovery Box</span>
@@ -381,7 +381,7 @@ export default function ProductCard({
                   e.stopPropagation();
                   onQuickView();
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#d1ae6d]/70 bg-[#1f1a16]/90 backdrop-blur-[2px] px-3.5 py-1.5 text-[11px] font-semibold text-[#d1ae6d] shadow-md whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--fa-gold)]/70 bg-[var(--fa-ink)]/90 backdrop-blur-[2px] px-3.5 py-1.5 text-[11px] font-semibold text-[var(--fa-gold)] shadow-md whitespace-nowrap"
               >
                 <svg
                   className="w-3.5 h-3.5"
@@ -414,13 +414,13 @@ export default function ProductCard({
 
         {/* Best Seller pill — bottom-left (hidden on mobile to avoid overlap) */}
         {isBestSeller && (
-          <span className="hidden lg:block absolute bottom-2 left-2 z-10 rounded-full bg-[#cbb99a] px-3 py-1 text-[11px] font-semibold tracking-wide text-[#2b2620] shadow-md transition-opacity duration-200 group-hover:opacity-0">
+          <span className="hidden lg:block absolute bottom-2 left-2 z-10 rounded-full bg-[var(--fa-border)] px-3 py-1 text-[11px] font-semibold tracking-wide text-[var(--fa-ink)] shadow-md transition-opacity duration-200 group-hover:opacity-0">
             Best Sellers
           </span>
         )}
 
         {/* Size pill (like the 5ml tester pill) */}
-        <span className="absolute bottom-2 right-2 z-10 rounded-full bg-[#efe9df] px-2 py-0.5 text-[10px] font-semibold text-[#3a352f] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
+        <span className="absolute bottom-2 right-2 z-10 rounded-full bg-[var(--fa-beige)] px-2 py-0.5 text-[10px] font-semibold text-[var(--fa-secondary)] shadow-sm transition-opacity duration-200 group-hover:opacity-0">
           {sizeLabel}
         </span>
       </div>
@@ -429,11 +429,11 @@ export default function ProductCard({
       <div
         className={
           hoverReveal
-            ? "relative flex-1 min-w-0 z-20 p-3 lg:p-4 flex flex-col bg-[#d5c7b4] lg:absolute lg:inset-x-0 lg:bottom-0 lg:border-t lg:border-[#d1ae6d] lg:shadow-[0_-6px_24px_rgba(0,0,0,0.28)] lg:transition-transform lg:duration-500 lg:ease-out lg:translate-y-full lg:group-hover:translate-y-0"
+            ? "relative flex-1 min-w-0 z-20 p-3 lg:p-4 flex flex-col bg-[var(--fa-beige)] lg:absolute lg:inset-x-0 lg:bottom-0 lg:border-t lg:border-[var(--fa-gold)] lg:shadow-[0_-6px_24px_rgba(0,0,0,0.28)] lg:transition-transform lg:duration-500 lg:ease-out lg:translate-y-full lg:group-hover:translate-y-0"
             : // min-w-0 matters: as a grid item this box defaults to a
               // min-content floor, and the nowrap title would push that past
               // the card's own width.
-              "p-2.5 sm:p-4 flex flex-col flex-1 min-h-0 min-w-0 bg-[#d5c7b4]"
+              "p-2.5 sm:p-4 flex flex-col flex-1 min-h-0 min-w-0 bg-[var(--fa-beige)]"
         }
       >
         {/* Quick View — sits on the image, just above the reveal panel */}
@@ -446,7 +446,7 @@ export default function ProductCard({
               e.stopPropagation();
               onQuickView();
             }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 hidden lg:flex items-center gap-1.5 rounded-full border border-[#d1ae6d]/70 bg-[#1f1a16]/90 backdrop-blur-[2px] px-3.5 py-1.5 text-[11px] font-semibold text-[#d1ae6d] shadow-md hover:bg-[#1f1a16] transition-all duration-200 whitespace-nowrap lg:opacity-0 lg:group-hover:opacity-100"
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 hidden lg:flex items-center gap-1.5 rounded-full border border-[var(--fa-gold)]/70 bg-[var(--fa-ink)]/90 backdrop-blur-[2px] px-3.5 py-1.5 text-[11px] font-semibold text-[var(--fa-gold)] shadow-md hover:bg-[var(--fa-ink)] transition-all duration-200 whitespace-nowrap lg:opacity-0 lg:group-hover:opacity-100"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -461,7 +461,7 @@ export default function ProductCard({
               as="h3"
               fit={`${name}|${gm?.label || ""}|${compact}`}
               floor={compact ? 9 : 12}
-              className={`font-bold text-[#211d18] leading-snug mb-2 text-center ${compact ? "text-[12px]" : "text-sm sm:text-base"}`}
+              className={`font-bold text-[var(--fa-ink)] leading-snug mb-2 text-center ${compact ? "text-[12px]" : "text-sm sm:text-base"}`}
             >
               {name}
               {gm && (
@@ -475,11 +475,11 @@ export default function ProductCard({
           return boxMode ? title : <Link href={href || "#"}>{title}</Link>;
         })()}
 
-        <div className={`text-[#3a352f] ${compact ? "space-y-0.5 text-[10px]" : "space-y-1.5 text-[11px] sm:text-xs"}`}>
+        <div className={`text-[var(--fa-secondary)] ${compact ? "space-y-0.5 text-[10px]" : "space-y-1.5 text-[11px] sm:text-xs"}`}>
           {impressionName && (
             <FitText fit={impressionName} floor={compact ? 8 : 10}>
               {!isSignatureScent(impressionName) && "Inspired by: "}
-              <span className="font-semibold text-[#211d18]">
+              <span className="font-semibold text-[var(--fa-ink)]">
                 {impressionName}
               </span>
             </FitText>
@@ -487,19 +487,19 @@ export default function ProductCard({
           {brandLabel && (
             <FitText fit={brandLabel} floor={compact ? 8 : 10}>
               Brand:{" "}
-              <span className="font-semibold text-[#211d18]">{brandLabel}</span>
+              <span className="font-semibold text-[var(--fa-ink)]">{brandLabel}</span>
             </FitText>
           )}
           {scentFamily && (
             <FitText fit={scentFamily} floor={compact ? 8 : 10}>
               Fragrance Family:{" "}
-              <span className="font-semibold text-[#211d18]">{scentFamily}</span>
+              <span className="font-semibold text-[var(--fa-ink)]">{scentFamily}</span>
             </FitText>
           )}
           {bestFor && (
             <p className="flex flex-wrap items-center gap-1.5">
               {!compact && <span className="shrink-0">Best For:</span>}
-              <span className={`inline-block rounded-full border border-[#c9a25a]/60 bg-[#efe3c9] font-semibold text-[#6b5421] ${compact ? "px-1.5 py-0 text-[9px]" : "px-2.5 py-0.5 text-[11px]"}`}>
+              <span className={`inline-block rounded-full border border-[var(--fa-gold)]/60 bg-[var(--fa-selected)] font-semibold text-[var(--fa-gold-ink)] ${compact ? "px-1.5 py-0 text-[9px]" : "px-2.5 py-0.5 text-[11px]"}`}>
                 {bestFor}
               </span>
             </p>
@@ -525,14 +525,14 @@ export default function ProductCard({
           <div>
             {compact ? (
               <span>
-                <span className="font-bold text-[#211d18]">{admire}%</span>{" "}
-                <span className="text-[#6b6052]">Admired</span>
+                <span className="font-bold text-[var(--fa-ink)]">{admire}%</span>{" "}
+                <span className="text-[var(--fa-secondary)]">Admired</span>
               </span>
             ) : (
               <span>
                 Globally Admired by:{" "}
-                <span className="font-bold text-[#211d18]">{admire}%</span>{" "}
-                <span className="text-[#6b6052]">Satisfied Users</span>
+                <span className="font-bold text-[var(--fa-ink)]">{admire}%</span>{" "}
+                <span className="text-[var(--fa-secondary)]">Satisfied Users</span>
               </span>
             )}
           </div>
@@ -546,7 +546,7 @@ export default function ProductCard({
           {/* Gender-coloured divider */}
           <div
             className={`h-[3px] ${compact ? "mb-1.5" : "mb-2.5"}`}
-            style={{ backgroundColor: gm ? gm.hex : "#b9a88c" }}
+            style={{ backgroundColor: gm ? gm.hex : "var(--fa-border)" }}
           />
 
           {/* Price */}
@@ -554,16 +554,16 @@ export default function ProductCard({
             {headlinePrice != null ? (
               <>
                 {disc > 0 && (
-                  <span className={`font-normal text-[#8c7f6d] strike-diagonal ${compact ? "text-[11px]" : "text-[15px]"}`}>
+                  <span className={`font-normal text-[var(--fa-secondary)] strike-diagonal ${compact ? "text-[11px]" : "text-[15px]"}`}>
                     {formatRs(headlinePrice)}
                   </span>
                 )}
-                <span className={`font-bold text-[#b5179e] ${compact ? "text-[12px]" : "text-[15px]"}`}>
+                <span className={`font-bold text-[var(--fa-gold-ink)] ${compact ? "text-[12px]" : "text-[15px]"}`}>
                   {formatRs(finalOf(headlinePrice))}
                 </span>
               </>
             ) : (
-              <span className="text-sm text-[#8c7f6d]">Unavailable</span>
+              <span className="text-sm text-[var(--fa-secondary)]">Unavailable</span>
             )}
           </div>
 
@@ -611,12 +611,12 @@ export default function ProductCard({
                 disabled={boxSoldOut}
                 className={`w-full rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-1.5 px-2 text-[9px]" : "py-2.5 px-3 text-[11px] sm:text-xs"} ${
                   boxSoldOut
-                    ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
+                    ? "bg-[var(--fa-disabled)] text-[var(--fa-secondary)] cursor-not-allowed"
                     : boxSwapTarget
-                    ? "bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489]"
+                    ? "bg-[var(--fa-gold)] text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)]"
                     : boxSelected
-                    ? "border border-[#c9a25a] bg-[#e9dcc4] text-[#6b5421] hover:bg-[#f1e7d4]"
-                    : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
+                    ? "border border-[var(--fa-gold)] bg-[var(--fa-selected)] text-[var(--fa-gold-ink)] hover:bg-[var(--fa-hover)]"
+                    : "bg-[var(--fa-ink)] text-[var(--fa-gold-hover)] hover:bg-[var(--fa-hover-dark)]"
                 }`}
               >
                 {boxSoldOut
@@ -635,12 +635,12 @@ export default function ProductCard({
                 disabled={!cardEdition}
                 className={`w-full flex items-center justify-center rounded-md font-semibold tracking-wide uppercase transition-colors ${compact ? "py-2 px-2 min-h-[34px] text-[9px]" : "py-3 px-3 min-h-[46px] text-[11px] sm:text-xs"} ${
                   !cardEdition
-                    ? "bg-[#bfb3a0] text-[#4f463a] cursor-not-allowed"
+                    ? "bg-[var(--fa-disabled)] text-[var(--fa-secondary)] cursor-not-allowed"
                     : showBanners
-                    ? "bg-[#2e2820] text-[#e3c489] hover:bg-[#3a332a]"
+                    ? "bg-[var(--fa-hover-dark)] text-[var(--fa-gold-hover)] hover:bg-[var(--fa-hover-dark)]"
                     : inCartQty > 0
-                    ? "bg-[#1d3a8f] text-white hover:bg-[#16306f]"
-                    : "bg-[#211d18] text-[#e3c489] hover:bg-[#2e2820]"
+                    ? "bg-[var(--fa-hover-dark)] text-[var(--fa-cream)] hover:bg-[var(--fa-dark)]"
+                    : "bg-[var(--fa-ink)] text-[var(--fa-gold-hover)] hover:bg-[var(--fa-hover-dark)]"
                 }`}
               >
                 {!cardEdition ? (

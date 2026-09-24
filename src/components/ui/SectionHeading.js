@@ -4,7 +4,7 @@ import { viewAllClass } from "@/lib/design";
 // The rule that sits under a heading: solid through the middle, fading out at
 // both ends. Width comes from its wrapper, so putting it inside an inline-block
 // alongside the title sizes it to the title rather than the container.
-export function Rule({ color = "#c9a25a", className = "" }) {
+export function Rule({ color = "var(--fa-gold)", className = "" }) {
   return (
     <div
       className={`h-[2px] md:h-[3px] w-full ${className}`}
@@ -27,8 +27,8 @@ function Arrow() {
  * A section's title block: Playfair italic heading, the rule sized to it, an
  * optional subtitle, and an optional outlined link pinned top-right on desktop.
  *
- * `tone` selects the ground the block sits on — "dark" for #373838 sections,
- * "light" for #d4c6ab ones.
+ * `tone` selects the ground the block sits on — "dark" for var(--fa-dark) sections,
+ * "light" for var(--fa-cream) ones.
  */
 export default function SectionHeading({
   title,
@@ -38,8 +38,8 @@ export default function SectionHeading({
   tone = "dark",
   className = "",
 }) {
-  const heading = tone === "dark" ? "#c9a25a" : "#211d18";
-  const sub = tone === "dark" ? "text-[#d2c1ac]" : "text-[#211d18]";
+  const heading = tone === "dark" ? "var(--fa-gold)" : "var(--fa-ink)";
+  const sub = tone === "dark" ? "text-[var(--fa-on-dark)]" : "text-[var(--fa-ink)]";
 
   return (
     <div className={`relative ${className}`}>

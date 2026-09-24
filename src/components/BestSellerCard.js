@@ -11,9 +11,9 @@ import DiscountRibbon from "./DiscountRibbon";
 import EditionChoiceModal from "./EditionChoiceModal";
 
 const EDITION_STYLE = {
-  luxury: { label: "Luxury Edition", bar: "bg-[#c9a24a]", text: "text-[#141414]" },
-  premium: { label: "Premium Edition", bar: "bg-[#c3c3ca]", text: "text-[#2b2b2b]" },
-  classic: { label: "Classic Edition", bar: "bg-[#d8cbb8]", text: "text-[#3a352f]" },
+  luxury: { label: "Luxury Edition", bar: "bg-[var(--fa-gold)]", text: "text-[var(--fa-ink)]" },
+  premium: { label: "Premium Edition", bar: "bg-[var(--fa-premium)]", text: "text-[var(--fa-ink)]" },
+  classic: { label: "Classic Edition", bar: "bg-[var(--fa-beige)]", text: "text-[var(--fa-secondary)]" },
 };
 
 function Stars({ rating, compact = false }) {
@@ -31,7 +31,7 @@ function Stars({ rating, compact = false }) {
     <span className="relative inline-flex" aria-label={`${rating} out of 5`}>
       {row("text-[#a89b86]")}
       <span className="absolute inset-0 overflow-hidden" style={{ width: `${pct}%` }}>
-        {row("text-[#1f1a16]")}
+        {row("text-[var(--fa-ink)]")}
       </span>
     </span>
   );
@@ -123,7 +123,7 @@ export default function BestSellerCard({
         replay(cartRef.current, "heartbeat");
         replay(qvRef.current, "vibrating");
       }}
-      className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#d5c7b4] shadow-[0_10px_28px_rgba(0,0,0,0.30)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
+      className="group relative flex flex-col rounded-2xl overflow-hidden bg-[var(--fa-beige)] shadow-[0_10px_28px_rgba(0,0,0,0.30)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
     >
       {/* Image */}
       <div className="relative w-full aspect-square overflow-hidden">
@@ -155,7 +155,7 @@ export default function BestSellerCard({
             });
           }}
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-          className={`absolute z-20 flex items-center justify-center rounded-full bg-[#e3d5c0] shadow-sm hover:scale-110 transition-transform duration-200 ${compact ? "top-2 right-2 w-7 h-7" : "top-3 right-3 w-9 h-9"}`}
+          className={`absolute z-20 flex items-center justify-center rounded-full bg-[var(--fa-beige)] shadow-sm hover:scale-110 transition-transform duration-200 ${compact ? "top-2 right-2 w-7 h-7" : "top-3 right-3 w-9 h-9"}`}
         >
           <svg
             viewBox="0 0 24 24"
@@ -178,7 +178,7 @@ export default function BestSellerCard({
               e.stopPropagation();
               onQuickView();
             }}
-            className="absolute left-1/2 bottom-3 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 rounded-full border border-[#d1ae6d]/70 bg-[#1f1a16]/90 backdrop-blur-[2px] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#d1ae6d] shadow-md whitespace-nowrap opacity-0 translate-y-1.5 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0"
+            className="absolute left-1/2 bottom-3 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 rounded-full border border-[var(--fa-gold)]/70 bg-[var(--fa-ink)]/90 backdrop-blur-[2px] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--fa-gold)] shadow-md whitespace-nowrap opacity-0 translate-y-1.5 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" />
@@ -189,12 +189,12 @@ export default function BestSellerCard({
         )}
 
         {badge && (
-          <span className={`absolute z-10 rounded-full bg-[#cbb99a] font-medium text-[#2b2620] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 left-2 px-2 py-0 text-[9px]" : "bottom-3 left-3 px-2.5 py-0.5 text-[11px]"}`}>
+          <span className={`absolute z-10 rounded-full bg-[var(--fa-border)] font-medium text-[var(--fa-ink)] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 left-2 px-2 py-0 text-[9px]" : "bottom-3 left-3 px-2.5 py-0.5 text-[11px]"}`}>
             {badge}
           </span>
         )}
         {cardEdition?.variant?.size && (
-          <span className={`absolute z-10 rounded-full bg-[#efe9df] font-medium text-[#3a352f] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 right-2 px-1.5 py-0 text-[9px]" : "bottom-3 right-3 px-2 py-0.5 text-[11px]"}`}>
+          <span className={`absolute z-10 rounded-full bg-[var(--fa-beige)] font-medium text-[var(--fa-secondary)] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 right-2 px-1.5 py-0 text-[9px]" : "bottom-3 right-3 px-2 py-0.5 text-[11px]"}`}>
             {cardEdition.variant.size}
           </span>
         )}
@@ -203,13 +203,13 @@ export default function BestSellerCard({
       {/* Details */}
       <div className={`relative flex flex-col ${compact ? "gap-1 px-2.5 pt-2 pb-3" : "gap-1.5 px-4 pt-3 pb-4"}`}>
         <Link href={href || "#"} className="text-center">
-          <h3 className={`font-bold leading-tight text-[#1f1a16] ${compact ? "text-[12px] line-clamp-2" : "text-[15px] whitespace-nowrap overflow-hidden text-ellipsis"}`}>
+          <h3 className={`font-bold leading-tight text-[var(--fa-ink)] ${compact ? "text-[12px] line-clamp-2" : "text-[15px] whitespace-nowrap overflow-hidden text-ellipsis"}`}>
             {name}
             {gm && <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{` - ${gm.label}`}</span>}
           </h3>
         </Link>
 
-        <div className={`space-y-0.5 text-[#3a352f] ${compact ? "text-[10px]" : "text-[12px]"}`}>
+        <div className={`space-y-0.5 text-[var(--fa-secondary)] ${compact ? "text-[10px]" : "text-[12px]"}`}>
           {impressionName && (
             <p className="line-clamp-1">
               {isSignatureScent(impressionName) ? impressionName : `Inspired by: ${impressionName}`}
@@ -221,20 +221,20 @@ export default function BestSellerCard({
 
         <div className={`flex items-center ${compact ? "gap-1 pr-9" : "gap-2 pr-14"}`}>
           <Stars rating={avgRating} compact={compact} />
-          <span className={`text-[#1f1a16] ${compact ? "text-[10px]" : "text-[12px]"}`}>{avgRating.toFixed(1)}/5</span>
-          {!compact && <span className="text-[12px] text-[#3a352f]">({globalAdmirePercent}%)</span>}
+          <span className={`text-[var(--fa-ink)] ${compact ? "text-[10px]" : "text-[12px]"}`}>{avgRating.toFixed(1)}/5</span>
+          {!compact && <span className="text-[12px] text-[var(--fa-secondary)]">({globalAdmirePercent}%)</span>}
         </div>
 
         <div className={`flex items-baseline ${compact ? "flex-wrap gap-x-1.5 gap-y-0 pr-9" : "gap-2.5 pr-14"}`}>
           {headlinePrice != null ? (
             <>
               {disc > 0 && (
-                <span className={`strike-diagonal text-[#8c7f6d] ${compact ? "text-[10px]" : "text-[13px]"}`}>{formatRs(headlinePrice)}</span>
+                <span className={`strike-diagonal text-[var(--fa-secondary)] ${compact ? "text-[10px]" : "text-[13px]"}`}>{formatRs(headlinePrice)}</span>
               )}
-              <span className={`font-bold text-[#b5179e] ${compact ? "text-[12px]" : "text-[15px]"}`}>{formatRs(finalOf(headlinePrice))}</span>
+              <span className={`font-bold text-[var(--fa-gold-ink)] ${compact ? "text-[12px]" : "text-[15px]"}`}>{formatRs(finalOf(headlinePrice))}</span>
             </>
           ) : (
-            <span className="text-[12px] text-[#8c7f6d]">Unavailable</span>
+            <span className="text-[12px] text-[var(--fa-secondary)]">Unavailable</span>
           )}
         </div>
 
@@ -248,10 +248,10 @@ export default function BestSellerCard({
           aria-label={inCartQty > 0 ? "Added to cart" : "Add to cart"}
           className={`group/cart absolute z-20 inline-flex flex-row-reverse items-center justify-center rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 ${compact ? "bottom-2.5 right-2 h-9 min-w-[36px]" : "bottom-4 right-3 h-11 min-w-[44px]"} shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
             !cardEdition
-              ? "bg-[#a8a099] cursor-not-allowed"
+              ? "bg-[var(--fa-disabled)] cursor-not-allowed"
               : inCartQty > 0
-              ? "bg-[#1d3a8f]"
-              : "bg-[#e0342c]"
+              ? "bg-[var(--fa-hover-dark)]"
+              : "bg-[var(--fa-dark)]"
           } text-white`}
         >
           <svg viewBox="0 0 24 24" className={`${compact ? "w-4 h-4" : "w-5 h-5"} shrink-0`} fill="currentColor" aria-hidden="true">

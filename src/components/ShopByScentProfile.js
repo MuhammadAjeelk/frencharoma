@@ -6,20 +6,20 @@ import { SCENTS } from "@/lib/scentProfiles";
 
 export default function ShopByScentProfile() {
   return (
-    <section className="relative bg-[#373838] py-10 md:py-12 overflow-hidden">
+    <section className="relative bg-[var(--fa-dark)] py-10 md:py-12 overflow-hidden">
       {/* faint mandala watermark */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_20%_30%,#c9a25a_0,transparent_40%),radial-gradient(circle_at_80%_75%,#c9a25a_0,transparent_40%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_20%_30%,var(--fa-gold)_0,transparent_40%),radial-gradient(circle_at_80%_75%,var(--fa-gold)_0,transparent_40%)]" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative mb-10 md:mb-14">
           <div className="text-center">
             <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
               Shop By Scent Profile
               </h2>
               {/* rule spans the title only — solid in the middle, fading at the ends */}
-              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
             </div>
-            <p className="mt-5 text-[#d2c1ac] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
+            <p className="mt-5 text-[var(--fa-on-dark)] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
               Find the fragrance that matches your style.
             </p>
           </div>
@@ -27,7 +27,7 @@ export default function ShopByScentProfile() {
           <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
             <Link
               href="/collections/shop-all"
-              className="inline-flex items-center gap-2.5 rounded-md border border-[#d2c1ac]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#efe7db] transition-colors hover:bg-[#d2c1ac] hover:text-[#211d18]"
+              className="inline-flex items-center gap-2.5 rounded-md border border-[var(--fa-on-dark)]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[var(--fa-cream)] transition-colors hover:bg-[var(--fa-on-dark)] hover:text-[var(--fa-ink)]"
             >
               View All
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
@@ -42,7 +42,7 @@ export default function ShopByScentProfile() {
             <Link
               key={s.name}
               href={`/collections/shop-all?scentFamily=${encodeURIComponent(s.name)}`}
-              className={`group block overflow-hidden border border-[#c9a25a] shadow-[0_6px_20px_rgba(0,0,0,0.25)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
+              className={`group block overflow-hidden border border-[var(--fa-gold)] shadow-[0_6px_20px_rgba(0,0,0,0.25)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
                 i === SCENTS.length - 1 && SCENTS.length % 3 === 1 ? "sm:col-start-2" : ""
               }`}
             >

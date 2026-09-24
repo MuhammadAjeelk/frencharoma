@@ -10,31 +10,31 @@ const SHOP_FLAGS = ["bestSeller", "specialOffer", "bundle", "signature", "newArr
 // The nav band is taupe with black labels; the panels that drop out of it are
 // dark, so they read as part of the same chrome as the logo bar above.
 const TAB =
-  "text-[13px] font-semibold uppercase tracking-[0.08em] text-black transition-colors duration-200";
+  "text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--fa-ink)] transition-colors duration-200";
 const TAB_ACTIVE = "underline underline-offset-[6px] decoration-2";
 const TAB_IDLE = "hover:underline hover:underline-offset-[6px] hover:decoration-2";
 
 const tabClass = (active) => `${TAB} ${active ? TAB_ACTIVE : TAB_IDLE} ${FOCUS_RING}`;
 
 // A row inside a dropdown. Square — the panel is the frame, the rows are not.
-const ROW = "transition-colors text-[#cbbfae] hover:bg-[#c9a25a]/10 hover:text-[#e3c489]";
+const ROW = "transition-colors text-[var(--fa-on-dark)] hover:bg-[var(--fa-gold)]/10 hover:text-[var(--fa-gold-hover)]";
 
 // The heading device from the homepage, sized to its own text.
 function PanelHeading({ children, className = "" }) {
   return (
     <div className={`px-5 pt-3 pb-1 ${className}`}>
       <span className="inline-block">
-        <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[#c9a25a]">
+        <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[var(--fa-gold)]">
           {children}
         </span>
-        <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+        <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
       </span>
     </div>
   );
 }
 
 function Bullet() {
-  return <span className="mr-2 text-[#c9a25a]">•</span>;
+  return <span className="mr-2 text-[var(--fa-gold)]">•</span>;
 }
 
 // Pure nav list — receives an isItemActive() so it can render both statically
@@ -75,7 +75,7 @@ export function NavList({
                   <div
                     className={`absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[500px] pt-1 pb-4 z-50 animate-fadeIn ${MENU_PANEL}`}
                   >
-                    <div className="pb-3 border-b border-[#c9a25a]/25 mb-3">
+                    <div className="pb-3 border-b border-[var(--fa-gold)]/25 mb-3">
                       <PanelHeading>Browse by Brand (A–Z)</PanelHeading>
                     </div>
                     <div className="grid grid-cols-3 gap-x-1 max-h-80 overflow-y-scroll scrollbar-always-gold px-3">
@@ -94,7 +94,7 @@ export function NavList({
                           </Link>
                         ))
                       ) : (
-                        <p className="col-span-3 px-3 py-2 text-[13px] text-[#a99d8c]">
+                        <p className="col-span-3 px-3 py-2 text-[13px] text-[var(--fa-muted-dark)]">
                           Loading brands...
                         </p>
                       )}

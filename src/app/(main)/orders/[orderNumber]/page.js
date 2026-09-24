@@ -19,16 +19,16 @@ const STATUS_STEPS = [
 
 const STATUS_ORDER = ["pending", "confirmed", "processing", "shipped", "delivered"];
 
-const PANEL = "border border-[#c9a25a]/40 bg-[#2e2e2e] p-5 sm:p-6";
+const PANEL = "border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)] p-5 sm:p-6";
 
 const PRIMARY_BTN =
-  "border border-[#c9a25a] bg-[#c9a25a] px-6 py-3 text-sm font-semibold text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] transition-colors";
+  "border border-[var(--fa-gold)] bg-[var(--fa-gold)] px-6 py-3 text-sm font-semibold text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] transition-colors";
 
 // A card heading: Playfair italic over a rule sized to the words.
 function CardHeading({ children }) {
   return (
     <div className="inline-block mb-5">
-      <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a]">
+      <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)]">
         {children}
       </h2>
       <Rule className="mt-1.5" />
@@ -40,9 +40,9 @@ function StatusTimeline({ status }) {
   const currentIdx = STATUS_ORDER.indexOf(status);
   return (
     <div className="flex items-center justify-between relative">
-      <div className="absolute top-5 left-0 right-0 h-0.5 bg-[#c9a25a]/25 z-0" />
+      <div className="absolute top-5 left-0 right-0 h-0.5 bg-[var(--fa-gold)]/25 z-0" />
       <div
-        className="absolute top-5 left-0 h-0.5 bg-[#c9a25a] z-0 transition-all duration-500"
+        className="absolute top-5 left-0 h-0.5 bg-[var(--fa-gold)] z-0 transition-all duration-500"
         style={{
           width: currentIdx >= 0
             ? `${(currentIdx / (STATUS_STEPS.length - 1)) * 100}%`
@@ -55,12 +55,12 @@ function StatusTimeline({ status }) {
           <div key={step.key} className="flex flex-col items-center z-10 flex-1">
             <div
               className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-base sm:text-lg border-2 transition-all ${
-                done ? "bg-[#c9a25a] border-[#c9a25a]" : "bg-[#2e2e2e] border-[#c9a25a]/35"
+                done ? "bg-[var(--fa-gold)] border-[var(--fa-gold)]" : "bg-[var(--fa-dark-deep)] border-[var(--fa-gold)]/35"
               }`}
             >
               <span className={done ? "filter-none" : "opacity-40"}>{step.icon}</span>
             </div>
-            <p className={`text-[10px] sm:text-xs mt-2 text-center font-medium ${done ? "text-[#e3c489]" : "text-[#a99d8c]"}`}>
+            <p className={`text-[10px] sm:text-xs mt-2 text-center font-medium ${done ? "text-[var(--fa-gold-hover)]" : "text-[var(--fa-muted-dark)]"}`}>
               {step.label}
             </p>
           </div>
@@ -94,24 +94,24 @@ export default function OrderPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#373838]">
-        <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--fa-dark)]">
+        <div className="w-8 h-8 border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] rounded-full animate-spin" />
       </div>
     );
   }
 
   if (error || !order) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#373838] px-4 py-16">
-        <div className="w-full max-w-md border border-[#c9a25a]/40 bg-[#2e2e2e] px-6 py-10 text-center">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--fa-dark)] px-4 py-16">
+        <div className="w-full max-w-md border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)] px-6 py-10 text-center">
           <p className="text-4xl mb-4">😔</p>
           <div className="inline-block">
-            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-3xl font-normal text-[#c9a25a]">
+            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-3xl font-normal text-[var(--fa-gold)]">
               Order Not Found
             </h1>
             <Rule className="mt-2" />
           </div>
-          <p className="mt-4 mb-7 text-sm text-[#a99d8c] break-words">
+          <p className="mt-4 mb-7 text-sm text-[var(--fa-muted-dark)] break-words">
             {error || "We couldn't find this order."}
           </p>
           <Link href="/track-order" className={`inline-block ${PRIMARY_BTN}`}>
@@ -130,15 +130,15 @@ export default function OrderPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#373838]">
+    <div className="min-h-screen bg-[var(--fa-dark)]">
       {/* Success Header */}
-      <div className="bg-[#2e2e2e] border-b border-[#c9a25a]/40">
+      <div className="bg-[var(--fa-dark-deep)] border-b border-[var(--fa-gold)]/40">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
           {isCancelled ? (
             <>
               <div className="w-16 h-16 rounded-full border border-[#8f4a3c] bg-[#4a2624] flex items-center justify-center text-2xl mx-auto mb-5">❌</div>
               <div className="inline-block">
-                <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
                   Order Cancelled
                 </h1>
                 <Rule className="mt-2" />
@@ -146,25 +146,25 @@ export default function OrderPage() {
             </>
           ) : (
             <>
-              <div className="w-16 h-16 rounded-full border border-[#c9a25a]/50 bg-[#211d18] flex items-center justify-center text-2xl mx-auto mb-5">
+              <div className="w-16 h-16 rounded-full border border-[var(--fa-gold)]/50 bg-[var(--fa-ink)] flex items-center justify-center text-2xl mx-auto mb-5">
                 {isOnline ? "💳" : "🎉"}
               </div>
               <div className="inline-block">
-                <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
                   {isOnline ? "Order Placed — Payment Pending" : "Order Confirmed!"}
                 </h1>
                 <Rule className="mt-2" />
               </div>
-              <p className="mt-4 font-[family-name:var(--font-playfair)] text-base md:text-lg text-[#d2c1ac]">
+              <p className="mt-4 font-[family-name:var(--font-playfair)] text-base md:text-lg text-[var(--fa-on-dark)]">
                 {isOnline
                   ? "Please transfer the payment and send your receipt via WhatsApp to confirm your order."
                   : "Thank you! Your order has been placed successfully."}
               </p>
             </>
           )}
-          <p className="mt-5 text-sm text-[#a99d8c]">
+          <p className="mt-5 text-sm text-[var(--fa-muted-dark)]">
             Order Number:{" "}
-            <span className="font-mono font-semibold text-[#efe7db] text-base break-all">{order.orderNumber}</span>
+            <span className="font-mono font-semibold text-[var(--fa-cream)] text-base break-all">{order.orderNumber}</span>
           </p>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function OrderPage() {
               Action Required: Send Payment Proof
             </h2>
             <p className="text-sm text-[#d9c9a6] mb-5">
-              Transfer <strong className="text-[#efe7db]">PKR {order.total?.toLocaleString()}</strong> to our bank account and send your payment screenshot on WhatsApp. Your order will be processed once payment is confirmed.
+              Transfer <strong className="text-[var(--fa-cream)]">PKR {order.total?.toLocaleString()}</strong> to our bank account and send your payment screenshot on WhatsApp. Your order will be processed once payment is confirmed.
             </p>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
@@ -202,8 +202,8 @@ export default function OrderPage() {
             <CardHeading>Order Status</CardHeading>
             <StatusTimeline status={order.status} />
             {order.trackingNumber && (
-              <p className="mt-5 text-xs text-[#a99d8c] text-center">
-                Tracking No: <span className="font-mono font-semibold text-[#efe7db] break-all">{order.trackingNumber}</span>
+              <p className="mt-5 text-xs text-[var(--fa-muted-dark)] text-center">
+                Tracking No: <span className="font-mono font-semibold text-[var(--fa-cream)] break-all">{order.trackingNumber}</span>
               </p>
             )}
           </div>
@@ -214,42 +214,42 @@ export default function OrderPage() {
           <CardHeading>Order Details</CardHeading>
           <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4 text-sm mb-5">
             <div>
-              <p className="text-xs text-[#a99d8c] mb-0.5">Order Number</p>
-              <p className="font-mono font-semibold text-[#efe7db] break-all">{order.orderNumber}</p>
+              <p className="text-xs text-[var(--fa-muted-dark)] mb-0.5">Order Number</p>
+              <p className="font-mono font-semibold text-[var(--fa-cream)] break-all">{order.orderNumber}</p>
             </div>
             <div>
-              <p className="text-xs text-[#a99d8c] mb-0.5">Date</p>
-              <p className="font-medium text-[#efe7db]">
+              <p className="text-xs text-[var(--fa-muted-dark)] mb-0.5">Date</p>
+              <p className="font-medium text-[var(--fa-cream)]">
                 {new Date(order.createdAt).toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric" })}
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#a99d8c] mb-0.5">Payment</p>
-              <p className="font-medium text-[#efe7db] capitalize">{order.paymentMethod === "cod" ? "Cash on Delivery" : "Online Transfer"}</p>
+              <p className="text-xs text-[var(--fa-muted-dark)] mb-0.5">Payment</p>
+              <p className="font-medium text-[var(--fa-cream)] capitalize">{order.paymentMethod === "cod" ? "Cash on Delivery" : "Online Transfer"}</p>
             </div>
             <div>
-              <p className="text-xs text-[#a99d8c] mb-0.5">Status</p>
+              <p className="text-xs text-[var(--fa-muted-dark)] mb-0.5">Status</p>
               <StatusBadge status={order.status} />
             </div>
           </div>
 
           {/* Items */}
-          <div className="border-t border-[#c9a25a]/25 pt-5 space-y-4">
+          <div className="border-t border-[var(--fa-gold)]/25 pt-5 space-y-4">
             {order.items?.map((item, idx) => (
               <div key={idx} className="flex gap-3">
-                <div className="relative w-14 h-14 shrink-0 overflow-hidden border border-[#c9a25a]/30 bg-[#211d18]">
+                <div className="relative w-14 h-14 shrink-0 overflow-hidden border border-[var(--fa-gold)]/30 bg-[var(--fa-ink)]">
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill className="object-cover" sizes="56px" />
                   ) : (
-                    <div className="w-full h-full bg-[#211d18]" />
+                    <div className="w-full h-full bg-[var(--fa-ink)]" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#efe7db]">{item.name}</p>
-                  <p className="text-xs text-[#a99d8c] capitalize mt-0.5">
+                  <p className="text-sm font-semibold text-[var(--fa-cream)]">{item.name}</p>
+                  <p className="text-xs text-[var(--fa-muted-dark)] capitalize mt-0.5">
                     {[item.edition, item.size].filter(Boolean).join(" · ")} × {item.quantity}
                   </p>
-                  <p className="text-sm font-semibold text-[#c9a25a] mt-0.5">
+                  <p className="text-sm font-semibold text-[var(--fa-gold)] mt-0.5">
                     PKR {(item.price * item.quantity).toLocaleString()}
                   </p>
                 </div>
@@ -258,16 +258,16 @@ export default function OrderPage() {
           </div>
 
           {/* Totals */}
-          <div className="border-t border-[#c9a25a]/25 mt-5 pt-4 space-y-2 text-sm">
-            <div className="flex justify-between text-[#a99d8c]">
+          <div className="border-t border-[var(--fa-gold)]/25 mt-5 pt-4 space-y-2 text-sm">
+            <div className="flex justify-between text-[var(--fa-muted-dark)]">
               <span>Subtotal</span>
               <span>PKR {order.subtotal?.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-[#a99d8c]">
+            <div className="flex justify-between text-[var(--fa-muted-dark)]">
               <span>Shipping</span>
               <span>PKR {order.shippingCost?.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between font-semibold text-[#c9a25a] text-base pt-2 border-t border-[#c9a25a]/25">
+            <div className="flex justify-between font-semibold text-[var(--fa-gold)] text-base pt-2 border-t border-[var(--fa-gold)]/25">
               <span>Total</span>
               <span>PKR {order.total?.toLocaleString()}</span>
             </div>
@@ -277,12 +277,12 @@ export default function OrderPage() {
         {/* Delivery Info */}
         <div className={PANEL}>
           <CardHeading>Delivery Information</CardHeading>
-          <div className="text-sm text-[#cbbfae] space-y-1 break-words">
-            <p className="font-semibold text-[#efe7db]">{order.customer?.name}</p>
+          <div className="text-sm text-[var(--fa-on-dark)] space-y-1 break-words">
+            <p className="font-semibold text-[var(--fa-cream)]">{order.customer?.name}</p>
             <p>{order.customer?.phone}</p>
             <p className="break-all">{order.customer?.email}</p>
-            <p className="text-[#a99d8c] pt-1">{order.customer?.address}</p>
-            <p className="text-[#a99d8c]">{[order.customer?.city, order.customer?.province].filter(Boolean).join(", ")}</p>
+            <p className="text-[var(--fa-muted-dark)] pt-1">{order.customer?.address}</p>
+            <p className="text-[var(--fa-muted-dark)]">{[order.customer?.city, order.customer?.province].filter(Boolean).join(", ")}</p>
           </div>
         </div>
 
@@ -312,7 +312,7 @@ function StatusBadge({ status }) {
     cancelled:  "bg-[#4a2624] text-[#e8927f] border border-[#8f4a3c]",
   };
   return (
-    <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize ${map[status] || "bg-[#211d18] text-[#cbbfae] border border-[#6b6255]"}`}>
+    <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize ${map[status] || "bg-[var(--fa-ink)] text-[var(--fa-on-dark)] border border-[#6b6255]"}`}>
       {status}
     </span>
   );

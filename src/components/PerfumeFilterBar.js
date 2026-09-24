@@ -111,8 +111,8 @@ export function FilterDropdown({
           isActive ? "pr-2" : "pr-3.5"
         } ${
           isActive
-            ? "border-[#c9a25a] bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489]"
-            : "border-[#c9a25a]/45 bg-[#3d3d3d] text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
+            ? "border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)]"
+            : "border-[var(--fa-gold)]/45 bg-[var(--fa-dark-raised)] text-[var(--fa-on-dark)] hover:border-[var(--fa-gold-hover)] hover:text-[var(--fa-gold-hover)]"
         }`}
       >
         <span>{isActive ? selected?.label : defaultLabel}</span>
@@ -126,7 +126,7 @@ export function FilterDropdown({
               onChange(resetValue);
               setOpen(false);
             }}
-            className="ml-0.5 w-4 h-4 flex items-center justify-center rounded-full text-[#211d18]/70 hover:bg-[#b3261e] hover:text-[#f7ece9] transition-colors"
+            className="ml-0.5 w-4 h-4 flex items-center justify-center rounded-full text-[var(--fa-ink)]/70 hover:bg-[#b3261e] hover:text-[#f7ece9] transition-colors"
           >
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.4}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -150,7 +150,7 @@ export function FilterDropdown({
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-[#2e2e2e] border border-[#c9a25a]/50 shadow-[0_8px_30px_rgba(0,0,0,0.45)] z-40 min-w-[180px] max-w-[calc(100vw-2rem)] py-1.5 max-h-72 overflow-y-auto scrollbar-always [scrollbar-color:rgba(209,174,109,0.55)_rgba(255,255,255,0.08)]">
+        <div className="absolute top-full left-0 mt-1.5 bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/50 shadow-[0_8px_30px_rgba(0,0,0,0.45)] z-40 min-w-[180px] max-w-[calc(100vw-2rem)] py-1.5 max-h-72 overflow-y-auto scrollbar-always [scrollbar-color:rgba(209,174,109,0.55)_rgba(255,255,255,0.08)]">
           {options.map((opt) => (
             <button
               key={opt.value}
@@ -158,10 +158,10 @@ export function FilterDropdown({
                 onChange(opt.value);
                 setOpen(false);
               }}
-              className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors hover:bg-[#3d3d3d] hover:text-[#e3c489] ${
+              className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors hover:bg-[var(--fa-dark-raised)] hover:text-[var(--fa-gold-hover)] ${
                 value === opt.value
-                  ? "font-semibold text-[#e3c489] bg-[#3d3d3d]"
-                  : "text-[#cbbfae]"
+                  ? "font-semibold text-[var(--fa-gold-hover)] bg-[var(--fa-dark-raised)]"
+                  : "text-[var(--fa-on-dark)]"
               }`}
             >
               {opt.label}
@@ -177,13 +177,13 @@ export function FilterDropdown({
 export function SortSelect({ sort, setSort }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[11px] font-medium text-[#a99d8c] hidden sm:inline">
+      <span className="text-[11px] font-medium text-[var(--fa-muted-dark)] hidden sm:inline">
         Sort by
       </span>
       <select
         value={sort}
         onChange={(e) => setSort(e.target.value)}
-        className="text-[12px] border border-[#c9a25a]/45 rounded-md px-3 py-2 focus:outline-none focus:border-[#e3c489] bg-[#3d3d3d] cursor-pointer font-medium text-[#efe7db] appearance-none pr-8 [color-scheme:dark] transition-colors hover:border-[#e3c489]"
+        className="text-[12px] border border-[var(--fa-gold)]/45 rounded-md px-3 py-2 focus:outline-none focus:border-[var(--fa-gold-hover)] bg-[var(--fa-dark-raised)] cursor-pointer font-medium text-[var(--fa-cream)] appearance-none pr-8 [color-scheme:dark] transition-colors hover:border-[var(--fa-gold-hover)]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c9a25a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
           backgroundRepeat: "no-repeat",
@@ -323,24 +323,24 @@ export default function PerfumeFilterBar({
             setBrandActive(-1);
           }
         }}
-        className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full bg-[#3d3d3d] text-[#efe7db] placeholder:text-[#a99d8c] focus:outline-none transition-colors duration-200 ${
+        className={`w-full pl-8 pr-7 py-2 text-[11px] font-medium border rounded-full bg-[var(--fa-dark-raised)] text-[var(--fa-cream)] placeholder:text-[var(--fa-muted-dark)] focus:outline-none transition-colors duration-200 ${
           brand
-            ? "border-[#e3c489]"
-            : "border-[#c9a25a]/45 hover:border-[#e3c489] focus:border-[#e3c489]"
+            ? "border-[var(--fa-gold-hover)]"
+            : "border-[var(--fa-gold)]/45 hover:border-[var(--fa-gold-hover)] focus:border-[var(--fa-gold-hover)]"
         }`}
       />
-      <svg className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#a99d8c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fa-muted-dark)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z" />
       </svg>
       {brand && (
-        <button onClick={() => setBrand("")} aria-label="Clear brand search" className="absolute right-2 top-1/2 -translate-y-1/2 text-[#a99d8c] hover:text-[#e3c489] transition-colors">
+        <button onClick={() => setBrand("")} aria-label="Clear brand search" className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] transition-colors">
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       )}
       {brandFocused && brandMatches.length > 0 && (
-        <div className="absolute left-0 top-full mt-1.5 w-full min-w-[180px] max-w-[calc(100vw-2rem)] bg-[#2e2e2e] border border-[#c9a25a]/50 shadow-[0_8px_30px_rgba(0,0,0,0.45)] z-40 py-1.5 max-h-60 overflow-y-auto scrollbar-always [scrollbar-color:rgba(209,174,109,0.55)_rgba(255,255,255,0.08)]">
+        <div className="absolute left-0 top-full mt-1.5 w-full min-w-[180px] max-w-[calc(100vw-2rem)] bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/50 shadow-[0_8px_30px_rgba(0,0,0,0.45)] z-40 py-1.5 max-h-60 overflow-y-auto scrollbar-always [scrollbar-color:rgba(209,174,109,0.55)_rgba(255,255,255,0.08)]">
           {brandMatches.map((b, i) => (
             <button
               key={b}
@@ -349,8 +349,8 @@ export default function PerfumeFilterBar({
               onMouseEnter={() => setBrandActive(i)}
               className={`w-full text-left px-4 py-1.5 text-[12px] transition-colors ${
                 i === brandActive
-                  ? "bg-[#3d3d3d] text-[#e3c489] font-semibold"
-                  : "text-[#cbbfae] hover:bg-[#3d3d3d] hover:text-[#e3c489]"
+                  ? "bg-[var(--fa-dark-raised)] text-[var(--fa-gold-hover)] font-semibold"
+                  : "text-[var(--fa-on-dark)] hover:bg-[var(--fa-dark-raised)] hover:text-[var(--fa-gold-hover)]"
               }`}
             >
               {b}
@@ -368,7 +368,7 @@ export default function PerfumeFilterBar({
       className={`text-[11px] px-3.5 py-2 rounded-full border transition-colors duration-200 shrink-0 font-semibold ${
         hasControlChanges
           ? "hover-vibrate border-[#d4685f] text-[#e8938c] hover:bg-[#b3261e] hover:border-[#b3261e] hover:text-[#f7ece9]"
-          : "border-[#5a564f] text-[#7d7669] cursor-default"
+          : "border-[var(--fa-secondary)] text-[var(--fa-muted-dark)] cursor-default"
       }`}
     >
       Clear Filters
@@ -378,9 +378,9 @@ export default function PerfumeFilterBar({
   return (
     <>
       {/* Desktop — inline filter bar (unchanged) */}
-      <div className="hidden lg:block border border-[#c9a25a]/40 bg-[#2e2e2e] p-3 md:p-4 shadow-[0_10px_30px_rgba(0,0,0,0.30)]">
+      <div className="hidden lg:block border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)] p-3 md:p-4 shadow-[0_10px_30px_rgba(0,0,0,0.30)]">
         <div className="flex flex-wrap items-center gap-2.5">
-          <span className="font-[family-name:var(--font-playfair)] italic text-base text-[#c9a25a] mr-1 shrink-0">
+          <span className="font-[family-name:var(--font-playfair)] italic text-base text-[var(--fa-gold)] mr-1 shrink-0">
             Filters
           </span>
           {dropdowns}
@@ -396,14 +396,14 @@ export default function PerfumeFilterBar({
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="relative inline-flex items-center gap-2 rounded-full border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] px-4 py-2.5 text-xs font-bold tracking-[0.06em] shadow-sm active:scale-95 transition-transform"
+          className="relative inline-flex items-center gap-2 rounded-full border border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] px-4 py-2.5 text-xs font-bold tracking-[0.06em] shadow-sm active:scale-95 transition-transform"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h18M6 12h12M10 19h4" />
           </svg>
           Filters
           {activeCount > 0 && (
-            <span className="ml-0.5 min-w-[20px] h-5 px-1 inline-flex items-center justify-center rounded-full bg-[#211d18] text-[#e3c489] text-[11px] font-bold leading-none">
+            <span className="ml-0.5 min-w-[20px] h-5 px-1 inline-flex items-center justify-center rounded-full bg-[var(--fa-ink)] text-[var(--fa-gold-hover)] text-[11px] font-bold leading-none">
               {activeCount}
             </span>
           )}
@@ -427,14 +427,14 @@ export default function PerfumeFilterBar({
               className="fixed inset-0 bg-black/60 z-[60] lg:hidden"
               onClick={() => setDrawerOpen(false)}
             />
-            <div className="fixed inset-y-0 right-0 w-[86vw] max-w-sm bg-[#373838] border-l border-[#c9a25a]/40 z-[70] lg:hidden flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.45)] animate-[slideInRight_0.28s_ease-out]">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[#c9a25a]/30">
+            <div className="fixed inset-y-0 right-0 w-[86vw] max-w-sm bg-[var(--fa-dark)] border-l border-[var(--fa-gold)]/40 z-[70] lg:hidden flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.45)] animate-[slideInRight_0.28s_ease-out]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--fa-gold)]/30">
                 <div className="flex items-center gap-2">
-                  <span className="font-[family-name:var(--font-playfair)] italic text-lg text-[#c9a25a]">
+                  <span className="font-[family-name:var(--font-playfair)] italic text-lg text-[var(--fa-gold)]">
                     Filters
                   </span>
                   {activeCount > 0 && (
-                    <span className="min-w-[20px] h-5 px-1 inline-flex items-center justify-center rounded-full bg-[#c9a25a] text-[#211d18] text-[11px] font-bold leading-none">
+                    <span className="min-w-[20px] h-5 px-1 inline-flex items-center justify-center rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-[11px] font-bold leading-none">
                       {activeCount}
                     </span>
                   )}
@@ -442,7 +442,7 @@ export default function PerfumeFilterBar({
                 <button
                   onClick={() => setDrawerOpen(false)}
                   aria-label="Close filters"
-                  className="p-1.5 rounded-full text-[#cbbfae] hover:text-[#e3c489] hover:bg-white/10 active:scale-90 transition-all"
+                  className="p-1.5 rounded-full text-[var(--fa-on-dark)] hover:text-[var(--fa-gold-hover)] hover:bg-white/10 active:scale-90 transition-all"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -456,21 +456,21 @@ export default function PerfumeFilterBar({
                 {extraControls}
               </div>
 
-              <div className="flex items-center gap-3 px-5 py-4 border-t border-[#c9a25a]/30">
+              <div className="flex items-center gap-3 px-5 py-4 border-t border-[var(--fa-gold)]/30">
                 <button
                   onClick={onReset}
                   disabled={!hasControlChanges}
                   className={`flex-1 py-3 rounded-full border text-sm font-semibold transition-colors ${
                     hasControlChanges
                       ? "border-[#d4685f] text-[#e8938c] hover:bg-[#b3261e] hover:border-[#b3261e] hover:text-[#f7ece9]"
-                      : "border-[#5a564f] text-[#7d7669] cursor-default"
+                      : "border-[var(--fa-secondary)] text-[var(--fa-muted-dark)] cursor-default"
                   }`}
                 >
                   Clear
                 </button>
                 <button
                   onClick={() => setDrawerOpen(false)}
-                  className="flex-1 py-3 rounded-full bg-[#c9a25a] text-[#211d18] text-sm font-bold hover:bg-[#e3c489] transition-colors"
+                  className="flex-1 py-3 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-sm font-bold hover:bg-[var(--fa-gold-hover)] transition-colors"
                 >
                   Show Results
                 </button>

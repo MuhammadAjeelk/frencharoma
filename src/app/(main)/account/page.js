@@ -12,7 +12,7 @@ import { GOLD_GLOW_WITH_BORDER, FOCUS_RING } from "@/lib/design";
 function CardHeading({ children }) {
   return (
     <div className="inline-block mb-5">
-      <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a]">
+      <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)]">
         {children}
       </h2>
       <Rule className="mt-1.5" />
@@ -23,22 +23,22 @@ function CardHeading({ children }) {
 function Field({ label, value, className = "" }) {
   return (
     <div>
-      <p className="text-[12px] text-[#a99d8c]">{label}</p>
-      <p className={`mt-0.5 text-[#efe7db] break-words ${className}`}>{value}</p>
+      <p className="text-[12px] text-[var(--fa-muted-dark)]">{label}</p>
+      <p className={`mt-0.5 text-[var(--fa-cream)] break-words ${className}`}>{value}</p>
     </div>
   );
 }
 
 function Chevron() {
   return (
-    <svg className="w-5 h-5 shrink-0 text-[#a99d8c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <svg className="w-5 h-5 shrink-0 text-[var(--fa-muted-dark)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 5l7 7-7 7" />
     </svg>
   );
 }
 
 // Square row, thin gold frame, gold glow on hover — never a lift.
-const ROW = `group flex items-center justify-between gap-3 border border-[#c9a25a]/35 bg-[#2e2e2e] p-4 ${GOLD_GLOW_WITH_BORDER}`;
+const ROW = `group flex items-center justify-between gap-3 border border-[var(--fa-gold)]/35 bg-[var(--fa-dark-deep)] p-4 ${GOLD_GLOW_WITH_BORDER}`;
 
 export default function AccountPage() {
   const router = useRouter();
@@ -52,8 +52,8 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#373838] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--fa-dark)] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] rounded-full animate-spin" />
       </div>
     );
   }
@@ -63,20 +63,20 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#373838] py-10 md:py-12">
+    <div className="min-h-screen bg-[var(--fa-dark)] py-10 md:py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <div className="inline-block">
-            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+            <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
               My Account
             </h1>
             <Rule className="mt-2" />
           </div>
         </div>
 
-        <div className="border border-[#c9a25a]/40 bg-[#2e2e2e]">
+        <div className="border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)]">
           {/* Account Info */}
-          <div className="p-5 sm:p-6 border-b border-[#c9a25a]/25">
+          <div className="p-5 sm:p-6 border-b border-[var(--fa-gold)]/25">
             <CardHeading>Account Information</CardHeading>
             <div className="space-y-3 text-sm">
               <Field label="Name" value={user.name || "Not provided"} />
@@ -93,7 +93,7 @@ export default function AccountPage() {
                 <Link href="/admin" className={ROW}>
                   <div className="flex items-center gap-3 min-w-0">
                     <svg
-                      className="w-5 h-5 shrink-0 text-[#c9a25a]"
+                      className="w-5 h-5 shrink-0 text-[var(--fa-gold)]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -112,7 +112,7 @@ export default function AccountPage() {
                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                       />
                     </svg>
-                    <span className="text-sm font-medium text-[#efe7db] truncate">Admin Panel</span>
+                    <span className="text-sm font-medium text-[var(--fa-cream)] truncate">Admin Panel</span>
                   </div>
                   <Chevron />
                 </Link>
@@ -121,7 +121,7 @@ export default function AccountPage() {
               <Link href="/account/orders" className={ROW}>
                 <div className="flex items-center gap-3 min-w-0">
                   <svg
-                    className="w-5 h-5 shrink-0 text-[#c9a25a]"
+                    className="w-5 h-5 shrink-0 text-[var(--fa-gold)]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -134,7 +134,7 @@ export default function AccountPage() {
                       d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
                     />
                   </svg>
-                  <span className="text-sm font-medium text-[#efe7db] truncate">My Orders</span>
+                  <span className="text-sm font-medium text-[var(--fa-cream)] truncate">My Orders</span>
                 </div>
                 <Chevron />
               </Link>
@@ -142,7 +142,7 @@ export default function AccountPage() {
               <Link href="/" className={ROW}>
                 <div className="flex items-center gap-3 min-w-0">
                   <svg
-                    className="w-5 h-5 shrink-0 text-[#c9a25a]"
+                    className="w-5 h-5 shrink-0 text-[var(--fa-gold)]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -155,14 +155,14 @@ export default function AccountPage() {
                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                     />
                   </svg>
-                  <span className="text-sm font-medium text-[#efe7db] truncate">Continue Shopping</span>
+                  <span className="text-sm font-medium text-[var(--fa-cream)] truncate">Continue Shopping</span>
                 </div>
                 <Chevron />
               </Link>
 
               <button
                 onClick={logout}
-                className={`w-full flex items-center justify-between gap-3 border border-[#8f4a3c] bg-[#2e2e2e] p-4 text-left transition-colors duration-300 hover:border-[#c26a55] hover:bg-[#4a2624]/50 ${FOCUS_RING}`}
+                className={`w-full flex items-center justify-between gap-3 border border-[#8f4a3c] bg-[var(--fa-dark-deep)] p-4 text-left transition-colors duration-300 hover:border-[#c26a55] hover:bg-[#4a2624]/50 ${FOCUS_RING}`}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <svg

@@ -27,23 +27,23 @@ function NotesPyramid({ notes }) {
     { label: "Base Notes",  sublabel: "Lasting Impression",    items: notes?.base   || [] },
   ];
   if (!layers.some((l) => l.items.length > 0)) {
-    return <p className="text-sm italic text-[#211d18]/60">Fragrance notes coming soon.</p>;
+    return <p className="text-sm italic text-[var(--fa-ink)]/60">Fragrance notes coming soon.</p>;
   }
   return (
     <div className="space-y-3">
       {layers.map(
         (layer) =>
           layer.items.length > 0 && (
-            <div key={layer.label} className="border border-[#c9a25a] bg-[#d4c6ab]/40 p-4">
-              <p className="font-[family-name:var(--font-playfair)] italic text-base leading-tight text-[#211d18]">
+            <div key={layer.label} className="border border-[var(--fa-gold)] bg-[var(--fa-cream)]/40 p-4">
+              <p className="font-[family-name:var(--font-playfair)] italic text-base leading-tight text-[var(--fa-ink)]">
                 {layer.label}
               </p>
-              <p className="mb-2.5 text-[11px] text-[#211d18]/60">{layer.sublabel}</p>
+              <p className="mb-2.5 text-[11px] text-[var(--fa-ink)]/60">{layer.sublabel}</p>
               <div className="flex flex-wrap gap-1.5">
                 {layer.items.map((note) => (
                   <span
                     key={note}
-                    className="rounded-full border border-[#c9a25a]/70 bg-white px-2.5 py-1 text-xs font-medium text-[#211d18]"
+                    className="rounded-full border border-[var(--fa-gold)]/70 bg-[var(--fa-cream)] px-2.5 py-1 text-xs font-medium text-[var(--fa-ink)]"
                   >
                     {note}
                   </span>
@@ -59,16 +59,16 @@ function NotesPyramid({ notes }) {
 // ── Accordion Row (opens side modal) ──────────────────────────────────────
 function AccordionRow({ title, onClick }) {
   return (
-    <div className="border-t border-[#c9a25a]/25">
+    <div className="border-t border-[var(--fa-gold)]/25">
       <button
         onClick={onClick}
-        className="group flex w-full items-center justify-between gap-3 px-2 py-4 text-left transition-colors hover:bg-[#c9a25a]/10"
+        className="group flex w-full items-center justify-between gap-3 px-2 py-4 text-left transition-colors hover:bg-[var(--fa-gold)]/10"
       >
-        <span className="text-sm font-semibold text-[#cbbfae] transition-colors group-hover:text-[#e3c489] break-words">
+        <span className="text-sm font-semibold text-[var(--fa-on-dark)] transition-colors group-hover:text-[var(--fa-gold-hover)] break-words">
           {title}
         </span>
         <svg
-          className="w-4 h-4 shrink-0 text-[#c9a25a]"
+          className="w-4 h-4 shrink-0 text-[var(--fa-gold)]"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -282,8 +282,8 @@ export default function ProductDetailPage() {
   // ── Loading ────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#373838]">
-        <div className="w-10 h-10 rounded-full border-2 border-[#c9a25a]/25 border-t-[#c9a25a] animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--fa-dark)]">
+        <div className="w-10 h-10 rounded-full border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] animate-spin" />
       </div>
     );
   }
@@ -291,14 +291,14 @@ export default function ProductDetailPage() {
   // ── Not found ──────────────────────────────────────────────────────────
   if (notFound || !perfume) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#373838] px-4 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--fa-dark)] px-4 text-center">
         <div className="inline-block">
-          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
             Product Not Found
           </h1>
-          <Rule color="#c9a25a" className="mt-2" />
+          <Rule color="var(--fa-gold)" className="mt-2" />
         </div>
-        <p className="mt-5 mb-8 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[#d2c1ac]">
+        <p className="mt-5 mb-8 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[var(--fa-on-dark)]">
           This perfume might have been removed or is no longer available.
         </p>
         <Link href="/collections/shop-all" className={viewAllClass("dark")}>
@@ -318,16 +318,16 @@ export default function ProductDetailPage() {
     : null;
 
   return (
-      <div className="min-h-screen bg-[#373838]">
+      <div className="min-h-screen bg-[var(--fa-dark)]">
 
       {/* ── Breadcrumb ───────────────────────────────────────── */}
       <div className={`${GUTTER} py-3`}>
-        <nav className="flex items-center gap-2 text-xs text-[#a99d8c]">
-          <Link href="/" className="transition-colors hover:text-[#e3c489]">Home</Link>
+        <nav className="flex items-center gap-2 text-xs text-[var(--fa-muted-dark)]">
+          <Link href="/" className="transition-colors hover:text-[var(--fa-gold-hover)]">Home</Link>
           <span aria-hidden="true">/</span>
-          <Link href="/collections/shop-all" className="transition-colors hover:text-[#e3c489]">Shop All</Link>
+          <Link href="/collections/shop-all" className="transition-colors hover:text-[var(--fa-gold-hover)]">Shop All</Link>
           <span aria-hidden="true">/</span>
-          <span className="font-medium text-[#cbbfae] truncate max-w-[9rem] sm:max-w-xs">{perfume.name}</span>
+          <span className="font-medium text-[var(--fa-on-dark)] truncate max-w-[9rem] sm:max-w-xs">{perfume.name}</span>
         </nav>
       </div>
 
@@ -339,7 +339,7 @@ export default function ProductDetailPage() {
           <div className="flex flex-col gap-3 lg:sticky lg:top-6 lg:self-start">
 
             {/* Main image + nav arrows */}
-            <div className={`group relative w-full aspect-[6.818/7.5] bg-[#2e2e2e] ${CARD_FRAME} ${GOLD_GLOW_WITH_BORDER}`}>
+            <div className={`group relative w-full aspect-[6.818/7.5] bg-[var(--fa-dark-deep)] ${CARD_FRAME} ${GOLD_GLOW_WITH_BORDER}`}>
               {currentImage ? (
                 <Image
                   src={currentImage}
@@ -351,12 +351,12 @@ export default function ProductDetailPage() {
                 />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-2.5 px-4 text-center">
-                  <svg className="w-16 h-16 text-[#c9a25a]/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <svg className="w-16 h-16 text-[var(--fa-gold)]/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className="text-xs text-[#a99d8c]">Photography coming soon</span>
+                  <span className="text-xs text-[var(--fa-muted-dark)]">Photography coming soon</span>
                 </div>
               )}
 
@@ -365,7 +365,7 @@ export default function ProductDetailPage() {
                 <>
                   <button
                     onClick={() => setActiveImgIndex((i) => (i - 1 + displayImages.length) % displayImages.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-[#c9a25a] bg-[#2e2e2e]/90 text-[#c9a25a] backdrop-blur-[2px] transition-colors duration-200 hover:bg-[#c9a25a] hover:text-[#211d18] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-[var(--fa-gold)] bg-[var(--fa-dark-deep)]/90 text-[var(--fa-gold)] backdrop-blur-[2px] transition-colors duration-200 hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
                     aria-label="Previous image"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -374,7 +374,7 @@ export default function ProductDetailPage() {
                   </button>
                   <button
                     onClick={() => setActiveImgIndex((i) => (i + 1) % displayImages.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-[#c9a25a] bg-[#2e2e2e]/90 text-[#c9a25a] backdrop-blur-[2px] transition-colors duration-200 hover:bg-[#c9a25a] hover:text-[#211d18] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-[var(--fa-gold)] bg-[var(--fa-dark-deep)]/90 text-[var(--fa-gold)] backdrop-blur-[2px] transition-colors duration-200 hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
                     aria-label="Next image"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -394,10 +394,10 @@ export default function ProductDetailPage() {
                     onClick={() => setActiveImgIndex(idx)}
                     aria-label={`Show image ${idx + 1} of ${displayImages.length}`}
                     aria-current={activeImgIndex === idx ? "true" : undefined}
-                    className={`shrink-0 w-16 sm:w-[76px] aspect-[6.818/7.5] overflow-hidden border bg-[#2e2e2e] transition-colors duration-200 ${
+                    className={`shrink-0 w-16 sm:w-[76px] aspect-[6.818/7.5] overflow-hidden border bg-[var(--fa-dark-deep)] transition-colors duration-200 ${
                       activeImgIndex === idx
-                        ? "border-[#e3c489]"
-                        : "border-[#c9a25a]/35 hover:border-[#c9a25a]"
+                        ? "border-[var(--fa-gold-hover)]"
+                        : "border-[var(--fa-gold)]/35 hover:border-[var(--fa-gold)]"
                     }`}
                   >
                     <Image
@@ -420,20 +420,20 @@ export default function ProductDetailPage() {
 
             {/* Name + gender */}
             <div className="self-start max-w-full mb-3">
-              <h1 className="font-[family-name:var(--font-playfair)] italic font-normal text-2xl sm:text-3xl md:text-4xl leading-tight text-[#c9a25a] break-words">
+              <h1 className="font-[family-name:var(--font-playfair)] italic font-normal text-2xl sm:text-3xl md:text-4xl leading-tight text-[var(--fa-gold)] break-words">
                 {perfume.name}
                 {genderLabel && (
-                  <span className="ml-2 align-middle not-italic font-[family-name:var(--font-geist-sans)] text-sm sm:text-base text-[#a99d8c] whitespace-nowrap">
+                  <span className="ml-2 align-middle not-italic font-[family-name:var(--font-geist-sans)] text-sm sm:text-base text-[var(--fa-muted-dark)] whitespace-nowrap">
                     (For {genderLabel})
                   </span>
                 )}
               </h1>
-              <Rule color="#c9a25a" className="mt-2" />
+              <Rule color="var(--fa-gold)" className="mt-2" />
             </div>
 
             {hasSpecialOffer && (
               <div className="mb-2">
-                <span className="inline-flex items-center rounded-full border border-[#c9a25a] bg-[#c9a25a]/15 px-3 py-1 text-xs font-bold text-[#e3c489]">
+                <span className="inline-flex items-center rounded-full border border-[var(--fa-gold)] bg-[var(--fa-gold)]/15 px-3 py-1 text-xs font-bold text-[var(--fa-gold-hover)]">
                   Special Offer
                 </span>
               </div>
@@ -441,29 +441,29 @@ export default function ProductDetailPage() {
 
             {/* Inspired by */}
             {brandLabel && (
-              <p className="mb-1 text-sm text-[#a99d8c] break-words">
-                Inspired By: <span className="font-semibold text-[#cbbfae]">{brandLabel}</span>
+              <p className="mb-1 text-sm text-[var(--fa-muted-dark)] break-words">
+                Inspired By: <span className="font-semibold text-[var(--fa-on-dark)]">{brandLabel}</span>
               </p>
             )}
 
             {perfume.impressionName && (
-              <p className="mb-1 text-sm text-[#a99d8c] break-words">
+              <p className="mb-1 text-sm text-[var(--fa-muted-dark)] break-words">
                 {!isSignatureScent(perfume.impressionName) && "Impression: "}
-                <span className="font-semibold text-[#cbbfae]">{perfume.impressionName}</span>
+                <span className="font-semibold text-[var(--fa-on-dark)]">{perfume.impressionName}</span>
               </p>
             )}
 
             {/* Scent family / concentration */}
             {perfume.scentFamily && (
-              <p className="mb-1 text-sm text-[#a99d8c] break-words">
-                Concentration: <span className="font-semibold text-[#cbbfae]">{perfume.scentFamily}</span>
+              <p className="mb-1 text-sm text-[var(--fa-muted-dark)] break-words">
+                Concentration: <span className="font-semibold text-[var(--fa-on-dark)]">{perfume.scentFamily}</span>
               </p>
             )}
 
             {/* Globally Admired */}
-            <p className="mb-3 text-sm text-[#a99d8c]">
+            <p className="mb-3 text-sm text-[var(--fa-muted-dark)]">
               Globally Admired:{" "}
-              <span className="font-bold text-[#e3c489]">
+              <span className="font-bold text-[var(--fa-gold-hover)]">
                 {Math.min(100, Math.max(60, Number(perfume.globalAdmirePercent) || 60))}%
               </span>
             </p>
@@ -485,7 +485,7 @@ export default function ProductDetailPage() {
                   {seasonTags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-[#c9a25a]/45 bg-[#2e2e2e] px-3 py-1 text-xs font-medium text-[#cbbfae]"
+                      className="rounded-full border border-[var(--fa-gold)]/45 bg-[var(--fa-dark-deep)] px-3 py-1 text-xs font-medium text-[var(--fa-on-dark)]"
                     >
                       {SEASON_LABELS[tag]}
                     </span>
@@ -494,12 +494,12 @@ export default function ProductDetailPage() {
               ) : null;
             })()}
 
-            <div className="h-px bg-[#c9a25a]/25 my-4" />
+            <div className="h-px bg-[var(--fa-gold)]/25 my-4" />
 
             {/* ── Edition Selector ── */}
             {enabledEditions.length > 0 && (
               <div className="mb-4">
-                <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Choose Edition</p>
+                <p className="mb-2 text-[13px] font-semibold text-[var(--fa-muted-dark)]">Choose Edition</p>
 
                 <div className="flex flex-wrap gap-2 mb-2">
                   {enabledEditions.map((ed) => {
@@ -521,13 +521,13 @@ export default function ProductDetailPage() {
                         aria-pressed={isSelected}
                         className={`flex min-w-[118px] flex-col items-center border px-4 py-2.5 capitalize transition-colors ${
                           isSelected
-                            ? "border-[#e3c489] bg-[#c9a25a] text-[#211d18]"
-                            : "border-[#c9a25a]/45 text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
+                            ? "border-[var(--fa-gold-hover)] bg-[var(--fa-gold)] text-[var(--fa-ink)]"
+                            : "border-[var(--fa-gold)]/45 text-[var(--fa-on-dark)] hover:border-[var(--fa-gold-hover)] hover:text-[var(--fa-gold-hover)]"
                         }`}
                       >
                         <span className="text-xs font-bold">{ed.key} Edition</span>
                         {minPrice < Infinity && (
-                          <span className={`mt-0.5 text-xs font-semibold ${isSelected ? "text-[#211d18]/75" : "text-[#a99d8c]"}`}>
+                          <span className={`mt-0.5 text-xs font-semibold ${isSelected ? "text-[var(--fa-ink)]/75" : "text-[var(--fa-muted-dark)]"}`}>
                             PKR {dispPrice.toLocaleString()}
                             {disc > 0 && <span className="ml-1 line-through opacity-70">{minPrice.toLocaleString()}</span>}
                           </span>
@@ -554,7 +554,7 @@ export default function ProductDetailPage() {
             {/* ── Size selector ── */}
             {selectedEdition && (
               <div className="mb-4">
-                <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Size</p>
+                <p className="mb-2 text-[13px] font-semibold text-[var(--fa-muted-dark)]">Size</p>
                   <div className="flex flex-wrap gap-2">
                     {(selectedEdition.variants || [])
                       .filter((v) => v.isActive)
@@ -566,10 +566,10 @@ export default function ProductDetailPage() {
                         aria-pressed={selectedVariant?.size === v.size}
                         className={`rounded-full border px-5 py-2 text-sm font-bold transition-colors ${
                           selectedVariant?.size === v.size
-                            ? "border-[#e3c489] bg-[#c9a25a] text-[#211d18]"
+                            ? "border-[var(--fa-gold-hover)] bg-[var(--fa-gold)] text-[var(--fa-ink)]"
                             : v.stock === 0
-                            ? "border-[#5a564f] text-[#8b8377] line-through hover:border-[#8b8377]"
-                            : "border-[#c9a25a]/45 text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
+                            ? "border-[var(--fa-secondary)] text-[var(--fa-secondary)] line-through hover:border-[var(--fa-secondary)]"
+                            : "border-[var(--fa-gold)]/45 text-[var(--fa-on-dark)] hover:border-[var(--fa-gold-hover)] hover:text-[var(--fa-gold-hover)]"
                         }`}
                       >
                         {v.size}
@@ -586,12 +586,12 @@ export default function ProductDetailPage() {
               const final = disc > 0 ? Math.round(orig * (1 - disc / 100)) : orig;
               return (
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-4">
-                  <span className="text-2xl sm:text-3xl font-bold text-[#e3c489]">
+                  <span className="text-2xl sm:text-3xl font-bold text-[var(--fa-gold-hover)]">
                     PKR {final.toLocaleString()}
                   </span>
                   {disc > 0 && (
                     <>
-                      <span className="text-base text-[#a99d8c] line-through">
+                      <span className="text-base text-[var(--fa-muted-dark)] line-through">
                         PKR {orig.toLocaleString()}
                       </span>
                       <span className="rounded-full border border-[#e07a72]/60 bg-[#e07a72]/15 px-2.5 py-0.5 text-xs font-bold text-[#e8877f]">
@@ -605,16 +605,16 @@ export default function ProductDetailPage() {
 
             {/* ── Quantity ── */}
             <div className="mb-4">
-              <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Quantity</p>
-              <div className="flex w-fit items-center border border-[#c9a25a]/45">
+              <p className="mb-2 text-[13px] font-semibold text-[var(--fa-muted-dark)]">Quantity</p>
+              <div className="flex w-fit items-center border border-[var(--fa-gold)]/45">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                   aria-label="Decrease quantity"
-                  className="px-4 py-2.5 text-lg font-bold leading-none text-[#cbbfae] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18]"
+                  className="px-4 py-2.5 text-lg font-bold leading-none text-[var(--fa-on-dark)] transition-colors hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)]"
                 >
                   −
                 </button>
-                <span className="min-w-[48px] border-x border-[#c9a25a]/45 px-5 py-2.5 text-center font-bold text-[#e3c489]">
+                <span className="min-w-[48px] border-x border-[var(--fa-gold)]/45 px-5 py-2.5 text-center font-bold text-[var(--fa-gold-hover)]">
                   {quantity}
                 </span>
                 <button
@@ -624,7 +624,7 @@ export default function ProductDetailPage() {
                     )
                   }
                   aria-label="Increase quantity"
-                  className="px-4 py-2.5 text-lg font-bold leading-none text-[#cbbfae] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18]"
+                  className="px-4 py-2.5 text-lg font-bold leading-none text-[var(--fa-on-dark)] transition-colors hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)]"
                 >
                   +
                 </button>
@@ -638,7 +638,7 @@ export default function ProductDetailPage() {
                   value={selectedSample}
                   onChange={(e) => setSelectedSample(e.target.value)}
                   aria-label="Choose a free 5-ml sample"
-                  className="w-full cursor-pointer appearance-none border border-[#c9a25a]/45 bg-[#2e2e2e] px-4 py-2.5 pr-10 text-sm text-[#cbbfae] transition-colors focus:outline-none focus:border-[#e3c489]"
+                  className="w-full cursor-pointer appearance-none border border-[var(--fa-gold)]/45 bg-[var(--fa-dark-deep)] px-4 py-2.5 pr-10 text-sm text-[var(--fa-on-dark)] transition-colors focus:outline-none focus:border-[var(--fa-gold-hover)]"
                 >
                   <option value="">Choose free 5-ml sample from the list</option>
                   <option value="none">No sample, thanks</option>
@@ -648,12 +648,12 @@ export default function ProductDetailPage() {
                   <option value="amber-noir">Amber Noir</option>
                 </select>
                 <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-                  <svg className="w-4 h-4 text-[#c9a25a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <svg className="w-4 h-4 text-[var(--fa-gold)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
-              <p className="mt-1.5 text-[10px] leading-tight text-[#a99d8c]">
+              <p className="mt-1.5 text-[10px] leading-tight text-[var(--fa-muted-dark)]">
                 This list will show different testers for each individual perfume. According to perfume categories.
               </p>
             </div>
@@ -668,13 +668,13 @@ export default function ProductDetailPage() {
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="flex flex-col items-center gap-1.5 border border-[#d1ae6d] bg-[#2e2e2e] px-1 py-3 text-center"
+                  className="flex flex-col items-center gap-1.5 border border-[var(--fa-gold)] bg-[var(--fa-dark-deep)] px-1 py-3 text-center"
                 >
                   <span className="relative w-8 h-8 sm:w-9 sm:h-9">
                     <Image src={b.icon} alt={b.label} fill className="object-contain" sizes="36px" />
                   </span>
-                  <p className="text-[9px] sm:text-[10px] font-semibold leading-tight text-[#efe7db]">{b.label}</p>
-                  <p className="text-[8px] sm:text-[9px] leading-tight text-[#cbbfae]">{b.sub}</p>
+                  <p className="text-[9px] sm:text-[10px] font-semibold leading-tight text-[var(--fa-cream)]">{b.label}</p>
+                  <p className="text-[8px] sm:text-[9px] leading-tight text-[var(--fa-on-dark)]">{b.sub}</p>
                 </div>
               ))}
                 </div>
@@ -685,8 +685,8 @@ export default function ProductDetailPage() {
               onClick={handleAddToCart}
               className={`mb-3 w-full border py-4 text-sm font-bold uppercase tracking-[0.1em] transition-colors ${
                 inStock && selectedVariant
-                  ? "border-[#c9a25a] bg-[#c9a25a] text-[#211d18] hover:border-[#e3c489] hover:bg-[#e3c489]"
-                  : "cursor-not-allowed border-[#5a564f] bg-[#45443f] text-[#8b8377]"
+                  ? "border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] hover:border-[var(--fa-gold-hover)] hover:bg-[var(--fa-gold-hover)]"
+                  : "cursor-not-allowed border-[var(--fa-secondary)] bg-[var(--fa-dark-raised)] text-[var(--fa-muted-dark)]"
               }`}
                 >
               {cartAdded
@@ -704,8 +704,8 @@ export default function ProductDetailPage() {
               onClick={handleBuyNow}
               className={`mb-3 w-full border py-4 text-sm font-bold uppercase tracking-[0.1em] transition-colors ${
                 inStock && selectedVariant
-                  ? "border-[#c9a25a] text-[#c9a25a] hover:bg-[#c9a25a] hover:text-[#211d18]"
-                  : "cursor-not-allowed border-[#5a564f] text-[#8b8377]"
+                  ? "border-[var(--fa-gold)] text-[var(--fa-gold)] hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)]"
+                  : "cursor-not-allowed border-[var(--fa-secondary)] text-[var(--fa-secondary)]"
               }`}
                 >
                   Buy Now
@@ -726,7 +726,7 @@ export default function ProductDetailPage() {
               className={`mb-5 flex w-full items-center justify-center gap-2 border py-3 text-sm font-semibold tracking-[0.04em] transition-colors ${
                 isInWishlist(perfume.slug)
                   ? "border-[#e07a72] bg-[#e07a72]/12 text-[#e8877f]"
-                  : "border-[#c9a25a]/50 text-[#cbbfae] hover:border-[#e3c489] hover:text-[#e3c489]"
+                  : "border-[var(--fa-gold)]/50 text-[var(--fa-on-dark)] hover:border-[var(--fa-gold-hover)] hover:text-[var(--fa-gold-hover)]"
               }`}
             >
               <svg
@@ -743,7 +743,7 @@ export default function ProductDetailPage() {
 
             {/* ── Short description ── */}
             {perfume.description && (
-              <div className="mb-4 text-sm leading-relaxed text-[#cbbfae]">
+              <div className="mb-4 text-sm leading-relaxed text-[var(--fa-on-dark)]">
                 <p>
                   {descExpanded ? perfume.description : shortDesc}
                   {needsReadMore && !descExpanded && "…"}
@@ -751,7 +751,7 @@ export default function ProductDetailPage() {
                 {needsReadMore && (
                   <button
                     onClick={() => setDescExpanded((o) => !o)}
-                    className="mt-1 text-xs text-[#c9a25a] underline underline-offset-2 transition-colors hover:text-[#e3c489]"
+                    className="mt-1 text-xs text-[var(--fa-gold)] underline underline-offset-2 transition-colors hover:text-[var(--fa-gold-hover)]"
                   >
                     {descExpanded ? "Show Less" : "Read More..."}
                   </button>
@@ -760,7 +760,7 @@ export default function ProductDetailPage() {
             )}
 
             {/* ── Accordion Rows → open side modal ── */}
-            <div className="border-b border-[#c9a25a]/25">
+            <div className="border-b border-[var(--fa-gold)]/25">
 
               <AccordionRow
                 title="Fragrance Profile"
@@ -773,7 +773,7 @@ export default function ProductDetailPage() {
                 title={`Why Choose ${perfume.name}?`}
                 onClick={() =>
                   openModal(`Why Choose ${perfume.name}?`, (
-                    <div className="space-y-3 text-sm leading-relaxed text-[#211d18]">
+                    <div className="space-y-3 text-sm leading-relaxed text-[var(--fa-ink)]">
                       <p>Our impression perfumes are crafted using <strong>100% original French perfume oils</strong>, ensuring the highest scent fidelity to the original fragrance.</p>
                       <p>With a concentration of up to <strong>35% perfume oil</strong>, our formulas last 12–16 hours on skin — outperforming most department-store alternatives.</p>
                       <p>Each bottle is filled with <strong>50ml</strong> of premium fragrance, providing incredible value compared to branded counterparts that cost 10× more.</p>
@@ -786,7 +786,7 @@ export default function ProductDetailPage() {
                 title="Disclaimer"
                 onClick={() =>
                   openModal("Disclaimer", (
-                    <p className="text-sm leading-relaxed text-[#211d18]">
+                    <p className="text-sm leading-relaxed text-[var(--fa-ink)]">
                       French Aromas perfumes are original impression fragrances inspired by luxury brands. We are not affiliated with or endorsed by the original brands. Our products are independently crafted using premium French perfume oils to recreate a similar scent experience.
                     </p>
                   ))
@@ -797,7 +797,7 @@ export default function ProductDetailPage() {
                 title="Shipping & Returns"
                 onClick={() =>
                   openModal("Shipping & Returns", (
-                    <div className="space-y-3 text-sm leading-relaxed text-[#211d18]">
+                    <div className="space-y-3 text-sm leading-relaxed text-[var(--fa-ink)]">
                       <p><strong>Free Shipping</strong> on orders above PKR 7,000.</p>
                       <p><strong>Standard Delivery:</strong> 3–5 working days across Pakistan.</p>
                       <p><strong>Returns:</strong> We accept returns within 7 days of delivery if the product is unopened and in its original packaging.</p>
@@ -810,13 +810,13 @@ export default function ProductDetailPage() {
                 title="FAQs"
                 onClick={() =>
                   openModal("Frequently Asked Questions", (
-                    <div className="space-y-4 text-sm leading-relaxed text-[#211d18]">
+                    <div className="space-y-4 text-sm leading-relaxed text-[var(--fa-ink)]">
                       <div>
-                        <p className="mb-1 font-semibold text-[#211d18]">Q: Why is the impression perfume so affordable compared to the original?</p>
+                        <p className="mb-1 font-semibold text-[var(--fa-ink)]">Q: Why is the impression perfume so affordable compared to the original?</p>
                         <p>Our perfumes skip expensive branding & marketing costs. You only pay for the fragrance itself — crafted with the same French perfume oils.</p>
                       </div>
                       <div>
-                        <p className="mb-1 font-semibold text-[#211d18]">Q: Is it also cheaper than other locally made impressions?</p>
+                        <p className="mb-1 font-semibold text-[var(--fa-ink)]">Q: Is it also cheaper than other locally made impressions?</p>
                         <p>Yes — we source directly from French oil suppliers and operate with minimal overhead, making our pricing the most competitive without sacrificing quality.</p>
                       </div>
                     </div>
@@ -832,7 +832,7 @@ export default function ProductDetailPage() {
       {/* ═══════════════════════════════════════════════════════
            ORIGINAL vs. IMPRESSION COMPARISON TABLE
           ═══════════════════════════════════════════════════════ */}
-      <div className={`bg-[#d4c6ab] ${SECTION_Y}`}>
+      <div className={`bg-[var(--fa-cream)] ${SECTION_Y}`}>
         <div className={GUTTER}>
           <SectionHeading
             tone="light"
@@ -851,16 +851,16 @@ export default function ProductDetailPage() {
                     src={perfume.images.main}
                     alt="Original perfume"
                     fill
-                    className="object-cover border border-[#d1ae6d]"
+                    className="object-cover border border-[var(--fa-gold)]"
                     sizes="160px"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center border border-[#d1ae6d] bg-[#c6b596]">
-                    <span className="px-2 text-center text-[10px] text-[#211d18]/70 break-words">{brandLabel || "Original"}</span>
+                  <div className="flex h-full w-full items-center justify-center border border-[var(--fa-gold)] bg-[var(--fa-beige)]">
+                    <span className="px-2 text-center text-[10px] text-[var(--fa-ink)]/70 break-words">{brandLabel || "Original"}</span>
                   </div>
                 )}
                 {/* Price badge */}
-                <div className="absolute -top-3 -left-3 border border-[#c9a25a] bg-[#211d18] px-2 py-1 text-center font-bold leading-tight text-[#e3c489]"
+                <div className="absolute -top-3 -left-3 border border-[var(--fa-gold)] bg-[var(--fa-ink)] px-2 py-1 text-center font-bold leading-tight text-[var(--fa-gold-hover)]"
                   style={{ fontSize: "9px", minWidth: "64px" }}>
                   <div>Price in PKR :</div>
                   <div className="text-[11px]">Rs. {brandLabel || "—"}</div>
@@ -870,16 +870,16 @@ export default function ProductDetailPage() {
 
             {/* ── Center: Comparison table ── */}
             <div className="flex-1 overflow-x-auto">
-              <table className="w-full min-w-[320px] border-collapse border border-[#211d18]/25">
+              <table className="w-full min-w-[320px] border-collapse border border-[var(--fa-ink)]/25">
                 <thead>
                   <tr>
-                    <th className="bg-[#211d18] px-2 py-4 text-center text-sm sm:text-base font-bold text-[#c9a25a] sm:px-4">
+                    <th className="bg-[var(--fa-ink)] px-2 py-4 text-center text-sm sm:text-base font-bold text-[var(--fa-gold)] sm:px-4">
                       Original Perfume
                     </th>
-                    <th className="bg-[#373838] px-2 py-4 text-center text-sm sm:text-base font-bold text-[#d4c6ab] sm:px-4">
+                    <th className="bg-[var(--fa-dark)] px-2 py-4 text-center text-sm sm:text-base font-bold text-[var(--fa-cream)] sm:px-4">
                       Features
                     </th>
-                    <th className="bg-[#211d18] px-2 py-4 text-center text-sm sm:text-base font-bold text-[#c9a25a] sm:px-4">
+                    <th className="bg-[var(--fa-ink)] px-2 py-4 text-center text-sm sm:text-base font-bold text-[var(--fa-gold)] sm:px-4">
                       Impression Perfume
                     </th>
                   </tr>
@@ -896,10 +896,10 @@ export default function ProductDetailPage() {
                     ["NO",                 "Return Policy",        "YES"                 ],
                     ["NO",                 "Tester Availability",  "YES"                 ],
                   ].map(([orig, feat, imp], i) => (
-                    <tr key={i} className={i % 2 === 0 ? "bg-[#ded2bc]" : "bg-[#d4c6ab]"}>
-                      <td className="border border-[#211d18]/15 px-2 py-3 text-center text-sm sm:text-base text-[#211d18] sm:px-4 break-words">{orig}</td>
-                      <td className="border border-[#211d18]/15 bg-[#c9bb9e] px-2 py-3 text-center text-sm sm:text-base font-bold text-[#211d18] sm:px-4">{feat}</td>
-                      <td className="border border-[#211d18]/15 px-2 py-3 text-center text-sm sm:text-base text-[#211d18] sm:px-4 break-words">{imp}</td>
+                    <tr key={i} className={i % 2 === 0 ? "bg-[var(--fa-beige)]" : "bg-[var(--fa-cream)]"}>
+                      <td className="border border-[var(--fa-ink)]/15 px-2 py-3 text-center text-sm sm:text-base text-[var(--fa-ink)] sm:px-4 break-words">{orig}</td>
+                      <td className="border border-[var(--fa-ink)]/15 bg-[var(--fa-selected)] px-2 py-3 text-center text-sm sm:text-base font-bold text-[var(--fa-ink)] sm:px-4">{feat}</td>
+                      <td className="border border-[var(--fa-ink)]/15 px-2 py-3 text-center text-sm sm:text-base text-[var(--fa-ink)] sm:px-4 break-words">{imp}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -914,16 +914,16 @@ export default function ProductDetailPage() {
                     src={currentImage}
                     alt={perfume.name}
                     fill
-                    className="object-cover border border-[#d1ae6d]"
+                    className="object-cover border border-[var(--fa-gold)]"
                     sizes="160px"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center border border-[#d1ae6d] bg-[#c6b596]">
-                    <span className="px-2 text-center text-[10px] text-[#211d18]/70 break-words">{perfume.name}</span>
+                  <div className="flex h-full w-full items-center justify-center border border-[var(--fa-gold)] bg-[var(--fa-beige)]">
+                    <span className="px-2 text-center text-[10px] text-[var(--fa-ink)]/70 break-words">{perfume.name}</span>
                   </div>
                 )}
                 {/* Price badge */}
-                <div className="absolute -top-3 -right-3 border border-[#c9a25a] bg-[#211d18] px-2 py-1 text-center font-bold leading-tight text-[#e3c489]"
+                <div className="absolute -top-3 -right-3 border border-[var(--fa-gold)] bg-[var(--fa-ink)] px-2 py-1 text-center font-bold leading-tight text-[var(--fa-gold-hover)]"
                   style={{ fontSize: "9px", minWidth: "64px" }}>
                   <div>Price in PKR :</div>
                   <div className="text-[11px]">
@@ -963,11 +963,11 @@ export default function ProductDetailPage() {
                   return (
                     <div
                       key={rp._id}
-                  className={`group flex flex-col bg-[#2e2e2e] ${CARD_FRAME} ${GOLD_GLOW_WITH_BORDER}`}
+                  className={`group flex flex-col bg-[var(--fa-dark-deep)] ${CARD_FRAME} ${GOLD_GLOW_WITH_BORDER}`}
                     >
                       <Link
                         href={`/products/${rp.slug}`}
-                        className="relative block w-full aspect-square overflow-hidden bg-[#373838]"
+                        className="relative block w-full aspect-square overflow-hidden bg-[var(--fa-dark)]"
                       >
                     {rp.images?.main ? (
                           <Image
@@ -978,8 +978,8 @@ export default function ProductDetailPage() {
                         sizes="(max-width: 640px) 50vw, 25vw"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-[#373838]">
-                        <svg className="w-10 h-10 text-[#c9a25a]/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                          <div className="w-full h-full flex items-center justify-center bg-[var(--fa-dark)]">
+                        <svg className="w-10 h-10 text-[var(--fa-gold)]/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                               />
@@ -989,22 +989,22 @@ export default function ProductDetailPage() {
                       </Link>
                       <div className="flex flex-1 flex-col p-3">
                         {rpBrand && (
-                          <p className="mb-0.5 text-[10px] text-[#a99d8c] line-clamp-1">{rpBrand}</p>
+                          <p className="mb-0.5 text-[10px] text-[var(--fa-muted-dark)] line-clamp-1">{rpBrand}</p>
                         )}
                         <Link href={`/products/${rp.slug}`}>
-                          <h3 className="mb-2 text-xs sm:text-sm font-semibold text-[#cbbfae] line-clamp-2 transition-colors hover:text-[#e3c489]">
+                          <h3 className="mb-2 text-xs sm:text-sm font-semibold text-[var(--fa-on-dark)] line-clamp-2 transition-colors hover:text-[var(--fa-gold-hover)]">
                             {rp.name}
                           </h3>
                         </Link>
                         <div className="flex-1" />
                         {rpPrice !== null && (
-                          <p className="mb-2 text-sm font-bold text-[#e3c489]">
+                          <p className="mb-2 text-sm font-bold text-[var(--fa-gold-hover)]">
                             PKR {rpPrice.toLocaleString()}
                           </p>
                         )}
                         <Link
                           href={`/products/${rp.slug}`}
-                          className="block border border-[#c9a25a] py-1.5 text-center text-xs font-semibold text-[#c9a25a] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18]"
+                          className="block border border-[var(--fa-gold)] py-1.5 text-center text-xs font-semibold text-[var(--fa-gold)] transition-colors hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)]"
                         >
                           View Details
                         </Link>
@@ -1020,7 +1020,7 @@ export default function ProductDetailPage() {
       {/* ═══════════════════════════════════════════════════════
            FREQUENTLY ASKED QUESTIONS
           ═══════════════════════════════════════════════════════ */}
-      <div className={`bg-[#d4c6ab] ${SECTION_Y}`}>
+      <div className={`bg-[var(--fa-cream)] ${SECTION_Y}`}>
         <div className={GUTTER}>
           <div className="max-w-3xl mx-auto">
           <SectionHeading
@@ -1030,7 +1030,7 @@ export default function ProductDetailPage() {
             className="mb-10 md:mb-12"
           />
 
-          <div className="border border-[#211d18]/25">
+          <div className="border border-[var(--fa-ink)]/25">
             {[
               {
                 q: "Why is the impression perfume so affordable compared to the original?",
@@ -1053,22 +1053,22 @@ export default function ProductDetailPage() {
                 a: "Yes! Free shipping on all orders above PKR 7,000. Standard delivery takes 3-5 working days across Pakistan.",
               },
             ].map((faq, i) => (
-              <div key={i} className={i > 0 ? "border-t border-[#211d18]/20" : ""}>
+              <div key={i} className={i > 0 ? "border-t border-[var(--fa-ink)]/20" : ""}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   aria-expanded={openFaq === i}
-                  className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-[#211d18]/5"
+                  className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-[var(--fa-ink)]/5"
                 >
-                  <span className="text-sm font-semibold text-[#211d18]">{faq.q}</span>
+                  <span className="text-sm font-semibold text-[var(--fa-ink)]">{faq.q}</span>
                   <svg
-                    className={`w-4 h-4 shrink-0 text-[#211d18]/60 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
+                    className={`w-4 h-4 shrink-0 text-[var(--fa-ink)]/60 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
                     fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 {openFaq === i && (
-                  <div className="px-5 pb-4 text-sm leading-relaxed text-[#211d18]/85 animate-fadeIn">
+                  <div className="px-5 pb-4 text-sm leading-relaxed text-[var(--fa-ink)]/85 animate-fadeIn">
                     {faq.a}
                   </div>
                 )}
@@ -1087,24 +1087,24 @@ export default function ProductDetailPage() {
         <div className="flex flex-col gap-5 mb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
                 Customer Reviews
               </h2>
-              <Rule color="#c9a25a" className="mt-2" />
+              <Rule color="var(--fa-gold)" className="mt-2" />
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-0.5" aria-hidden="true">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <svg
                     key={star}
-                    className={`w-4 h-4 ${star <= Math.round(avgRating) ? "text-[#e3c489] fill-[#e3c489]" : "text-[#5c554b] fill-[#5c554b]"}`}
+                    className={`w-4 h-4 ${star <= Math.round(avgRating) ? "text-[var(--fa-gold-hover)] fill-[var(--fa-gold-hover)]" : "text-[var(--fa-secondary)] fill-[var(--fa-secondary)]"}`}
                     viewBox="0 0 20 20"
                   >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
               </div>
-              <span className="text-sm text-[#a99d8c]">
+              <span className="text-sm text-[var(--fa-muted-dark)]">
                 {avgRating > 0 ? `${avgRating} out of 5` : "No reviews yet"} ({reviewTotal} review{reviewTotal !== 1 ? "s" : ""})
               </span>
             </div>
@@ -1112,7 +1112,7 @@ export default function ProductDetailPage() {
           <button
             onClick={() => setShowReviewForm(!showReviewForm)}
             aria-expanded={showReviewForm}
-            className="shrink-0 self-start border border-[#c9a25a] px-5 py-2.5 text-sm font-semibold tracking-[0.04em] text-[#c9a25a] transition-colors hover:bg-[#c9a25a] hover:text-[#211d18] sm:self-auto"
+            className="shrink-0 self-start border border-[var(--fa-gold)] px-5 py-2.5 text-sm font-semibold tracking-[0.04em] text-[var(--fa-gold)] transition-colors hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] sm:self-auto"
           >
             Write a Review
           </button>
@@ -1120,8 +1120,8 @@ export default function ProductDetailPage() {
 
         {/* Review Form */}
         {showReviewForm && (
-          <form onSubmit={handleReviewSubmit} className="mb-8 border border-[#c9a25a]/40 bg-[#2e2e2e] p-5 animate-fadeIn">
-            <h3 className="mb-4 font-[family-name:var(--font-playfair)] italic text-lg font-normal text-[#c9a25a]">Write Your Review</h3>
+          <form onSubmit={handleReviewSubmit} className="mb-8 border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)] p-5 animate-fadeIn">
+            <h3 className="mb-4 font-[family-name:var(--font-playfair)] italic text-lg font-normal text-[var(--fa-gold)]">Write Your Review</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <input
                 type="text"
@@ -1129,18 +1129,18 @@ export default function ProductDetailPage() {
                 value={reviewForm.name}
                 onChange={(e) => setReviewForm((f) => ({ ...f, name: e.target.value }))}
                 required
-                className="w-full border border-[#c9a25a]/40 bg-[#373838] px-4 py-2.5 text-sm text-[#cbbfae] placeholder-[#8b8377] transition-colors focus:outline-none focus:border-[#e3c489]"
+                className="w-full border border-[var(--fa-gold)]/40 bg-[var(--fa-dark)] px-4 py-2.5 text-sm text-[var(--fa-on-dark)] placeholder-[var(--fa-secondary)] transition-colors focus:outline-none focus:border-[var(--fa-gold-hover)]"
               />
               <input
                 type="text"
                 placeholder="Review Title (optional)"
                 value={reviewForm.title}
                 onChange={(e) => setReviewForm((f) => ({ ...f, title: e.target.value }))}
-                className="w-full border border-[#c9a25a]/40 bg-[#373838] px-4 py-2.5 text-sm text-[#cbbfae] placeholder-[#8b8377] transition-colors focus:outline-none focus:border-[#e3c489]"
+                className="w-full border border-[var(--fa-gold)]/40 bg-[var(--fa-dark)] px-4 py-2.5 text-sm text-[var(--fa-on-dark)] placeholder-[var(--fa-secondary)] transition-colors focus:outline-none focus:border-[var(--fa-gold-hover)]"
               />
             </div>
             <div className="mb-4">
-              <p className="mb-2 text-[13px] font-semibold text-[#a99d8c]">Rating *</p>
+              <p className="mb-2 text-[13px] font-semibold text-[var(--fa-muted-dark)]">Rating *</p>
               <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -1152,7 +1152,7 @@ export default function ProductDetailPage() {
                     className="p-1 focus:outline-none"
                   >
                     <svg
-                      className={`w-6 h-6 transition-colors ${star <= reviewForm.rating ? "text-[#e3c489] fill-[#e3c489]" : "text-[#5c554b] fill-[#5c554b]"}`}
+                      className={`w-6 h-6 transition-colors ${star <= reviewForm.rating ? "text-[var(--fa-gold-hover)] fill-[var(--fa-gold-hover)]" : "text-[var(--fa-secondary)] fill-[var(--fa-secondary)]"}`}
                       viewBox="0 0 20 20"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -1166,13 +1166,13 @@ export default function ProductDetailPage() {
               value={reviewForm.body}
               onChange={(e) => setReviewForm((f) => ({ ...f, body: e.target.value }))}
               rows={4}
-              className="w-full border border-[#c9a25a]/40 bg-[#373838] px-4 py-2.5 text-sm text-[#cbbfae] placeholder-[#8b8377] transition-colors focus:outline-none focus:border-[#e3c489] mb-4 resize-none"
+              className="w-full border border-[var(--fa-gold)]/40 bg-[var(--fa-dark)] px-4 py-2.5 text-sm text-[var(--fa-on-dark)] placeholder-[var(--fa-secondary)] transition-colors focus:outline-none focus:border-[var(--fa-gold-hover)] mb-4 resize-none"
             />
             <div className="flex gap-3">
-              <button type="button" onClick={() => setShowReviewForm(false)} className="border border-[#c9a25a]/50 px-5 py-2.5 text-sm font-medium text-[#cbbfae] transition-colors hover:border-[#e3c489] hover:text-[#e3c489]">
+              <button type="button" onClick={() => setShowReviewForm(false)} className="border border-[var(--fa-gold)]/50 px-5 py-2.5 text-sm font-medium text-[var(--fa-on-dark)] transition-colors hover:border-[var(--fa-gold-hover)] hover:text-[var(--fa-gold-hover)]">
                 Cancel
               </button>
-              <button type="submit" disabled={reviewSubmitting || !reviewForm.name} className="border border-[#c9a25a] bg-[#c9a25a] px-5 py-2.5 text-sm font-semibold text-[#211d18] transition-colors hover:border-[#e3c489] hover:bg-[#e3c489] disabled:cursor-not-allowed disabled:border-[#5a564f] disabled:bg-[#45443f] disabled:text-[#8b8377]">
+              <button type="submit" disabled={reviewSubmitting || !reviewForm.name} className="border border-[var(--fa-gold)] bg-[var(--fa-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--fa-ink)] transition-colors hover:border-[var(--fa-gold-hover)] hover:bg-[var(--fa-gold-hover)] disabled:cursor-not-allowed disabled:border-[var(--fa-secondary)] disabled:bg-[var(--fa-dark-raised)] disabled:text-[var(--fa-muted-dark)]">
                 {reviewSubmitting ? "Submitting..." : "Submit Review"}
               </button>
             </div>
@@ -1183,11 +1183,11 @@ export default function ProductDetailPage() {
         {reviews.length > 0 ? (
           <div className="space-y-4">
             {reviews.map((review) => (
-              <div key={review._id} className="border border-[#c9a25a]/30 bg-[#2e2e2e] p-4 sm:p-5">
+              <div key={review._id} className="border border-[var(--fa-gold)]/30 bg-[var(--fa-dark-deep)] p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-[#e3c489] break-words">{review.name}</span>
+                      <span className="text-sm font-semibold text-[var(--fa-gold-hover)] break-words">{review.name}</span>
                       {review.isVerifiedPurchase && (
                         <span className="rounded-full border border-[#7cc47f]/60 bg-[#7cc47f]/12 px-2 py-0.5 text-[10px] font-semibold text-[#7cc47f]">
                           Verified
@@ -1198,7 +1198,7 @@ export default function ProductDetailPage() {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <svg
                           key={star}
-                          className={`w-3.5 h-3.5 ${star <= review.rating ? "text-[#e3c489] fill-[#e3c489]" : "text-[#5c554b] fill-[#5c554b]"}`}
+                          className={`w-3.5 h-3.5 ${star <= review.rating ? "text-[var(--fa-gold-hover)] fill-[var(--fa-gold-hover)]" : "text-[var(--fa-secondary)] fill-[var(--fa-secondary)]"}`}
                           viewBox="0 0 20 20"
                         >
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -1206,18 +1206,18 @@ export default function ProductDetailPage() {
                       ))}
                     </div>
                   </div>
-                  <span className="shrink-0 text-xs text-[#a99d8c]">
+                  <span className="shrink-0 text-xs text-[var(--fa-muted-dark)]">
                     {new Date(review.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                   </span>
                 </div>
-                {review.title && <p className="mb-1 text-sm font-semibold text-[#cbbfae] break-words">{review.title}</p>}
-                {review.body && <p className="text-sm leading-relaxed text-[#cbbfae] break-words">{review.body}</p>}
+                {review.title && <p className="mb-1 text-sm font-semibold text-[var(--fa-on-dark)] break-words">{review.title}</p>}
+                {review.body && <p className="text-sm leading-relaxed text-[var(--fa-on-dark)] break-words">{review.body}</p>}
               </div>
             ))}
           </div>
         ) : (
-          <div className="border border-dashed border-[#c9a25a]/40 py-10 text-center">
-            <p className="text-sm text-[#a99d8c]">No reviews yet. Be the first to share your experience!</p>
+          <div className="border border-dashed border-[var(--fa-gold)]/40 py-10 text-center">
+            <p className="text-sm text-[var(--fa-muted-dark)]">No reviews yet. Be the first to share your experience!</p>
           </div>
         )}
         </div>

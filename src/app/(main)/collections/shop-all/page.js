@@ -293,12 +293,12 @@ function ShopAllContent() {
   // ────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <div className="min-h-screen bg-[#373838]">
+      <div className="min-h-screen bg-[var(--fa-dark)]">
         {/* Scroll anchor for brand-logo clicks (?view=products) */}
         <div ref={gridTopRef} className="scroll-mt-0" />
 
         {/* ── Sticky Filter Bar ── */}
-        <div className="sticky top-0 z-40 bg-[#373838]/95 backdrop-blur-md border-b border-[#c9a25a]/35">
+        <div className="sticky top-0 z-40 bg-[var(--fa-dark)]/95 backdrop-blur-md border-b border-[var(--fa-gold)]/35">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
             <PerfumeFilterBar
               gender={gender}
@@ -326,7 +326,7 @@ function ShopAllContent() {
             <nav className="flex items-center gap-2 text-[13px] flex-wrap min-w-0">
               <Link
                 href="/"
-                className="text-[#a99d8c] hover:text-[#e3c489] transition-colors"
+                className="text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] transition-colors"
               >
                 Home
               </Link>
@@ -335,12 +335,12 @@ function ShopAllContent() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="text-[#a99d8c] hover:text-[#e3c489] transition-colors"
+                  className="text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] transition-colors"
                 >
                   Shop All
                 </button>
               ) : (
-                <span className="font-semibold text-[#efe7db]">Shop All</span>
+                <span className="font-semibold text-[var(--fa-cream)]">Shop All</span>
               )}
               {filterCrumbs.map((c, i) => {
                 const isLast = i === filterCrumbs.length - 1;
@@ -348,14 +348,14 @@ function ShopAllContent() {
                   <span key={i} className="flex items-center gap-2">
                     <span className="text-[#6f6a60]">/</span>
                     {isLast ? (
-                      <span className="font-semibold text-[#efe7db]">
+                      <span className="font-semibold text-[var(--fa-cream)]">
                         {c.label}
                       </span>
                     ) : (
                       <button
                         type="button"
                         onClick={() => trimCrumbsAfter(i)}
-                        className="text-[#a99d8c] hover:text-[#e3c489] transition-colors"
+                        className="text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] transition-colors"
                       >
                         {c.label}
                       </button>
@@ -368,17 +368,17 @@ function ShopAllContent() {
           </div>
 
           {/* Count */}
-          <p className="text-[13px] text-[#a99d8c] mb-4 text-right">
+          <p className="text-[13px] text-[var(--fa-muted-dark)] mb-4 text-right">
             {loading ? (
-              <span className="inline-block w-16 h-4 bg-[#4a4a4a] animate-pulse" />
+              <span className="inline-block w-16 h-4 bg-[var(--fa-dark-raised)] animate-pulse" />
             ) : (
               <>
                 Showing{" "}
-                <span className="font-semibold text-[#e3c489]">
+                <span className="font-semibold text-[var(--fa-gold-hover)]">
                   {perfumes.length.toLocaleString()}
                 </span>{" "}
                 of{" "}
-                <span className="font-semibold text-[#e3c489]">
+                <span className="font-semibold text-[var(--fa-gold-hover)]">
                   {total.toLocaleString()}
                 </span>{" "}
                 products
@@ -392,13 +392,13 @@ function ShopAllContent() {
               {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
-                  className="border border-[#4a4a4a] overflow-hidden animate-pulse"
+                  className="border border-[var(--fa-dark-raised)] overflow-hidden animate-pulse"
                 >
-                  <div className="aspect-[6.818/7.5] bg-[#454545]" />
-                  <div className="bg-[#d5c7b4]/15 p-3 space-y-2">
-                    <div className="h-3 bg-[#4f4f4f] w-3/4" />
-                    <div className="h-3 bg-[#4f4f4f] w-1/2" />
-                    <div className="h-8 bg-[#4f4f4f] mt-3" />
+                  <div className="aspect-[6.818/7.5] bg-[var(--fa-dark-raised)]" />
+                  <div className="bg-[var(--fa-beige)]/15 p-3 space-y-2">
+                    <div className="h-3 bg-[var(--fa-dark-raised)] w-3/4" />
+                    <div className="h-3 bg-[var(--fa-dark-raised)] w-1/2" />
+                    <div className="h-8 bg-[var(--fa-dark-raised)] mt-3" />
                   </div>
                 </div>
               ))}
@@ -409,7 +409,7 @@ function ShopAllContent() {
           {!loading && perfumes.length === 0 && (
             <div className="flex flex-col items-center justify-center py-28 text-center">
               <svg
-                className="w-16 h-16 text-[#c9a25a]/45 mb-4"
+                className="w-16 h-16 text-[var(--fa-gold)]/45 mb-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -422,12 +422,12 @@ function ShopAllContent() {
                 />
               </svg>
               <div className="inline-block">
-                <h3 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+                <h3 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
                   No perfumes found
                 </h3>
                 <Rule className="mt-2" />
               </div>
-              <p className="mt-5 mb-6 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[#d2c1ac]">
+              <p className="mt-5 mb-6 font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug text-[var(--fa-on-dark)]">
                 Try adjusting your filters or search term.
               </p>
               {hasControlChanges && (
@@ -487,12 +487,12 @@ function ShopAllContent() {
             className="flex justify-center items-center py-10 mt-4 min-h-[80px]"
           >
             {loadingMore && (
-              <div className="w-8 h-8 border-2 border-[#5a5750] border-t-[#c9a25a] rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-[#5a5750] border-t-[var(--fa-gold)] rounded-full animate-spin" />
             )}
             {!hasMore && !loading && perfumes.length > 0 && (
-              <p className="text-sm text-[#a99d8c]">
+              <p className="text-sm text-[var(--fa-muted-dark)]">
                 Showing all{" "}
-                <span className="font-semibold text-[#e3c489]">
+                <span className="font-semibold text-[var(--fa-gold-hover)]">
                   {total.toLocaleString()}
                 </span>{" "}
                 perfumes
@@ -524,21 +524,21 @@ function ShopAllContent() {
 
 function ShopAllFallback() {
   return (
-    <div className="min-h-screen bg-[#373838]">
+    <div className="min-h-screen bg-[var(--fa-dark)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div className="h-8 w-48 bg-[#4a4a4a] animate-pulse mb-8" />
-        <div className="h-16 w-full bg-[#4a4a4a] animate-pulse mb-8" />
+        <div className="h-8 w-48 bg-[var(--fa-dark-raised)] animate-pulse mb-8" />
+        <div className="h-16 w-full bg-[var(--fa-dark-raised)] animate-pulse mb-8" />
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="border border-[#4a4a4a] overflow-hidden animate-pulse"
+              className="border border-[var(--fa-dark-raised)] overflow-hidden animate-pulse"
             >
-              <div className="aspect-[6.818/7.5] bg-[#454545]" />
-              <div className="bg-[#d5c7b4]/15 p-3 space-y-2">
-                <div className="h-3 bg-[#4f4f4f] w-3/4" />
-                <div className="h-3 bg-[#4f4f4f] w-1/2" />
-                <div className="h-8 bg-[#4f4f4f] mt-3" />
+              <div className="aspect-[6.818/7.5] bg-[var(--fa-dark-raised)]" />
+              <div className="bg-[var(--fa-beige)]/15 p-3 space-y-2">
+                <div className="h-3 bg-[var(--fa-dark-raised)] w-3/4" />
+                <div className="h-3 bg-[var(--fa-dark-raised)] w-1/2" />
+                <div className="h-8 bg-[var(--fa-dark-raised)] mt-3" />
               </div>
             </div>
           ))}

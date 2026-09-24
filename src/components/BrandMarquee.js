@@ -148,19 +148,19 @@ export default function BrandMarquee() {
   }, []);
 
   return (
-    <div className="pt-10 md:pt-12 pb-12 md:pb-14 bg-[#d4c6ab] overflow-hidden">
+    <div className="pt-10 md:pt-12 pb-12 md:pb-14 bg-[var(--fa-cream)] overflow-hidden">
       {/* Heading */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-9 md:mb-12">
         <div className="relative">
         <div className="text-center">
           <div className="inline-block">
-            <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#211d18]">
+            <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-ink)]">
               Shop By Brand
             </h2>
             {/* rule spans the title only — solid in the middle, fading at the ends */}
-            <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#211d18_25%,#211d18_75%,transparent_100%)]" />
+            <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-ink)_25%,var(--fa-ink)_75%,transparent_100%)]" />
           </div>
-          <p className="mt-5 text-[#7b6a55] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
+          <p className="mt-5 text-[var(--fa-secondary)] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
             Discover your favorite houses.
           </p>
         </div>
@@ -168,7 +168,7 @@ export default function BrandMarquee() {
         <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
           <Link
             href="/collections/shop-all?view=brands"
-            className="group/all inline-flex items-center gap-2.5 rounded-lg border border-[#2a2620]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#2a2620] transition-colors hover:bg-[#2a2620] hover:text-[#d4c6ab]"
+            className="group/all inline-flex items-center gap-2.5 rounded-lg border border-[var(--fa-hover-dark)]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[var(--fa-hover-dark)] transition-colors hover:bg-[var(--fa-hover-dark)] hover:text-[var(--fa-cream)]"
           >
             View All
             <svg
@@ -208,7 +208,7 @@ export default function BrandMarquee() {
             onMouseLeave={() => setHovering(false)}
           >
             {/* Fixed dark patti behind the pills — gold line top & bottom, edge to edge */}
-            <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[58px] sm:h-[86px] md:h-[106px] bg-black border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[#c9a25a] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[58px] sm:h-[86px] md:h-[106px] bg-[var(--fa-dark-deep)] border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[var(--fa-gold)] shadow-[0_0_14px_rgba(201,162,90,0.22),inset_0_2px_10px_rgba(0,0,0,0.45)] overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,rgba(201,162,90,0.12),transparent_60%)]" />
             </div>
 
@@ -231,10 +231,10 @@ export default function BrandMarquee() {
               type="button"
               aria-label="Previous brand"
               onClick={() => step("prev")}
-              className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[58px] sm:h-[86px] md:h-[106px] w-8 sm:w-12 md:w-16 flex items-center justify-center border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[#c9a25a] bg-[#373838]"
+              className="group/cap absolute left-0 top-1/2 -translate-y-1/2 z-30 h-[58px] sm:h-[86px] md:h-[106px] w-8 sm:w-12 md:w-16 flex items-center justify-center border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[var(--fa-gold)] bg-[var(--fa-dark)]"
             >
               <svg
-                className="w-5 h-8 sm:w-8 sm:h-12 md:w-11 md:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                className="w-5 h-8 sm:w-8 sm:h-12 md:w-11 md:h-16 fill-[var(--fa-beige)] group-hover/cap:fill-[var(--fa-gold)] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
@@ -245,10 +245,10 @@ export default function BrandMarquee() {
               type="button"
               aria-label="Next brand"
               onClick={() => step("next")}
-              className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[58px] sm:h-[86px] md:h-[106px] w-8 sm:w-12 md:w-16 flex items-center justify-center border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[#c9a25a] bg-[#373838]"
+              className="group/cap absolute right-0 top-1/2 -translate-y-1/2 z-30 h-[58px] sm:h-[86px] md:h-[106px] w-8 sm:w-12 md:w-16 flex items-center justify-center border-y-[3px] sm:border-y-[4px] md:border-y-[5px] border-[var(--fa-gold)] bg-[var(--fa-dark)]"
             >
               <svg
-                className="w-5 h-8 sm:w-8 sm:h-12 md:w-11 md:h-16 fill-[#d1c0ab] group-hover/cap:fill-[#c9a25a] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                className="w-5 h-8 sm:w-8 sm:h-12 md:w-11 md:h-16 fill-[var(--fa-beige)] group-hover/cap:fill-[var(--fa-gold)] transition-colors duration-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >

@@ -24,18 +24,18 @@ const GENDERS = [
 
 export default function ShopByGender() {
   return (
-    <section className="bg-[#373838] py-10 md:py-12">
+    <section className="bg-[var(--fa-dark)] py-10 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative mb-10 md:mb-14">
           <div className="text-center">
             <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
               Shop By Gender
               </h2>
               {/* rule spans the title only — solid in the middle, fading at the ends */}
-              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
+              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
             </div>
-            <p className="mt-5 text-[#d2c1ac] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
+            <p className="mt-5 text-[var(--fa-on-dark)] font-[family-name:var(--font-playfair)] text-base md:text-xl leading-snug">
               Find the scent that reflects you.
             </p>
           </div>
@@ -43,7 +43,7 @@ export default function ShopByGender() {
           <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
             <Link
               href="/collections/shop-all"
-              className="inline-flex items-center gap-2.5 rounded-md border border-[#d2c1ac]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[#efe7db] transition-colors hover:bg-[#d2c1ac] hover:text-[#211d18]"
+              className="inline-flex items-center gap-2.5 rounded-md border border-[var(--fa-on-dark)]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[var(--fa-cream)] transition-colors hover:bg-[var(--fa-on-dark)] hover:text-[var(--fa-ink)]"
             >
               View All
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
@@ -58,9 +58,9 @@ export default function ShopByGender() {
             <Link
               key={g.name}
               href={g.href}
-              className="group relative block border-2 border-[#d1ae6d] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
+              className="group relative block border-2 border-[var(--fa-gold)] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-[box-shadow,border-color] duration-300 hover:border-[var(--fa-gold-hover)] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
             >
-              <div className="relative w-full aspect-[550/477] overflow-hidden border-2 border-[#d1ae6d]">
+              <div className="relative w-full aspect-[550/477] overflow-hidden border-2 border-[var(--fa-gold)]">
                 <Image
                   src={g.img}
                   alt={g.name}
@@ -74,10 +74,10 @@ export default function ShopByGender() {
               {/* Animated line — draws left→right on hover with the tagline centered on it */}
               <div className="absolute inset-x-0 bottom-0 px-5 pb-5">
                 <div className="relative h-4">
-                  <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#c9a25a] w-10 group-hover:w-full transition-[width] duration-[650ms] ease-out" />
+                  <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-[var(--fa-gold)] w-10 group-hover:w-full transition-[width] duration-[650ms] ease-out" />
                   {/* px-1 keeps the drawn line 4px clear of the chip's border */}
-                  <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 bg-[linear-gradient(90deg,#14110e_0%,#373838_30%,#373838_70%,#14110e_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-                    <span className="block px-2.5 py-0.5 border border-[#d1ae6d] text-[#c9a25a] text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.22em] whitespace-nowrap">
+                  <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 bg-[linear-gradient(90deg,var(--fa-dark-deep)_0%,var(--fa-dark)_30%,var(--fa-dark)_70%,var(--fa-dark-deep)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+                    <span className="block px-2.5 py-0.5 border border-[var(--fa-gold)] text-[var(--fa-gold)] text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.22em] whitespace-nowrap">
                       {g.tag}
                     </span>
                   </span>

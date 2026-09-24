@@ -1,17 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  /* The canvas behind the page — what shows in the rubber-band area when you
-     overscroll past the top or bottom. Every page sits on a dark ground, so a
-     white canvas flashed on every bounce. */
-  --background: #373838;
-  --foreground: #111111;
-  --primary: #faf8f5;
-  --accent: #211d18;
-  --accent-gold: #b8964e;
-  --muted: #6b6560;
-  --border: #e8e4df;
-  --surface: #f7f5f2;
+  /* Reference palette: espresso chrome, ivory panels, champagne highlights.
+     UI colors only: photography and logo assets retain their original pixels. */
+  --fa-dark: #281b12;
+  --fa-dark-deep: #20150e;
+  --fa-dark-raised: #3b2b20;
+  --fa-cream: #f7f2ea;
+  --fa-beige: #eee3d4;
+  --fa-gold: #b99a66;
+  --fa-gold-hover: #d4b987;
+  --fa-gold-ink: #765431;
+  --fa-ink: #281e16;
+  --fa-secondary: #68594b;
+  --fa-on-dark: #e4d7c5;
+  --fa-muted-dark: #c0ae98;
+  --fa-border: #d7c5ad;
+  --fa-hover: #f0e2d1;
+  --fa-selected: #ead8bf;
+  --fa-hover-dark: #493425;
+  --fa-disabled: #d1c3b1;
+  --fa-premium: #ddd3c4;
+  --fa-peach: #edd8ca;
+  --background: var(--fa-dark);
+  --foreground: var(--fa-ink);
+  --primary: var(--fa-cream);
+  --accent: var(--fa-ink);
+  --accent-gold: var(--fa-gold);
+  --muted: var(--fa-secondary);
+  --border: var(--fa-border);
+  --surface: var(--fa-beige);
 }
 
 @theme inline {
@@ -49,7 +67,7 @@ body {
 }
 
 button { cursor: pointer; }
-::selection { background: #1a1a2e; color: #fff; }
+::selection { background: var(--fa-selected); color: var(--fa-ink); }
 
 /* Smooth transitions globally */
 *, *::before, *::after {

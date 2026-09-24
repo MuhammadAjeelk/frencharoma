@@ -35,7 +35,7 @@ const PROVINCES = [
 // the order of this string. #e8927f is the palette's danger tone (the one
 // MENU_ITEM_DANGER uses); a plain red fails contrast on these grounds.
 const FIELD_INVALID =
-  "bg-[#211d18] border border-[#e8927f] text-[#efe7db] placeholder-[#a99d8c]/60 focus:outline-none focus:border-[#e8927f] transition-colors";
+  "bg-[var(--fa-ink)] border border-[#e8927f] text-[var(--fa-cream)] placeholder-[var(--fa-muted-dark)] focus:outline-none focus:border-[#e8927f] transition-colors";
 
 const fieldClass = (invalid) =>
   `w-full px-3 py-2.5 text-sm ${invalid ? FIELD_INVALID : FIELD_DARK} ${FOCUS_RING}`;
@@ -44,7 +44,7 @@ const fieldClass = (invalid) =>
 // invisible on this page's grounds, and FOCUS_RING's gold would sit invisibly
 // on the gold button — so the submit control offsets its ring onto the card.
 const BUTTON_FOCUS =
-  "focus-visible:ring-2 focus-visible:ring-[#e3c489] focus-visible:ring-offset-2 focus-visible:ring-offset-[#2e2e2e]";
+  "focus-visible:ring-2 focus-visible:ring-[var(--fa-gold-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fa-dark-deep)]";
 
 export default function CheckoutPage() {
   const { items, subtotal, summary, clearCart, hydrated } = useCart();
@@ -171,25 +171,25 @@ export default function CheckoutPage() {
 
   if (!hydrated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#373838]">
-        <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--fa-dark)]">
+        <div className="w-8 h-8 border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#373838]">
+    <div className="min-h-screen bg-[var(--fa-dark)]">
       {/* Page Header */}
-      <div className="py-8 md:py-10 text-center bg-[#373838] border-b border-[#c9a25a]/30">
-        <nav className="flex justify-center items-center gap-2 text-xs text-[#cbbfae] mb-3">
-          <Link href="/" className={`hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}>Home</Link>
+      <div className="py-8 md:py-10 text-center bg-[var(--fa-dark)] border-b border-[var(--fa-gold)]/30">
+        <nav className="flex justify-center items-center gap-2 text-xs text-[var(--fa-on-dark)] mb-3">
+          <Link href="/" className={`hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}>Home</Link>
           <span>/</span>
-          <Link href="/cart" className={`hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}>Cart</Link>
+          <Link href="/cart" className={`hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}>Cart</Link>
           <span>/</span>
-          <span className="text-[#c9a25a] font-medium">Checkout</span>
+          <span className="text-[var(--fa-gold)] font-medium">Checkout</span>
         </nav>
         <div className="inline-block">
-          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
             Checkout
           </h1>
           <Rule className="mt-2" />
@@ -202,14 +202,14 @@ export default function CheckoutPage() {
             {/* Left: Form */}
             <div className="flex-1 min-w-0 space-y-6">
               {/* Contact Info */}
-              <div className="bg-[#2e2e2e] border border-[#c9a25a]/40 p-4 sm:p-6">
-                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a] mb-4 flex items-center gap-2.5">
-                  <span className="w-6 h-6 shrink-0 rounded-full bg-[#c9a25a] text-[#211d18] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">1</span>
+              <div className="bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/40 p-4 sm:p-6">
+                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)] mb-4 flex items-center gap-2.5">
+                  <span className="w-6 h-6 shrink-0 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">1</span>
                   Contact Information
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-[#cbbfae] mb-1.5">Full Name *</label>
+                    <label className="block text-xs font-medium text-[var(--fa-on-dark)] mb-1.5">Full Name *</label>
                     <input
                       type="text"
                       name="name"
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
                     {errors.name && <p className="text-xs text-[#e8927f] mt-1.5">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#cbbfae] mb-1.5">Email Address *</label>
+                    <label className="block text-xs font-medium text-[var(--fa-on-dark)] mb-1.5">Email Address *</label>
                     <input
                       type="email"
                       name="email"
@@ -233,7 +233,7 @@ export default function CheckoutPage() {
                     {errors.email && <p className="text-xs text-[#e8927f] mt-1.5">{errors.email}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#cbbfae] mb-1.5">Phone Number *</label>
+                    <label className="block text-xs font-medium text-[var(--fa-on-dark)] mb-1.5">Phone Number *</label>
                     <input
                       type="tel"
                       name="phone"
@@ -248,14 +248,14 @@ export default function CheckoutPage() {
               </div>
 
               {/* Delivery Address */}
-              <div className="bg-[#2e2e2e] border border-[#c9a25a]/40 p-4 sm:p-6">
-                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a] mb-4 flex items-center gap-2.5">
-                  <span className="w-6 h-6 shrink-0 rounded-full bg-[#c9a25a] text-[#211d18] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">2</span>
+              <div className="bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/40 p-4 sm:p-6">
+                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)] mb-4 flex items-center gap-2.5">
+                  <span className="w-6 h-6 shrink-0 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">2</span>
                   Delivery Address
                 </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-[#cbbfae] mb-1.5">Street Address *</label>
+                    <label className="block text-xs font-medium text-[var(--fa-on-dark)] mb-1.5">Street Address *</label>
                     <textarea
                       name="address"
                       value={form.address}
@@ -268,7 +268,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-[#cbbfae] mb-1.5">City *</label>
+                      <label className="block text-xs font-medium text-[var(--fa-on-dark)] mb-1.5">City *</label>
                       <input
                         type="text"
                         name="city"
@@ -280,12 +280,12 @@ export default function CheckoutPage() {
                       {errors.city && <p className="text-xs text-[#e8927f] mt-1.5">{errors.city}</p>}
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#cbbfae] mb-1.5">Province</label>
+                      <label className="block text-xs font-medium text-[var(--fa-on-dark)] mb-1.5">Province</label>
                       <select
                         name="province"
                         value={form.province}
                         onChange={handleChange}
-                        className={`${fieldClass(false)} [&>option]:bg-[#211d18] [&>option]:text-[#efe7db]`}
+                        className={`${fieldClass(false)} [&>option]:bg-[var(--fa-ink)] [&>option]:text-[var(--fa-cream)]`}
                       >
                         <option value="">Select province</option>
                         {PROVINCES.map((p) => (
@@ -298,9 +298,9 @@ export default function CheckoutPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="bg-[#2e2e2e] border border-[#c9a25a]/40 p-4 sm:p-6">
-                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a] mb-4 flex items-center gap-2.5">
-                  <span className="w-6 h-6 shrink-0 rounded-full bg-[#c9a25a] text-[#211d18] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">3</span>
+              <div className="bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/40 p-4 sm:p-6">
+                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)] mb-4 flex items-center gap-2.5">
+                  <span className="w-6 h-6 shrink-0 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">3</span>
                   Payment Method
                 </h2>
 
@@ -308,7 +308,7 @@ export default function CheckoutPage() {
                   {/* COD */}
                   <label
                     className={`flex items-start gap-3 p-4 border-2 cursor-pointer transition-colors ${
-                      paymentMethod === "cod" ? "border-[#c9a25a] bg-[#c9a25a]/10" : "border-[#c9a25a]/25 hover:border-[#c9a25a]/55"
+                      paymentMethod === "cod" ? "border-[var(--fa-gold)] bg-[var(--fa-gold)]/10" : "border-[var(--fa-gold)]/25 hover:border-[var(--fa-gold)]/55"
                     }`}
                   >
                     <input
@@ -317,18 +317,18 @@ export default function CheckoutPage() {
                       value="cod"
                       checked={paymentMethod === "cod"}
                       onChange={() => setPaymentMethod("cod")}
-                      className={`mt-0.5 accent-[#c9a25a] ${FOCUS_RING}`}
+                      className={`mt-0.5 accent-[var(--fa-gold)] ${FOCUS_RING}`}
                     />
                     <div>
-                      <p className="font-semibold text-sm text-[#efe7db]">Cash on Delivery (COD)</p>
-                      <p className="text-xs text-[#cbbfae] mt-1">Pay with cash when your order arrives at your doorstep.</p>
+                      <p className="font-semibold text-sm text-[var(--fa-cream)]">Cash on Delivery (COD)</p>
+                      <p className="text-xs text-[var(--fa-on-dark)] mt-1">Pay with cash when your order arrives at your doorstep.</p>
                     </div>
                   </label>
 
                   {/* Online */}
                   <label
                     className={`flex items-start gap-3 p-4 border-2 cursor-pointer transition-colors ${
-                      paymentMethod === "online" ? "border-[#c9a25a] bg-[#c9a25a]/10" : "border-[#c9a25a]/25 hover:border-[#c9a25a]/55"
+                      paymentMethod === "online" ? "border-[var(--fa-gold)] bg-[var(--fa-gold)]/10" : "border-[var(--fa-gold)]/25 hover:border-[var(--fa-gold)]/55"
                     }`}
                   >
                     <input
@@ -337,19 +337,19 @@ export default function CheckoutPage() {
                       value="online"
                       checked={paymentMethod === "online"}
                       onChange={() => setPaymentMethod("online")}
-                      className={`mt-0.5 accent-[#c9a25a] ${FOCUS_RING}`}
+                      className={`mt-0.5 accent-[var(--fa-gold)] ${FOCUS_RING}`}
                     />
                     <div>
-                      <p className="font-semibold text-sm text-[#efe7db]">Online Bank Transfer</p>
-                      <p className="text-xs text-[#cbbfae] mt-1">Transfer payment to our bank account and send receipt via WhatsApp. Order confirmed after payment verification.</p>
+                      <p className="font-semibold text-sm text-[var(--fa-cream)]">Online Bank Transfer</p>
+                      <p className="text-xs text-[var(--fa-on-dark)] mt-1">Transfer payment to our bank account and send receipt via WhatsApp. Order confirmed after payment verification.</p>
                     </div>
                   </label>
                 </div>
 
                 {/* Bank Details – shown when Online selected */}
                 {paymentMethod === "online" && (
-                  <div className="mt-2 p-4 bg-[#211d18] border border-[#c9a25a]/40">
-                    <p className="font-[family-name:var(--font-playfair)] italic text-base text-[#c9a25a] mb-3 flex items-center gap-1.5">
+                  <div className="mt-2 p-4 bg-[var(--fa-ink)] border border-[var(--fa-gold)]/70">
+                    <p className="font-[family-name:var(--font-playfair)] italic text-base text-[var(--fa-gold)] mb-3 flex items-center gap-1.5">
                       <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                       </svg>
@@ -357,33 +357,33 @@ export default function CheckoutPage() {
                     </p>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between gap-3">
-                        <span className="text-[#a99d8c]">Bank</span>
-                        <span className="font-semibold text-[#efe7db] text-right">{BANK_INFO.bankName}</span>
+                        <span className="text-[var(--fa-muted-dark)]">Bank</span>
+                        <span className="font-semibold text-[var(--fa-cream)] text-right">{BANK_INFO.bankName}</span>
                       </div>
                       <div className="flex justify-between gap-3">
-                        <span className="text-[#a99d8c]">Account Title</span>
-                        <span className="font-semibold text-[#efe7db] text-right">{BANK_INFO.accountTitle}</span>
+                        <span className="text-[var(--fa-muted-dark)]">Account Title</span>
+                        <span className="font-semibold text-[var(--fa-cream)] text-right">{BANK_INFO.accountTitle}</span>
                       </div>
                       <div className="flex justify-between gap-3">
-                        <span className="text-[#a99d8c]">Account No.</span>
-                        <span className="font-semibold text-[#efe7db] font-mono text-right">{BANK_INFO.accountNumber}</span>
+                        <span className="text-[var(--fa-muted-dark)]">Account No.</span>
+                        <span className="font-semibold text-[var(--fa-cream)] font-mono text-right">{BANK_INFO.accountNumber}</span>
                       </div>
                       <div className="flex justify-between gap-3">
-                        <span className="text-[#a99d8c] shrink-0">IBAN</span>
-                        <span className="font-semibold text-[#efe7db] font-mono text-xs text-right break-all">{BANK_INFO.iban}</span>
+                        <span className="text-[var(--fa-muted-dark)] shrink-0">IBAN</span>
+                        <span className="font-semibold text-[var(--fa-cream)] font-mono text-xs text-right break-all">{BANK_INFO.iban}</span>
                       </div>
                     </div>
-                    <div className="mt-3 pt-3 border-t border-[#c9a25a]/25 flex items-start gap-2">
+                    <div className="mt-3 pt-3 border-t border-[var(--fa-gold)]/25 flex items-start gap-2">
                       <svg className="w-4 h-4 text-[#25d366] mt-0.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
                       </svg>
-                      <p className="text-xs text-[#cbbfae] leading-relaxed">
+                      <p className="text-xs text-[var(--fa-on-dark)] leading-relaxed">
                         After placing your order, send payment proof on WhatsApp:{" "}
                         <a
                           href={`https://wa.me/${WHATSAPP_NUMBER}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`font-bold text-[#c9a25a] underline hover:no-underline hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                          className={`font-bold text-[var(--fa-gold)] underline hover:no-underline hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                         >
                           +{WHATSAPP_NUMBER}
                         </a>
@@ -395,10 +395,10 @@ export default function CheckoutPage() {
               </div>
 
               {/* Order Notes */}
-              <div className="bg-[#2e2e2e] border border-[#c9a25a]/40 p-4 sm:p-6">
-                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a] mb-4 flex items-center gap-2.5">
-                  <span className="w-6 h-6 shrink-0 rounded-full bg-[#c9a25a] text-[#211d18] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">4</span>
-                  Order Notes <span className="text-[#a99d8c] font-normal text-sm not-italic font-[family-name:var(--font-geist-sans)]">(Optional)</span>
+              <div className="bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/40 p-4 sm:p-6">
+                <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)] mb-4 flex items-center gap-2.5">
+                  <span className="w-6 h-6 shrink-0 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-xs flex items-center justify-center font-bold not-italic font-[family-name:var(--font-geist-sans)]">4</span>
+                  Order Notes <span className="text-[var(--fa-muted-dark)] font-normal text-sm not-italic font-[family-name:var(--font-geist-sans)]">(Optional)</span>
                 </h2>
                 <textarea
                   name="notes"
@@ -413,9 +413,9 @@ export default function CheckoutPage() {
 
             {/* Right: Order Summary */}
             <div className="lg:w-80 xl:w-96 shrink-0">
-              <div className="bg-[#2e2e2e] border border-[#c9a25a]/40 p-4 sm:p-6 static lg:sticky lg:top-24">
+              <div className="bg-[var(--fa-dark-deep)] border border-[var(--fa-gold)]/40 p-4 sm:p-6 static lg:sticky lg:top-24">
                 <div className="inline-block mb-4">
-                  <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a]">Order Summary</h2>
+                  <h2 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)]">Order Summary</h2>
                   <Rule className="mt-1.5" />
                 </div>
 
@@ -423,20 +423,20 @@ export default function CheckoutPage() {
                 <div className="space-y-3 mb-4 max-h-64 overflow-y-auto pr-1">
                   {items.map((item) => (
                     <div key={item.id} className="flex gap-3">
-                      <div className="relative w-14 h-14 shrink-0 overflow-hidden bg-[#211d18] border border-[#c9a25a]/30">
+                      <div className="relative w-14 h-14 shrink-0 overflow-hidden bg-[var(--fa-ink)] border border-[var(--fa-gold)]/30">
                         {item.image ? (
                           <Image src={item.image} alt={item.name} fill className="object-cover" sizes="56px" />
                         ) : (
-                          <div className="w-full h-full bg-[#211d18]" />
+                          <div className="w-full h-full bg-[var(--fa-ink)]" />
                         )}
-                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#c9a25a] text-[#211d18] text-[10px] rounded-full flex items-center justify-center font-bold">
+                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[var(--fa-gold)] text-[var(--fa-ink)] text-[10px] rounded-full flex items-center justify-center font-bold">
                           {item.quantity}
                         </span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-[#efe7db] line-clamp-2">{item.name}</p>
-                        {item.edition && <p className="text-[10px] text-[#a99d8c] capitalize mt-0.5">{item.edition} · {item.size}</p>}
-                        <p className="text-xs font-bold text-[#efe7db] mt-0.5">
+                        <p className="text-xs font-semibold text-[var(--fa-cream)] line-clamp-2">{item.name}</p>
+                        {item.edition && <p className="text-[10px] text-[var(--fa-muted-dark)] capitalize mt-0.5">{item.edition} · {item.size}</p>}
+                        <p className="text-xs font-bold text-[var(--fa-cream)] mt-0.5">
                           PKR {(item.price * item.quantity).toLocaleString()}
                         </p>
                       </div>
@@ -444,8 +444,8 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
-                <div className="border-t border-[#c9a25a]/25 pt-4 space-y-2 text-sm">
-                  <div className="flex justify-between text-[#cbbfae]">
+                <div className="border-t border-[var(--fa-gold)]/25 pt-4 space-y-2 text-sm">
+                  <div className="flex justify-between text-[var(--fa-on-dark)]">
                     <span>Subtotal</span>
                     <span>PKR {subtotal.toLocaleString()}</span>
                   </div>
@@ -455,13 +455,13 @@ export default function CheckoutPage() {
                       <span>− PKR {summary.bundle.savings.toLocaleString()}</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-[#cbbfae]">
+                  <div className="flex justify-between text-[var(--fa-on-dark)]">
                     <span>Shipping</span>
                     <span className={shipping === 0 ? "text-[#4ade80] font-medium" : ""}>
                       {shipping === 0 ? "FREE" : `PKR ${shipping.toLocaleString()}`}
                     </span>
                   </div>
-                  <div className="flex justify-between font-bold text-[#c9a25a] text-base pt-2 border-t border-[#c9a25a]/25">
+                  <div className="flex justify-between font-bold text-[var(--fa-gold)] text-base pt-2 border-t border-[var(--fa-gold)]/25">
                     <span>Total</span>
                     <span>PKR {total.toLocaleString()}</span>
                   </div>
@@ -470,11 +470,11 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full mt-5 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] py-3.5 font-semibold text-sm transition-colors hover:bg-[#e3c489] hover:border-[#e3c489] ${BUTTON_FOCUS} disabled:bg-[#4a463c] disabled:border-[#4a463c] disabled:text-[#cbbfae] disabled:cursor-not-allowed flex items-center justify-center gap-2`}
+                  className={`w-full mt-5 border border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] py-3.5 font-semibold text-sm transition-colors hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] ${BUTTON_FOCUS} disabled:bg-[#4a463c] disabled:border-[#4a463c] disabled:text-[var(--fa-on-dark)] disabled:cursor-not-allowed flex items-center justify-center gap-2`}
                 >
                   {loading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-[#cbbfae]/30 border-t-[#cbbfae] rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-[var(--fa-on-dark)]/30 border-t-[var(--fa-on-dark)] rounded-full animate-spin" />
                       Placing Order...
                     </>
                   ) : (
@@ -484,7 +484,7 @@ export default function CheckoutPage() {
                   )}
                 </button>
 
-                <p className="text-[10px] text-[#a99d8c] text-center mt-3">
+                <p className="text-[10px] text-[var(--fa-muted-dark)] text-center mt-3">
                   By placing your order you agree to our terms of service.
                 </p>
               </div>

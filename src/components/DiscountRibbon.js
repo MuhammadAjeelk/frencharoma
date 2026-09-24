@@ -9,7 +9,7 @@ export default function DiscountRibbon({ percent, className = "", compact = fals
   const p = Number(percent) || 0;
   if (p <= 0) return null;
 
-  const color = p >= 30 ? "#ee3b3b" : "#f7bf2e";
+  const color = p >= 30 ? "var(--fa-dark)" : "var(--fa-gold-ink)";
   const k = compact ? 0.62 : 1;
   const px = (n) => `${Math.round(n * k)}px`;
 

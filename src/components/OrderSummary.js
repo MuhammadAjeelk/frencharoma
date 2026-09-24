@@ -31,19 +31,19 @@ export default function OrderSummary({ summary, itemCount }) {
   return (
     <div>
       <div className="inline-block pb-3 mb-3">
-        <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[#211d18]">
+        <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[var(--fa-ink)]">
           Order Summary
         </h2>
-        <div className="mt-1.5 h-[2px] w-full bg-[linear-gradient(90deg,transparent_0%,#211d18_25%,#211d18_75%,transparent_100%)]" />
+        <div className="mt-1.5 h-[2px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-ink)_25%,var(--fa-ink)_75%,transparent_100%)]" />
       </div>
 
       <div className="space-y-2.5 text-sm">
         {/* Total at full price */}
-        <div className="flex justify-between gap-3 text-[#3f3931]">
+        <div className="flex justify-between gap-3 text-[var(--fa-secondary)]">
           <span>
             Total Amount ({count} item{count !== 1 ? "s" : ""})
           </span>
-          <span className="font-semibold text-[#211d18] whitespace-nowrap">{rs(totalOriginal)}</span>
+          <span className="font-semibold text-[var(--fa-ink)] whitespace-nowrap">{rs(totalOriginal)}</span>
         </div>
 
         {/* Trade discounts */}
@@ -67,20 +67,20 @@ export default function OrderSummary({ summary, itemCount }) {
         )}
 
         {/* Subtotal */}
-        <div className="flex justify-between gap-3 text-[#211d18] pt-2 border-t border-[#211d18]/15">
+        <div className="flex justify-between gap-3 text-[var(--fa-ink)] pt-2 border-t border-[var(--fa-ink)]/15">
           <span className="font-semibold">Subtotal</span>
           <span className="font-bold whitespace-nowrap">{rs(subtotal)}</span>
         </div>
 
         {/* Shipping */}
-        <div className="flex justify-between gap-3 text-[#211d18]">
+        <div className="flex justify-between gap-3 text-[var(--fa-ink)]">
           <span className="font-semibold">
             Shipping Charges{" "}
             {shippingFree && (
               <span className="font-semibold text-[#15662f]">(Saved {rs(200)})</span>
             )}
           </span>
-          <span className={`font-semibold whitespace-nowrap ${shippingFree ? "text-[#15662f]" : "text-[#211d18]"}`}>
+          <span className={`font-semibold whitespace-nowrap ${shippingFree ? "text-[#15662f]" : "text-[var(--fa-ink)]"}`}>
             {shipping === 0 ? "0" : rs(shipping)}
           </span>
         </div>
@@ -105,13 +105,13 @@ export default function OrderSummary({ summary, itemCount }) {
 
         {/* Free-shipping note for a lone Discovery Box */}
         {singleBoxOnly && (
-          <div className="border border-[#c9a25a]/70 bg-[#e3d7c1] px-3 py-2.5 text-[12px] text-[#3f3931] leading-snug">
-            <span className="font-bold text-[#211d18]">Note:</span> Free shipping is not available
+          <div className="border border-[var(--fa-gold)]/70 bg-[var(--fa-selected)] px-3 py-2.5 text-[12px] text-[var(--fa-secondary)] leading-snug">
+            <span className="font-bold text-[var(--fa-ink)]">Note:</span> Free shipping is not available
             when your cart contains only one Discovery Box and no other products. Add any perfume or
             another discovery box to qualify for free shipping.
             <Link
               href="/pages/shipping-policy"
-              className="block mt-1 font-semibold text-[#211d18] underline underline-offset-2 hover:text-[#6f5518] transition-colors"
+              className="block mt-1 font-semibold text-[var(--fa-ink)] underline underline-offset-2 hover:text-[var(--fa-gold-ink)] transition-colors"
             >
               Free Shipping Policy
             </Link>
@@ -120,9 +120,9 @@ export default function OrderSummary({ summary, itemCount }) {
       </div>
 
       {/* Net Amount */}
-      <div className="mt-4 bg-[#373838] px-4 py-3 flex justify-between items-center gap-3">
-        <span className="font-semibold text-[#efe7db]">Net Amount:</span>
-        <span className="font-bold text-lg text-[#c9a25a] whitespace-nowrap">{rs(netAmount)}</span>
+      <div className="mt-4 bg-[var(--fa-dark)] px-4 py-3 flex justify-between items-center gap-3">
+        <span className="font-semibold text-[var(--fa-cream)]">Net Amount:</span>
+        <span className="font-bold text-lg text-[var(--fa-gold)] whitespace-nowrap">{rs(netAmount)}</span>
       </div>
 
       {/* Net Savings */}

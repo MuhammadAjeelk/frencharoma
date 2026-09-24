@@ -12,9 +12,9 @@ import DiscountRibbon from "./DiscountRibbon";
 import { FOCUS_RING_LIGHT } from "@/lib/design";
 
 const EDITION_STYLE = {
-  luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[#c9a24a] to-[#e6c986]", text: "text-[#3a2c08]", pill: "bg-[#c9a24a] text-[#2a2008]" },
-  premium: { label: "Premium Edition", bar: "bg-gradient-to-r from-[#b6b6bb] to-[#e4e4e8]", text: "text-[#2b2b2b]", pill: "bg-[#c3c3ca] text-[#2b2b2b]" },
-  classic: { label: "Classic Edition", bar: "bg-gradient-to-r from-[#d8cbb8] to-[#efe7d8]", text: "text-[#3a352f]", pill: "bg-[#d8cbb8] text-[#3a352f]" },
+  luxury:  { label: "Luxury Edition",  bar: "bg-gradient-to-r from-[var(--fa-gold)] to-[var(--fa-gold-hover)]", text: "text-[var(--fa-gold-ink)]", pill: "bg-[var(--fa-gold)] text-[var(--fa-gold-ink)]" },
+  premium: { label: "Premium Edition", bar: "bg-gradient-to-r from-[var(--fa-premium)] to-[var(--fa-premium)]", text: "text-[var(--fa-ink)]", pill: "bg-[var(--fa-premium)] text-[var(--fa-ink)]" },
+  classic: { label: "Classic Edition", bar: "bg-gradient-to-r from-[var(--fa-beige)] to-[var(--fa-beige)]", text: "text-[var(--fa-secondary)]", pill: "bg-[var(--fa-beige)] text-[var(--fa-secondary)]" },
 };
 
 function buildImages(perfume) {
@@ -132,7 +132,7 @@ export default function QuickAddModal({
     <div>
       {/* Image with hover arrows */}
       {images.length > 0 && (
-        <div className="group relative isolate w-full aspect-[6.818/7.5] overflow-hidden bg-[#e3d7c1] border border-[#d1ae6d] mb-4">
+        <div className="group relative isolate w-full aspect-[6.818/7.5] overflow-hidden bg-[var(--fa-selected)] border border-[var(--fa-gold)] mb-4">
           <Image src={images[activeIdx]} alt={perfume.name} fill className="object-cover" sizes="620px" />
 
           {/* Card badges — same as the perfume card (discount, wishlist, best seller, size) */}
@@ -141,10 +141,10 @@ export default function QuickAddModal({
             <button
               onClick={toggleWishlist}
               aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-              className="group/heart absolute top-2 right-2 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-[#efe7db]/90 backdrop-blur-sm border border-[#c9a25a]/50 hover:bg-[#efe7db] transition-colors duration-200 shadow-sm"
+              className="group/heart absolute top-2 right-2 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-[var(--fa-cream)]/90 backdrop-blur-sm border border-[var(--fa-gold)]/50 hover:bg-[var(--fa-cream)] transition-colors duration-200 shadow-sm"
             >
               <svg
-                className={`w-[18px] h-[18px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[#8a8175] group-hover/heart:text-[#e11d48]"}`}
+                className={`w-[18px] h-[18px] transition-colors duration-200 ${wishlisted ? "text-[#c2185b] fill-[#c2185b]" : "text-[var(--fa-secondary)] group-hover/heart:text-[#e11d48]"}`}
                 fill={wishlisted ? "currentColor" : "none"}
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -155,12 +155,12 @@ export default function QuickAddModal({
             </button>
           )}
           {!boxMode && perfume.isBestSeller && activeIdx === 0 && (
-            <span className="absolute bottom-2 left-2 z-10 bg-[#c9a25a] text-[#211d18] rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md">
+            <span className="absolute bottom-2 left-2 z-10 bg-[var(--fa-gold)] text-[var(--fa-ink)] rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide shadow-md">
               Best Sellers
             </span>
           )}
           {activeIdx === 0 && (
-            <span className="absolute bottom-2 right-2 z-10 bg-[#efe7db]/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#211d18] shadow-sm">
+            <span className="absolute bottom-2 right-2 z-10 bg-[var(--fa-cream)]/90 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] font-semibold text-[var(--fa-ink)] shadow-sm">
               {sizeLabel}
             </span>
           )}
@@ -169,14 +169,14 @@ export default function QuickAddModal({
             <>
               <button
                 onClick={() => setActiveIdx((i) => (i - 1 + images.length) % images.length)}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-[#efe7db]/90 border border-[#c9a25a]/50 text-[#211d18] rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-[var(--fa-cream)]/90 border border-[var(--fa-gold)]/50 text-[var(--fa-ink)] rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
                 aria-label="Previous image"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               </button>
               <button
                 onClick={() => setActiveIdx((i) => (i + 1) % images.length)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-[#efe7db]/90 border border-[#c9a25a]/50 text-[#211d18] rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-[var(--fa-cream)]/90 border border-[var(--fa-gold)]/50 text-[var(--fa-ink)] rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
                 aria-label="Next image"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -187,7 +187,7 @@ export default function QuickAddModal({
       )}
 
       {/* Name + gender */}
-      <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[#211d18] mb-2 break-words">
+      <h2 className="font-[family-name:var(--font-playfair)] italic text-xl font-normal text-[var(--fa-ink)] mb-2 break-words">
         {perfume.name}
         {gm && (
           <>
@@ -197,21 +197,21 @@ export default function QuickAddModal({
         )}
       </h2>
 
-      <div className="space-y-1 text-sm text-[#3f3931]">
+      <div className="space-y-1 text-sm text-[var(--fa-secondary)]">
         {perfume.impressionName && (
           <p>
             {!isSignatureScent(perfume.impressionName) && "Inspired by: "}
-            <span className="font-semibold text-[#211d18]">{perfume.impressionName}</span>
+            <span className="font-semibold text-[var(--fa-ink)]">{perfume.impressionName}</span>
           </p>
         )}
-        {brandLabel && <p>Brand: <span className="font-semibold text-[#211d18]">{brandLabel}</span></p>}
+        {brandLabel && <p>Brand: <span className="font-semibold text-[var(--fa-ink)]">{brandLabel}</span></p>}
         {perfume.scentFamily && (
-          <p>Fragrance Family: <span className="font-semibold text-[#211d18]">{perfume.scentFamily}</span></p>
+          <p>Fragrance Family: <span className="font-semibold text-[var(--fa-ink)]">{perfume.scentFamily}</span></p>
         )}
         {bestFor && (
           <p className="flex flex-wrap items-center gap-2">
             Best For:
-            <span className="inline-block px-3 py-0.5 rounded-full bg-[#e3d7c1] text-[#6f5518] text-xs font-semibold border border-[#c9a25a]/60">{bestFor}</span>
+            <span className="inline-block px-3 py-0.5 rounded-full bg-[var(--fa-selected)] text-[var(--fa-gold-ink)] text-xs font-semibold border border-[var(--fa-gold)]/60">{bestFor}</span>
           </p>
         )}
         {!boxMode && displaySellable.length > 0 && (
@@ -232,18 +232,18 @@ export default function QuickAddModal({
           </p>
         )}
         <div className="pt-0.5">
-          <span>Globally Admired by: <span className="font-bold text-[#211d18]">{admire}%</span> <span className="text-[#6b6459]">Satisfied Users</span></span>
+          <span>Globally Admired by: <span className="font-bold text-[var(--fa-ink)]">{admire}%</span> <span className="text-[var(--fa-secondary)]">Satisfied Users</span></span>
         </div>
       </div>
 
       {/* Gender divider */}
-      <div className="h-[3px] my-3" style={{ backgroundColor: gm ? gm.hex : "#c4b79e" }} />
+      <div className="h-[3px] my-3" style={{ backgroundColor: gm ? gm.hex : "var(--fa-border)" }} />
 
       {/* Price — hidden once the edition chooser is showing (spec pt 7) */}
       {headlinePrice != null && !showBanners && (
         <div className="flex items-baseline justify-center gap-12 sm:gap-16 flex-wrap mb-3">
-          {disc > 0 && <span className="text-base font-normal text-[#8a8175] strike-diagonal">{formatRs(headlinePrice)}</span>}
-          <span className="text-base font-semibold text-[#211d18]">{formatRs(finalOf(headlinePrice))}</span>
+          {disc > 0 && <span className="text-base font-normal text-[var(--fa-secondary)] strike-diagonal">{formatRs(headlinePrice)}</span>}
+          <span className="text-base font-semibold text-[var(--fa-ink)]">{formatRs(finalOf(headlinePrice))}</span>
         </div>
       )}
 
@@ -274,16 +274,16 @@ export default function QuickAddModal({
           disabled={disabled}
           className={`w-full py-3 min-h-[46px] flex items-center justify-center font-semibold text-sm tracking-[0.06em] transition-colors border ${FOCUS_RING_LIGHT} ${
             disabled
-              ? "border-[#b9a98e] bg-[#d4c6ab] text-[#6d6459] cursor-not-allowed"
+              ? "border-[var(--fa-border)] bg-[var(--fa-cream)] text-[var(--fa-secondary)] cursor-not-allowed"
               : boxMode
               ? boxSelected
-                ? "border-[#c9a25a] bg-[#e3d7c1] text-[#6f5518] hover:bg-[#d8c9ab]"
-                : "border-[#c9a25a] bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] hover-vibrate"
+                ? "border-[var(--fa-gold)] bg-[var(--fa-selected)] text-[var(--fa-gold-ink)] hover:bg-[var(--fa-selected)]"
+                : "border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] hover-vibrate"
               : showBanners
-              ? "border-[#373838] bg-[#373838] text-[#efe7db] hover:bg-[#2e2e2e]"
+              ? "border-[var(--fa-dark)] bg-[var(--fa-dark)] text-[var(--fa-cream)] hover:bg-[var(--fa-dark-deep)]"
               : inCartQty > 0
-              ? "border-[#211d18] bg-[#211d18] text-[#efe7db] hover:bg-[#373838]"
-              : "border-[#c9a25a] bg-[#c9a25a] text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] hover-vibrate"
+              ? "border-[var(--fa-ink)] bg-[var(--fa-ink)] text-[var(--fa-cream)] hover:bg-[var(--fa-dark)]"
+              : "border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] hover-vibrate"
           }`}
         >
           {boxMode ? (
@@ -295,7 +295,7 @@ export default function QuickAddModal({
           ) : inCartQty > 0 ? (
             <span className="inline-flex items-center justify-center gap-3">
               Added to Cart
-              <span className="inline-flex items-center justify-center min-w-[21px] h-[21px] px-1 rounded-full bg-[#c9a25a] text-[#211d18] text-[11px] font-bold leading-none">
+              <span className="inline-flex items-center justify-center min-w-[21px] h-[21px] px-1 rounded-full bg-[var(--fa-gold)] text-[var(--fa-ink)] text-[11px] font-bold leading-none">
                 {inCartQty}
               </span>
             </span>
@@ -318,22 +318,22 @@ export default function QuickAddModal({
       {/* Scent Profile — open by default (spec pt 13/14): How It Smells?, Ideal
           For:, then Top/Heart/Base notes */}
       {!boxMode && (perfume.howItSmells || perfume.idealFor || hasNotes) && (
-        <div className="border-t border-[#211d18]/15">
+        <div className="border-t border-[var(--fa-ink)]/15">
           <button onClick={() => setNotesOpen((o) => !o)} className={`w-full flex items-center justify-between gap-3 py-3 text-left ${FOCUS_RING_LIGHT}`}>
-            <span className="font-[family-name:var(--font-playfair)] italic text-base text-[#211d18]">Scent Profile</span>
-            <span className={`text-[#6b6459] transition-transform ${notesOpen ? "rotate-180" : ""}`}>▴</span>
+            <span className="font-[family-name:var(--font-playfair)] italic text-base text-[var(--fa-ink)]">Scent Profile</span>
+            <span className={`text-[var(--fa-secondary)] transition-transform ${notesOpen ? "rotate-180" : ""}`}>▴</span>
           </button>
           {notesOpen && (
-            <div className="space-y-1.5 text-sm text-[#3f3931] pb-3">
+            <div className="space-y-1.5 text-sm text-[var(--fa-secondary)] pb-3">
               {perfume.howItSmells && (
-                <p><span className="font-semibold text-[#211d18]">How It Smells?</span> {perfume.howItSmells}</p>
+                <p><span className="font-semibold text-[var(--fa-ink)]">How It Smells?</span> {perfume.howItSmells}</p>
               )}
               {perfume.idealFor && (
-                <p><span className="font-semibold text-[#211d18]">Ideal For:</span> {perfume.idealFor}</p>
+                <p><span className="font-semibold text-[var(--fa-ink)]">Ideal For:</span> {perfume.idealFor}</p>
               )}
-              {notes.top?.length > 0 && <p><span className="font-semibold text-[#211d18]">Top Notes:</span> {notes.top.join(", ")}</p>}
-              {notes.middle?.length > 0 && <p><span className="font-semibold text-[#211d18]">Heart Notes:</span> {notes.middle.join(", ")}</p>}
-              {notes.base?.length > 0 && <p><span className="font-semibold text-[#211d18]">Base Notes:</span> {notes.base.join(", ")}</p>}
+              {notes.top?.length > 0 && <p><span className="font-semibold text-[var(--fa-ink)]">Top Notes:</span> {notes.top.join(", ")}</p>}
+              {notes.middle?.length > 0 && <p><span className="font-semibold text-[var(--fa-ink)]">Heart Notes:</span> {notes.middle.join(", ")}</p>}
+              {notes.base?.length > 0 && <p><span className="font-semibold text-[var(--fa-ink)]">Base Notes:</span> {notes.base.join(", ")}</p>}
             </div>
           )}
         </div>
@@ -341,19 +341,19 @@ export default function QuickAddModal({
 
       {/* Description */}
       {perfume.description && (
-        <div className="border-t border-[#211d18]/15">
+        <div className="border-t border-[var(--fa-ink)]/15">
           <button onClick={() => setDescOpen((o) => !o)} className={`w-full flex items-center justify-between gap-3 py-3 text-left ${FOCUS_RING_LIGHT}`}>
-            <span className="font-[family-name:var(--font-playfair)] italic text-base text-[#211d18]">Description</span>
-            <span className={`text-[#6b6459] transition-transform ${descOpen ? "rotate-180" : ""}`}>▾</span>
+            <span className="font-[family-name:var(--font-playfair)] italic text-base text-[var(--fa-ink)]">Description</span>
+            <span className={`text-[var(--fa-secondary)] transition-transform ${descOpen ? "rotate-180" : ""}`}>▾</span>
           </button>
-          {descOpen && <p className="text-sm text-[#3f3931] leading-relaxed pb-3">{perfume.description}</p>}
+          {descOpen && <p className="text-sm text-[var(--fa-secondary)] leading-relaxed pb-3">{perfume.description}</p>}
         </div>
       )}
 
       <Link
         href={`/products/${perfume.slug}`}
         onClick={onClose}
-        className={`mt-4 block w-full text-center border border-[#211d18]/70 text-[#211d18] py-3 font-semibold text-sm hover:bg-[#211d18] hover:text-[#efe7db] transition-colors ${FOCUS_RING_LIGHT}`}
+        className={`mt-4 block w-full text-center border border-[var(--fa-ink)]/70 text-[var(--fa-ink)] py-3 font-semibold text-sm hover:bg-[var(--fa-ink)] hover:text-[var(--fa-cream)] transition-colors ${FOCUS_RING_LIGHT}`}
       >
         View Full Details
       </Link>

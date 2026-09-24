@@ -10,14 +10,14 @@ import { FIELD_DARK, FOCUS_RING, viewAllClass } from "@/lib/design";
 
 // Form chrome on the dark ground, matching the footer's newsletter field.
 const INPUT = `block w-full px-4 py-3 text-sm ${FIELD_DARK} ${FOCUS_RING}`;
-const LABEL = "block text-[13px] font-medium text-[#cbbfae] mb-1.5";
+const LABEL = "block text-[13px] font-medium text-[var(--fa-on-dark)] mb-1.5";
 // Disabled has to stay visible on #2e2e2e — a dimmed gold, not a pale grey.
 // The focus ring is spelled out rather than composed from FOCUS_RING: that
 // constant carries `ring-offset-0`, and a gold ring flush on a gold fill is
 // only 1.42:1. Overriding it would leave both offset utilities in the class
 // list, where the winner depends on Tailwind's stylesheet order.
 const SUBMIT =
-  "w-full flex justify-center items-center border border-[#c9a25a] bg-[#c9a25a] py-3 px-4 text-sm font-semibold text-[#211d18] hover:bg-[#e3c489] hover:border-[#e3c489] focus-visible:ring-2 focus-visible:ring-[#e3c489] focus-visible:ring-offset-2 focus-visible:ring-offset-[#2e2e2e] disabled:bg-[#6f5c3a] disabled:border-[#6f5c3a] disabled:text-[#efe7db] disabled:cursor-not-allowed transition-colors";
+  "w-full flex justify-center items-center border border-[var(--fa-gold)] bg-[var(--fa-gold)] py-3 px-4 text-sm font-semibold text-[var(--fa-ink)] hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] focus-visible:ring-2 focus-visible:ring-[var(--fa-gold-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fa-dark-deep)] disabled:bg-[#6f5c3a] disabled:border-[#6f5c3a] disabled:text-[var(--fa-cream)] disabled:cursor-not-allowed transition-colors";
 // The required marker: red on the dark ground, not the old #ef4444.
 const REQUIRED = "text-[#e8927f]";
 
@@ -106,23 +106,23 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#373838] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--fa-dark)] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <div className="inline-block">
-          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[#c9a25a]">
+          <h1 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
             Create Account
           </h1>
           <Rule className="mt-2" />
         </div>
-        <p className="mt-4 font-[family-name:var(--font-playfair)] text-base md:text-lg text-[#d2c1ac]">
+        <p className="mt-4 font-[family-name:var(--font-playfair)] text-base md:text-lg text-[var(--fa-on-dark)]">
           Join us for exclusive fragrances
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         {/* The double gold frame the gender cards and the newsletter box use */}
-        <div className="border border-[#c9a25a]/60 p-1.5">
-          <div className="border border-[#c9a25a]/30 bg-[#2e2e2e] py-8 px-5 sm:px-8">
+        <div className="border border-[var(--fa-gold)]/60 p-1.5">
+          <div className="border border-[var(--fa-gold)]/30 bg-[var(--fa-dark-deep)] py-8 px-5 sm:px-8">
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name */}
               <div>
@@ -176,7 +176,7 @@ function SignupForm() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 px-3 flex items-center text-[#a99d8c] hover:text-[#e3c489] focus:outline-none focus-visible:text-[#e3c489] transition-colors"
+                    className="absolute inset-y-0 right-0 px-3 flex items-center text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] focus:outline-none focus-visible:text-[var(--fa-gold-hover)] transition-colors"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                     aria-pressed={showPassword}
                   >
@@ -206,7 +206,7 @@ function SignupForm() {
               <button type="submit" disabled={loading} className={SUBMIT}>
                 {loading ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-[#efe7db]/30 border-t-[#efe7db] rounded-full animate-spin mr-2" />
+                    <div className="w-5 h-5 border-2 border-[var(--fa-cream)]/30 border-t-[var(--fa-cream)] rounded-full animate-spin mr-2" />
                     Creating account...
                   </>
                 ) : (
@@ -218,10 +218,10 @@ function SignupForm() {
             <div className="mt-7">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-[#c9a25a]/25" />
+                  <div className="w-full border-t border-[var(--fa-gold)]/25" />
                 </div>
                 <div className="relative flex justify-center text-[13px]">
-                  <span className="px-3 bg-[#2e2e2e] text-[#a99d8c]">
+                  <span className="px-3 bg-[var(--fa-dark-deep)] text-[var(--fa-muted-dark)]">
                     Already have an account?
                   </span>
                 </div>
@@ -245,8 +245,8 @@ function SignupForm() {
 
 function LoadingFallback() {
   return (
-    <div className="min-h-screen bg-[#373838] flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-[#c9a25a]/25 border-t-[#c9a25a] rounded-full animate-spin" />
+    <div className="min-h-screen bg-[var(--fa-dark)] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[var(--fa-gold)]/25 border-t-[var(--fa-gold)] rounded-full animate-spin" />
     </div>
   );
 }

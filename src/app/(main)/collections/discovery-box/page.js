@@ -120,12 +120,12 @@ function EmptySlot({ index, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group/slot relative w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16 border border-dashed border-[#c9a25a]/45 bg-[#211d18] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[#e3c489] hover:bg-[#2a251d] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
+      className="group/slot relative w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16 border border-dashed border-[var(--fa-gold)]/45 bg-[var(--fa-ink)] flex items-center justify-center shrink-0 transition-[box-shadow,border-color,background-color] duration-300 hover:border-[var(--fa-gold-hover)] hover:bg-[var(--fa-hover-dark)] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]"
     >
-      <span className="text-[11px] sm:text-base font-bold max-sm:leading-none text-[#a99d8c]/70 transition-opacity duration-150 group-hover/slot:opacity-0">
+      <span className="text-[11px] sm:text-base font-bold max-sm:leading-none text-[var(--fa-muted-dark)]/70 transition-opacity duration-150 group-hover/slot:opacity-0">
         {index + 1}
       </span>
-      <span className="absolute inset-0 flex items-center justify-center text-[9px] sm:text-[11px] font-bold uppercase tracking-wide text-[#e3c489] opacity-0 transition-opacity duration-150 group-hover/slot:opacity-100">
+      <span className="absolute inset-0 flex items-center justify-center text-[9px] sm:text-[11px] font-bold uppercase tracking-wide text-[var(--fa-gold-hover)] opacity-0 transition-opacity duration-150 group-hover/slot:opacity-100">
         Empty
       </span>
     </button>
@@ -143,14 +143,14 @@ function FilledSlot({
 }) {
   // A sealed box frames its testers in solid gold; the box still being filled
   // keeps a quieter ring so the two read apart at a glance.
-  const border = tone === "done" ? "border-[#d1ae6d]" : "border-[#c9a25a]/60";
+  const border = tone === "done" ? "border-[var(--fa-gold)]" : "border-[var(--fa-gold)]/60";
   return (
     <button
       type="button"
       onClick={onScrollTo}
       onMouseEnter={(e) => onPreview?.(perfume, e.currentTarget)}
       onMouseLeave={() => onPreviewEnd?.()}
-      className={`relative w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16 overflow-hidden border-2 ${border} bg-[#211d18] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[#e3c489] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
+      className={`relative w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16 overflow-hidden border-2 ${border} bg-[var(--fa-ink)] group shrink-0 transition-[box-shadow,border-color] duration-300 hover:border-[var(--fa-gold-hover)] hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_10px_26px_rgba(209,174,109,0.22)]`}
     >
       {get5mlImage(perfume) ? (
         <Image
@@ -161,7 +161,7 @@ function FilledSlot({
           sizes="64px"
         />
       ) : (
-        <div className="w-full h-full bg-[#373838]" />
+        <div className="w-full h-full bg-[var(--fa-dark)]" />
       )}
       {/* Phones have no hover, so the × stays visible below sm — otherwise a
           tester could be added on a phone and never taken back out. */}
@@ -454,13 +454,13 @@ export default function DiscoveryBoxPage() {
   const activeBox = (
     <div
       data-box
-      className="shrink-0 border-2 border-dashed border-[#c9a25a]/60 bg-[#373838] p-1.5 sm:p-2.5"
+      className="shrink-0 border-2 border-dashed border-[var(--fa-gold)]/60 bg-[var(--fa-dark)] p-1.5 sm:p-2.5"
     >
       <div className="flex items-center justify-between gap-2 sm:gap-3 mb-1 sm:mb-1.5 px-0.5">
-        <span className="text-[11px] sm:text-sm font-bold max-sm:leading-tight text-[#c9a25a] whitespace-nowrap">
+        <span className="text-[11px] sm:text-sm font-bold max-sm:leading-tight text-[var(--fa-gold)] whitespace-nowrap">
           Discovery Box {completeCount + 1}
         </span>
-        <span className="text-[10px] sm:text-xs font-bold max-sm:leading-tight text-[#a99d8c] whitespace-nowrap">
+        <span className="text-[10px] sm:text-xs font-bold max-sm:leading-tight text-[var(--fa-muted-dark)] whitespace-nowrap">
           {activeCount}/{BOX_SIZE}
         </span>
       </div>
@@ -484,28 +484,28 @@ export default function DiscoveryBoxPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#373838]">
+    <div className="min-h-screen bg-[var(--fa-dark)]">
       {/* ── Top banner — FLAT 40% OFF + Discovery Box ────────────────────── */}
-      <div className="relative bg-[#2e2e2e] text-[#efe7db] border-y-[6px] border-[#c9a25a]">
+      <div className="relative bg-[var(--fa-dark-deep)] text-[var(--fa-cream)] border-y-[6px] border-[var(--fa-gold)]">
         {/* Breadcrumb overlaid so it doesn't offset the vertically-centred logo */}
-        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-[#a99d8c]">
-          <Link href="/" className="transition-colors hover:text-[#e3c489]">
+        <nav className="absolute top-3.5 left-4 z-10 flex items-center gap-2 text-[11px] text-[var(--fa-muted-dark)]">
+          <Link href="/" className="transition-colors hover:text-[var(--fa-gold-hover)]">
             Home
           </Link>
           <span>/</span>
-          <span className="text-[#cbbfae]">Discovery Box</span>
+          <span className="text-[var(--fa-on-dark)]">Discovery Box</span>
         </nav>
         <div className={`${GUTTER} pt-10 pb-6 md:py-7`}>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
             {/* Left — FLAT 40% OFF logo (Century Schoolbook) */}
             <div
-              className="shrink-0 flex items-stretch text-[#c9a25a] -translate-y-1 md:-translate-y-8"
+              className="shrink-0 flex items-stretch text-[var(--fa-gold)] -translate-y-1 md:-translate-y-8"
               style={{
                 fontFamily:
                   '"Century Schoolbook", "Century Schoolbook L", "TeX Gyre Schola", Georgia, "Times New Roman", serif',
               }}
             >
-              <span className="self-center text-base sm:text-xl md:text-4xl tracking-[0.08em] text-[#efe7db]">
+              <span className="self-center text-base sm:text-xl md:text-4xl tracking-[0.08em] text-[var(--fa-cream)]">
                 FLAT
               </span>
               <span className="text-[4rem] sm:text-[5.5rem] md:text-[13rem] font-normal leading-[0.72] -ml-1 md:-ml-2">
@@ -519,7 +519,7 @@ export default function DiscoveryBoxPage() {
                   %
                 </span>
                 <span
-                  className="text-lg sm:text-xl md:text-5xl tracking-[0.06em] text-[#efe7db] leading-none"
+                  className="text-lg sm:text-xl md:text-5xl tracking-[0.06em] text-[var(--fa-cream)] leading-none"
                   style={{ transform: "translateY(0.6em)" }}
                 >
                   OFF
@@ -528,29 +528,29 @@ export default function DiscoveryBoxPage() {
             </div>
 
             {/* Gold vertical divider */}
-            <div className="hidden md:block self-stretch w-px bg-[#c9a25a]/50" />
+            <div className="hidden md:block self-stretch w-px bg-[var(--fa-gold)]/50" />
 
             {/* Right — title, subtitle, description */}
             <div className="max-w-2xl text-center">
               <div className="inline-block">
-                <h1 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[#c9a25a]">
+                <h1 className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl font-normal text-[var(--fa-gold)]">
                   Discovery Box
                 </h1>
                 <Rule className="mt-2" />
               </div>
-              <p className="font-[family-name:var(--font-playfair)] italic text-[#d2c1ac] mt-3 text-base md:text-xl leading-snug">
+              <p className="font-[family-name:var(--font-playfair)] italic text-[var(--fa-on-dark)] mt-3 text-base md:text-xl leading-snug">
                 Discover Fragrances Before You Buy ...
               </p>
               <div className="flex items-center gap-2 my-3 justify-center">
-                <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
-                <span className="w-2 h-2 rotate-45 bg-[#c9a25a]" />
-                <span className="h-px w-14 md:w-28 bg-[#c9a25a]/50" />
+                <span className="h-px w-14 md:w-28 bg-[var(--fa-gold)]/50" />
+                <span className="w-2 h-2 rotate-45 bg-[var(--fa-gold)]" />
+                <span className="h-px w-14 md:w-28 bg-[var(--fa-gold)]/50" />
               </div>
-              <p className="text-[#cbbfae] text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
+              <p className="text-[var(--fa-on-dark)] text-xs md:text-sm max-w-2xl leading-relaxed mx-auto">
                 Build your discovery box with any{" "}
-                <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong> in 5ml
+                <strong className="font-semibold text-[var(--fa-gold)]">5 fragrances</strong> in 5ml
                 bottles and enjoy a{" "}
-                <strong className="font-semibold text-[#c9a25a]">Flat 40% OFF</strong> —
+                <strong className="font-semibold text-[var(--fa-gold)]">Flat 40% OFF</strong> —
                 Explore, compare, and discover your favorites—More you explore,
                 more you love our Fragrances.
               </p>
@@ -562,7 +562,7 @@ export default function DiscoveryBoxPage() {
       {/* ── Sticky box builder ───────────────────────────────────────────── */}
       <div
         ref={barRef}
-        className="sticky top-0 z-30 border-b-2 border-[#c9a25a] bg-[#2e2e2e] shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
+        className="sticky top-0 z-30 border-b-2 border-[var(--fa-gold)] bg-[var(--fa-dark-deep)] shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-1.5 sm:py-3.5 lg:py-4">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4">
@@ -575,7 +575,7 @@ export default function DiscoveryBoxPage() {
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
                 <svg
-                  className="w-5 h-8 sm:w-8 sm:h-12 lg:w-10 lg:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
+                  className="w-5 h-8 sm:w-8 sm:h-12 lg:w-10 lg:h-14 fill-[var(--fa-muted-dark)] group-hover/cap:fill-[var(--fa-gold-hover)] transition-colors duration-200"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -597,14 +597,14 @@ export default function DiscoveryBoxPage() {
                   <div
                     key={bi}
                     data-box
-                    className="shrink-0 border-2 border-[#d1ae6d] bg-[#211d18] p-1.5 sm:p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.25)]"
+                    className="shrink-0 border-2 border-[var(--fa-gold)] bg-[var(--fa-ink)] p-1.5 sm:p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.25)]"
                   >
                     <div className="flex items-center justify-between gap-2 sm:gap-3 mb-1 sm:mb-1.5 px-0.5">
-                      <span className="text-[11px] sm:text-sm font-bold max-sm:leading-tight text-[#e3c489] whitespace-nowrap">
+                      <span className="text-[11px] sm:text-sm font-bold max-sm:leading-tight text-[var(--fa-gold-hover)] whitespace-nowrap">
                         Discovery Box {bi + 1} ✓
                       </span>
                       <span className="flex items-baseline gap-1 sm:gap-1.5 whitespace-nowrap">
-                        <span className="text-[10px] sm:text-[11px] font-semibold max-sm:leading-tight text-[#a99d8c] strike-diagonal">
+                        <span className="text-[10px] sm:text-[11px] font-semibold max-sm:leading-tight text-[var(--fa-muted-dark)] strike-diagonal">
                           {formatRs(orig)}
                         </span>
                         <span className="text-[11px] sm:text-[13px] font-bold max-sm:leading-tight text-[#7dd18d]">
@@ -642,7 +642,7 @@ export default function DiscoveryBoxPage() {
                 className="group/cap shrink-0 flex items-center justify-center px-1"
               >
                 <svg
-                  className="w-5 h-8 sm:w-8 sm:h-12 lg:w-10 lg:h-14 fill-[#a99d8c] group-hover/cap:fill-[#e3c489] transition-colors duration-200"
+                  className="w-5 h-8 sm:w-8 sm:h-12 lg:w-10 lg:h-14 fill-[var(--fa-muted-dark)] group-hover/cap:fill-[var(--fa-gold-hover)] transition-colors duration-200"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -653,9 +653,9 @@ export default function DiscoveryBoxPage() {
 
             {/* Empty / partial — helper text beside the box (no box ready yet) */}
             {completeCount === 0 && (
-              <p className="w-full lg:flex-1 mx-auto text-[11px] sm:text-lg text-[#cbbfae] leading-snug sm:leading-relaxed text-center">
+              <p className="w-full lg:flex-1 mx-auto text-[11px] sm:text-lg text-[var(--fa-on-dark)] leading-snug sm:leading-relaxed text-center">
                 To fill your Discovery Box — Choose any{" "}
-                <strong className="font-semibold text-[#c9a25a]">5 fragrances</strong>
+                <strong className="font-semibold text-[var(--fa-gold)]">5 fragrances</strong>
                 <br />
                 from the collection below.
               </p>
@@ -663,17 +663,17 @@ export default function DiscoveryBoxPage() {
 
             {/* Ready — inline summary + Add Ready Box to Cart */}
             {completeCount >= 1 && (
-              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-1.5 sm:gap-2 border border-[#d1ae6d] bg-[#211d18] px-3 py-2 sm:px-4 sm:py-2.5">
+              <div className="w-full sm:w-auto sm:ml-auto flex flex-col gap-1.5 sm:gap-2 border border-[var(--fa-gold)] bg-[var(--fa-ink)] px-3 py-2 sm:px-4 sm:py-2.5">
                 <div className="min-w-0">
-                  <p className="text-[#efe7db] font-bold text-[11px] sm:text-sm max-sm:leading-tight whitespace-nowrap">
+                  <p className="text-[var(--fa-cream)] font-bold text-[11px] sm:text-sm max-sm:leading-tight whitespace-nowrap">
                     {completeCount} Discovery Box{completeCount > 1 ? "es" : ""}{" "}
                     {completeCount > 1 ? "are" : "is"} Ready.
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-[11px] sm:text-[13px] font-semibold max-sm:leading-tight text-[#a99d8c] strike-diagonal">
+                    <span className="text-[11px] sm:text-[13px] font-semibold max-sm:leading-tight text-[var(--fa-muted-dark)] strike-diagonal">
                       {formatRs(totalOriginal)}
                     </span>
-                    <span className="text-[#c9a25a] text-sm sm:text-lg font-bold max-sm:leading-tight">
+                    <span className="text-[var(--fa-gold)] text-sm sm:text-lg font-bold max-sm:leading-tight">
                       {formatRs(totalDiscounted)}
                     </span>
                   </div>
@@ -683,7 +683,7 @@ export default function DiscoveryBoxPage() {
                 </div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full inline-flex items-center justify-center gap-2 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] font-bold text-[11px] sm:text-[13px] px-3 sm:px-4 py-2.5 transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
+                  className="w-full inline-flex items-center justify-center gap-2 border border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] font-bold text-[11px] sm:text-[13px] px-3 sm:px-4 py-2.5 transition-colors hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)]"
                 >
                   {addedToCart
                     ? "✓ Added!"
@@ -708,7 +708,7 @@ export default function DiscoveryBoxPage() {
 
           {/* Click-an-empty-slot hint — shown close to the box */}
           {hint && (
-            <p className="mt-1.5 sm:mt-2.5 text-center text-[11px] sm:text-[13px] max-sm:leading-snug font-bold text-[#e3c489] animate-fadeIn">
+            <p className="mt-1.5 sm:mt-2.5 text-center text-[11px] sm:text-[13px] max-sm:leading-snug font-bold text-[var(--fa-gold-hover)] animate-fadeIn">
               Select Fragrances from the collection below ↓
             </p>
           )}
@@ -723,9 +723,9 @@ export default function DiscoveryBoxPage() {
             return (
               <div
                 style={{ left: previewLeft }}
-                className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 w-[330px] max-w-[92vw] flex items-center gap-2.5 border border-[#d1ae6d] bg-[#211d18] p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.35),0_18px_44px_rgba(0,0,0,0.55)] animate-fadeIn"
+                className="pointer-events-none absolute top-full mt-2 z-40 -translate-x-1/2 w-[330px] max-w-[92vw] flex items-center gap-2.5 border border-[var(--fa-gold)] bg-[var(--fa-ink)] p-2.5 shadow-[0_0_0_1px_rgba(209,174,109,0.35),0_18px_44px_rgba(0,0,0,0.55)] animate-fadeIn"
               >
-                <div className="relative w-[72px] h-[72px] overflow-hidden border border-[#d1ae6d]/50 bg-[#373838] shrink-0">
+                <div className="relative w-[72px] h-[72px] overflow-hidden border border-[var(--fa-gold)]/50 bg-[var(--fa-dark)] shrink-0">
                   {get5mlImage(preview) ? (
                     <Image
                       src={get5mlImage(preview)}
@@ -739,29 +739,29 @@ export default function DiscoveryBoxPage() {
                 {/* Names run long — the popover is width-capped and the copy
                     clamps rather than pushing past the sticky bar. */}
                 <div className="min-w-0 flex-1 pr-1">
-                  <p className="text-[13px] font-bold text-[#efe7db] leading-tight line-clamp-2">
+                  <p className="text-[13px] font-bold text-[var(--fa-cream)] leading-tight line-clamp-2">
                     {preview.name}
                     {gm && <span className={genderTextClass(preview.gender, "dark")}> - ({gm.label})</span>}
                   </p>
                   {preview.impressionName && (
-                    <p className="text-[11px] text-[#a99d8c] mt-0.5 truncate">
+                    <p className="text-[11px] text-[var(--fa-muted-dark)] mt-0.5 truncate">
                       Impression of:{" "}
-                      <span className="font-bold text-[#e8dccb]">
+                      <span className="font-bold text-[var(--fa-on-dark)]">
                         {preview.impressionName}
                       </span>
                     </p>
                   )}
                   {brandLabel && (
-                    <p className="text-[11px] text-[#a99d8c] mt-0.5 truncate">
+                    <p className="text-[11px] text-[var(--fa-muted-dark)] mt-0.5 truncate">
                       Brand:{" "}
-                      <span className="font-bold text-[#e8dccb]">
+                      <span className="font-bold text-[var(--fa-on-dark)]">
                         {brandLabel}
                       </span>
                     </p>
                   )}
                   {price != null && (
                     <p className="mt-1 flex items-center gap-2">
-                      <span className="text-[13px] font-semibold text-[#a99d8c] strike-diagonal whitespace-nowrap">
+                      <span className="text-[13px] font-semibold text-[var(--fa-muted-dark)] strike-diagonal whitespace-nowrap">
                         {formatRs(price)}
                       </span>
                       <span className="text-[13px] font-bold text-[#7dd18d] whitespace-nowrap">
@@ -804,8 +804,8 @@ export default function DiscoveryBoxPage() {
                   aria-pressed={onlyInStock}
                   className={`flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold border rounded-full transition-all duration-200 select-none hover:underline underline-offset-4 decoration-1 ${
                     onlyInStock
-                      ? "border-[#c9a25a] bg-[#c9a25a] text-[#211d18]"
-                      : "border-[#c9a25a]/40 text-[#4a4540] hover:border-[#c9a25a] hover:text-[#211d18]"
+                      ? "border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)]"
+                      : "border-[var(--fa-gold)]/40 text-[var(--fa-on-dark)] hover:border-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)]"
                   }`}
                 >
                   In stock only
@@ -835,12 +835,12 @@ export default function DiscoveryBoxPage() {
             {[...Array(12)].map((_, i) => (
               <div
                 key={i}
-                className="border border-[#d1ae6d]/40 bg-[#2e2e2e] overflow-hidden animate-pulse"
+                className="border border-[var(--fa-gold)]/40 bg-[var(--fa-dark-deep)] overflow-hidden animate-pulse"
               >
-                <div className="aspect-[6.818/7.5] bg-[#3f3f3f]" />
+                <div className="aspect-[6.818/7.5] bg-[var(--fa-dark-raised)]" />
                 <div className="p-3 space-y-2">
-                  <div className="h-3 bg-[#3f3f3f] w-3/4" />
-                  <div className="h-3 bg-[#3f3f3f] w-1/2" />
+                  <div className="h-3 bg-[var(--fa-dark-raised)] w-3/4" />
+                  <div className="h-3 bg-[var(--fa-dark-raised)] w-1/2" />
                 </div>
               </div>
             ))}
@@ -849,17 +849,17 @@ export default function DiscoveryBoxPage() {
 
         {/* Empty state */}
         {!loading && perfumes.length === 0 && (
-          <div className="border border-[#d1ae6d] bg-[#2e2e2e] px-6 py-16 text-center">
+          <div className="border border-[var(--fa-gold)] bg-[var(--fa-dark-deep)] px-6 py-16 text-center">
             <div className="text-4xl mb-4">🎁</div>
-            <h3 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[#c9a25a] mb-2">
+            <h3 className="font-[family-name:var(--font-playfair)] italic text-xl md:text-2xl font-normal text-[var(--fa-gold)] mb-2">
               No testers available yet
             </h3>
-            <p className="text-sm text-[#a99d8c] mb-6">
+            <p className="text-sm text-[var(--fa-muted-dark)] mb-6">
               We&apos;re stocking up. Check back soon!
             </p>
             <Link
               href="/collections/shop-all"
-              className="inline-flex items-center justify-center border border-[#c9a25a] bg-[#c9a25a] px-6 py-3 text-sm font-semibold text-[#211d18] transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
+              className="inline-flex items-center justify-center border border-[var(--fa-gold)] bg-[var(--fa-gold)] px-6 py-3 text-sm font-semibold text-[var(--fa-ink)] transition-colors hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)]"
             >
               Browse All Perfumes
             </Link>
@@ -868,17 +868,17 @@ export default function DiscoveryBoxPage() {
 
         {/* No search/filter matches */}
         {!loading && perfumes.length > 0 && visiblePerfumes.length === 0 && (
-          <div className="border border-[#d1ae6d] bg-[#2e2e2e] px-6 py-14 text-center">
+          <div className="border border-[var(--fa-gold)] bg-[var(--fa-dark-deep)] px-6 py-14 text-center">
             <div className="text-3xl mb-3">🔍</div>
-            <h3 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[#c9a25a] mb-1">
+            <h3 className="font-[family-name:var(--font-playfair)] italic text-lg md:text-xl font-normal text-[var(--fa-gold)] mb-1">
               No testers match your search
             </h3>
-            <p className="text-sm text-[#a99d8c] mb-5">
+            <p className="text-sm text-[var(--fa-muted-dark)] mb-5">
               Try a different name, brand or filter.
             </p>
             <button
               onClick={resetFilters}
-              className="inline-flex items-center justify-center border border-[#c9a25a] bg-[#c9a25a] px-6 py-2.5 text-sm font-semibold text-[#211d18] transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
+              className="inline-flex items-center justify-center border border-[var(--fa-gold)] bg-[var(--fa-gold)] px-6 py-2.5 text-sm font-semibold text-[var(--fa-ink)] transition-colors hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)]"
             >
               Reset Filters
             </button>
@@ -934,18 +934,18 @@ export default function DiscoveryBoxPage() {
         {/* UniversalModal's panel is still the old white sheet (Phase 5), so
             this content is styled for a light ground. */}
         <div className="space-y-4">
-          <p className="text-sm text-[#4a4540] leading-relaxed">
+          <p className="text-sm text-[var(--fa-secondary)] leading-relaxed">
             You have{" "}
-            <strong className="text-[#211d18]">
+            <strong className="text-[var(--fa-ink)]">
               {completeCount} complete box{completeCount > 1 ? "es" : ""}
             </strong>{" "}
             ready ({DISCOUNT_PERCENT}% off), plus a box that&apos;s only{" "}
-            <strong className="text-[#211d18]">
+            <strong className="text-[var(--fa-ink)]">
               {activeCount}/{BOX_SIZE}
             </strong>{" "}
             filled.
           </p>
-          <p className="text-sm text-[#4a4540] leading-relaxed">
+          <p className="text-sm text-[var(--fa-secondary)] leading-relaxed">
             Check out the completed box{completeCount > 1 ? "es" : ""} now, or
             keep building to finish the last one? The {activeCount} tester
             {activeCount > 1 ? "s" : ""} in the unfinished box will stay in your
@@ -954,14 +954,14 @@ export default function DiscoveryBoxPage() {
           <div className="flex flex-col gap-2 pt-1">
             <button
               onClick={commitBoxes}
-              className="w-full py-3 border border-[#c9a25a] bg-[#c9a25a] text-[#211d18] font-semibold text-sm transition-colors hover:bg-[#e3c489] hover:border-[#e3c489]"
+              className="w-full py-3 border border-[var(--fa-gold)] bg-[var(--fa-gold)] text-[var(--fa-ink)] font-semibold text-sm transition-colors hover:bg-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)]"
             >
               Checkout {completeCount} completed box
               {completeCount > 1 ? "es" : ""} →
             </button>
             <button
               onClick={() => setCheckoutPromptOpen(false)}
-              className="w-full py-3 border border-[#211d18]/30 text-[#211d18] font-semibold text-sm transition-colors hover:bg-[#211d18] hover:text-[#d4c6ab] hover:border-[#211d18]"
+              className="w-full py-3 border border-[var(--fa-ink)]/30 text-[var(--fa-ink)] font-semibold text-sm transition-colors hover:bg-[var(--fa-ink)] hover:text-[var(--fa-cream)] hover:border-[var(--fa-ink)]"
             >
               Keep building — finish this box
             </button>

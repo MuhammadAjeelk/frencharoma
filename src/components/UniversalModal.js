@@ -63,7 +63,7 @@ export default function UniversalModal({
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full bg-[#efe7db] border-l border-[#c9a25a] z-[70] shadow-[-20px_0_60px_rgba(0,0,0,0.35)] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
+        className={`fixed inset-y-0 right-0 w-full bg-[var(--fa-cream)] border-l border-[var(--fa-gold)] z-[70] shadow-[-20px_0_60px_rgba(0,0,0,0.35)] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
           wide ? "sm:w-[480px] md:w-[520px] lg:w-[560px]" : "sm:w-[420px] md:w-[500px]"
         }`}
         style={{
@@ -87,7 +87,7 @@ export default function UniversalModal({
               aria-label="Close modal"
               className={`group/close absolute left-[95.8%] top-[3.43%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full cursor-pointer ${FOCUS_RING}`}
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#faf9f7] text-red-600 opacity-0 transition-opacity duration-150 group-hover/close:opacity-100 group-focus-visible/close:opacity-100">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--fa-cream)] text-red-600 opacity-0 transition-opacity duration-150 group-hover/close:opacity-100 group-focus-visible/close:opacity-100">
                 <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -96,13 +96,13 @@ export default function UniversalModal({
           </div>
         ) : (
           <>
-            <div className="sticky top-0 bg-[#373838] border-b-2 border-[#c9a25a] px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 z-30">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-base sm:text-lg font-normal text-[#c9a25a] leading-tight min-w-0">
+            <div className="sticky top-0 bg-[var(--fa-dark)] border-b-2 border-[var(--fa-gold)] px-4 sm:px-5 py-2.5 flex items-center justify-between gap-3 z-30">
+              <h2 className="font-[family-name:var(--font-playfair)] italic text-base sm:text-lg font-normal text-[var(--fa-gold)] leading-tight min-w-0">
                 {heading}
               </h2>
               <button
                 onClick={onClose}
-                className={`group/close shrink-0 p-1.5 rounded-full text-[#cbbfae] hover:text-[#211d18] hover:bg-[#c9a25a] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
+                className={`group/close shrink-0 p-1.5 rounded-full text-[var(--fa-on-dark)] hover:text-[var(--fa-ink)] hover:bg-[var(--fa-gold)] active:scale-90 transition-all duration-200 ${FOCUS_RING}`}
                 aria-label="Close modal"
               >
                 <svg
@@ -121,7 +121,7 @@ export default function UniversalModal({
               {details && (
                 <div className="mb-6">
                   <div className="prose prose-sm max-w-none">
-                    <div className="text-[14px] text-[#3f3931] whitespace-pre-line leading-relaxed">
+                    <div className="text-[14px] text-[var(--fa-secondary)] whitespace-pre-line leading-relaxed">
                       {details}
                     </div>
                   </div>
