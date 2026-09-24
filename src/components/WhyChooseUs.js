@@ -57,10 +57,8 @@ const FEATURES = [
     icon: 7,
     title: "FREE SHIPPING",
     blurb: "Countrywide free shipping on perfumes.",
-    heading: "Countrywide Free Shipping",
-    details: [
-      "Enjoy **free shipping** on all perfume orders across Pakistan. Choose the fragrances you love, check out, and relax while we deliver them to your doorstep **at no additional charge**.",
-    ],
+    heading: "Free Shipping",
+    image: "/images/home/trust/free-shipping-popup-v1.png",
   },
   {
     icon: 8,
