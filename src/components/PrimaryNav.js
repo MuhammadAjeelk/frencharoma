@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { DesktopShopMenu } from "./ShopMenu";
 import { usePathname, useSearchParams } from "next/navigation";
 import { MENU_PANEL, FOCUS_RING } from "@/lib/design";
 
@@ -44,6 +45,7 @@ export function NavList({
   openDropdown,
   setOpenDropdown,
   families,
+  familiesStatus,
   brands,
 }) {
   return (
@@ -53,75 +55,16 @@ export function NavList({
         return (
           <li
             key={index}
-            className="relative group"
+            className={item.shopMenu ? "static group" : "relative group"}
             onMouseEnter={() =>
-              (item.submenu || item.brandDropdown) && setOpenDropdown(index)
+              item.brandDropdown && setOpenDropdown(index)
             }
-            onMouseLeave={() => setOpenDropdown(null)}
+            onMouseLeave={() => { if (!item.shopMenu) setOpenDropdown(null); }}
           >
-            {item.submenu ? (
-              <>
-                <Link
-                  href={item.href && item.href !== "#" ? item.href : "#"}
-                  onClick={() => setOpenDropdown(null)}
-                  className={`flex items-center gap-1 py-2 ${tabClass(active)}`}
-                >
-                  {item.name}
-                  <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
-                </Link>
-                {openDropdown === index && (
-                  <div
-                    className={`absolute top-full left-0 mt-0 py-2 z-50 animate-fadeIn flex ${MENU_PANEL} ${families.length > 0 ? "w-[520px]" : "w-64"}`}
-                  >
-                    <div className={families.length > 0 ? "w-1/2 border-r border-[#c9a25a]/25" : "w-full"}>
-                      {item.submenu.map((sub, si) =>
-                        sub.heading ? (
-                          <PanelHeading key={si}>{sub.heading}</PanelHeading>
-                        ) : (
-                          <Link
-                            key={si}
-                            href={sub.href}
-                            onClick={() => setOpenDropdown(null)}
-                            className={`group/link flex items-center ${ROW} ${FOCUS_RING} ${
-                              sub.accent
-                                ? "px-5 py-2 text-[13px] font-bold uppercase tracking-wide text-[#e3c489]"
-                                : sub.standalone
-                                  ? "px-5 py-1.5 text-[13px] font-semibold text-[#efe7db]"
-                                  : "pl-8 pr-5 py-1 text-[13px]"
-                            }`}
-                          >
-                            {!sub.accent && !sub.standalone && <Bullet />}
-                            <span className="group-hover/link:underline underline-offset-4 decoration-1">
-                              {sub.name}
-                            </span>
-                          </Link>
-                        ),
-                      )}
-                    </div>
-
-                    {families.length > 0 && (
-                      <div className="w-1/2 flex flex-col">
-                        <PanelHeading>Shop by Fragrance Family</PanelHeading>
-                        <div className="overflow-y-scroll scrollbar-always-gold max-h-72 px-1">
-                          {families.map((f) => (
-                            <Link
-                              key={f}
-                              href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
-                              onClick={() => setOpenDropdown(null)}
-                              className={`group/link flex items-center pl-7 pr-4 py-1 text-[13px] ${ROW} ${FOCUS_RING}`}
-                            >
-                              <Bullet />
-                              <span className="truncate group-hover/link:underline underline-offset-4 decoration-1">
-                                {f}
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
+            {item.shopMenu ? (
+              <DesktopShopMenu label={item.name} className={tabClass(active)}
+                open={openDropdown === index} setOpen={(open) => setOpenDropdown(current => open ? index : current === index ? null : current)}
+                families={families} status={familiesStatus} />
             ) : item.brandDropdown ? (
               <>
                 <button className={`flex items-center gap-1 py-2 ${tabClass(active)}`}>
@@ -181,7 +124,7 @@ export default function DesktopNav(props) {
     if (item.brandDropdown) {
       return pathname === "/collections/shop-all" && !!searchParams.get("search");
     }
-    if (item.submenu) {
+    if (item.shopMenu) {
       return (
         pathname === "/collections/shop-all" &&
         !SHOP_FLAGS.some((k) => searchParams.get(k))

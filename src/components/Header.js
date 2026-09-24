@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { MobileShopMenu } from "./ShopMenu";
 import DesktopNav, { NavList } from "@/components/PrimaryNav";
 import {
   MENU_PANEL,
@@ -49,6 +50,7 @@ export default function Header() {
   const [mobileSubOpen, setMobileSubOpen] = useState(null);
   const [brands, setBrands] = useState([]);
   const [families, setFamilies] = useState([]);
+  const [familiesStatus, setFamiliesStatus] = useState("loading");
   const accountRef = useRef(null);
   const { user, logout, isAdmin, loading } = useAuth();
   const { itemCount } = useCart();
@@ -61,9 +63,9 @@ export default function Header() {
       .then((data) => setBrands(data.brands || []))
       .catch(() => {});
     fetch("/api/scent-families")
-      .then((r) => r.json())
-      .then((data) => setFamilies(data.families || []))
-      .catch(() => {});
+      .then((r) => { if (!r.ok) throw new Error("Scent families unavailable"); return r.json(); })
+      .then((data) => { setFamilies(data.families || []); setFamiliesStatus("ready"); })
+      .catch(() => setFamiliesStatus("error"));
   }, []);
 
   // Live search suggestions (debounced)
@@ -100,33 +102,8 @@ export default function Header() {
     setIsAccountOpen(false);
   };
 
-  const shopSubmenu = [
-    { name: "Shop", href: "/collections/shop-all", accent: true },
-    {
-      name: "Signature Scents",
-      href: "/collections/shop-all?signature=true",
-      standalone: true,
-    },
-    { heading: "Shop by Gender" },
-    { name: "For Men", href: "/collections/shop-all?gender=men" },
-    { name: "For Women", href: "/collections/shop-all?gender=women" },
-    { name: "For Unisex", href: "/collections/shop-all?gender=unisex" },
-    { heading: "Shop by Collection" },
-    { name: "Luxury Edition", href: "/collections/shop-all?edition=luxury" },
-    { name: "Premium Edition", href: "/collections/shop-all?edition=premium" },
-    { heading: "Shop by Season" },
-    {
-      name: "For Winter & Autumn",
-      href: "/collections/shop-all?tags=autumn,winter",
-    },
-    {
-      name: "For Summer & Spring",
-      href: "/collections/shop-all?tags=spring,summer",
-    },
-  ];
-
   const menuItems = [
-    { name: "SHOP", href: "/collections/shop-all", submenu: shopSubmenu },
+    { name: "SHOP", href: "/collections/shop-all", shopMenu: true },
     { name: "BEST SELLERS", href: "/collections/shop-all?bestSeller=true" },
     { name: "SHOP BY BRAND", href: "#", brandDropdown: true },
     { name: "SPECIAL OFFERS", href: "/collections/shop-all?specialOffer=true" },
@@ -537,7 +514,7 @@ export default function Header() {
         {/* Desktop Navigation */}
         <div className="hidden lg:block bg-[#d1c0ab] border-t border-[#bda98f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <nav className="flex items-center justify-center py-2">
+            <nav className="relative flex items-center justify-center py-2">
             <Suspense
               fallback={
                 <NavList
@@ -546,6 +523,7 @@ export default function Header() {
                   openDropdown={openDropdown}
                   setOpenDropdown={setOpenDropdown}
                   families={families}
+                  familiesStatus={familiesStatus}
                   brands={brands}
                 />
               }
@@ -555,6 +533,7 @@ export default function Header() {
                 openDropdown={openDropdown}
                 setOpenDropdown={setOpenDropdown}
                 families={families}
+                familiesStatus={familiesStatus}
                 brands={brands}
               />
             </Suspense>
@@ -592,100 +571,10 @@ export default function Header() {
                 <ul className="space-y-1">
                   {menuItems.map((item, index) => (
                     <li key={index}>
-                      {item.submenu ? (
-                        <div>
-                          <button
-                            onClick={() =>
-                              setMobileSubOpen(
-                                mobileSubOpen === index ? null : index,
-                              )
-                            }
-                            className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
-                          >
-                            {item.name}
-                            <MaskIcon
-                              src="/icons/caret.svg"
-                              className={`w-4 h-4 shrink-0 text-[#c9a25a] transition-transform ${mobileSubOpen === index ? "rotate-180" : ""}`}
-                            />
-                          </button>
-                          {mobileSubOpen === index && (
-                            <ul className="pl-4 space-y-0.5 mt-1 mb-2">
-                              {item.submenu.map((sub, si) =>
-                                sub.heading ? (
-                                  <li key={si} className="pt-4 pb-1">
-                                    <span className="inline-block">
-                                      <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[#c9a25a]">
-                                        {sub.heading}
-                                      </span>
-                                      <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
-                                    </span>
-                                  </li>
-                                ) : (
-                                  <li key={si}>
-                                    <Link
-                                      href={sub.href}
-                                      className={`group/link flex items-center py-2 text-sm transition-colors hover:text-[#e3c489] ${FOCUS_RING} ${
-                                        sub.accent
-                                          ? "font-bold text-[#e3c489] uppercase tracking-wide"
-                                          : sub.standalone
-                                            ? "font-semibold text-[#efe7db]"
-                                            : "pl-3 text-[#cbbfae]"
-                                      }`}
-                                      onClick={() => {
-                                        setMobileSubOpen(null);
-                                        setIsMenuOpen(false);
-                                      }}
-                                    >
-                                      {!sub.accent && !sub.standalone && (
-                                        <span className="mr-2 text-[#c9a25a]">
-                                          •
-                                        </span>
-                                      )}
-                                      <span className="group-hover/link:underline underline-offset-4 decoration-1">
-                                        {sub.name}
-                                      </span>
-                                    </Link>
-                                  </li>
-                                ),
-                              )}
-                              {families.length > 0 && (
-                                <>
-                                  <li className="pt-4 pb-1">
-                                    <span className="inline-block">
-                                      <span className="block font-[family-name:var(--font-playfair)] italic text-[15px] text-[#c9a25a]">
-                                        Shop by Fragrance Family
-                                      </span>
-                                      <span className="mt-1 block h-px w-full bg-[linear-gradient(90deg,transparent_0%,#c9a25a_25%,#c9a25a_75%,transparent_100%)]" />
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <ul className="max-h-56 overflow-y-auto scrollbar-always-gold">
-                                      {families.map((f) => (
-                                        <li key={f}>
-                                          <Link
-                                            href={`/collections/shop-all?scentFamily=${encodeURIComponent(f)}`}
-                                            className={`group/link flex items-center py-2 pl-3 text-sm text-[#cbbfae] transition-colors hover:text-[#e3c489] ${FOCUS_RING}`}
-                                            onClick={() => {
-                                              setMobileSubOpen(null);
-                                              setIsMenuOpen(false);
-                                            }}
-                                          >
-                                            <span className="mr-2 text-[#c9a25a]">
-                                              •
-                                            </span>
-                                            <span className="group-hover/link:underline underline-offset-4 decoration-1">
-                                              {f}
-                                            </span>
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </li>
-                                </>
-                              )}
-                            </ul>
-                          )}
-                        </div>
+                      {item.shopMenu ? (
+                        <MobileShopMenu label={item.name} families={families} status={familiesStatus}
+                          className={`w-full flex items-center justify-between py-3 text-sm font-medium uppercase tracking-wide text-[#efe7db] hover:text-[#e3c489] transition-colors ${FOCUS_RING}`}
+                          onSelect={() => { setMobileSubOpen(null); setIsMenuOpen(false); }} />
                       ) : item.brandDropdown ? (
                         <div>
                           <button
