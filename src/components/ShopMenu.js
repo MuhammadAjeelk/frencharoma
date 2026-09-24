@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { COLORS } from "@/lib/design";
+import { SCENTS } from "@/lib/scentProfiles";
 import styles from "./ShopMenu.module.css";
 
 const SHOP = "/collections/shop-all";
@@ -15,15 +16,10 @@ const groups = [
   ] },
   { title: "For You", links: [
     ["Best Sellers", "?bestSeller=true", "star"], ["New Arrivals", "?newArrival=true", "gift"],
-    ["Signature Scents", "?signature=true", "spark"], ["Special Offers", "?specialOffer=true", "tag"],
+    ["Special Offers", "?specialOffer=true", "tag"], ["Signature Scents", "?signature=true", "spark"],
   ] },
   { title: "Shop by Edition", links: [
     ["Luxury Edition", "?edition=luxury", "crown"], ["Premium Edition", "?edition=premium", "diamond"],
-  ] },
-  { title: "Shop by Season", links: [
-    ["Winter & Autumn", "?tags=autumn,winter", "leaf"],
-    ["Summer & Spring", "?tags=spring,summer", "sun"],
-    ["All Seasons (Versatile)", "?tags=all-seasons", "spark"],
   ] },
 ];
 const palette = { "--shop-ink": COLORS.ink, "--shop-gold": COLORS.gold, "--shop-ground": COLORS.lightGround };
@@ -41,6 +37,13 @@ const paths = {
   arrow: "M4 12h16 M14 6l6 6-6 6",
   close: "m6 6 12 12 M6 18 18 6",
   back: "M20 12H4 M10 6l-6 6 6 6",
+  floral: "M12 9C4-3 1 11 9 12c-12 8 2 12 3 3 8 12 12-2 3-3 12-8-2-12-3-3Z M14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0",
+  woody: "m12 2-6 7h3l-5 6h5l-4 5h14l-4-5h5l-5-6h3z M12 20v3",
+  musky: "M7 21c-7-6 5-10 0-18 M12 21c-7-6 5-10 0-18 M17 21c-7-6 5-10 0-18",
+  fruity: "M12 7c-10-5-12 5-6 13 2 3 4 0 6 0s4 3 6 0c6-8 4-18-6-13Z M12 7c0-4 2-5 5-5 M12 6C7 6 6 4 6 2c4 0 6 1 6 4",
+  spicy: "M14 3c-2 3-4 4-3 7 1 2 4 1 5-1 1 6-3 12-12 12 2-2 3-5 3-8 M14 3l4-1",
+  leather: "m8 3 8 0 4 8-3 9H7l-3-9z M8 3l4 4 4-4",
+  amber: "M12 3c0 6-6 6-6 12a6 6 0 0 0 12 0c0-3-2-5-3-6 0 5-4 3-3-6Z",
 };
 function Icon({ name }) {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={paths[name] || paths.leaf} /></svg>;
@@ -56,35 +59,39 @@ function Group({ group, onSelect }) {
     <ul>{group.links.map(([label, query, icon]) => <li key={label}><MenuLink label={label} query={query} icon={icon} featured={!query} onSelect={onSelect} /></li>)}</ul>
   </section>;
 }
-function Scents({ families, status, onSelect }) {
+const scentIcons = ["leaf", "fruity", "floral", "spicy", "woody", "musky", "leaf", "leather", "amber", "leaf"];
+function Scents({ onSelect }) {
   return <div className={styles.scents}>
-    {families.length ? <ul>{families.map(f => <li key={f}><MenuLink label={f} query={`?scentFamily=${encodeURIComponent(f)}`} icon="leaf" onSelect={onSelect} /></li>)}</ul>
-      : <p className={styles.status} role="status">{status === "loading" ? "Loading scent families…" : status === "error" ? "Scent families are temporarily unavailable. Explore all perfumes below." : "No scent families available yet. Explore all perfumes below."}</p>}
+    <ul>{SCENTS.map((scent, i) => <li key={scent.name}><MenuLink label={scent.name} query={`?scentFamily=${encodeURIComponent(scent.name)}`} icon={scentIcons[i]} onSelect={onSelect} /></li>)}</ul>
   </div>;
 }
 function AllPerfumes({ onSelect }) {
   return <Link href={SHOP} className={styles.all} onClick={onSelect}>View All Perfumes <Icon name="arrow" /></Link>;
 }
-function Content({ families, status, onSelect, mobile = false }) {
-  return <>
-    <div className={styles.intro}><h2>Shop All</h2><p>Discover your signature scent. A fragrance for every mood, every moment.</p></div>
-    <div className={styles.layout}>
-      <div className={styles.navigation}>
-        <div className={styles.groups}>{groups.map(group => <Group key={group.title} group={group} onSelect={onSelect} />)}</div>
-        <AllPerfumes onSelect={onSelect} />
+function Content({ onSelect, mobile = false }) {
+  const intro = <div className={styles.intro}><span className={styles.eyebrow}>Explore our collection</span><h2>Shop All</h2><p>Discover 100+ inspired fragrances for every mood, every moment.</p></div>;
+  if (mobile) return <div className={styles.mobileContent}>
+    {intro}
+    {groups.map(group => <Group key={group.title} group={group} onSelect={onSelect} />)}
+    <details className={styles.accordion} open><summary>Shop by Scent <span aria-hidden="true">⌄</span></summary><Scents onSelect={onSelect} /></details>
+    <div className={styles.mobileCta}><AllPerfumes onSelect={onSelect} /></div>
+  </div>;
+  return <div className={styles.layout}>
+    <div className={styles.navigation}>
+      {intro}
+      <div className={styles.columns}>
+        <div className={styles.leftColumn}><Group group={groups[0]} onSelect={onSelect} /><Group group={groups[2]} onSelect={onSelect} /><AllPerfumes onSelect={onSelect} /></div>
+        <div className={styles.rightColumn}><Group group={groups[1]} onSelect={onSelect} /><section className={styles.scentSection} aria-label="Shop by Scent"><h3>Shop by Scent</h3><Scents onSelect={onSelect} /></section></div>
       </div>
-      {mobile ? <details className={styles.accordion}><summary>Shop by Scent <span aria-hidden="true">⌄</span></summary><Scents families={families} status={status} onSelect={onSelect} /></details>
-        : <section className={styles.scentSection} aria-label="Shop by Scent"><h3>Shop by Scent</h3><p className={styles.hint}>Explore our fragrance families</p><Scents families={families} status={status} onSelect={onSelect} /></section>}
-      {!mobile && <Link href={`${SHOP}?signature=true`} onClick={onSelect} className={styles.promo}>
-        <div className={styles.photo}><Image src="/images/home/hero-shop-all-v4.webp" alt="French Aromas perfumes overlooking Paris at sunset" fill sizes="1400px" /><div className={styles.promoTitle}>Find your<br /><em>signature scent.</em></div></div>
-        <span className={styles.promoCaption}>Explore Signature Scents <Icon name="arrow" /></span>
-      </Link>}
     </div>
-    {mobile && <div className={styles.mobileCta}><AllPerfumes onSelect={onSelect} /></div>}
-  </>;
+    <Link href={`${SHOP}?signature=true`} onClick={onSelect} className={styles.promo} aria-label="Explore Signature Scents">
+      <div className={styles.photo}><Image src="/images/home/hero-shop-all-v2.webp" alt="French Aromas perfume collection in Paris" fill sizes="1400px" /><div className={styles.promoTitle}><h3>Find Your<br />Signature Scent</h3><p>Timeless Fragrances.<br />A More Beautiful You.</p><span /></div></div>
+      <span className={styles.promoCaption}>Inspired by a more beautiful tomorrow</span>
+    </Link>
+  </div>;
 }
 
-export function DesktopShopMenu({ label, className, open, setOpen, families, status }) {
+export function DesktopShopMenu({ label, className, open, setOpen }) {
   const root = useRef(null);
   const trigger = useRef(null);
   const panel = useRef(null);
@@ -97,7 +104,7 @@ export function DesktopShopMenu({ label, className, open, setOpen, families, sta
     const escape = event => { if (event.key === "Escape") { event.preventDefault(); setOpen(false); trigger.current?.focus(); } };
     const resize = () => {
       if (window.innerWidth < 1024) setOpen(false);
-      if (panel.current) panel.current.style.maxHeight = `${Math.max(100, Math.min(610, window.innerHeight - panel.current.getBoundingClientRect().top - 16))}px`;
+      if (panel.current) panel.current.style.maxHeight = `${Math.max(100, Math.min(760, window.innerHeight - panel.current.getBoundingClientRect().top - 12))}px`;
     };
     resize();
     document.addEventListener("pointerdown", outside);
@@ -116,12 +123,12 @@ export function DesktopShopMenu({ label, className, open, setOpen, families, sta
     </button>
     {open && <div ref={panel} id={id} className={styles.panel} aria-label="Shop collection navigation">
       <button type="button" className={styles.close} onClick={() => { close(); trigger.current?.focus(); }} aria-label="Close Shop menu"><Icon name="close" /></button>
-      <Content families={families} status={status} onSelect={close} />
+      <Content onSelect={close} />
     </div>}
   </div>;
 }
 
-function MobilePanel({ families, status, onClose, onSelect }) {
+function MobilePanel({ onClose, onSelect }) {
   const panel = useRef(null);
   useEffect(() => {
     const previous = document.activeElement;
@@ -156,17 +163,18 @@ function MobilePanel({ families, status, onClose, onSelect }) {
   }, [onClose]);
   return createPortal(<div className={styles.mobileOverlay} style={palette} onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
     <div ref={panel} className={styles.mobilePanel} role="dialog" aria-modal="true" aria-label="Shop All navigation">
-      <div className={styles.mobileTop}><button type="button" onClick={onClose}><Icon name="back" />Menu</button><button type="button" onClick={onClose} aria-label="Close Shop menu"><Icon name="close" /></button></div>
-      <Content families={families} status={status} onSelect={onSelect} mobile />
+      <div className={styles.mobileBrand}><button type="button" onClick={onClose} aria-label="Back to menu"><Icon name="back" /></button><Image src="/logo-dark.png" width={100} height={75} alt="French Aromas" /></div>
+      <button type="button" className={styles.mobileClose} onClick={onClose} aria-label="Close Shop menu"><Icon name="close" /></button>
+      <Content onSelect={onSelect} mobile />
     </div>
   </div>, document.body);
 }
-export function MobileShopMenu({ label, className, families, status, onSelect }) {
+export function MobileShopMenu({ label, className, onSelect }) {
   const [open, setOpen] = useState(false);
   // Stable callbacks keep the focus/scroll lifecycle tied to the panel mount.
   const close = useCallback(() => setOpen(false), []);
   return <>
     <button type="button" className={className} aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>{label}<span aria-hidden="true">›</span></button>
-    {open && <MobilePanel families={families} status={status} onClose={close} onSelect={() => { setOpen(false); onSelect(); }} />}
+    {open && <MobilePanel onClose={close} onSelect={() => { setOpen(false); onSelect(); }} />}
   </>;
 }
