@@ -22,6 +22,11 @@ const groups = [
     ["Luxury Edition", "?edition=luxury", "crown"], ["Premium Edition", "?edition=premium", "diamond"],
   ] },
 ];
+const seasons = { title: "Shop by Season", links: [
+  ["Winter & Autumn", "?tags=autumn,winter", "leaf"],
+  ["Summer & Spring", "?tags=spring,summer", "sun"],
+  ["All Seasons (Versatile)", "?tags=all-seasons", "spark"],
+] };
 const palette = { "--shop-ink": COLORS.ink, "--shop-gold": COLORS.gold, "--shop-ground": COLORS.lightGround };
 const paths = {
   grid: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z",
@@ -73,6 +78,7 @@ function Content({ onSelect, mobile = false }) {
   if (mobile) return <div className={styles.mobileContent}>
     {intro}
     {groups.map(group => <Group key={group.title} group={group} onSelect={onSelect} />)}
+    <details className={styles.accordion}><summary>Shop by Season <span aria-hidden="true">⌄</span></summary><Group group={seasons} onSelect={onSelect} /></details>
     <details className={styles.accordion} open><summary>Shop by Scent <span aria-hidden="true">⌄</span></summary><Scents onSelect={onSelect} /></details>
     <div className={styles.mobileCta}><AllPerfumes onSelect={onSelect} /></div>
   </div>;
@@ -80,12 +86,12 @@ function Content({ onSelect, mobile = false }) {
     <div className={styles.navigation}>
       {intro}
       <div className={styles.columns}>
-        <div className={styles.leftColumn}><Group group={groups[0]} onSelect={onSelect} /><Group group={groups[2]} onSelect={onSelect} /><AllPerfumes onSelect={onSelect} /></div>
+        <div className={styles.leftColumn}><Group group={groups[0]} onSelect={onSelect} /><Group group={groups[2]} onSelect={onSelect} /><Group group={seasons} onSelect={onSelect} /><AllPerfumes onSelect={onSelect} /></div>
         <div className={styles.rightColumn}><Group group={groups[1]} onSelect={onSelect} /><section className={styles.scentSection} aria-label="Shop by Scent"><h3>Shop by Scent</h3><Scents onSelect={onSelect} /></section></div>
       </div>
     </div>
     <Link href={`${SHOP}?signature=true`} onClick={onSelect} className={styles.promo} aria-label="Explore Signature Scents">
-      <div className={styles.photo}><Image src="/images/home/hero-shop-all-v2.webp" alt="French Aromas perfume collection in Paris" fill sizes="1400px" /><div className={styles.promoTitle}><h3>Find Your<br />Signature Scent</h3><p>Timeless Fragrances.<br />A More Beautiful You.</p><span /></div></div>
+      <div className={styles.photo}><Image src="/images/home/shop-menu-promo-v1.webp" alt="French Aromas Office Partner and Choice of Heart perfumes in Paris" fill sizes="(min-width: 1200px) 435px, 42vw" /><div className={styles.promoTitle}><h3>Find Your<br />Signature Scent</h3><p>Timeless Fragrances.<br />A More Beautiful You.</p><span /></div></div>
       <span className={styles.promoCaption}>Inspired by a more beautiful tomorrow</span>
     </Link>
   </div>;
