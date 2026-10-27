@@ -32,14 +32,13 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-// Hash password before saving
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("passwordHash")) {
-    return next();
-  }
+// Hash password before saving. Mongoose 9 no longer passes `next` to async
+// hooks — calling it threw "next is not a function" and broke every signup.
+// The returned promise is what Mongoose waits on.
+UserSchema.pre("save", async function () {
+  if (!this.isModified("passwordHash")) return;
   const salt = await bcrypt.genSalt(12);
   this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
-  next();
 });
 
 // Compare password method
