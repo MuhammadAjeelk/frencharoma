@@ -1,22 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 
 const EDITIONS = [
   {
     label: "LUXURY EDITION",
     tag: "MORE REFINED – MORE LONG-LASTING.",
-    img: "/images/home/new/edition-luxury-v2.webp",
+    media: "editions.luxury",
     href: "/collections/shop-all?edition=luxury",
   },
   {
     label: "PREMIUM EDITION",
     tag: "EVERYDAY EXCELLENCE – AFFORDABLE PRICE.",
-    img: "/images/home/new/edition-premium-v2.webp",
+    media: "editions.premium",
     href: "/collections/shop-all?edition=premium",
   },
 ];
 
-export default function ShopByEditions() {
+// Card art is admin-replaceable; `media` keys map into src/lib/siteMedia.js.
+export default function ShopByEditions({ media = DEFAULT_MEDIA }) {
   return (
     <section className="relative bg-[var(--fa-cream)] py-10 md:py-12 overflow-hidden">
       {/* faint lotus watermark */}
@@ -59,7 +61,7 @@ export default function ShopByEditions() {
               {/* The artwork carries its own frame, label and tagline */}
               <div className="relative w-full aspect-[2443/1564]">
                 <Image
-                  src={e.img}
+                  src={media[e.media]?.src}
                   alt={e.label}
                   fill
                   className="object-cover transition-[filter] duration-500 group-hover:brightness-110"

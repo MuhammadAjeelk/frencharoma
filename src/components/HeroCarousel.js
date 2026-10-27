@@ -3,38 +3,21 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getImageProps } from "next/image";
+import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 
 // Each banner carries its own "Explore Collection" button in the artwork, so
 // the whole slide is the link — there is no overlaid CTA any more.
 //
-// Phones get the square-ish mobile art where the designer supplied it. A slide
+// Phones get the square-ish mobile art where one has been supplied. A slide
 // with no mobile art is left out below sm rather than squeezed: its wide art
 // cropped into a 1290x1405 frame would lose the bottles and the copy.
+// Art comes from the admin-managed image map (src/lib/siteMedia.js); `id`
+// matches the slot keys hero.<id>.desktop / hero.<id>.mobile.
 const SLIDES = [
-  {
-    title: "Best Sellers",
-    href: "/collections/shop-all?bestSeller=true",
-    desktop: "/images/home/hero-best-sellers-v5.webp",
-    mobile: "/images/home/hero-best-sellers-mobile-v5.webp",
-  },
-  {
-    title: "Special Offers",
-    href: "/collections/shop-all?specialOffer=true",
-    desktop: "/images/home/hero-special-offers-v5.webp",
-    mobile: null,
-  },
-  {
-    title: "Bundle Offers",
-    href: "/collections/shop-all",
-    desktop: "/images/home/hero-bundle-offers-v5.webp",
-    mobile: "/images/home/hero-bundle-offers-mobile-v5.webp",
-  },
-  {
-    title: "Discovery Box",
-    href: "/collections/discovery-box",
-    desktop: "/images/home/hero-discovery-box-v5.webp",
-    mobile: "/images/home/hero-discovery-box-mobile-v5.webp",
-  },
+  { id: "bestSellers", title: "Best Sellers", href: "/collections/shop-all?bestSeller=true" },
+  { id: "specialOffers", title: "Special Offers", href: "/collections/shop-all?specialOffer=true" },
+  { id: "bundleOffers", title: "Bundle Offers", href: "/collections/shop-all" },
+  { id: "discoveryBox", title: "Discovery Box", href: "/collections/discovery-box" },
 ];
 
 const DESKTOP = { width: 2880, height: 985 };
@@ -45,11 +28,23 @@ const MOBILE = { width: 1290, height: 1405 };
 // CSS would fetch both.
 function SlideArt({ slide, priority }) {
   const common = { alt: slide.title, sizes: "100vw", priority };
+  const d = slide.desktop;
+  const m = slide.mobile;
   const {
     props: { srcSet: desktopSrcSet, ...rest },
-  } = getImageProps({ ...common, ...DESKTOP, src: slide.desktop });
-  const mobileSrcSet = slide.mobile
-    ? getImageProps({ ...common, ...MOBILE, src: slide.mobile }).props.srcSet
+  } = getImageProps({
+    ...common,
+    src: d.src,
+    width: d.width || DESKTOP.width,
+    height: d.height || DESKTOP.height,
+  });
+  const mobileSrcSet = m?.src
+    ? getImageProps({
+        ...common,
+        src: m.src,
+        width: m.width || MOBILE.width,
+        height: m.height || MOBILE.height,
+      }).props.srcSet
     : null;
 
   return (
@@ -62,7 +57,7 @@ function SlideArt({ slide, priority }) {
   );
 }
 
-export default function HeroCarousel() {
+export default function HeroCarousel({ media = DEFAULT_MEDIA }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   // Mount-guarded so SSR and the first client paint agree.
@@ -75,7 +70,12 @@ export default function HeroCarousel() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const slides = isPhone ? SLIDES.filter((s) => s.mobile) : SLIDES;
+  const all = SLIDES.map((s) => ({
+    ...s,
+    desktop: media[`hero.${s.id}.desktop`],
+    mobile: media[`hero.${s.id}.mobile`],
+  })).filter((s) => s.desktop?.src);
+  const slides = isPhone ? all.filter((s) => s.mobile?.src) : all;
 
   // Crossing the breakpoint changes the slide count; keep the index in range.
   useEffect(() => {
@@ -88,6 +88,8 @@ export default function HeroCarousel() {
     }, 5000);
     return () => clearInterval(interval);
   }, [slides.length]);
+
+  if (slides.length === 0) return null;
 
   return (
     <div className="relative w-full">

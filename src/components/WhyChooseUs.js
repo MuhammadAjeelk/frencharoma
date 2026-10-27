@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import UniversalModal from "./UniversalModal";
+import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 
 // title, one-line blurb (card), icon (1–8), and rich modal details
 const FEATURES = [
@@ -11,28 +12,28 @@ const FEATURES = [
     title: "FRENCH INGREDIENTS",
     blurb: "Crafted with original French ingredients.",
     heading: "French Ingredients",
-    image: "/images/home/trust/french-ingredients-popup-v3.png",
+    media: "frenchIngredients",
   },
   {
     icon: 2,
     title: "40% CONCENTRATION",
     blurb: "Enhanced richness, projection, and lasting power.",
     heading: "High Concentration",
-    image: "/images/home/trust/high-concentration-popup-v1.png",
+    media: "highConcentration",
   },
   {
     icon: 3,
     title: "LONG-LASTING",
     blurb: "Exceptionally long-lasting: 12 to 24 hours.",
     heading: "Long-Lasting",
-    image: "/images/home/trust/long-lasting-popup-v1.png",
+    media: "longLasting",
   },
   {
     icon: 4,
     title: "AFFORDABLE LUXURY",
     blurb: "Imported quality, at local price.",
     heading: "Affordable Luxury",
-    image: "/images/home/trust/affordable-luxury-popup-v1.png",
+    media: "affordableLuxury",
   },
   {
     icon: 5,
@@ -58,7 +59,7 @@ const FEATURES = [
     title: "FREE SHIPPING",
     blurb: "Countrywide free shipping on perfumes.",
     heading: "Free Shipping",
-    image: "/images/home/trust/free-shipping-popup-v1.png",
+    media: "freeShipping",
   },
   {
     icon: 8,
@@ -82,25 +83,31 @@ function renderInline(text, key) {
 }
 
 // The trust strip under the hero — icon + two-line label, divided, in one row.
-// Each strip item is a single supplied asset with its label baked in; `icon`
-// only links the tile back to its FEATURES entry for the detail modal.
+// Each strip item is a single asset with its label baked in; `icon` links the
+// tile back to its FEATURES entry for the detail modal.
 const STRIP = [
-  { icon: 1, src: "/images/home/trust/french-ingredients.webp", w: 770, h: 340, icon_src: "/images/home/trust/french-ingredients-icon.webp", iw: 174, ih: 240 },
-  { icon: 2, src: "/images/home/trust/high-concentration.webp", w: 874, h: 345, icon_src: "/images/home/trust/high-concentration-icon.webp", iw: 155, ih: 240 },
-  { icon: 3, src: "/images/home/trust/long-lasting.webp", w: 972, h: 346, icon_src: "/images/home/trust/long-lasting-icon.webp", iw: 275, ih: 240 },
-  { icon: 4, src: "/images/home/trust/affordable-luxury.webp", w: 893, h: 346, icon_src: "/images/home/trust/affordable-luxury-icon.webp", iw: 269, ih: 240 },
-  { icon: 7, src: "/images/home/trust/free-shipping.webp", w: 581, h: 344, icon_src: "/images/home/trust/free-shipping.webp", iw: 581, ih: 344 },
+  { icon: 1, id: "frenchIngredients" },
+  { icon: 2, id: "highConcentration" },
+  { icon: 3, id: "longLasting" },
+  { icon: 4, id: "affordableLuxury" },
+  { icon: 7, id: "freeShipping" },
 ];
 
-export default function WhyChooseUs() {
+// Images come from the admin-managed map: trust.<id>.strip (desktop, label
+// baked in), trust.<id>.icon (phones and tablets) and trust.<id>.popup.
+export default function WhyChooseUs({ media = DEFAULT_MEDIA }) {
   const [openIndex, setOpenIndex] = useState(null);
   const active = openIndex != null ? FEATURES[openIndex] : null;
+  const activeArt = active?.media ? media[`trust.${active.media}.popup`]?.src : null;
 
   return (
     <section className="bg-[var(--fa-dark)] py-7 md:py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-5 gap-x-1 sm:gap-x-2">
         {STRIP.map((item, i) => {
           const feature = FEATURES.find((f) => f.icon === item.icon);
+          const strip = media[`trust.${item.id}.strip`];
+          const icon = media[`trust.${item.id}.icon`];
+          if (!strip?.src || !icon?.src) return null;
           return (
             <div
               key={item.icon}
@@ -115,17 +122,17 @@ export default function WhyChooseUs() {
                 className="group focus:outline-none"
               >
                 <Image
-                  src={item.icon_src}
+                  src={icon.src}
                   alt={feature?.title || ""}
-                  width={item.iw}
-                  height={item.ih}
+                  width={icon.width}
+                  height={icon.height}
                   className="h-8 sm:h-9 md:h-10 w-auto lg:hidden transition-transform duration-300 group-hover:scale-105"
                 />
                 <Image
-                  src={item.src}
+                  src={strip.src}
                   alt={feature?.title || ""}
-                  width={item.w}
-                  height={item.h}
+                  width={strip.width}
+                  height={strip.height}
                   className="hidden lg:block lg:h-[60px] w-auto transition-transform duration-300 group-hover:scale-105"
                 />
               </button>
@@ -138,9 +145,9 @@ export default function WhyChooseUs() {
         isOpen={openIndex != null}
         onClose={() => setOpenIndex(null)}
         heading={active?.heading || ""}
-        artwork={active?.image}
+        artwork={activeArt}
       >
-        {active && !active.image && (
+        {active && !activeArt && active.details && (
           <div className="space-y-3">
             {active.details.map((para, idx) => (
               <p key={idx} className="text-[14px] text-[var(--fa-secondary)] leading-relaxed">

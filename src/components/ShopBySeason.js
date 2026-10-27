@@ -1,25 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 
 const SEASONS = [
   {
     label: "WINTER & AUTUMN",
-    img: "/images/home/new/season-winter-v2.webp",
+    media: "seasons.winter",
     href: "/collections/shop-all?tags=autumn,winter",
   },
   {
     label: "SUMMER & SPRING",
-    img: "/images/home/new/season-summer-v2.webp",
+    media: "seasons.summer",
     href: "/collections/shop-all?tags=spring,summer",
   },
   {
     label: "ALL SEASONS (VERSATILE)",
-    img: "/images/home/new/season-all-v2.webp",
+    media: "seasons.all",
     href: "/collections/shop-all?tags=all-seasons",
   },
 ];
 
-export default function ShopBySeason() {
+// Card art is admin-replaceable; `media` keys map into src/lib/siteMedia.js.
+export default function ShopBySeason({ media = DEFAULT_MEDIA }) {
   return (
     <section className="bg-[var(--fa-cream)] py-10 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +62,7 @@ export default function ShopBySeason() {
               {/* title and copy are part of the artwork */}
               <div className="relative w-full aspect-square">
                 <Image
-                  src={s.img}
+                  src={media[s.media]?.src}
                   alt={s.label}
                   fill
                   className="object-cover transition-[filter] duration-500 group-hover:brightness-110"

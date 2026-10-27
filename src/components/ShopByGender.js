@@ -1,28 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 
 const GENDERS = [
   {
     name: "Men",
     tag: "Bold & Refined",
-    img: "/images/home/new/gender-men-v2.webp",
+    media: "gender.men",
     href: "/collections/shop-all?gender=men",
   },
   {
     name: "Women",
     tag: "Elegant & Timeless",
-    img: "/images/home/new/gender-women-v2.webp",
+    media: "gender.women",
     href: "/collections/shop-all?gender=women",
   },
   {
     name: "Unisex",
     tag: "Beyond Boundaries",
-    img: "/images/home/new/gender-unisex-v2.webp",
+    media: "gender.unisex",
     href: "/collections/shop-all?gender=unisex",
   },
 ];
 
-export default function ShopByGender() {
+// Card art is admin-replaceable; `media` keys map into src/lib/siteMedia.js.
+export default function ShopByGender({ media = DEFAULT_MEDIA }) {
   return (
     <section className="bg-[var(--fa-dark)] py-10 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,7 +64,7 @@ export default function ShopByGender() {
             >
               <div className="relative w-full aspect-[550/477] overflow-hidden border-2 border-[var(--fa-gold)]">
                 <Image
-                  src={g.img}
+                  src={media[g.media]?.src}
                   alt={g.name}
                   fill
                   className="object-cover transition-[filter] duration-500 group-hover:brightness-110"

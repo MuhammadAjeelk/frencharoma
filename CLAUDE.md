@@ -33,6 +33,15 @@ inline their classes; folding them in is Phase 9, not urgent.
   indefinitely. Suffix `-v2`, `-v3`.
 - After converting artwork to webp, open the webp and look at it before wiring
   it in.
+- **Homepage images are admin-replaceable** (Admin → Homepage Images). Each one
+  is a slot in `src/lib/siteMedia.js` with a built-in default; the database only
+  stores overrides. A new homepage image gets a slot there and is read from the
+  `media` prop — never a hardcoded path in the component, or the admin can't
+  replace it.
+- The homepage must stay static (`○ /` in the build output). It reads the image
+  map once per render, and the admin API calls `revalidatePath("/")` after each
+  save, so visitors never hit the database. Don't add `cookies()`, `headers()`
+  or per-request fetches to the homepage or its layouts.
 
 ## Migration rules
 

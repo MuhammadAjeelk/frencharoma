@@ -112,6 +112,41 @@ export async function deleteFile(fileUrl) {
   }
 }
 
+// ── Homepage (site) images ────────────────────────────────────────────────
+// Kept beside the perfume uploads in a sibling `site/` folder, so the same
+// nginx `/uploads/` alias serves them and product photos stay separate.
+const SITE_UPLOAD_DIR = path.join(path.dirname(UPLOAD_DIR), "site");
+const SITE_URL_BASE = UPLOAD_URL_BASE.replace(/\/perfumes$/, "") + "/site";
+export const SITE_MAX_FILE_SIZE = 25 * 1024 * 1024; // designer exports run large
+
+// Normalises any upload to a webp no wider than `maxWidth` and writes it under
+// a unique name — a new URL per upload, so no cache (Next's optimizer,
+// Cloudflare, the browser) can ever keep serving the image it replaced.
+// Transparency survives: the trust-strip icons rely on it.
+export async function saveSiteImage(buffer, { key, maxWidth }) {
+  const sharp = (await import("sharp")).default;
+  if (!existsSync(SITE_UPLOAD_DIR)) {
+    await mkdir(SITE_UPLOAD_DIR, { recursive: true });
+  }
+
+  const { data, info } = await sharp(buffer, { limitInputPixels: 80_000_000 })
+    .rotate() // honour EXIF orientation from phone photos
+    .resize({ width: maxWidth, withoutEnlargement: true })
+    .webp({ quality: 82, alphaQuality: 90, effort: 5 })
+    .toBuffer({ resolveWithObject: true });
+
+  const slug = key.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase();
+  const filename = `${slug}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+  await writeFile(path.join(SITE_UPLOAD_DIR, filename), data);
+
+  return {
+    url: `${SITE_URL_BASE}/${filename}`,
+    width: info.width,
+    height: info.height,
+    bytes: info.size,
+  };
+}
+
 export async function saveMultipleFiles(files) {
   const urls = [];
   for (const file of files) {

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 
 // The brand pills — each has a white label (default) and a gold label (hover)
 // in /public/icons/brands-labels/<slug>-dark.webp and <slug>-gold.webp.
@@ -78,7 +79,9 @@ function BrandBox({ brand }) {
   );
 }
 
-export default function BrandMarquee() {
+export default function BrandMarquee({ media = DEFAULT_MEDIA }) {
+  // Admin-replaceable (slot brands.collage).
+  const collage = media["brands.collage"];
   const [hovering, setHovering] = useState(false);
 
   // Custom marquee: a continuously-scrolling flex track driven by rAF so an
@@ -194,10 +197,10 @@ export default function BrandMarquee() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative w-full overflow-hidden">
           <Image
-            src="/images/home/new/brand-collage-v2.webp"
+            src={collage.src}
             alt="Fragrance houses we carry"
-            width={2000}
-            height={1211}
+            width={collage.width}
+            height={collage.height}
             className="block w-full h-auto select-none"
             sizes="100vw"
           />

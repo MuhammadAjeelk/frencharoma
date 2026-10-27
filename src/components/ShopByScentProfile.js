@@ -2,9 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SCENTS } from "@/lib/scentProfiles";
+import { DEFAULT_MEDIA, scentKey } from "@/lib/siteMedia";
 
 
-export default function ShopByScentProfile() {
+// Card art is admin-replaceable via slot scents.<name>; the built-in file in
+// SCENTS is the default.
+export default function ShopByScentProfile({ media = DEFAULT_MEDIA }) {
   return (
     <section className="relative bg-[var(--fa-dark)] py-10 md:py-12 overflow-hidden">
       {/* faint mandala watermark */}
@@ -49,7 +52,7 @@ export default function ShopByScentProfile() {
               {/* name and tagline are part of the artwork */}
               <div className="relative w-full aspect-square">
                 <Image
-                  src={s.img}
+                  src={media[scentKey(s)].src}
                   alt={s.name}
                   fill
                   className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
