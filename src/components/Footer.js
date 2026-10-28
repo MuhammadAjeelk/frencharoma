@@ -87,8 +87,9 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Two navigation columns, then how to reach the shop */}
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Navigation. The address and contact columns are removed until the
+              correct details are confirmed; restore them from git history. */}
+          <div className="mt-12 grid grid-cols-2 gap-10 max-w-xl">
             <Column title="Shop">
               <ul className="space-y-2.5">
                 {shop.map((item) => (
@@ -111,38 +112,6 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-            </Column>
-
-            <Column title="Visit us">
-              <div className="space-y-1.5 text-[13px] text-[#cbbfae]">
-                <p>Gold Souq, Gate No. 2, Deira, Dubai, UAE.</p>
-                <Link
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 pt-1 text-[#c9a25a] hover:text-[#e3c489] transition-colors"
-                >
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
-                  Open in Maps
-                </Link>
-                <p className="pt-3 text-[#efe7db]">Open daily, except Sunday</p>
-                <p>09:00 AM – 2:00 PM</p>
-                <p>4:00 PM – 10:00 PM</p>
-              </div>
-            </Column>
-
-            <Column title="Talk to us">
-              <div className="space-y-1.5 text-[13px] text-[#cbbfae]">
-                <a href="mailto:divinaperfume@gmail.com" className="block hover:text-[#e3c489] transition-colors">
-                  divinaperfume@gmail.com
-                </a>
-                <a href="tel:+971581031864" className="block hover:text-[#e3c489] transition-colors">
-                  +971 58 103 1864
-                </a>
-                <p className="pt-1 text-[#a99d8c]">Call or WhatsApp</p>
-              </div>
             </Column>
           </div>
 
