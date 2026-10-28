@@ -9,14 +9,14 @@ import ShopByScentProfile from "@/components/ShopByScentProfile";
 import Reveal from "@/components/Reveal";
 import getSiteMedia from "@/lib/getSiteMedia";
 
-// Static page. The image map is read when the page is rendered — at build, and
-// again only after an admin replaces an image — never per visitor.
+// Static page. The image map and hero slides are read when the page is
+// rendered — at build, and again only after an admin saves — never per visitor.
 export default async function Home() {
-  const media = await getSiteMedia();
+  const { media, heroSlides } = await getSiteMedia();
 
   return (
     <div className="min-h-screen bg-[var(--fa-dark)]">
-      <HeroCarousel media={media} />
+      <HeroCarousel slides={heroSlides} />
       <Reveal><WhyChooseUs media={media} /></Reveal>
       <Reveal><BrandMarquee media={media} /></Reveal>
       <Reveal><ShopByGender media={media} /></Reveal>

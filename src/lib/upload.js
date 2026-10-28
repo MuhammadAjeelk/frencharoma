@@ -116,7 +116,7 @@ export async function deleteFile(fileUrl) {
 // Kept beside the perfume uploads in a sibling `site/` folder, so the same
 // nginx `/uploads/` alias serves them and product photos stay separate.
 const SITE_UPLOAD_DIR = path.join(path.dirname(UPLOAD_DIR), "site");
-const SITE_URL_BASE = UPLOAD_URL_BASE.replace(/\/perfumes$/, "") + "/site";
+export const SITE_URL_BASE = UPLOAD_URL_BASE.replace(/\/perfumes$/, "") + "/site";
 export const SITE_MAX_FILE_SIZE = 25 * 1024 * 1024; // designer exports run large
 
 // Normalises any upload to a webp no wider than `maxWidth` and writes it under

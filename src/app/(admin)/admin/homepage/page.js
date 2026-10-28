@@ -1,30 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { SITE_MEDIA_SECTIONS } from "@/lib/siteMedia";
+import { confirmShape } from "./imageCheck";
+import HeroSlidesEditor from "./HeroSlidesEditor";
 
 // Replace any homepage image. Each save re-renders the homepage once on the
 // server; visitors keep getting the cached page, so this never slows the site.
 
-const ASPECT_TOLERANCE = 0.08; // warn when an upload is >8% off the slot's shape
-
-function readImageSize(file) {
-  return new Promise((resolve) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      resolve({ width: img.naturalWidth, height: img.naturalHeight });
-      URL.revokeObjectURL(url);
-    };
-    img.onerror = () => {
-      resolve(null);
-      URL.revokeObjectURL(url);
-    };
-    img.src = url;
-  });
-}
-
 function SlotCard({ slot, override, onSaved, onReset }) {
+  const router = useRouter();
   const inputRef = useRef(null);
   const [busy, setBusy] = useState(null); // "upload" | "reset" | null
   const [error, setError] = useState("");
@@ -44,18 +30,7 @@ function SlotCard({ slot, override, onSaved, onReset }) {
     setError("");
     setJustSaved(false);
 
-    const size = await readImageSize(file);
-    if (size) {
-      const want = slot.width / slot.height;
-      const got = size.width / size.height;
-      if (Math.abs(got - want) / want > ASPECT_TOLERANCE) {
-        const ok = window.confirm(
-          `This image is ${size.width} × ${size.height}, but this spot is shaped for ` +
-            `${slot.width} × ${slot.height}. It will be cropped to fit.\n\nUpload anyway?`,
-        );
-        if (!ok) return;
-      }
-    }
+    if (!(await confirmShape(file, slot))) return;
 
     setBusy("upload");
     try {
@@ -67,6 +42,7 @@ function SlotCard({ slot, override, onSaved, onReset }) {
       if (!res.ok) throw new Error(data.error || "Upload failed");
       onSaved(data);
       setJustSaved(true);
+      router.refresh(); // drop the browser's cached copy of the homepage
     } catch (err) {
       setError(err.message);
     } finally {
@@ -87,6 +63,7 @@ function SlotCard({ slot, override, onSaved, onReset }) {
       if (!res.ok) throw new Error(data.error || "Reset failed");
       onReset(slot.key);
       setJustSaved(true);
+      router.refresh();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -192,7 +169,18 @@ export default function HomepageImagesPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Homepage Images</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl font-bold text-gray-900">Homepage Images</h1>
+          {/* A plain link, not <Link>: a full page load never shows a stale copy */}
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener"
+            className="text-sm text-gray-700 underline hover:text-gray-900"
+          >
+            View homepage ↗
+          </a>
+        </div>
         <p className="text-gray-600 mt-1">
           Replace any image on the homepage. Uploads are resized and converted automatically, so
           large files are fine. The original stays available — “Reset” puts it back.
@@ -216,6 +204,7 @@ export default function HomepageImagesPage() {
         </div>
       ) : (
         <div className="space-y-10">
+          <HeroSlidesEditor />
           {SITE_MEDIA_SECTIONS.map((section) => (
             <section key={section.id}>
               <div className="mb-4">

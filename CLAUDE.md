@@ -37,7 +37,9 @@ inline their classes; folding them in is Phase 9, not urgent.
   is a slot in `src/lib/siteMedia.js` with a built-in default; the database only
   stores overrides. A new homepage image gets a slot there and is read from the
   `media` prop — never a hardcoded path in the component, or the admin can't
-  replace it.
+  replace it. The hero is the exception: it is a slide *list* admins add to,
+  remove from and reorder (`HeroSlides` model, `DEFAULT_HERO_SLIDES` until the
+  list is first saved).
 - The homepage must stay static (`○ /` in the build output). It reads the image
   map once per render, and the admin API calls `revalidatePath("/")` after each
   save, so visitors never hit the database. Don't add `cookies()`, `headers()`

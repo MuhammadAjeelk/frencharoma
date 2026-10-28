@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getImageProps } from "next/image";
-import { DEFAULT_MEDIA } from "@/lib/siteMedia";
+import { DEFAULT_HERO_SLIDES, HERO_DESKTOP as DESKTOP, HERO_MOBILE as MOBILE } from "@/lib/siteMedia";
 
 // Each banner carries its own "Explore Collection" button in the artwork, so
 // the whole slide is the link — there is no overlaid CTA any more.
@@ -11,17 +11,8 @@ import { DEFAULT_MEDIA } from "@/lib/siteMedia";
 // Phones get the square-ish mobile art where one has been supplied. A slide
 // with no mobile art is left out below sm rather than squeezed: its wide art
 // cropped into a 1290x1405 frame would lose the bottles and the copy.
-// Art comes from the admin-managed image map (src/lib/siteMedia.js); `id`
-// matches the slot keys hero.<id>.desktop / hero.<id>.mobile.
-const SLIDES = [
-  { id: "bestSellers", title: "Best Sellers", href: "/collections/shop-all?bestSeller=true" },
-  { id: "specialOffers", title: "Special Offers", href: "/collections/shop-all?specialOffer=true" },
-  { id: "bundleOffers", title: "Bundle Offers", href: "/collections/shop-all" },
-  { id: "discoveryBox", title: "Discovery Box", href: "/collections/discovery-box" },
-];
-
-const DESKTOP = { width: 2880, height: 985 };
-const MOBILE = { width: 1290, height: 1405 };
+// The slide list is admin-managed (Admin → Homepage Images); see
+// DEFAULT_HERO_SLIDES in src/lib/siteMedia.js for the shape.
 
 // Art direction: one <picture> per slide, so a phone downloads only the phone
 // art and a desktop only the wide art. Two next/image elements toggled with
@@ -57,7 +48,7 @@ function SlideArt({ slide, priority }) {
   );
 }
 
-export default function HeroCarousel({ media = DEFAULT_MEDIA }) {
+export default function HeroCarousel({ slides: allSlides = DEFAULT_HERO_SLIDES }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   // Mount-guarded so SSR and the first client paint agree.
@@ -70,11 +61,7 @@ export default function HeroCarousel({ media = DEFAULT_MEDIA }) {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const all = SLIDES.map((s) => ({
-    ...s,
-    desktop: media[`hero.${s.id}.desktop`],
-    mobile: media[`hero.${s.id}.mobile`],
-  })).filter((s) => s.desktop?.src);
+  const all = allSlides.filter((s) => s.desktop?.src);
   const slides = isPhone ? all.filter((s) => s.mobile?.src) : all;
 
   // Crossing the breakpoint changes the slide count; keep the index in range.
@@ -96,7 +83,7 @@ export default function HeroCarousel({ media = DEFAULT_MEDIA }) {
       <div className="relative w-full aspect-[1290/1405] sm:aspect-[2880/985] overflow-hidden bg-[#e9d9c6]">
         {slides.map((slide, index) => (
           <Link
-            key={slide.title}
+            key={slide.id}
             href={slide.href}
             aria-label={slide.title}
             tabIndex={index === currentSlide ? 0 : -1}
@@ -118,7 +105,7 @@ export default function HeroCarousel({ media = DEFAULT_MEDIA }) {
         <div className="flex items-center justify-center gap-2.5 py-2 bg-[var(--fa-dark)] sm:absolute sm:inset-x-0 sm:bottom-2.5 md:bottom-3.5 sm:z-20 sm:gap-3 sm:py-0 sm:bg-transparent">
           {slides.map((slide, index) => (
             <button
-              key={slide.title}
+              key={slide.id}
               onClick={() => setCurrentSlide(index)}
               className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-colors duration-300 ${
                 index === currentSlide

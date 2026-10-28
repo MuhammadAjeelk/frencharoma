@@ -13,27 +13,50 @@
 
 import { SCENTS } from "./scentProfiles";
 
-const hero = (id, label, desktop, mobile) => [
-  {
-    key: `hero.${id}.desktop`,
-    label: `${label} — desktop`,
-    hint: "Wide banner. 2880 × 985 recommended; anything wider is cropped to fit.",
-    src: desktop,
-    width: 2880,
-    height: 985,
-    maxWidth: 2880,
-  },
-  {
-    key: `hero.${id}.mobile`,
-    label: `${label} — phone`,
-    hint: mobile
-      ? "Phone banner. 1290 × 1405 recommended."
-      : "Phone banner. 1290 × 1405 recommended. Until one is uploaded this slide is hidden on phones.",
-    src: mobile,
-    width: 1290,
-    height: 1405,
-    maxWidth: 1290,
-  },
+// The hero is a list, not fixed slots: admins add, remove and reorder slides.
+// Until the list has been saved once, these built-in slides are shown. A slide
+// with no phone art is hidden on phones rather than cropped.
+export const HERO_DESKTOP = { width: 2880, height: 985 };
+export const HERO_MOBILE = { width: 1290, height: 1405 };
+export const HERO_MAX_SLIDES = 10;
+
+const builtInSlide = (id, title, href, desktop, mobile) => ({
+  id,
+  title,
+  href,
+  desktop: { src: desktop, ...HERO_DESKTOP },
+  mobile: mobile ? { src: mobile, ...HERO_MOBILE } : null,
+});
+
+export const DEFAULT_HERO_SLIDES = [
+  builtInSlide(
+    "bestSellers",
+    "Best Sellers",
+    "/collections/shop-all?bestSeller=true",
+    "/images/home/hero-best-sellers-v5.webp",
+    "/images/home/hero-best-sellers-mobile-v5.webp",
+  ),
+  builtInSlide(
+    "specialOffers",
+    "Special Offers",
+    "/collections/shop-all?specialOffer=true",
+    "/images/home/hero-special-offers-v5.webp",
+    null,
+  ),
+  builtInSlide(
+    "bundleOffers",
+    "Bundle Offers",
+    "/collections/shop-all",
+    "/images/home/hero-bundle-offers-v5.webp",
+    "/images/home/hero-bundle-offers-mobile-v5.webp",
+  ),
+  builtInSlide(
+    "discoveryBox",
+    "Discovery Box",
+    "/collections/discovery-box",
+    "/images/home/hero-discovery-box-v5.webp",
+    "/images/home/hero-discovery-box-mobile-v5.webp",
+  ),
 ];
 
 const trust = (id, label, strip, icon, popup) => [
@@ -77,32 +100,6 @@ const card = (key, label, src, width, height, maxWidth, hint) => ({
 });
 
 export const SITE_MEDIA_SECTIONS = [
-  {
-    id: "hero",
-    title: "Hero banners",
-    note: "The banner images already include their “Explore Collection” button, so the whole slide is the link.",
-    slots: [
-      ...hero(
-        "bestSellers",
-        "Best Sellers",
-        "/images/home/hero-best-sellers-v5.webp",
-        "/images/home/hero-best-sellers-mobile-v5.webp",
-      ),
-      ...hero("specialOffers", "Special Offers", "/images/home/hero-special-offers-v5.webp", null),
-      ...hero(
-        "bundleOffers",
-        "Bundle Offers",
-        "/images/home/hero-bundle-offers-v5.webp",
-        "/images/home/hero-bundle-offers-mobile-v5.webp",
-      ),
-      ...hero(
-        "discoveryBox",
-        "Discovery Box",
-        "/images/home/hero-discovery-box-v5.webp",
-        "/images/home/hero-discovery-box-mobile-v5.webp",
-      ),
-    ],
-  },
   {
     id: "trust",
     title: "Trust strip",
