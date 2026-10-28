@@ -7,6 +7,7 @@ import BestSellers from "@/components/BestSellers";
 import ShopBySeason from "@/components/ShopBySeason";
 import ShopByScentProfile from "@/components/ShopByScentProfile";
 import Reveal from "@/components/Reveal";
+import BundleOfferModal from "@/components/BundleOfferModal";
 import getSiteMedia from "@/lib/getSiteMedia";
 
 // Static page. The image map and hero slides are read when the page is
@@ -24,6 +25,7 @@ export default async function Home() {
       <Reveal><BestSellers /></Reveal>
       <Reveal><ShopBySeason media={media} /></Reveal>
       <Reveal><ShopByScentProfile media={media} /></Reveal>
+      <BundleOfferModal />
     </div>
   );
 }
