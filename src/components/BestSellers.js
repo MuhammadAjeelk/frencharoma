@@ -5,6 +5,25 @@ import BestSellerCard from "./BestSellerCard";
 import UniversalModal from "./UniversalModal";
 import QuickAddModal from "./QuickAddModal";
 import { genderHeading } from "@/lib/gender";
+import HomeHeading from "./home/HomeHeading";
+
+// Phones: dark band, one card at a time. Desktop: the mockup's white band with
+// four taller cards (product art is drawn at 1200 × 1850 there).
+const GROUND = "bg-[var(--fa-dark)] md:bg-[var(--fa-home-paper)]";
+const IMAGE_SHAPE = "aspect-square md:aspect-[1200/1850]";
+
+function Heading() {
+  return (
+    <HomeHeading
+      eyebrow="Most Loved"
+      title="Best Sellers"
+      subtitle="Most Loved. Most Trusted."
+      href="/collections/shop-all?bestSeller=true"
+      tone="dark"
+      className="md:mb-12"
+    />
+  );
+}
 
 export default function BestSellers() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -83,25 +102,18 @@ export default function BestSellers() {
 
   if (loading) {
     return (
-      <div className="py-10 md:py-12 bg-[var(--fa-dark)]">
+      <div className={`py-8 md:py-10 ${GROUND}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
-                Best Sellers
-              </h2>
-              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
-            </div>
-          </div>
+          <Heading />
           {/* Placeholder count matches the four cards the carousel shows */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-12 sm:px-14">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="border border-[var(--fa-dark-raised)] overflow-hidden animate-pulse">
-                <div className="aspect-square bg-[var(--fa-dark-raised)]" />
-                <div className="bg-[var(--fa-beige)]/20 p-4 space-y-2">
-                  <div className="h-3 bg-[var(--fa-dark-raised)] w-3/4" />
-                  <div className="h-3 bg-[var(--fa-dark-raised)] w-1/2" />
-                  <div className="h-8 bg-[var(--fa-dark-raised)] mt-3" />
+              <div key={i} className={`rounded-2xl overflow-hidden animate-pulse ${i ? "hidden sm:block" : ""}`}>
+                <div className={`${IMAGE_SHAPE} bg-[var(--fa-dark-raised)] md:bg-[var(--fa-home-cream)]`} />
+                <div className="bg-[var(--fa-beige)] p-4 space-y-2">
+                  <div className="h-3 bg-[var(--fa-border)] w-3/4" />
+                  <div className="h-3 bg-[var(--fa-border)] w-1/2" />
+                  <div className="h-8 bg-[var(--fa-border)] mt-3" />
                 </div>
               </div>
             ))}
@@ -115,39 +127,14 @@ export default function BestSellers() {
 
   return (
     <>
-      <div className="py-10 md:py-12 bg-[var(--fa-dark)] relative overflow-visible">
+      <div className={`py-8 md:py-10 relative overflow-visible ${GROUND}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible">
-          <div className="relative mb-10 md:mb-14">
-            <div className="text-center">
-              <div className="inline-block">
-              <h2 className="font-[family-name:var(--font-playfair)] italic text-2xl md:text-4xl font-normal text-[var(--fa-gold)]">
-                Best Sellers
-              </h2>
-              {/* rule spans the title only — solid in the middle, fading at the ends */}
-              <div className="mt-2 h-[2px] md:h-[3px] w-full bg-[linear-gradient(90deg,transparent_0%,var(--fa-gold)_25%,var(--fa-gold)_75%,transparent_100%)]" />
-            </div>
-              <p className="mt-5 text-base md:text-xl leading-snug text-[var(--fa-on-dark)] font-[family-name:var(--font-playfair)]">
-                Most Loved. Most Trusted.
-              </p>
-            </div>
+          <Heading />
 
-            <div className="mt-6 flex justify-center md:mt-0 md:absolute md:right-0 md:bottom-0">
-              <a
-                href="/collections/shop-all?bestSeller=true"
-                className="inline-flex items-center gap-2.5 rounded-md border border-[var(--fa-on-dark)]/70 px-6 py-2.5 text-sm font-semibold tracking-[0.06em] text-[var(--fa-cream)] transition-colors hover:bg-[var(--fa-on-dark)] hover:text-[var(--fa-ink)]"
-              >
-                View All
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h15m0 0l-5.5-5.5M19 12l-5.5 5.5" />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <div className="relative mb-10 md:mb-14 overflow-visible">
+          <div className="relative overflow-visible">
             <button
               onClick={handlePrevious}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[var(--fa-beige)] border border-[var(--fa-border)] shadow-sm text-[var(--fa-ink)] hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] hover:shadow-md transition-all duration-200"
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[var(--fa-home-strip)] border border-[var(--fa-border)] text-[var(--fa-ink)]/70 hover:text-[var(--fa-ink)] hover:border-[var(--fa-gold)] transition-colors duration-200"
               aria-label="Previous products"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -189,6 +176,7 @@ export default function BestSellers() {
                         discountPercent={perfume.discountPercent || 0}
                         globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
                         href={`/products/${perfume.slug}`}
+                        imageClass={IMAGE_SHAPE}
                         onQuickView={() => {
                           setSelectedPerfume(perfume);
                           setModalOpen(true);
@@ -202,7 +190,7 @@ export default function BestSellers() {
 
             <button
               onClick={handleNext}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[var(--fa-beige)] border border-[var(--fa-border)] shadow-sm text-[var(--fa-ink)] hover:bg-[var(--fa-gold)] hover:text-[var(--fa-ink)] hover:shadow-md transition-all duration-200"
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[var(--fa-home-strip)] border border-[var(--fa-border)] text-[var(--fa-ink)]/70 hover:text-[var(--fa-ink)] hover:border-[var(--fa-gold)] transition-colors duration-200"
               aria-label="Next products"
             >
               <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

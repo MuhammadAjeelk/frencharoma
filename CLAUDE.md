@@ -20,6 +20,12 @@ Short version:
 - Hover never lifts or zooms — gold glow plus `brightness-110` on photography
 - Gutter `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`, applied once per section
 
+The homepage itself follows the 2026-10 homepage mockup instead, which
+overrides two of the rules above there: on desktop its section titles are a
+tracked eyebrow over a roman serif title between gold rules
+(`src/components/home/HomeHeading.js`); phones keep Playfair italic. Its
+grounds are the `--fa-home-*` tokens in `globals.css`.
+
 Import from `src/lib/design.js` and `src/components/ui/SectionHeading.js` rather
 than retyping hexes. The homepage sections predate these primitives and still
 inline their classes; folding them in is Phase 9, not urgent.
@@ -27,7 +33,6 @@ inline their classes; folding them in is Phase 9, not urgent.
 ## Conventions
 
 - Scripts in `scripts/` are Node + `sharp`, run with `node scripts/<name>.js`
-- Brand pills are generated, not hand-made: `node scripts/build-brand-pills.js`
 - **Any changed image needs a new filename.** Next's image optimizer keys its
   cache on URL, not contents, so overwriting in place serves the old file
   indefinitely. Suffix `-v2`, `-v3`.

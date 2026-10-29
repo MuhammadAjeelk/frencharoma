@@ -59,6 +59,8 @@ export default function BestSellerCard({
   // it ~180px, where the desktop type and the 44px cart button collide with the
   // price. `compact` scales the internals for that width.
   compact = false,
+  // The image box's shape. Square by default; the homepage asks for taller.
+  imageClass = "aspect-square",
 }) {
   const { addItem, perfumeQty } = useCart();
   const { isInWishlist, toggleItem } = useWishlist();
@@ -126,7 +128,7 @@ export default function BestSellerCard({
       className="group relative flex flex-col rounded-2xl overflow-hidden bg-[var(--fa-beige)] shadow-[0_10px_28px_rgba(0,0,0,0.30)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
     >
       {/* Image */}
-      <div className="relative w-full aspect-square overflow-hidden">
+      <div className={`relative w-full overflow-hidden ${imageClass}`}>
         <Link href={href || "#"} className="absolute inset-0 z-0">
           {image ? (
             <RetryImage

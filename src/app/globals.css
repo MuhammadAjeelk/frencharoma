@@ -22,6 +22,13 @@
   --fa-disabled: #d1c3b1;
   --fa-premium: #ddd3c4;
   --fa-peach: #edd8ca;
+  /* Homepage grounds, sampled from the 2026-10 homepage mockup. Desktop
+     alternates cream and paper bands; phones alternate sand with the dark. */
+  --fa-home-cream: #f4f0ea;
+  --fa-home-paper: #fefefe;
+  --fa-home-strip: #f7f0e5;
+  --fa-home-sand: #decfba;
+  --fa-home-rule: #dec496;
   --background: var(--fa-dark);
   --foreground: var(--fa-ink);
   --primary: var(--fa-cream);
@@ -159,6 +166,10 @@ img { image-rendering: -webkit-optimize-contrast; }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
 .scrollbar-thin:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
+
+/* Swipe rows: scroll by touch or arrows, no visible bar */
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
 
 /* Scroll reveal — elegant fade-up used across homepage sections */
 .reveal {

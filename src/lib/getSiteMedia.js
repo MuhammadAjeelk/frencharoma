@@ -2,9 +2,11 @@ import "server-only";
 import connectDB from "./db";
 import SiteMedia from "./models/SiteMedia";
 import HeroSlides from "./models/HeroSlides";
+import Review from "./models/Review";
 import { resolveMedia, DEFAULT_HERO_SLIDES } from "./siteMedia";
 
-// Reads the homepage image overrides and the hero slide list. This runs only
+// Reads the homepage image overrides, the hero slide list and a handful of
+// recent good reviews for the customer strip. This runs only
 // when the homepage is rendered — once at build, and once more after an admin
 // saves (the admin APIs call revalidatePath("/")). Visitors are served the
 // cached page, so no visitor request ever reaches the database for these.
@@ -17,20 +19,28 @@ import { resolveMedia, DEFAULT_HERO_SLIDES } from "./siteMedia";
 //   its default until the next save.
 const BUILD_TIMEOUT_MS = 5000;
 
-const DEFAULTS = { media: resolveMedia({}), heroSlides: DEFAULT_HERO_SLIDES };
+const DEFAULTS = { media: resolveMedia({}), heroSlides: DEFAULT_HERO_SLIDES, reviews: [] };
 
 export default async function getSiteMedia() {
   const building = process.env.NEXT_PHASE === "phase-production-build";
 
   const read = async () => {
     await connectDB();
-    const [docs, hero] = await Promise.all([
+    const [docs, hero, reviews] = await Promise.all([
       SiteMedia.find({}, { key: 1, url: 1, width: 1, height: 1 }).lean(),
       HeroSlides.findOne({ key: "home" }, { slides: 1 }).lean(),
+      Review.find(
+        { isApproved: true, rating: { $gte: 4 }, body: { $nin: ["", null] } },
+        { _id: 0, name: 1, rating: 1, body: 1, perfumeSlug: 1 },
+      )
+        .sort({ createdAt: -1 })
+        .limit(8)
+        .lean(),
     ]);
     return {
       media: resolveMedia(Object.fromEntries(docs.map((d) => [d.key, d]))),
       heroSlides: hero ? hero.slides : DEFAULT_HERO_SLIDES,
+      reviews,
     };
   };
 
