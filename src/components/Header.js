@@ -239,7 +239,10 @@ export default function Header() {
                           }
                         }}
                         placeholder="Search perfumes..."
-                        className={`w-64 px-4 py-2 pl-10 pr-10 text-[13px] ${FIELD_DARK}`}
+                        // The gold border is this field's focus mark; the global
+                        // :focus-visible outline would double it.
+                        style={{ outline: "none" }}
+                        className="w-[260px] h-[30px] -mt-[4px] pl-[26px] pr-[28px] bg-[#2b2b2b] border border-[#a69c8d] font-[Arial,Helvetica,sans-serif] text-[12px] tracking-[0.02em] text-[#f1ece4] placeholder-[#a69c8d] focus:border-[var(--fa-gold-hover)] transition-colors [&::-webkit-search-cancel-button]:appearance-none"
                         autoFocus
                         onBlur={() => {
                           setTimeout(() => {
@@ -247,8 +250,8 @@ export default function Header() {
                           }, 200);
                         }}
                       />
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--fa-gold)]">
-                        <MaskIcon src="/icons/search.svg" />
+                      <div className="absolute left-[8px] top-1/2 -translate-y-1/2 -mt-[2px] pointer-events-none text-[#d8cfc1]">
+                        <MaskIcon src="/icons/search.svg" className="w-3 h-3" />
                       </div>
                       <button
                         type="button"
@@ -256,10 +259,10 @@ export default function Header() {
                           setIsSearchExpanded(false);
                           setSearchQuery("");
                         }}
-                        className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--fa-muted-dark)] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
+                        className={`absolute right-[6px] top-1/2 -translate-y-1/2 -mt-[2px] p-[2px] text-[#a69c8d] hover:text-[var(--fa-gold-hover)] transition-colors ${FOCUS_RING}`}
                         aria-label="Close search"
                       >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
@@ -285,7 +288,7 @@ export default function Header() {
                                       : "border-transparent hover:bg-[var(--fa-gold)]/10"
                                   }`}
                                 >
-                                  <div className="relative w-9 h-9 overflow-hidden bg-[var(--fa-ink)] shrink-0 border border-[var(--fa-gold)]">
+                                  <div className="relative w-9 h-9 overflow-hidden bg-[var(--fa-dark-raised)] shrink-0 border border-[var(--fa-gold)]/60">
                                     {p.images?.main ? (
                                       <Image src={p.images.main} alt={p.name} fill className="object-cover" sizes="36px" />
                                     ) : null}
