@@ -119,6 +119,7 @@ export default function BestSellers() {
     return (
       <BestSellerCard
         key={key}
+        shadow={false}
         name={perfume.name}
         brand={brandLabel}
         image={perfume.images?.main || ""}

@@ -65,6 +65,9 @@ export default function BestSellerCard({
   // cart button, with every line on a fixed rhythm so cards in a row align
   // even when a field is missing.
   look = "default",
+  // The drop shadow suits the dark shop grounds; the homepage's cream band
+  // turns it into a grey haze, so the homepage turns it off.
+  shadow = true,
 }) {
   const home = look === "home";
   const { addItem, perfumeQty } = useCart();
@@ -133,7 +136,7 @@ export default function BestSellerCard({
       className={`group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
         home
           ? "@container rounded-[4.14cqw] border border-[#3c3c3c] bg-[#f4ede4] aspect-[1200/1850]"
-          : "rounded-2xl bg-[var(--fa-beige)] shadow-[0_10px_28px_rgba(0,0,0,0.30)]"
+          : `rounded-2xl bg-[var(--fa-beige)] ${shadow ? "shadow-[0_10px_28px_rgba(0,0,0,0.30)]" : ""}`
       }`}
     >
       {/* Image */}
