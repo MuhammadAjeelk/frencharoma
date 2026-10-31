@@ -63,7 +63,7 @@ export function ShopByBrand({ media = DEFAULT_MEDIA }) {
         <div className="md:px-[4.38vw]">
           <BrandMarquee
             label="Shop by brand"
-            gapClass="gap-[3.17vw] md:gap-[2.37vw]"
+            gapClass="gap-[3.84vw] md:gap-[2.37vw]"
             itemClass="w-[36.11vw] md:w-[calc((100%-5*2.37vw)/6)]"
             items={slotsOf("brands").map((slot) => (
               <ArtCard key={slot.key} art={media[slot.key]} round sizes="(max-width: 767px) 37vw, 13vw" />
@@ -106,7 +106,7 @@ export function ShopByEdition({ media = DEFAULT_MEDIA }) {
         </SnapRow>
       </div>
 
-      <div className={`hidden md:block mt-[16px] ${FRAME}`}>
+      <div className={`hidden md:block mt-[14px] ${FRAME}`}>
         <div className="@container group relative overflow-hidden" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
           <Image src={art.src} alt={art.alt} fill sizes="96vw" className={`object-cover ${PHOTO_HOVER}`} />
           {/* Each half of the banner opens its edition; the buttons are links too. */}
@@ -157,7 +157,7 @@ function OfferBanner({ desktop, phone }) {
 export function OfferBanners({ media = DEFAULT_MEDIA }) {
   const ids = ["discoveryBox", "specialOffers", "bundleOffers"];
   return (
-    <section className="bg-white flex flex-col gap-[1.32vw] md:gap-[27px]">
+    <section className="bg-white flex flex-col gap-[1.52vw] md:gap-[27px]">
       {ids.map((id) => (
         <OfferBanner key={id} desktop={media[`promo.${id}`]} phone={media[`promo.${id}.mobile`]} />
       ))}

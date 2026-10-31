@@ -59,29 +59,29 @@ function Quote({ reviews }) {
 
   return (
     <div className="relative">
-      <p className="font-[family-name:var(--font-tinos)] text-[10px] md:text-[11px] leading-none uppercase tracking-[0.32em] text-[var(--fa-home-text)] pl-[15px] md:pl-[5.04vw]">
+      <p className="font-[family-name:var(--font-tinos)] text-[1.85vw] md:text-[11px] leading-none uppercase tracking-[0.38em] md:tracking-[0.32em] text-[var(--fa-home-text)] pl-[4.63vw] md:pl-[5.04vw]">
         What our customers say
       </p>
-      <div className="mt-[10px] md:mt-[14px] flex items-center">
+      <div className="mt-[2.5vw] md:mt-[14px] flex items-center">
         <button
           type="button"
           onClick={() => step(-1)}
           aria-label="Previous review"
           disabled={!many}
-          className="shrink-0 w-[40px] md:w-[3.6vw] flex justify-center text-[var(--fa-home-text)] hover:text-[var(--fa-gold-ink)] disabled:invisible"
+          className="shrink-0 w-[4vw] md:w-[3.6vw] flex justify-center text-[var(--fa-home-text)] hover:text-[var(--fa-gold-ink)] disabled:invisible"
         >
           <Chevron dir={-1} />
         </button>
         <figure className="flex-1 min-w-0 text-center font-[family-name:var(--font-tinos)]">
-          <blockquote className="italic text-[12px] md:text-[17px] leading-snug text-[var(--fa-home-text)]">
+          <blockquote className="italic text-[3.04vw] md:text-[17px] leading-[1.2] md:leading-snug text-[var(--fa-home-text)]">
             “{review ? (review.body.length > 120 ? `${review.body.slice(0, 117).trimEnd()}…` : review.body) : "More Than a Fragrance — A Feeling."}”
           </blockquote>
           {review ? (
             <>
-              <div className="mt-[8px] text-[13px] md:text-[17px]">
+              <div className="mt-[2.5vw] md:mt-[8px] text-[2.4vw] md:text-[17px]">
                 <Stars rating={review.rating} />
               </div>
-              <figcaption className="mt-[6px] text-[11px] md:text-[13px] text-[var(--fa-home-text)]">
+              <figcaption className="mt-[1.2vw] md:mt-[6px] text-[2.1vw] md:text-[13px] text-[var(--fa-home-text)]">
                 {review.perfumeSlug ? (
                   <Link href={`/products/${review.perfumeSlug}`} className="hover:underline">
                     {review.name}
@@ -92,7 +92,7 @@ function Quote({ reviews }) {
               </figcaption>
             </>
           ) : (
-            <figcaption className="mt-[8px] text-[11px] md:text-[13px] tracking-[0.06em] text-[var(--fa-home-text)]">French Aromas</figcaption>
+            <figcaption className="mt-[2.5vw] md:mt-[8px] text-[2.1vw] md:text-[13px] tracking-[0.06em] text-[var(--fa-home-text)]">French Aromas</figcaption>
           )}
         </figure>
         <button
@@ -100,7 +100,7 @@ function Quote({ reviews }) {
           onClick={() => step(1)}
           aria-label="Next review"
           disabled={!many}
-          className="shrink-0 w-[40px] md:w-[3.6vw] flex justify-center text-[var(--fa-home-text)] hover:text-[var(--fa-gold-ink)] disabled:invisible"
+          className="shrink-0 w-[4vw] md:w-[3.6vw] flex justify-center text-[var(--fa-home-text)] hover:text-[var(--fa-gold-ink)] disabled:invisible"
         >
           <Chevron dir={1} />
         </button>
@@ -111,7 +111,7 @@ function Quote({ reviews }) {
 
 export default function CustomerStrip({ reviews = [] }) {
   return (
-    <section className="bg-[var(--fa-home-strip)] min-h-[44.58vw] flex items-center md:min-h-0 md:h-[149px]">
+    <section className="bg-[var(--fa-home-strip)] h-[24.6vw] pt-[3.6vw] md:pt-0 md:flex md:items-center md:h-[149px]">
       <div className="w-full md:h-full md:grid md:grid-cols-[51.9%_1fr] md:items-center">
         <div className="md:self-start md:pt-[25px] md:h-full md:border-r md:border-[var(--fa-home-text)]/12">
           <Quote reviews={reviews} />

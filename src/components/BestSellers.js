@@ -152,7 +152,7 @@ export default function BestSellers() {
     return (
       <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[36px] ${GROUND}`} aria-busy="true">
         <Heading />
-        <div className={`mt-[2.71vw] md:mt-[28px] flex gap-[1.98vw] md:gap-[1.53vw] overflow-hidden px-[3.17vw] ${ROW}`}>
+        <div className={`mt-[2.71vw] md:mt-[20px] flex gap-[1.98vw] md:gap-[1.53vw] overflow-hidden px-[3.17vw] ${ROW}`}>
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
@@ -195,7 +195,7 @@ export default function BestSellers() {
         </div>
 
         {/* Desktop: paged row */}
-        <div className={`hidden md:block relative mt-[28px] ${ROW}`}>
+        <div className={`hidden md:block relative mt-[20px] ${ROW}`}>
           <button onClick={handlePrevious} className={`${arrow} left-[2.56vw]`} aria-label="Previous products">
             <Chevron dir={-1} />
           </button>

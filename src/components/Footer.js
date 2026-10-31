@@ -159,7 +159,7 @@ export default function Footer() {
         {/* Skyline art fading in from the right edge */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute top-0 right-0 h-[139px] w-[40vw] md:w-[13.8vw] bg-[url('/images/home/footer-paris-v1.webp')] bg-cover bg-center opacity-70 [mask-image:linear-gradient(90deg,transparent,black_55%)]"
+          className="pointer-events-none absolute top-0 right-0 h-[139px] w-[56vw] md:w-[40.1vw] bg-[url('/images/home/v3/footer-skyline-mock-v1.webp')] bg-cover bg-right [mask-image:linear-gradient(90deg,transparent,black_30%)]"
         />
 
         {/* Desktop: one row, columns at the mockup's positions */}
@@ -186,7 +186,7 @@ export default function Footer() {
           <Socials className="mt-5" />
         </div>
 
-        <div className="relative border-t border-[var(--fa-gold)]/15">
+        <div className="relative border-t border-[#8c6c3e]">
           <div className="h-auto md:h-[53px] py-4 md:py-0 flex flex-col md:flex-row items-center gap-3 md:gap-0 px-5 md:pl-[2.85vw] font-[family-name:var(--font-tinos)] text-[13px] md:text-[13.5px] text-[#bdb6aa]">
             <p className="md:w-[33.95vw]">&copy; 2026 French Aromas. All rights reserved.</p>
             <div className="flex gap-[27px]">

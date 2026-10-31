@@ -133,7 +133,9 @@ export default function Header() {
     <>
       {/* Running announcement bar */}
       <div className="w-full overflow-hidden border-t-2 border-t-[var(--fa-gold)]/70 border-b border-b-[var(--fa-gold)]/25 bg-[var(--fa-dark-deep)]">
-        <div className="flex w-max animate-marquee py-2">
+        {/* 71 units of the 756-unit phone spec (9.39vw) on phones, 69px on
+            desktop as in the 1369px mockup — borders included */}
+        <div className="flex w-max animate-marquee items-center h-[calc(min(9.39vw,44px)-3px)] lg:h-[66px]">
           {[0, 1].map((dup) => (
             <div
               key={dup}
@@ -161,12 +163,12 @@ export default function Header() {
       </div>
 
       {/* Charcoal chrome from the 2026-10 mockups, the same on every device:
-          61px tall on phones, 157px on desktop with the logo centred over the nav row and
+          118 units of the phone spec (15.61vw) on phones, 157px on desktop with the logo centred over the nav row and
           search / icons 123px in from each edge of the 1369px design. */}
       <header className="header relative z-50 bg-[var(--fa-dark)] lg:h-[157px]">
         <div className="px-4 sm:px-6 lg:px-[8.98vw]">
           {/* Top Section */}
-          <div className="flex items-center justify-between h-[61px] lg:h-auto lg:items-start lg:pt-[43px]">
+          <div className="flex items-center justify-between h-[min(15.61vw,72px)] lg:h-auto lg:items-start lg:pt-[43px]">
             {/* Left — Search */}
             <div className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible">
               {/* Mobile Menu Button */}
@@ -344,7 +346,7 @@ export default function Header() {
                   alt="French Aromas"
                   width={96}
                   height={36}
-                  className="w-auto h-[50px] lg:h-[106px] max-w-[92px] lg:max-w-none object-contain transition-[filter] duration-300 hover:brightness-110"
+                  className="w-auto h-[min(12.83vw,60px)] lg:h-[106px] max-w-none object-contain transition-[filter] duration-300 hover:brightness-110"
                   priority
                 />
               </Link>

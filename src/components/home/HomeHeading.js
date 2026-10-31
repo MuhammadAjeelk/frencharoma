@@ -38,7 +38,7 @@ export default function HomeHeading({
         {href && (
           <Link
             href={href}
-            className="shrink-0 font-[Arial,Helvetica,sans-serif] font-bold text-[3.3vw] leading-none text-[var(--fa-home-link)] underline underline-offset-[2px] decoration-1 hover:text-[var(--fa-home-text-deep)] transition-colors"
+            className="shrink-0 font-[Arial,Helvetica,sans-serif] font-bold text-[3.44vw] leading-none text-[var(--fa-home-link)] underline underline-offset-[2px] decoration-1 hover:text-[var(--fa-home-text-deep)] transition-colors"
           >
             View All
           </Link>

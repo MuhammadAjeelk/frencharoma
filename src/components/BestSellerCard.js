@@ -19,9 +19,9 @@ const EDITION_STYLE = {
 function Stars({ rating, compact = false, home = false }) {
   const pct = Math.max(0, Math.min(100, (rating / 5) * 100));
   const row = (cls) => (
-    <span className={`flex ${home ? "gap-[3px]" : "gap-0.5"} ${cls}`}>
+    <span className={`flex ${home ? "gap-[1.03cqw]" : "gap-0.5"} ${cls}`}>
       {[0, 1, 2, 3, 4].map((i) => (
-        <svg key={i} viewBox="0 0 24 24" className={`${home ? "w-[19px] h-[19px]" : compact ? "w-[11px] h-[11px]" : "w-[14px] h-[14px]"} shrink-0`} fill="currentColor">
+        <svg key={i} viewBox="0 0 24 24" className={`${home ? "w-[6.55cqw] h-[6.55cqw]" : compact ? "w-[11px] h-[11px]" : "w-[14px] h-[14px]"} shrink-0`} fill="currentColor">
           <path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.6 6.1 20.7l1.2-6.6L2.5 9.5l6.6-.9z" />
         </svg>
       ))}
@@ -132,7 +132,7 @@ export default function BestSellerCard({
       }}
       className={`group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
         home
-          ? "rounded-[12px] border border-[#3c3c3c] bg-[#f4ede4] aspect-[1200/1850]"
+          ? "@container rounded-[4.14cqw] border border-[#3c3c3c] bg-[#f4ede4] aspect-[1200/1850]"
           : "rounded-2xl bg-[var(--fa-beige)] shadow-[0_10px_28px_rgba(0,0,0,0.30)]"
       }`}
     >
@@ -150,7 +150,7 @@ export default function BestSellerCard({
           ) : null}
         </Link>
 
-        {disc > 0 && <DiscountRibbon percent={disc} compact={compact} color={home ? "#f5b62b" : undefined} scale={home ? 0.74 : undefined} />}
+        {disc > 0 && <DiscountRibbon percent={disc} compact={compact} color={home ? "#f5b62b" : undefined} scale={home ? 0.74 : undefined} unit={home ? "0.3448cqw" : undefined} />}
 
         <button
           type="button"
@@ -167,12 +167,12 @@ export default function BestSellerCard({
           }}
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
           className={`absolute z-20 flex items-center justify-center rounded-full shadow-sm hover:scale-110 transition-transform duration-200 ${
-            home ? "top-[10px] right-[10px] w-[27px] h-[27px] bg-white" : compact ? "top-2 right-2 w-7 h-7 bg-[var(--fa-beige)]" : "top-3 right-3 w-9 h-9 bg-[var(--fa-beige)]"
+            home ? "top-[3.45cqw] right-[3.45cqw] w-[9.31cqw] h-[9.31cqw] bg-white" : compact ? "top-2 right-2 w-7 h-7 bg-[var(--fa-beige)]" : "top-3 right-3 w-9 h-9 bg-[var(--fa-beige)]"
           }`}
         >
           <svg
             viewBox="0 0 24 24"
-            className={`${home ? "w-[18px] h-[18px]" : compact ? "w-4 h-4" : "w-5 h-5"} ${wished ? "fill-[#e0342c] text-[#e0342c]" : "fill-none text-[#e07a72]"}`}
+            className={`${home ? "w-[6.21cqw] h-[6.21cqw]" : compact ? "w-4 h-4" : "w-5 h-5"} ${wished ? "fill-[#e0342c] text-[#e0342c]" : "fill-none text-[#e07a72]"}`}
             stroke="currentColor"
             strokeWidth={1.8}
           >
@@ -204,7 +204,7 @@ export default function BestSellerCard({
         {badge && (
           <span className={`absolute z-10 rounded-full transition-opacity duration-200 group-hover:opacity-0 ${
             home
-              ? "bottom-[6px] left-[7px] px-[9px] h-[18px] leading-[18px] text-[13.5px] font-[family-name:var(--font-carlito)] bg-[#cfae6e] text-[#2b2016]"
+              ? "bottom-[2.07cqw] left-[2.41cqw] px-[3.1cqw] h-[6.21cqw] leading-[6.21cqw] text-[4.66cqw] font-[family-name:var(--font-carlito)] bg-[#cfae6e] text-[#2b2016]"
               : `bg-[var(--fa-border)] font-medium text-[var(--fa-ink)] shadow-sm ${compact ? "bottom-2 left-2 px-2 py-0 text-[9px]" : "bottom-3 left-3 px-2.5 py-0.5 text-[11px]"}`
           }`}>
             {badge}
@@ -213,7 +213,7 @@ export default function BestSellerCard({
         {cardEdition?.variant?.size && (
           <span className={`absolute z-10 rounded-full transition-opacity duration-200 group-hover:opacity-0 ${
             home
-              ? "bottom-[6px] right-[7px] px-[6px] h-[18px] leading-[18px] text-[13.5px] font-[family-name:var(--font-carlito)] bg-white text-[#222]"
+              ? "bottom-[2.07cqw] right-[2.41cqw] px-[2.07cqw] h-[6.21cqw] leading-[6.21cqw] text-[4.66cqw] font-[family-name:var(--font-carlito)] bg-white text-[#222]"
               : `bg-[var(--fa-beige)] font-medium text-[var(--fa-secondary)] shadow-sm ${compact ? "bottom-2 right-2 px-1.5 py-0 text-[9px]" : "bottom-3 right-3 px-2 py-0.5 text-[11px]"}`
           }`}>
             {cardEdition.variant.size}
@@ -224,22 +224,23 @@ export default function BestSellerCard({
       {/* Details */}
       <div
         className={`relative flex flex-col ${
-          home ? "shrink-0 h-[156px] px-[15px] pt-[7px] pb-[10px]" : compact ? "gap-1 px-2.5 pt-2 pb-3" : "gap-1.5 px-4 pt-3 pb-4"
+          home ? "shrink-0 h-[53.79cqw] px-[5.17cqw] pt-[1.67cqw] pb-[3.45cqw]" : compact ? "gap-1 px-2.5 pt-2 pb-3" : "gap-1.5 px-4 pt-3 pb-4"
         }`}
       >
         {home ? (
-          // Fixed rhythm from the mockup: name baseline 24px under the photo,
-          // three 22.4px detail lines, stars, price, 156px in all.
+          // Fixed rhythm from the mockups, in cqw of the card's width so it
+          // scales as one piece: matched to the 537-unit phone spec card (name,
+          // three detail lines 43 units apart, stars, price) and the 290px
+          // desktop one, 156px of details there.
           <>
-
             <Link href={href || "#"} className="text-center">
-              <h3 className="font-[Arial,Helvetica,sans-serif] font-bold text-[18px] leading-[22px] text-[#333] whitespace-nowrap overflow-hidden text-ellipsis">
+              <h3 className="font-[Arial,Helvetica,sans-serif] font-bold text-[6.21cqw] leading-[7.59cqw] text-[#333] whitespace-nowrap overflow-hidden text-ellipsis">
                 {name}
-                {gm && <span className={`font-normal text-[15.5px] ${genderTextClass(gender, "light")}`}>{` - ${gm.label.replace(/^For\s+/i, "")}`}</span>}
+                {gm && <span className={`font-normal text-[5.34cqw] ${genderTextClass(gender, "light")}`}>{` - ${gm.label.replace(/^For\s+/i, "")}`}</span>}
               </h3>
             </Link>
 
-            <div className="mt-[4px] font-[family-name:var(--font-carlito)] text-[15.5px] leading-[22.4px] text-[#373435]">
+            <div className="mt-[0.64cqw] font-[family-name:var(--font-carlito)] text-[5.34cqw] leading-[8.09cqw] text-[#373435]">
               <p className="truncate">
                 {impressionName ? (isSignatureScent(impressionName) ? impressionName : `Inspired by: ${impressionName}`) : "\u00a0"}
               </p>
@@ -247,14 +248,14 @@ export default function BestSellerCard({
               <p className="truncate">{scentFamily ? `Fragrance: ${scentFamily}` : "\u00a0"}</p>
             </div>
 
-            <div className="h-[19px] flex items-center gap-[16px] pr-[46px] font-[family-name:var(--font-carlito)] text-[15.5px] leading-none text-[#373435] whitespace-nowrap">
+            <div className="mt-[1.12cqw] h-[6.55cqw] flex items-center gap-[5.52cqw] pr-[15.86cqw] font-[family-name:var(--font-carlito)] text-[5.34cqw] leading-none text-[#373435] whitespace-nowrap">
               <Stars rating={avgRating} home />
               <span>
                 {avgRating.toFixed(1)}/5&nbsp;&nbsp;({globalAdmirePercent}%)
               </span>
             </div>
 
-            <div className="mt-[9px] h-[18px] flex items-baseline gap-[16px] pr-[46px] font-[Arial,Helvetica,sans-serif] text-[15.5px] leading-[18px] whitespace-nowrap">
+            <div className="mt-[2.17cqw] h-[6.21cqw] flex items-baseline gap-[5.52cqw] pr-[15.86cqw] font-[Arial,Helvetica,sans-serif] text-[5.34cqw] leading-[6.21cqw] whitespace-nowrap">
               {headlinePrice != null ? (
                 <>
                   {disc > 0 && (
@@ -316,7 +317,7 @@ export default function BestSellerCard({
           disabled={!cardEdition}
           aria-label={inCartQty > 0 ? "Added to cart" : "Add to cart"}
           className={`group/cart absolute z-20 inline-flex flex-row-reverse items-center justify-center rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 ${
-            home ? "bottom-[10px] right-[10px] h-[39px] min-w-[39px]" : compact ? "bottom-2.5 right-2 h-9 min-w-[36px]" : "bottom-4 right-3 h-11 min-w-[44px]"
+            home ? "bottom-[3.45cqw] right-[3.45cqw] h-[13.45cqw] min-w-[13.45cqw]" : compact ? "bottom-2.5 right-2 h-9 min-w-[36px]" : "bottom-4 right-3 h-11 min-w-[44px]"
           } shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
             !cardEdition
               ? "bg-[var(--fa-disabled)] cursor-not-allowed"
@@ -325,9 +326,18 @@ export default function BestSellerCard({
               : home ? "bg-[#ee3b3b]" : "bg-[var(--fa-dark)]"
           } text-white`}
         >
-          <svg viewBox="0 0 24 24" className={`${home ? "w-[22px] h-[22px]" : compact ? "w-4 h-4" : "w-5 h-5"} shrink-0`} fill="currentColor" aria-hidden="true">
-            <path d="M7 4h-3a1 1 0 100 2h2.2l2.3 9.2A2 2 0 0010.4 17h7.2a2 2 0 001.9-1.4l2-6.6H8.2l-.5-2A1 1 0 007 4zm3.5 15a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2zm7 0a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z" />
-          </svg>
+          {home ? (
+            // The mockup's outline trolley, about 60% of the button.
+            <svg viewBox="0 0 24 24" className="w-[8.3cqw] h-[8.3cqw] shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M2.5 4.5h2.6l2.4 10.3a1.4 1.4 0 001.4 1.1h8.4a1.4 1.4 0 001.4-1.1l1.5-6.6H6.2M9.6 9.6l.6 3.2M13.2 9.6v3.2M16.8 9.6l-.6 3.2" />
+              <circle cx="9.6" cy="19.3" r="1.4" />
+              <circle cx="16.4" cy="19.3" r="1.4" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" className={`${compact ? "w-4 h-4" : "w-5 h-5"} shrink-0`} fill="currentColor" aria-hidden="true">
+              <path d="M7 4h-3a1 1 0 100 2h2.2l2.3 9.2A2 2 0 0010.4 17h7.2a2 2 0 001.9-1.4l2-6.6H8.2l-.5-2A1 1 0 007 4zm3.5 15a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2zm7 0a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z" />
+            </svg>
+          )}
           <span className="max-w-0 overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.06em] opacity-0 transition-all duration-200 group-hover/cart:max-w-[110px] group-hover/cart:opacity-100">
             {inCartQty > 0 ? "Added to Cart" : "Add to Cart"}
           </span>
