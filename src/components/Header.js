@@ -133,9 +133,9 @@ export default function Header() {
     <>
       {/* Running announcement bar */}
       <div className="w-full overflow-hidden border-t-2 border-t-[var(--fa-gold)]/70 border-b border-b-[var(--fa-gold)]/25 bg-[var(--fa-dark-deep)]">
-        {/* 71 units of the 756-unit phone spec (9.39vw) on phones, 69px on
-            desktop as in the 1369px mockup — borders included */}
-        <div className="flex w-max animate-marquee items-center h-[calc(min(9.39vw,44px)-3px)] lg:h-[66px]">
+        {/* 71 units of the 756-unit phone spec (9.39vw) on phones, 40px on
+            desktop — borders included */}
+        <div className="flex w-max animate-marquee items-center h-[calc(min(9.39vw,44px)-3px)] lg:h-[37px]">
           {[0, 1].map((dup) => (
             <div
               key={dup}
