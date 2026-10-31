@@ -25,7 +25,7 @@ export default function SnapRow({
   desktop = "grid",
   cols = 3,
   itemClass = "w-[84.26vw] md:w-auto",
-  gapClass = "gap-[1.98vw] md:gap-[9px]",
+  gapClass = "gap-[1.72vw] md:gap-[9px]",
   className = "",
 }) {
   const ref = useRef(null);

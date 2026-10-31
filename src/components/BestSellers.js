@@ -120,6 +120,7 @@ export default function BestSellers() {
       <BestSellerCard
         key={key}
         shadow={false}
+        fixedShape
         name={perfume.name}
         brand={brandLabel}
         image={perfume.images?.main || ""}
@@ -150,9 +151,9 @@ export default function BestSellers() {
 
   if (loading) {
     return (
-      <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[36px] ${GROUND}`} aria-busy="true">
+      <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[42px] ${GROUND}`} aria-busy="true">
         <Heading />
-        <div className={`mt-[2.71vw] md:mt-[20px] flex gap-[1.98vw] md:gap-[1.53vw] overflow-hidden px-[3.17vw] ${ROW}`}>
+        <div className={`mt-[2.71vw] md:mt-[20px] flex gap-[2.25vw] md:gap-[1.53vw] overflow-hidden px-[3.17vw] ${ROW}`}>
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
@@ -176,13 +177,13 @@ export default function BestSellers() {
 
   return (
     <>
-      <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[36px] ${GROUND}`}>
+      <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[42px] ${GROUND}`}>
         <Heading />
 
         {/* Phones: swipe row */}
         <div
           onScroll={onPhoneScroll}
-          className="md:hidden mt-[2.71vw] flex gap-[1.98vw] overflow-x-auto snap-x snap-mandatory scroll-px-[3.17vw] px-[3.17vw] scrollbar-none"
+          className="md:hidden mt-[2.71vw] flex gap-[2.25vw] overflow-x-auto snap-x snap-mandatory scroll-px-[3.17vw] px-[3.17vw] scrollbar-none"
           role="region"
           aria-label="Best sellers"
         >

@@ -47,17 +47,24 @@ export function cropCta(cta, start, span) {
 
 // `href` makes the button its own link (the edition banner's two halves);
 // without it the button is decoration inside a card that is already a link.
-export default function Cta({ cta, href, className = "" }) {
+// `phone` is the button's box below md when the card is cropped differently
+// there (see ArtCard); it defaults to the same box.
+export default function Cta({ cta, phone = cta, href, className = "" }) {
   if (!cta) return null;
   const style = {
-    left: `${cta.x}%`,
-    top: `${cta.y}%`,
-    width: `${cta.w}%`,
-    height: `${cta.h}%`,
-    fontSize: `${cta.size}cqw`,
+    "--l": `${phone.x}%`,
+    "--t": `${phone.y}%`,
+    "--w": `${phone.w}%`,
+    "--h": `${phone.h}%`,
+    "--f": `${phone.size}cqw`,
+    "--l-md": `${cta.x}%`,
+    "--t-md": `${cta.y}%`,
+    "--w-md": `${cta.w}%`,
+    "--h-md": `${cta.h}%`,
+    "--f-md": `${cta.size}cqw`,
     borderWidth: "max(1px, 0.11cqw)",
   };
-  const cls = `absolute z-10 flex items-center justify-center gap-[0.35em] whitespace-nowrap leading-none border transition-[filter] duration-200 group-hover:brightness-110 ${
+  const cls = `absolute z-10 left-[var(--l)] top-[var(--t)] w-[var(--w)] h-[var(--h)] text-[length:var(--f)] md:left-[var(--l-md)] md:top-[var(--t-md)] md:w-[var(--w-md)] md:h-[var(--h-md)] md:text-[length:var(--f-md)] flex items-center justify-center gap-[0.35em] whitespace-nowrap leading-none border transition-[filter] duration-200 group-hover:brightness-110 ${
     LOOKS[cta.look] || LOOKS["pill-dark"]
   } ${className}`;
   const body = (

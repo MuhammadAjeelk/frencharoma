@@ -13,9 +13,10 @@ import BrandMarquee from "./BrandMarquee";
 //
 // Spacing is the mockups' own. Desktop values are the 1369px mockup's pixels.
 // Phones follow the 756-unit phone spec in vw (1 unit = 100/756 vw), so every
-// section keeps its drawn proportions on any phone: 431-unit sections with a
-// 31-unit top pad, a 45.5-unit title, 20.5 units to a 273-unit card row, and
-// 61 units below; 24-unit side gutters and 15-unit gaps between cards. Desktop content
+// section keeps its drawn proportions on any phone: 458-unit sections with a
+// 31-unit top pad, a 45.5-unit title, 20.5 units to a 300-unit card row, and
+// 61 units below; 24-unit side gutters, 13-unit gaps between cards and 37
+// between brand circles; 360-unit offer banners 20 units apart. Desktop content
 // spans the full width less a 2.41vw margin each side, as drawn.
 
 const FRAME = "md:px-[2.41vw]";
@@ -63,8 +64,8 @@ export function ShopByBrand({ media = DEFAULT_MEDIA }) {
         <div className="md:px-[4.38vw]">
           <BrandMarquee
             label="Shop by brand"
-            gapClass="gap-[3.84vw] md:gap-[2.37vw]"
-            itemClass="w-[36.11vw] md:w-[calc((100%-5*2.37vw)/6)]"
+            gapClass="gap-[4.89vw] md:gap-[2.37vw]"
+            itemClass="w-[39.68vw] md:w-[calc((100%-5*2.37vw)/6)]"
             items={slotsOf("brands").map((slot) => (
               <ArtCard key={slot.key} art={media[slot.key]} round sizes="(max-width: 767px) 37vw, 13vw" />
             ))}
@@ -157,7 +158,7 @@ function OfferBanner({ desktop, phone }) {
 export function OfferBanners({ media = DEFAULT_MEDIA }) {
   const ids = ["discoveryBox", "specialOffers", "bundleOffers"];
   return (
-    <section className="bg-white flex flex-col gap-[1.52vw] md:gap-[27px]">
+    <section className="bg-white flex flex-col gap-[2.65vw] pb-[2.65vw] md:gap-[27px] md:pb-0">
       {ids.map((id) => (
         <OfferBanner key={id} desktop={media[`promo.${id}`]} phone={media[`promo.${id}.mobile`]} />
       ))}

@@ -68,6 +68,9 @@ export default function BestSellerCard({
   // The drop shadow suits the dark shop grounds; the homepage's cream band
   // turns it into a grey haze, so the homepage turns it off.
   shadow = true,
+  // Holds the card to the homepage spec's 1200 × 1850 shape (537 × 827 on a
+  // phone): the photo gives up whatever height the details need.
+  fixedShape = false,
 }) {
   const home = look === "home";
   const { addItem, perfumeQty } = useCart();
@@ -136,11 +139,11 @@ export default function BestSellerCard({
       className={`group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
         home
           ? "@container rounded-[4.14cqw] border border-[#3c3c3c] bg-[#f4ede4] aspect-[1200/1850]"
-          : `rounded-2xl bg-[var(--fa-beige)] ${shadow ? "shadow-[0_10px_28px_rgba(0,0,0,0.30)]" : ""}`
+          : `rounded-2xl bg-[var(--fa-beige)] ${shadow ? "shadow-[0_10px_28px_rgba(0,0,0,0.30)]" : ""} ${fixedShape ? "aspect-[1200/1850]" : ""}`
       }`}
     >
       {/* Image */}
-      <div className={`relative w-full overflow-hidden ${home ? "flex-1 min-h-0" : "aspect-square"}`}>
+      <div className={`relative w-full overflow-hidden ${home || fixedShape ? "flex-1 min-h-0" : "aspect-square"}`}>
         <Link href={href || "#"} className="absolute inset-0 z-0">
           {image ? (
             <RetryImage
