@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { getImageProps } from "next/image";
 import { DEFAULT_HERO_SLIDES, HERO_DESKTOP as DESKTOP, HERO_MOBILE as MOBILE } from "@/lib/siteMedia";
@@ -69,18 +69,37 @@ export default function HeroCarousel({ slides: allSlides = DEFAULT_HERO_SLIDES }
     setCurrentSlide((i) => (i < slides.length ? i : 0));
   }, [slides.length]);
 
+  // Restarts on every slide change, so a swipe gets a full 5s before the next.
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [slides.length, currentSlide]);
+
+  // No dots, as in the mockups: the hero runs straight into the trust strip.
+  // Slides advance on their own and can be swiped on touch screens.
+  const touchX = useRef(null);
+  const onTouchStart = (e) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e) => {
+    if (touchX.current == null || slides.length < 2) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) < 40) return;
+    setCurrentSlide((i) => (i + (dx < 0 ? 1 : -1) + slides.length) % slides.length);
+  };
 
   if (slides.length === 0) return null;
 
   return (
     <div className="relative w-full">
-      <div className="relative w-full aspect-[1290/1405] sm:aspect-[2880/985] overflow-hidden bg-[#e9d9c6]">
+      <div
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        className="relative w-full aspect-[1290/1405] sm:aspect-[2880/985] overflow-hidden bg-[#e9d9c6]"
+      >
         {slides.map((slide, index) => (
           <Link
             key={slide.id}
@@ -97,27 +116,6 @@ export default function HeroCarousel({ slides: allSlides = DEFAULT_HERO_SLIDES }
         ))}
       </div>
 
-      {/* Dots. On phones the art centres its own button right at the bottom
-          edge, so the dots sit in a band beneath the image instead — the same
-          ground as the trust strip below, so it reads as part of it. From sm
-          the button is off to the side and the dots overlay the art. */}
-      {slides.length > 1 && (
-        <div className="flex items-center justify-center gap-2.5 py-2 bg-[var(--fa-dark)] sm:absolute sm:inset-x-0 sm:bottom-2.5 md:bottom-3.5 sm:z-20 sm:gap-3 sm:py-0 sm:bg-transparent">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.id}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-colors duration-300 ${
-                index === currentSlide
-                  ? "bg-[var(--fa-gold)] border-[var(--fa-gold)] sm:bg-[var(--fa-ink)] sm:border-[var(--fa-ink)]"
-                  : "bg-transparent border-[var(--fa-gold)]/70 sm:border-[var(--fa-ink)]/60 hover:bg-[var(--fa-ink)]/40"
-              }`}
-              aria-label={`Go to slide ${index + 1}: ${slide.title}`}
-              aria-current={index === currentSlide}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
