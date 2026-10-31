@@ -97,7 +97,7 @@ function Content({ onSelect, mobile = false }) {
   </div>;
 }
 
-export function DesktopShopMenu({ label, className, open, setOpen }) {
+export function DesktopShopMenu({ label, className, open, setOpen, caret = true }) {
   const root = useRef(null);
   const trigger = useRef(null);
   const panel = useRef(null);
@@ -125,7 +125,7 @@ export function DesktopShopMenu({ label, className, open, setOpen }) {
     onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) close(); }}>
     <button ref={trigger} type="button" aria-expanded={open} aria-controls={id} className={`flex items-center gap-1 py-2 ${className}`}
       onClick={() => setOpen(true)} onKeyDown={event => { if (event.key === "ArrowDown") { event.preventDefault(); setOpen(true); requestAnimationFrame(() => root.current?.querySelector("a")?.focus()); } }}>
-      {label}<span aria-hidden="true" className={styles.caret}>⌄</span>
+      {label}{caret && <span aria-hidden="true" className={styles.caret}>⌄</span>}
     </button>
     {open && <div ref={panel} id={id} className={styles.panel} aria-label="Shop collection navigation">
       <button type="button" className={styles.close} onClick={() => { close(); trigger.current?.focus(); }} aria-label="Close Shop menu"><Icon name="close" /></button>

@@ -28,6 +28,15 @@ const builtInSlide = (id, title, href, desktop, mobile) => ({
 });
 
 export const DEFAULT_HERO_SLIDES = [
+  // The mockup's hero. Until the designer's 5700 × 1950 file is uploaded, both
+  // versions are cut from the mockups (desktop soft at full width).
+  builtInSlide(
+    "shopAll",
+    "Shop All",
+    "/collections/shop-all",
+    "/images/home/v3/hero-shop-all-mock-v1.webp",
+    "/images/home/v3/hero-shop-all-mobile-mock-v1.webp",
+  ),
   builtInSlide(
     "bestSellers",
     "Best Sellers",
@@ -58,27 +67,23 @@ export const DEFAULT_HERO_SLIDES = [
   ),
 ];
 
-const trust = (id, label, strip, icon, popup) => [
+// Trust strip tiles: one image with the icon and its label, used on every
+// device (a row on desktop, two rows of three on phones), plus the popup a tap
+// opens.
+const trust = (id, label, strip, popup) => [
   {
     key: `trust.${id}.strip`,
-    label: `${label} — strip (desktop)`,
-    hint: "Icon with its label baked in, transparent background. About 60px tall on screen.",
+    label: `${label} — icon & label`,
+    hint: "Icon with its label baked in, transparent background. About 75px tall on desktop, 40px on phones.",
     ...strip,
     maxWidth: 1200,
-  },
-  {
-    key: `trust.${id}.icon`,
-    label: `${label} — icon (phone & tablet)`,
-    hint: "Icon only, transparent background. About 40px tall on screen.",
-    ...icon,
-    maxWidth: 600,
   },
   ...(popup
     ? [
         {
           key: `trust.${id}.popup`,
           label: `${label} — popup`,
-          hint: "Shown when the icon is tapped. 1094 × 1437 recommended.",
+          hint: "Shown when the tile is tapped. 1094 × 1437 recommended.",
           src: popup,
           width: 1094,
           height: 1437,
@@ -88,10 +93,17 @@ const trust = (id, label, strip, icon, popup) => [
     : []),
 ];
 
-// A slot whose art carries its own text and button (the designer bakes the
-// label, tagline and "Explore" into the image), so the whole image is the
-// link. `alt` is what a screen reader hears in place of that baked-in text.
-const card = (key, label, { src, width, height, maxWidth, hint, href, alt }) => ({
+// An image slot that links somewhere. `alt` is what a screen reader hears in
+// place of the text drawn into the art.
+//
+// `cta` is the button the website draws over the art — the designer's files
+// carry the title and tagline but not the button. Its box is in percent of the
+// art (x, y = top-left corner; w, h = size) and `size` is the label's font size
+// in percent of the art's width, so it scales with the image and always lands
+// on the same spot. Positions were measured from the 2026-10 mockups and
+// checked against the supplied artwork; replacement art should leave that
+// spot clear.
+const card = (key, label, { src, width, height, maxWidth, hint, href, alt, cta, ctas, phoneCrop }) => ({
   key,
   label,
   hint,
@@ -101,16 +113,27 @@ const card = (key, label, { src, width, height, maxWidth, hint, href, alt }) => 
   maxWidth,
   href,
   alt: alt || label,
+  ...(cta ? { cta } : {}),
+  ...(ctas ? { ctas } : {}),
+  ...(phoneCrop ? { phoneCrop } : {}),
 });
 
-// Until the designer's full-size files are uploaded, each slot shows its box
-// cut from the approved homepage mockup (public/images/home/mock). They are
-// soft at full size; that is expected for a placeholder.
+const V3 = (name) => `/images/home/v3/${name}.webp`;
+// Brand cards are still cut from the mockup until their artwork arrives.
 const MOCK = (name) => `/images/home/mock/${name}-mock-v1.webp`;
 
-const WIDE_CARD = { width: 1788, height: 767, maxWidth: 1788, hint: "1788 × 767. Text and button are part of the image." };
-const wideCard = (key, label, mock, href, alt) =>
-  card(key, label, { src: MOCK(mock), ...WIDE_CARD, href, alt });
+// The supplied sample cards stand in for every wide card until each one's own
+// art is uploaded.
+const SAMPLE_SEASONS = V3("card-sample-all-seasons-v1");
+const SAMPLE_FRESH = V3("card-sample-fresh-v1");
+
+// "Explore →" on a 1788 × 767 card, from the mockup: same spot on every card,
+// below the tagline.
+const EXPLORE = { label: "Explore", x: 7.48, y: 63.5, w: 22.3, h: 16.2, size: 3.85 };
+
+const WIDE_CARD = { width: 1788, height: 767, maxWidth: 1788, hint: "1788 × 767 with the title and tagline on the left; leave the lower-left clear for the Explore button." };
+const wideCard = (key, label, src, href, alt, look = "pill-dark") =>
+  card(key, label, { src, ...WIDE_CARD, href, alt, cta: { ...EXPLORE, look } });
 
 const brand = (id, name, mock) =>
   card(`brands.${id}`, name, {
@@ -122,54 +145,73 @@ const brand = (id, name, mock) =>
     href: `/collections/shop-all?search=${encodeURIComponent(name)}&view=products`,
   });
 
-const promo = (id, label, mock, href) =>
-  card(`promo.${id}`, label, {
-    src: MOCK(mock),
+// Offer banners: a desktop file (5700 × 1200) and a phone file, each with its
+// own button position.
+const promo = (id, label, href, desktop, phone) => [
+  card(`promo.${id}`, `${label} — desktop`, {
+    src: desktop.src,
     width: 5700,
     height: 1200,
     maxWidth: 2880,
     hint: "5700 × 1200 full-width banner. The whole banner is the link.",
     href,
-  });
+    alt: label,
+    cta: desktop.cta,
+  }),
+  card(`promo.${id}.mobile`, `${label} — phone`, {
+    src: phone.src,
+    width: phone.width,
+    height: phone.height,
+    maxWidth: 1510,
+    hint: `${phone.width * 2} × ${phone.height * 2} phone banner. The whole banner is the link.`,
+    href,
+    alt: label,
+    cta: phone.cta,
+  }),
+];
 
 export const SITE_MEDIA_SECTIONS = [
   {
     id: "trust",
     title: "Trust strip",
-    note: "The row of icons under the hero. Desktop shows the labelled version, phones and tablets the icon alone.",
+    note: "The six tiles under the hero: one row on desktop, two rows of three on phones. Tap a tile to see its popup.",
     slots: [
       ...trust(
         "frenchIngredients",
         "French Ingredients",
         { src: "/images/home/trust/french-ingredients.webp", width: 770, height: 340 },
-        { src: "/images/home/trust/french-ingredients-icon.webp", width: 174, height: 240 },
         "/images/home/trust/french-ingredients-popup-v3.png",
       ),
       ...trust(
         "highConcentration",
         "High Concentration",
         { src: "/images/home/trust/high-concentration.webp", width: 874, height: 345 },
-        { src: "/images/home/trust/high-concentration-icon.webp", width: 155, height: 240 },
         "/images/home/trust/high-concentration-popup-v1.png",
       ),
       ...trust(
         "longLasting",
         "Long-Lasting",
         { src: "/images/home/trust/long-lasting.webp", width: 972, height: 346 },
-        { src: "/images/home/trust/long-lasting-icon.webp", width: 275, height: 240 },
         "/images/home/trust/long-lasting-popup-v1.png",
       ),
       ...trust(
         "affordableLuxury",
         "Affordable Luxury",
         { src: "/images/home/trust/affordable-luxury.webp", width: 893, height: 346 },
-        { src: "/images/home/trust/affordable-luxury-icon.webp", width: 269, height: 240 },
         "/images/home/trust/affordable-luxury-popup-v1.png",
       ),
+      {
+        key: "trust.trusted.icon",
+        label: "Trusted by Customers — icon",
+        hint: "Shield and handshake, icon only, transparent background. The label is set by the website.",
+        src: V3("trust-trusted-icon-mock-v2"),
+        width: 246,
+        height: 276,
+        maxWidth: 600,
+      },
       ...trust(
         "freeShipping",
         "Free Shipping",
-        { src: "/images/home/trust/free-shipping.webp", width: 581, height: 344 },
         { src: "/images/home/trust/free-shipping.webp", width: 581, height: 344 },
         "/images/home/trust/free-shipping-popup-v1.png",
       ),
@@ -178,11 +220,11 @@ export const SITE_MEDIA_SECTIONS = [
   {
     id: "gender",
     title: "Shop By Gender",
-    note: "Three cards under the trust strip. On phones they become a swipeable row.",
+    note: "Three cards under the trust strip; a swipeable row on phones. Showing the sample card until each is uploaded.",
     slots: [
-      wideCard("gender.men", "For Men", "gender-men", "/collections/shop-all?gender=men", "For Men — Bold. Distinctive. Timeless."),
-      wideCard("gender.women", "For Women", "gender-women", "/collections/shop-all?gender=women", "For Women — Elegant. Graceful. Unique."),
-      wideCard("gender.unisex", "Unisex", "gender-unisex", "/collections/shop-all?gender=unisex", "Unisex — Beyond Boundaries."),
+      wideCard("gender.men", "For Men", SAMPLE_SEASONS, "/collections/shop-all?gender=men", "For Men — Bold. Distinctive. Timeless."),
+      wideCard("gender.women", "For Women", SAMPLE_FRESH, "/collections/shop-all?gender=women", "For Women — Elegant. Graceful. Unique.", "pill-coral"),
+      wideCard("gender.unisex", "Unisex", SAMPLE_SEASONS, "/collections/shop-all?gender=unisex", "Unisex — Beyond Boundaries.", "pill-outline"),
     ],
   },
   {
@@ -202,23 +244,28 @@ export const SITE_MEDIA_SECTIONS = [
     id: "seasons",
     title: "Shop By Season",
     slots: [
-      wideCard("seasons.all", "All Seasons", "season-all", "/collections/shop-all?tags=all-seasons", "All Seasons — scents for every moment."),
-      wideCard("seasons.summer", "Summer & Spring", "season-summer", "/collections/shop-all?tags=spring,summer", "Summer & Spring — fresh scents for brighter days."),
-      wideCard("seasons.winter", "Winter & Autumn", "season-winter", "/collections/shop-all?tags=autumn,winter", "Winter & Autumn — warm scents for cozy moments."),
+      wideCard("seasons.all", "All Seasons", SAMPLE_SEASONS, "/collections/shop-all?tags=all-seasons", "All Seasons — scents for every moment."),
+      wideCard("seasons.summer", "Summer & Spring", SAMPLE_SEASONS, "/collections/shop-all?tags=spring,summer", "Summer & Spring — fresh scents for brighter days."),
+      wideCard("seasons.winter", "Winter & Autumn", SAMPLE_SEASONS, "/collections/shop-all?tags=autumn,winter", "Winter & Autumn — warm scents for cozy moments."),
     ],
   },
   {
     id: "editions",
     title: "Shop By Edition",
-    note: "One banner: the left half opens Luxury, the right half opens Premium.",
+    note: "One banner with a button on each half. Phones show it as two cards: the left 47% (Luxury) and the right 47% (Premium).",
     slots: [
       card("editions.banner", "Luxury & Premium banner", {
-        src: MOCK("editions"),
+        src: V3("editions-v1"),
         width: 5432,
         height: 1088,
         maxWidth: 2880,
-        hint: "5432 × 1088. Keep Luxury on the left half and Premium on the right.",
+        hint: "5432 × 1088. Luxury text on the left, Premium on the right; keep the space under each list clear for its button.",
         alt: "Luxury Edition and Premium Edition",
+        phoneCrop: 47,
+        ctas: [
+          { label: "Shop Luxury", href: "/collections/shop-all?edition=luxury", look: "pill-outline-gold", x: 5.91, y: 78.5, w: 11.9, h: 12.6, size: 1.46 },
+          { label: "Shop Premium", href: "/collections/shop-all?edition=premium", look: "pill-dark", x: 74.96, y: 78.5, w: 13.5, h: 12.6, size: 1.46 },
+        ],
       }),
     ],
   },
@@ -226,19 +273,64 @@ export const SITE_MEDIA_SECTIONS = [
     id: "scents",
     title: "Shop By Scent Profile",
     slots: [
-      wideCard("scents.fresh", "Fresh", "scent-fresh", "/collections/shop-all?scentFamily=Fresh", "Fresh — bright, clean, refreshing."),
-      wideCard("scents.fruity", "Fruity", "scent-fruity", "/collections/shop-all?scentFamily=Fruity", "Fruity — juicy, vibrant, playful."),
-      wideCard("scents.floral", "Floral", "scent-floral", "/collections/shop-all?scentFamily=Floral", "Floral — elegant, romantic, delicate."),
+      wideCard("scents.fresh", "Fresh", SAMPLE_FRESH, "/collections/shop-all?scentFamily=Fresh", "Fresh — bright, clean, refreshing."),
+      wideCard("scents.fruity", "Fruity", SAMPLE_FRESH, "/collections/shop-all?scentFamily=Fruity", "Fruity — juicy, vibrant, playful."),
+      wideCard("scents.floral", "Floral", SAMPLE_FRESH, "/collections/shop-all?scentFamily=Floral", "Floral — elegant, romantic, delicate."),
     ],
   },
   {
     id: "promos",
     title: "Offer banners",
-    note: "The three full-width banners above the footer, in this order.",
+    note: "The three full-width banners above the footer, in this order. Phones get their own, taller files.",
     slots: [
-      promo("discoveryBox", "Discovery Box", "promo-discovery-box", "/collections/discovery-box"),
-      promo("specialOffers", "Special Offers", "promo-special-offers", "/collections/shop-all?specialOffer=true"),
-      promo("bundleOffers", "Bundle Offers", "promo-bundle-offers", "/collections/shop-all"),
+      ...promo(
+        "discoveryBox",
+        "Discovery Box",
+        "/collections/discovery-box",
+        {
+          src: V3("promo-discovery-box-v1"),
+          // The mockup's spot, nudged 2.5% left so it clears the Eiffel Tower's leg.
+          cta: { label: "Build Your Box", look: "rect-dark-caps", x: 75.95, y: 75.0, w: 13.3, h: 12.8, size: 0.99 },
+        },
+        {
+          src: V3("promo-discovery-box-mobile-mock-v1"),
+          width: 755,
+          height: 378,
+          cta: { label: "Build Your Box", look: "pill-dark", x: 55.0, y: 71.4, w: 28.7, h: 11.3, size: 3.2 },
+        },
+      ),
+      ...promo(
+        "specialOffers",
+        "Special Offers",
+        "/collections/shop-all?specialOffer=true",
+        {
+          src: V3("promo-special-offers-v1"),
+          cta: { label: "Explore", look: "rect-dark", x: 14.83, y: 74.0, w: 7.82, h: 12.2, size: 1.02 },
+        },
+        {
+          src: V3("promo-special-offers-mobile-mock-v1"),
+          width: 755,
+          height: 378,
+          cta: { label: "Shop Now", look: "pill-dark", x: 7.6, y: 80.0, w: 22.8, h: 11.5, size: 3.2 },
+        },
+      ),
+      ...promo(
+        "bundleOffers",
+        "Bundle Offers",
+        "/collections/shop-all",
+        {
+          src: V3("promo-bundle-offers-v1"),
+          // The mockup puts this under the discount box, but in the final art
+          // the box runs to the bottom edge, so it sits after the subtitle.
+          cta: { label: "Shop Now", look: "pill-gray-caps", x: 32.6, y: 31.75, w: 7.82, h: 8.7, size: 0.8 },
+        },
+        {
+          src: V3("promo-bundle-offers-mobile-mock-v1"),
+          width: 755,
+          height: 337,
+          cta: { label: "Shop Now", look: "pill-dark", x: 38.6, y: 81.0, w: 22.8, h: 13.6, size: 3.2 },
+        },
+      ),
     ],
   },
 ];
@@ -248,7 +340,8 @@ export const SLOTS = Object.fromEntries(
 );
 
 // Merges overrides ({ key: { url, width, height } }) over the defaults and
-// returns { key: { src, width, height, custom, href, alt } } for every slot. Overrides for
+// returns { key: { src, width, height, custom, href, alt, cta… } } for every
+// slot. Overrides for
 // keys no longer in the registry are ignored rather than rendered.
 export function resolveMedia(overrides = {}) {
   const out = {};
@@ -257,7 +350,7 @@ export function resolveMedia(overrides = {}) {
     const art = o?.url
       ? { src: o.url, width: o.width || slot.width, height: o.height || slot.height, custom: true }
       : { src: slot.src, width: slot.width, height: slot.height, custom: false };
-    out[key] = { ...art, href: slot.href, alt: slot.alt };
+    out[key] = { ...art, href: slot.href, alt: slot.alt, cta: slot.cta, ctas: slot.ctas, phoneCrop: slot.phoneCrop };
   }
   return out;
 }

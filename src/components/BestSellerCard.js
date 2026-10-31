@@ -16,12 +16,12 @@ const EDITION_STYLE = {
   classic: { label: "Classic Edition", bar: "bg-[var(--fa-beige)]", text: "text-[var(--fa-secondary)]" },
 };
 
-function Stars({ rating, compact = false }) {
+function Stars({ rating, compact = false, home = false }) {
   const pct = Math.max(0, Math.min(100, (rating / 5) * 100));
   const row = (cls) => (
-    <span className={`flex gap-0.5 ${cls}`}>
+    <span className={`flex ${home ? "gap-[3px]" : "gap-0.5"} ${cls}`}>
       {[0, 1, 2, 3, 4].map((i) => (
-        <svg key={i} viewBox="0 0 24 24" className={`${compact ? "w-[11px] h-[11px]" : "w-[14px] h-[14px]"} shrink-0`} fill="currentColor">
+        <svg key={i} viewBox="0 0 24 24" className={`${home ? "w-[19px] h-[19px]" : compact ? "w-[11px] h-[11px]" : "w-[14px] h-[14px]"} shrink-0`} fill="currentColor">
           <path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.6 6.1 20.7l1.2-6.6L2.5 9.5l6.6-.9z" />
         </svg>
       ))}
@@ -29,9 +29,9 @@ function Stars({ rating, compact = false }) {
   );
   return (
     <span className="relative inline-flex" aria-label={`${rating} out of 5`}>
-      {row("text-[#a89b86]")}
+      {row(home ? "text-[#c9c3ba]" : "text-[#a89b86]")}
       <span className="absolute inset-0 overflow-hidden" style={{ width: `${pct}%` }}>
-        {row("text-[var(--fa-ink)]")}
+        {row(home ? "text-[#231a14]" : "text-[var(--fa-ink)]")}
       </span>
     </span>
   );
@@ -59,9 +59,14 @@ export default function BestSellerCard({
   // it ~180px, where the desktop type and the 44px cart button collide with the
   // price. `compact` scales the internals for that width.
   compact = false,
-  // The image box's shape. Square by default; the homepage asks for taller.
-  imageClass = "aspect-square",
+  // "home" is the 2026-10 homepage mockup's card, 1200 × 1850 as a whole (the
+  // photo takes what the fixed details block leaves): thin dark
+  // rim, Arial name, Calibri details, black stars, magenta price and a red
+  // cart button, with every line on a fixed rhythm so cards in a row align
+  // even when a field is missing.
+  look = "default",
 }) {
+  const home = look === "home";
   const { addItem, perfumeQty } = useCart();
   const { isInWishlist, toggleItem } = useWishlist();
 
@@ -125,10 +130,14 @@ export default function BestSellerCard({
         replay(cartRef.current, "heartbeat");
         replay(qvRef.current, "vibrating");
       }}
-      className="group relative flex flex-col rounded-2xl overflow-hidden bg-[var(--fa-beige)] shadow-[0_10px_28px_rgba(0,0,0,0.30)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)]"
+      className={`group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(209,174,109,0.45),0_14px_38px_rgba(209,174,109,0.22)] ${
+        home
+          ? "rounded-[12px] border border-[#3c3c3c] bg-[#f4ede4] aspect-[1200/1850]"
+          : "rounded-2xl bg-[var(--fa-beige)] shadow-[0_10px_28px_rgba(0,0,0,0.30)]"
+      }`}
     >
       {/* Image */}
-      <div className={`relative w-full overflow-hidden ${imageClass}`}>
+      <div className={`relative w-full overflow-hidden ${home ? "flex-1 min-h-0" : "aspect-square"}`}>
         <Link href={href || "#"} className="absolute inset-0 z-0">
           {image ? (
             <RetryImage
@@ -136,12 +145,12 @@ export default function BestSellerCard({
               alt={name}
               fill
               className="object-cover transition-[filter] duration-500 group-hover:brightness-110"
-              sizes="(max-width:640px) 90vw, 25vw"
+              sizes={home ? "(max-width:767px) 72vw, 22vw" : "(max-width:640px) 90vw, 25vw"}
             />
           ) : null}
         </Link>
 
-        {disc > 0 && <DiscountRibbon percent={disc} compact={compact} />}
+        {disc > 0 && <DiscountRibbon percent={disc} compact={compact} color={home ? "#f5b62b" : undefined} scale={home ? 0.74 : undefined} />}
 
         <button
           type="button"
@@ -157,11 +166,13 @@ export default function BestSellerCard({
             });
           }}
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-          className={`absolute z-20 flex items-center justify-center rounded-full bg-[var(--fa-beige)] shadow-sm hover:scale-110 transition-transform duration-200 ${compact ? "top-2 right-2 w-7 h-7" : "top-3 right-3 w-9 h-9"}`}
+          className={`absolute z-20 flex items-center justify-center rounded-full shadow-sm hover:scale-110 transition-transform duration-200 ${
+            home ? "top-[10px] right-[10px] w-[27px] h-[27px] bg-white" : compact ? "top-2 right-2 w-7 h-7 bg-[var(--fa-beige)]" : "top-3 right-3 w-9 h-9 bg-[var(--fa-beige)]"
+          }`}
         >
           <svg
             viewBox="0 0 24 24"
-            className={`${compact ? "w-4 h-4" : "w-5 h-5"} ${wished ? "fill-[#e0342c] text-[#e0342c]" : "fill-none text-[#e07a72]"}`}
+            className={`${home ? "w-[18px] h-[18px]" : compact ? "w-4 h-4" : "w-5 h-5"} ${wished ? "fill-[#e0342c] text-[#e0342c]" : "fill-none text-[#e07a72]"}`}
             stroke="currentColor"
             strokeWidth={1.8}
           >
@@ -191,54 +202,110 @@ export default function BestSellerCard({
         )}
 
         {badge && (
-          <span className={`absolute z-10 rounded-full bg-[var(--fa-border)] font-medium text-[var(--fa-ink)] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 left-2 px-2 py-0 text-[9px]" : "bottom-3 left-3 px-2.5 py-0.5 text-[11px]"}`}>
+          <span className={`absolute z-10 rounded-full transition-opacity duration-200 group-hover:opacity-0 ${
+            home
+              ? "bottom-[6px] left-[7px] px-[9px] h-[18px] leading-[18px] text-[13.5px] font-[family-name:var(--font-carlito)] bg-[#cfae6e] text-[#2b2016]"
+              : `bg-[var(--fa-border)] font-medium text-[var(--fa-ink)] shadow-sm ${compact ? "bottom-2 left-2 px-2 py-0 text-[9px]" : "bottom-3 left-3 px-2.5 py-0.5 text-[11px]"}`
+          }`}>
             {badge}
           </span>
         )}
         {cardEdition?.variant?.size && (
-          <span className={`absolute z-10 rounded-full bg-[var(--fa-beige)] font-medium text-[var(--fa-secondary)] shadow-sm transition-opacity duration-200 group-hover:opacity-0 ${compact ? "bottom-2 right-2 px-1.5 py-0 text-[9px]" : "bottom-3 right-3 px-2 py-0.5 text-[11px]"}`}>
+          <span className={`absolute z-10 rounded-full transition-opacity duration-200 group-hover:opacity-0 ${
+            home
+              ? "bottom-[6px] right-[7px] px-[6px] h-[18px] leading-[18px] text-[13.5px] font-[family-name:var(--font-carlito)] bg-white text-[#222]"
+              : `bg-[var(--fa-beige)] font-medium text-[var(--fa-secondary)] shadow-sm ${compact ? "bottom-2 right-2 px-1.5 py-0 text-[9px]" : "bottom-3 right-3 px-2 py-0.5 text-[11px]"}`
+          }`}>
             {cardEdition.variant.size}
           </span>
         )}
       </div>
 
       {/* Details */}
-      <div className={`relative flex flex-col ${compact ? "gap-1 px-2.5 pt-2 pb-3" : "gap-1.5 px-4 pt-3 pb-4"}`}>
-        <Link href={href || "#"} className="text-center">
-          <h3 className={`font-bold leading-tight text-[var(--fa-ink)] ${compact ? "text-[12px] line-clamp-2" : "text-[15px] whitespace-nowrap overflow-hidden text-ellipsis"}`}>
-            {name}
-            {gm && <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{` - ${gm.label}`}</span>}
-          </h3>
-        </Link>
+      <div
+        className={`relative flex flex-col ${
+          home ? "shrink-0 h-[156px] px-[15px] pt-[7px] pb-[10px]" : compact ? "gap-1 px-2.5 pt-2 pb-3" : "gap-1.5 px-4 pt-3 pb-4"
+        }`}
+      >
+        {home ? (
+          // Fixed rhythm from the mockup: name baseline 24px under the photo,
+          // three 22.4px detail lines, stars, price, 156px in all.
+          <>
 
-        <div className={`space-y-0.5 text-[var(--fa-secondary)] ${compact ? "text-[10px]" : "text-[12px]"}`}>
-          {impressionName && (
-            <p className="line-clamp-1">
-              {isSignatureScent(impressionName) ? impressionName : `Inspired by: ${impressionName}`}
-            </p>
-          )}
-          {brand && <p className="line-clamp-1">Brand: {brand}</p>}
-          {scentFamily && <p className="line-clamp-1">Fragrance: {scentFamily}</p>}
-        </div>
+            <Link href={href || "#"} className="text-center">
+              <h3 className="font-[Arial,Helvetica,sans-serif] font-bold text-[18px] leading-[22px] text-[#333] whitespace-nowrap overflow-hidden text-ellipsis">
+                {name}
+                {gm && <span className={`font-normal text-[15.5px] ${genderTextClass(gender, "light")}`}>{` - ${gm.label.replace(/^For\s+/i, "")}`}</span>}
+              </h3>
+            </Link>
 
-        <div className={`flex items-center ${compact ? "gap-1 pr-9" : "gap-2 pr-14"}`}>
-          <Stars rating={avgRating} compact={compact} />
-          <span className={`text-[var(--fa-ink)] ${compact ? "text-[10px]" : "text-[12px]"}`}>{avgRating.toFixed(1)}/5</span>
-          {!compact && <span className="text-[12px] text-[var(--fa-secondary)]">({globalAdmirePercent}%)</span>}
-        </div>
+            <div className="mt-[4px] font-[family-name:var(--font-carlito)] text-[15.5px] leading-[22.4px] text-[#373435]">
+              <p className="truncate">
+                {impressionName ? (isSignatureScent(impressionName) ? impressionName : `Inspired by: ${impressionName}`) : "\u00a0"}
+              </p>
+              <p className="truncate">{brand ? `Brand: ${brand}` : "\u00a0"}</p>
+              <p className="truncate">{scentFamily ? `Fragrance: ${scentFamily}` : "\u00a0"}</p>
+            </div>
 
-        <div className={`flex items-baseline ${compact ? "flex-wrap gap-x-1.5 gap-y-0 pr-9" : "gap-2.5 pr-14"}`}>
-          {headlinePrice != null ? (
-            <>
-              {disc > 0 && (
-                <span className={`strike-diagonal text-[var(--fa-secondary)] ${compact ? "text-[10px]" : "text-[13px]"}`}>{formatRs(headlinePrice)}</span>
+            <div className="h-[19px] flex items-center gap-[16px] pr-[46px] font-[family-name:var(--font-carlito)] text-[15.5px] leading-none text-[#373435] whitespace-nowrap">
+              <Stars rating={avgRating} home />
+              <span>
+                {avgRating.toFixed(1)}/5&nbsp;&nbsp;({globalAdmirePercent}%)
+              </span>
+            </div>
+
+            <div className="mt-[9px] h-[18px] flex items-baseline gap-[16px] pr-[46px] font-[Arial,Helvetica,sans-serif] text-[15.5px] leading-[18px] whitespace-nowrap">
+              {headlinePrice != null ? (
+                <>
+                  {disc > 0 && (
+                    <span className="text-[#555] line-through decoration-[#e23b3b] decoration-[1.5px]">{formatRs(headlinePrice)}</span>
+                  )}
+                  <span className="font-bold text-[#a8329e]">{formatRs(finalOf(headlinePrice))}</span>
+                </>
+              ) : (
+                <span className="text-[#555]">Unavailable</span>
               )}
-              <span className={`font-bold text-[var(--fa-gold-ink)] ${compact ? "text-[12px]" : "text-[15px]"}`}>{formatRs(finalOf(headlinePrice))}</span>
-            </>
-          ) : (
-            <span className="text-[12px] text-[var(--fa-secondary)]">Unavailable</span>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <>
+          <Link href={href || "#"} className="text-center">
+            <h3 className={`font-bold leading-tight text-[var(--fa-ink)] ${compact ? "text-[12px] line-clamp-2" : "text-[15px] whitespace-nowrap overflow-hidden text-ellipsis"}`}>
+              {name}
+              {gm && <span className={`font-semibold ${genderTextClass(gender, "light")}`}>{` - ${gm.label}`}</span>}
+            </h3>
+          </Link>
+
+          <div className={`space-y-0.5 text-[var(--fa-secondary)] ${compact ? "text-[10px]" : "text-[12px]"}`}>
+            {impressionName && (
+              <p className="line-clamp-1">
+                {isSignatureScent(impressionName) ? impressionName : `Inspired by: ${impressionName}`}
+              </p>
+            )}
+            {brand && <p className="line-clamp-1">Brand: {brand}</p>}
+            {scentFamily && <p className="line-clamp-1">Fragrance: {scentFamily}</p>}
+          </div>
+
+          <div className={`flex items-center ${compact ? "gap-1 pr-9" : "gap-2 pr-14"}`}>
+            <Stars rating={avgRating} compact={compact} />
+            <span className={`text-[var(--fa-ink)] ${compact ? "text-[10px]" : "text-[12px]"}`}>{avgRating.toFixed(1)}/5</span>
+            {!compact && <span className="text-[12px] text-[var(--fa-secondary)]">({globalAdmirePercent}%)</span>}
+          </div>
+
+          <div className={`flex items-baseline ${compact ? "flex-wrap gap-x-1.5 gap-y-0 pr-9" : "gap-2.5 pr-14"}`}>
+            {headlinePrice != null ? (
+              <>
+                {disc > 0 && (
+                  <span className={`strike-diagonal text-[var(--fa-secondary)] ${compact ? "text-[10px]" : "text-[13px]"}`}>{formatRs(headlinePrice)}</span>
+                )}
+                <span className={`font-bold text-[var(--fa-gold-ink)] ${compact ? "text-[12px]" : "text-[15px]"}`}>{formatRs(finalOf(headlinePrice))}</span>
+              </>
+            ) : (
+              <span className="text-[12px] text-[var(--fa-secondary)]">Unavailable</span>
+            )}
+          </div>
+          </>
+        )}
 
         {/* Spec #3/#4 — icon only at rest, label slides out on hover */}
         <button
@@ -248,15 +315,17 @@ export default function BestSellerCard({
           onClick={handleCart}
           disabled={!cardEdition}
           aria-label={inCartQty > 0 ? "Added to cart" : "Add to cart"}
-          className={`group/cart absolute z-20 inline-flex flex-row-reverse items-center justify-center rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 ${compact ? "bottom-2.5 right-2 h-9 min-w-[36px]" : "bottom-4 right-3 h-11 min-w-[44px]"} shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
+          className={`group/cart absolute z-20 inline-flex flex-row-reverse items-center justify-center rounded-full px-0 gap-0 hover:px-3.5 hover:gap-1.5 ${
+            home ? "bottom-[10px] right-[10px] h-[39px] min-w-[39px]" : compact ? "bottom-2.5 right-2 h-9 min-w-[36px]" : "bottom-4 right-3 h-11 min-w-[44px]"
+          } shadow-[0_5px_14px_rgba(0,0,0,0.26)] transition-all duration-200 ${
             !cardEdition
               ? "bg-[var(--fa-disabled)] cursor-not-allowed"
               : inCartQty > 0
-              ? "bg-[var(--fa-hover-dark)]"
-              : "bg-[var(--fa-dark)]"
+              ? home ? "bg-[#b82a2a]" : "bg-[var(--fa-hover-dark)]"
+              : home ? "bg-[#ee3b3b]" : "bg-[var(--fa-dark)]"
           } text-white`}
         >
-          <svg viewBox="0 0 24 24" className={`${compact ? "w-4 h-4" : "w-5 h-5"} shrink-0`} fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" className={`${home ? "w-[22px] h-[22px]" : compact ? "w-4 h-4" : "w-5 h-5"} shrink-0`} fill="currentColor" aria-hidden="true">
             <path d="M7 4h-3a1 1 0 100 2h2.2l2.3 9.2A2 2 0 0010.4 17h7.2a2 2 0 001.9-1.4l2-6.6H8.2l-.5-2A1 1 0 007 4zm3.5 15a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2zm7 0a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z" />
           </svg>
           <span className="max-w-0 overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.06em] opacity-0 transition-all duration-200 group-hover/cart:max-w-[110px] group-hover/cart:opacity-100">

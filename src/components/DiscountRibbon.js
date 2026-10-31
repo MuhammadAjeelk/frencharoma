@@ -5,12 +5,13 @@
 // `compact` is for the 2-up phone grid, where the card is ~173px wide and the
 // full-size ribbon covers a third of the artwork. Everything scales by one
 // factor so the band stays proportioned.
-export default function DiscountRibbon({ percent, className = "", compact = false }) {
+// `color` and `scale` let the homepage card use the mockup's smaller yellow band.
+export default function DiscountRibbon({ percent, className = "", compact = false, color: colorOverride, scale }) {
   const p = Number(percent) || 0;
   if (p <= 0) return null;
 
-  const color = p >= 30 ? "var(--fa-dark)" : "var(--fa-gold-ink)";
-  const k = compact ? 0.62 : 1;
+  const color = colorOverride || (p >= 30 ? "var(--fa-dark)" : "var(--fa-gold-ink)");
+  const k = scale || (compact ? 0.62 : 1);
   const px = (n) => `${Math.round(n * k)}px`;
 
   return (

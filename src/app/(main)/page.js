@@ -12,7 +12,6 @@ import {
   OfferBanners,
 } from "@/components/home/HomeSections";
 import CustomerStrip from "@/components/home/CustomerStrip";
-import ElevateBand from "@/components/home/ElevateBand";
 import getSiteMedia from "@/lib/getSiteMedia";
 
 // Static page. Images, hero slides and reviews are read when the page is
@@ -20,32 +19,32 @@ import getSiteMedia from "@/lib/getSiteMedia";
 // reach the customer strip — never per visitor.
 export const revalidate = 3600;
 
-// The phone and desktop mockups stack the sections in different orders, so
-// each one carries its position for both: `order-N md:order-M`.
+// The phone and desktop mockups stack the sections in the same order except
+// that phones show Edition before Season, so each carries `order-N md:order-M`.
 export default async function Home() {
   const { media, heroSlides, reviews } = await getSiteMedia();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--fa-dark)]">
+    <div className="min-h-screen flex flex-col bg-[var(--fa-home-cream)]">
       <div className="order-1">
         <HeroCarousel slides={heroSlides} />
       </div>
       <Reveal className="order-2">
         <WhyChooseUs media={media} />
       </Reveal>
-      <Reveal className="order-4 md:order-3">
+      <Reveal className="order-3">
         <ShopByGender media={media} />
       </Reveal>
-      <Reveal className="order-3 md:order-4">
+      <Reveal className="order-4">
         <ShopByBrand media={media} />
       </Reveal>
-      <Reveal className="order-6 md:order-5">
+      <Reveal className="order-5">
         <BestSellers />
       </Reveal>
       <Reveal className="order-7 md:order-6">
         <ShopBySeason media={media} />
       </Reveal>
-      <Reveal className="order-5 md:order-7">
+      <Reveal className="order-6 md:order-7">
         <ShopByEdition media={media} />
       </Reveal>
       <Reveal className="order-8">
@@ -56,9 +55,6 @@ export default async function Home() {
       </Reveal>
       <div className="order-10">
         <CustomerStrip reviews={reviews} />
-      </div>
-      <div className="order-11">
-        <ElevateBand />
       </div>
       <BundleOfferModal />
     </div>

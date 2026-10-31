@@ -246,7 +246,7 @@ export default function HeroSlidesEditor() {
           <h2 className="text-lg font-semibold text-gray-900">Hero slides</h2>
           <p className="text-sm text-gray-500 mt-0.5">
             The banners already include their “Explore Collection” button, so the whole slide is the
-            link. Desktop 2880 × 985, phone 1290 × 1405. A slide with no phone image is hidden on phones.
+            link. Upload desktop at 5700 × 1950 and phone at 1290 × 1405 (any size with the same shape works). A slide with no phone image is hidden on phones.
           </p>
         </div>
         {!loading && !isDefault && (

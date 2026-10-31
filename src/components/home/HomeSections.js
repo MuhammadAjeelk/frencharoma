@@ -1,31 +1,35 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { DEFAULT_MEDIA, SITE_MEDIA_SECTIONS } from "@/lib/siteMedia";
 import { PHOTO_HOVER } from "@/lib/design";
 import ArtCard from "./ArtCard";
+import Cta from "./Cta";
 import HomeHeading from "./HomeHeading";
 import SnapRow from "./SnapRow";
+import BrandMarquee from "./BrandMarquee";
 
-// The homepage sections of the 2026-10 mockup. Every image comes from the
-// admin-managed map (src/lib/siteMedia.js), and the slot list for each section
-// is read from there too, so adding a brand or card is a registry change.
+// The homepage sections of the 2026-10 mockups. Every image, and the slot list
+// of each section, comes from the admin-managed registry (src/lib/siteMedia.js).
 //
-// Grounds alternate per device, as drawn: desktop cream / paper bands, phones
-// sand / dark. `PHONE_DARK` sections pass tone="dark" to their heading and row.
+// Spacing is the mockups' own, section by section, because the designer did
+// not space them uniformly: desktop values are the 1369px mockup's pixels,
+// phone values the phone mockup's divided by its 1.94 scale. Desktop content
+// spans the full width less a 2.41vw margin each side, as drawn.
 
-const GUTTER = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
-const CREAM = "bg-[var(--fa-home-sand)] md:bg-[var(--fa-home-cream)]";
-const PAPER = "bg-[var(--fa-home-sand)] md:bg-[var(--fa-home-paper)]";
-const PHONE_DARK_CREAM = "bg-[var(--fa-dark)] md:bg-[var(--fa-home-cream)]";
+const FRAME = "md:px-[2.41vw]";
+
+// Section grounds. Phones and desktop alternate them differently.
+const CREAM = "bg-[var(--fa-home-cream)]";
+const WHITE = "bg-[var(--fa-home-white)]";
 
 const slotsOf = (id) => SITE_MEDIA_SECTIONS.find((s) => s.id === id)?.slots || [];
 
 // Three wide cards: gender, season, scent profile.
-const CARD_SIZES = "(max-width: 767px) 92vw, 33vw";
+const CARD_SIZES = "(max-width: 767px) 85vw, 32vw";
 
-function CardRow({ id, media, label, tone }) {
+function CardRow({ id, media, label }) {
   return (
-    <SnapRow label={label} tone={tone}>
+    <SnapRow label={label}>
       {slotsOf(id).map((slot) => (
         <ArtCard key={slot.key} art={media[slot.key]} sizes={CARD_SIZES} />
       ))}
@@ -33,111 +37,127 @@ function CardRow({ id, media, label, tone }) {
   );
 }
 
+// Section padding and the gap under the heading, phone then desktop.
+function Section({ ground, pad, children }) {
+  return <section className={`${ground} ${pad}`}>{children}</section>;
+}
+
 export function ShopByGender({ media = DEFAULT_MEDIA }) {
   return (
-    <section className={`${CREAM} py-6 md:py-2`}>
-      <div className={GUTTER}>
-        <HomeHeading title="Shop By Gender" subtitle="Find the scent that reflects you." phoneOnly />
+    <Section ground={CREAM} pad="pt-[15px] pb-[31px] md:pt-[7px] md:pb-0">
+      <HomeHeading title="Shop by Gender" href="/collections/shop-all" desktop={false} />
+      <div className={`mt-[11px] md:mt-0 ${FRAME}`}>
         <CardRow id="gender" media={media} label="Shop by gender" />
       </div>
-    </section>
+    </Section>
   );
 }
 
 export function ShopByBrand({ media = DEFAULT_MEDIA }) {
   return (
-    <section className={`${PHONE_DARK_CREAM} py-8 md:pt-10 md:pb-14`}>
-      <div className={GUTTER}>
-        <HomeHeading
-          eyebrow="Iconic Brands"
-          title="Shop By Brand"
-          subtitle="Discover your favorite houses."
-          href="/collections/shop-all?view=brands"
-          phoneLinkOnly
-          tone="dark"
-        />
-        <div className="md:px-14">
-          <SnapRow
+    <Section ground={`${WHITE} md:bg-[var(--fa-home-cream)]`} pad="pt-[15px] pb-[31px] md:pt-[35px] md:pb-[67px]">
+      <HomeHeading eyebrow="Iconic Brands" title="Shop by Brand" href="/collections/shop-all?view=brands" />
+      <div className={`mt-[11px] md:mt-[27px] ${FRAME}`}>
+        <div className="md:px-[4.38vw]">
+          <BrandMarquee
             label="Shop by brand"
-            desktop="scroll"
-            dots={false}
-            tone="dark"
-            itemClass="w-[44%] sm:w-[30%] md:w-[calc((100%-120px)/6)]"
-          >
-            {slotsOf("brands").map((slot) => (
-              <ArtCard
-                key={slot.key}
-                art={media[slot.key]}
-                round
-                sizes="(max-width: 767px) 44vw, 15vw"
-                className="ring-2 ring-[var(--fa-gold)]/70"
-              />
+            gapClass="gap-[13px] md:gap-[2.37vw]"
+            itemClass="w-[36.4vw] md:w-[calc((100%-5*2.37vw)/6)]"
+            items={slotsOf("brands").map((slot) => (
+              <ArtCard key={slot.key} art={media[slot.key]} round sizes="(max-width: 767px) 37vw, 13vw" />
             ))}
-          </SnapRow>
+          />
         </div>
       </div>
-    </section>
+    </Section>
   );
 }
 
 export function ShopBySeason({ media = DEFAULT_MEDIA }) {
   return (
-    <section className={`${CREAM} py-8 md:py-10`}>
-      <div className={GUTTER}>
-        <HomeHeading
-          eyebrow="Seasonal Scents"
-          title="Shop By Season"
-          subtitle="Discover the perfect expression for every time of year."
-        />
+    <Section ground={CREAM} pad="pt-[15px] pb-[31px] md:pt-[21px] md:pb-[38px]">
+      <HomeHeading eyebrow="Seasonal Scents" title="Shop by Season" href="/collections/shop-all" />
+      <div className={`mt-[11px] md:mt-[21px] ${FRAME}`}>
         <CardRow id="seasons" media={media} label="Shop by season" />
       </div>
-    </section>
+    </Section>
   );
 }
 
-// One banner with two destinations: the left half is Luxury, the right half
-// Premium. The halves are separate links over a single image.
+// Desktop: one banner, a button on each half, each half its own link.
+// Phones: two cards cut from the same banner — the left `phoneCrop`% for
+// Luxury and the right for Premium — each with its half's button.
 export function ShopByEdition({ media = DEFAULT_MEDIA }) {
   const art = media["editions.banner"];
   if (!art?.src) return null;
+  const [luxury, premium] = art.ctas || [];
+  const span = art.phoneCrop || 47;
+
   return (
-    <section className={`${PAPER} py-8 md:py-10`}>
-      <div className={GUTTER}>
-        <HomeHeading eyebrow="Find Your Style" title="Shop By Edition" subtitle="Crafted for every mood and moment." />
-        <div className="group relative overflow-hidden" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
-          <Image src={art.src} alt={art.alt} fill sizes="(max-width: 1280px) 100vw, 1280px" className={`object-cover ${PHOTO_HOVER}`} />
-          <Link href="/collections/shop-all?edition=luxury" aria-label="Shop Luxury Edition" className="absolute inset-y-0 left-0 w-1/2" />
-          <Link href="/collections/shop-all?edition=premium" aria-label="Shop Premium Edition" className="absolute inset-y-0 right-0 w-1/2" />
+    <Section ground={WHITE} pad="pt-[15px] pb-[31px] md:pt-[30px] md:pb-[59px]">
+      <HomeHeading eyebrow="Find Your Style" title="Shop by Edition" href="/collections/shop-all" />
+
+      <div className="mt-[11px] md:hidden">
+        <SnapRow label="Shop by edition">
+          {luxury && <ArtCard art={art} href={luxury.href} cta={luxury} crop={{ start: 0, span }} sizes="85vw" />}
+          {premium && <ArtCard art={art} href={premium.href} cta={premium} crop={{ start: 100 - span, span }} sizes="85vw" />}
+        </SnapRow>
+      </div>
+
+      <div className={`hidden md:block mt-[16px] ${FRAME}`}>
+        <div className="@container group relative overflow-hidden" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
+          <Image src={art.src} alt={art.alt} fill sizes="96vw" className={`object-cover ${PHOTO_HOVER}`} />
+          {/* Each half of the banner opens its edition; the buttons are links too. */}
+          {luxury && <Link href={luxury.href} aria-label={luxury.label} className="absolute inset-y-0 left-0 w-1/2" />}
+          {premium && <Link href={premium.href} aria-label={premium.label} className="absolute inset-y-0 right-0 w-1/2" />}
+          {(art.ctas || []).map((cta) => (
+            <Cta key={cta.label} cta={cta} href={cta.href} />
+          ))}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }
 
 export function ShopByScent({ media = DEFAULT_MEDIA }) {
   return (
-    <section className={`${PHONE_DARK_CREAM} py-8 md:py-10`}>
-      <div className={GUTTER}>
-        <HomeHeading
-          eyebrow="Choose Your Experience"
-          title="Shop By Scent Profile"
-          subtitle="Find the fragrance that matches your style."
-          href="/collections/shop-all"
-          desktopLinkLabel="More"
-          tone="dark"
-        />
-        <CardRow id="scents" media={media} label="Shop by scent profile" tone="dark" />
+    <Section ground={`${WHITE} md:bg-[var(--fa-home-cream)]`} pad="pt-[15px] pb-[17px] md:pt-[33px] md:pb-[42px]">
+      <HomeHeading
+        eyebrow="Choose Your Experience"
+        title="Shop by Scent Profile"
+        href="/collections/shop-all"
+        desktopLink={{ href: "/collections/shop-all", label: "More", top: 64 }}
+        className={FRAME}
+      />
+      <div className={`mt-[11px] md:mt-[31px] ${FRAME}`}>
+        <CardRow id="scents" media={media} label="Shop by scent profile" />
       </div>
-    </section>
+    </Section>
   );
 }
 
-// Discovery Box, Special Offers, Bundle Offers: edge-to-edge banners.
-export function OfferBanners({ media = DEFAULT_MEDIA }) {
+// Discovery Box, Special Offers, Bundle Offers: edge-to-edge banners. Phones
+// and desktop get different files, shapes and button spots, so each device
+// renders its own; only the one on screen is downloaded.
+function OfferBanner({ desktop, phone }) {
   return (
-    <section className="bg-[var(--fa-home-paper)] py-3 md:py-5 space-y-3 md:space-y-6">
-      {slotsOf("promos").map((slot) => (
-        <ArtCard key={slot.key} art={media[slot.key]} sizes="100vw" />
+    <>
+      <div className="md:hidden">
+        <ArtCard art={phone} sizes="100vw" />
+      </div>
+      <div className="hidden md:block">
+        <ArtCard art={desktop} sizes="100vw" />
+      </div>
+    </>
+  );
+}
+
+export function OfferBanners({ media = DEFAULT_MEDIA }) {
+  const ids = ["discoveryBox", "specialOffers", "bundleOffers"];
+  return (
+    <section className="bg-white flex flex-col gap-[5px] md:gap-[27px]">
+      {ids.map((id) => (
+        <OfferBanner key={id} desktop={media[`promo.${id}`]} phone={media[`promo.${id}.mobile`]} />
       ))}
     </section>
   );

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // Staging preview of the bundle-offer artwork as a centred pop-up. It opens on
-// every homepage load so the design can be judged on the live layout; the
-// floating button reopens it after closing. Not wired to the cart — the
+// every homepage load so the design can be judged on the live layout;
+// reloading the page shows it again. Not wired to the cart — the
 // buttons in the artwork are part of the image.
 
 const ART = [
@@ -45,16 +45,6 @@ export default function BundleOfferModal() {
 
   return (
     <>
-      {!open && (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="fixed bottom-4 left-4 z-40 rounded-full px-4 py-2 text-sm font-semibold bg-[var(--fa-gold)] text-[var(--fa-ink)] shadow-lg hover:brightness-110 transition"
-        >
-          Bundle Offer
-        </button>
-      )}
-
       {open && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-3 sm:p-6"

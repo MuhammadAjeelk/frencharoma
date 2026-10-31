@@ -7,12 +7,14 @@ import { MENU_PANEL, FOCUS_RING } from "@/lib/design";
 
 const SHOP_FLAGS = ["bestSeller", "specialOffer", "bundle", "signature", "newArrival", "search"];
 
-// The nav band is taupe with black labels; the panels that drop out of it are
-// dark, so they read as part of the same chrome as the logo bar above.
+// The nav sits in the charcoal header (2026-10 mockup): white Arial caps,
+// spaced evenly around a gap where the logo's own "FRENCH AROMAS" lettering
+// lines up with them. Size and spacing come from --nav-font / --nav-gap /
+// --nav-logo-w set by Header. The panels that drop out of it are dark too.
 const TAB =
-  "text-[13px] font-semibold uppercase tracking-[0.08em] text-[var(--fa-ink)] transition-colors duration-200";
-const TAB_ACTIVE = "underline underline-offset-[6px] decoration-2";
-const TAB_IDLE = "hover:underline hover:underline-offset-[6px] hover:decoration-2";
+  "font-[Arial,Helvetica,sans-serif] text-[length:var(--nav-font)] font-bold uppercase leading-none whitespace-nowrap text-white transition-colors duration-200";
+const TAB_ACTIVE = "text-[var(--fa-gold-hover)]";
+const TAB_IDLE = "hover:text-[var(--fa-gold-hover)]";
 
 const tabClass = (active) => `${TAB} ${active ? TAB_ACTIVE : TAB_IDLE} ${FOCUS_RING}`;
 
@@ -49,8 +51,11 @@ export function NavList({
   brands,
 }) {
   return (
-    <ul className="flex items-center gap-10 xl:gap-12">
+    <ul className="flex items-center gap-[var(--nav-gap)]">
       {menuItems.map((item, index) => {
+        if (item.spacer) {
+          return <li key={index} aria-hidden="true" className="shrink-0 w-[var(--nav-logo-w)]" />;
+        }
         const active = isItemActive(item);
         return (
           <li
@@ -62,14 +67,13 @@ export function NavList({
             onMouseLeave={() => { if (!item.shopMenu) setOpenDropdown(null); }}
           >
             {item.shopMenu ? (
-              <DesktopShopMenu label={item.name} className={tabClass(active)}
+              <DesktopShopMenu label={item.name} className={tabClass(active)} caret={false}
                 open={openDropdown === index} setOpen={(open) => setOpenDropdown(current => open ? index : current === index ? null : current)}
                 families={families} status={familiesStatus} />
             ) : item.brandDropdown ? (
               <>
-                <button className={`flex items-center gap-1 py-2 ${tabClass(active)}`}>
+                <button className={`flex items-center py-2 ${tabClass(active)}`}>
                   {item.name}
-                  <img src="/icons/caret.svg" alt="" className="w-3 h-3 opacity-50" />
                 </button>
                 {openDropdown === index && (
                   <div

@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Tinos, Carlito } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
@@ -22,6 +22,22 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
+// The 2026-10 homepage mockup sets its titles, buttons and footer in Times and
+// its product details in Calibri. Tinos and Carlito are the open fonts drawn to
+// the same metrics, so text sits exactly where the designer placed it.
+const tinos = Tinos({
+  variable: "--font-tinos",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+});
+
+const carlito = Carlito({
+  variable: "--font-carlito",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export const metadata = {
   title: "French Aromas | Premium Impression Perfumes",
   description:
@@ -33,7 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${tinos.variable} ${carlito.variable} antialiased overflow-x-hidden`}
       >
         <AuthProvider>
           <CartProvider>

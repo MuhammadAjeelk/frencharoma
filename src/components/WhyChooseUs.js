@@ -82,64 +82,90 @@ function renderInline(text, key) {
   );
 }
 
-// The trust strip under the hero — icon + two-line label, divided, in one row.
-// Each strip item is a single asset with its label baked in; `icon` links the
-// tile back to its FEATURES entry for the detail modal.
+// The trust strip under the hero, from the 2026-10 mockups.
+// - Desktop: six tiles in one centred row, 71px tall in the 1369px mockup with
+//   48px between them and a divider in each gap — kept in vw so the row holds
+//   those proportions at any width.
+// - Phones: two rows of three, each tile 41px tall, dividers between columns.
+// Most tiles are one image with the label drawn in; "Trusted by Customers" is
+// an icon with its label set as text. `icon` links a tile to its FEATURES
+// entry for the popup.
 const STRIP = [
   { icon: 1, id: "frenchIngredients" },
   { icon: 2, id: "highConcentration" },
   { icon: 3, id: "longLasting" },
   { icon: 4, id: "affordableLuxury" },
+  { icon: 8, id: "trusted", label: ["Trusted by", "Customers"] },
   { icon: 7, id: "freeShipping" },
 ];
 
-// Images come from the admin-managed map: trust.<id>.strip (desktop, label
-// baked in), trust.<id>.icon (phones and tablets) and trust.<id>.popup.
+function Tile({ item, media, onOpen }) {
+  const feature = FEATURES.find((f) => f.icon === item.icon);
+  const art = media[item.label ? `trust.${item.id}.icon` : `trust.${item.id}.strip`];
+  if (!art?.src) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(FEATURES.indexOf(feature))}
+      aria-label={feature?.heading}
+      className="group flex h-full items-center gap-[var(--tile-gap)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fa-gold-hover)]"
+    >
+      <Image
+        src={art.src}
+        alt={item.label ? "" : feature?.heading || ""}
+        width={art.width}
+        height={art.height}
+        className="h-full w-auto transition-[filter] duration-300 group-hover:brightness-110"
+      />
+      {item.label && (
+        <span className="text-left font-[family-name:var(--font-carlito)] text-[length:var(--tile-label)] leading-[1.18] text-[#cdaa63]">
+          {item.label[0]}
+          <br />
+          {item.label[1]}
+        </span>
+      )}
+    </button>
+  );
+}
+
+// Images come from the admin-managed map: trust.<id>.strip (or .icon for the
+// text-label tile) and trust.<id>.popup.
 export default function WhyChooseUs({ media = DEFAULT_MEDIA }) {
   const [openIndex, setOpenIndex] = useState(null);
   const active = openIndex != null ? FEATURES[openIndex] : null;
   const activeArt = active?.media ? media[`trust.${active.media}.popup`]?.src : null;
 
   return (
-    <section className="bg-[var(--fa-dark)] py-7 md:py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-5 gap-x-1 sm:gap-x-2">
-        {STRIP.map((item, i) => {
-          const feature = FEATURES.find((f) => f.icon === item.icon);
-          const strip = media[`trust.${item.id}.strip`];
-          const icon = media[`trust.${item.id}.icon`];
-          if (!strip?.src || !icon?.src) return null;
-          return (
-            <div
-              key={item.icon}
-              className={`flex items-center justify-center px-2 md:px-4 ${
-                i < STRIP.length - 1 ? "lg:border-r lg:border-[var(--fa-gold)]/30" : ""
-              }`}
-            >
-              <button
-                type="button"
-                onClick={() => setOpenIndex(FEATURES.indexOf(feature))}
-                aria-label={feature?.title}
-                className="group focus:outline-none"
-              >
-                <Image
-                  src={icon.src}
-                  alt={feature?.title || ""}
-                  width={icon.width}
-                  height={icon.height}
-                  className="h-8 sm:h-9 md:h-10 w-auto lg:hidden transition-transform duration-300 group-hover:scale-105"
-                />
-                <Image
-                  src={strip.src}
-                  alt={feature?.title || ""}
-                  width={strip.width}
-                  height={strip.height}
-                  className="hidden lg:block lg:h-[60px] w-auto transition-transform duration-300 group-hover:scale-105"
-                />
-              </button>
-            </div>
-          );
-        })}
-      </div>
+    <section className="bg-[var(--fa-home-phone-dark)] md:bg-[var(--fa-dark)]">
+      {/* Phones: 2 × 3 */}
+      <ul
+        className="md:hidden grid grid-cols-3 gap-y-[23px] pt-[10px] pb-[12px] [--tile-label:13.5px] [--tile-gap:8px]"
+        aria-label="Why French Aromas"
+      >
+        {STRIP.map((item, i) => (
+          <li
+            key={item.id}
+            className={`relative flex h-[41px] justify-center ${
+              i % 3 ? "before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-[37px] before:w-px before:bg-[#cdaa63]/45" : ""
+            }`}
+          >
+            <Tile item={item} media={media} onOpen={setOpenIndex} />
+          </li>
+        ))}
+      </ul>
+
+      {/* Desktop: one row */}
+      <ul
+        className="hidden md:flex items-center justify-center h-[7.96vw] [--tile-label:1.76vw] [--tile-gap:1.17vw]"
+        aria-label="Why French Aromas"
+      >
+        {STRIP.map((item, i) => (
+          <li key={item.id} className="flex items-center h-[5.19vw]">
+            {i > 0 && <span aria-hidden="true" className="mx-[1.75vw] h-[4.4vw] w-px bg-[#cdaa63]/40" />}
+            <Tile item={item} media={media} onOpen={setOpenIndex} />
+          </li>
+        ))}
+      </ul>
 
       <UniversalModal
         isOpen={openIndex != null}

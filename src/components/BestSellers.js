@@ -7,21 +7,32 @@ import QuickAddModal from "./QuickAddModal";
 import { genderHeading } from "@/lib/gender";
 import HomeHeading from "./home/HomeHeading";
 
-// Phones: dark band, one card at a time. Desktop: the mockup's white band with
-// four taller cards (product art is drawn at 1200 × 1850 there).
-const GROUND = "bg-[var(--fa-dark)] md:bg-[var(--fa-home-paper)]";
-const IMAGE_SHAPE = "aspect-square md:aspect-[1200/1850]";
+// Best Sellers, as the 2026-10 mockups draw it.
+// - Desktop: paper band; four cards across the middle 88.8% of the width
+//   (77px in from each edge of the 1369px mockup, 21px apart), light round
+//   arrows outside them that page four at a time.
+// - Phones: cream band; a swipe row with each card 71% wide and the next one
+//   peeking in.
+const GROUND = "bg-[var(--fa-home-cream)] md:bg-[var(--fa-home-paper)]";
+const ROW = "md:px-[5.62vw]";
 
 function Heading() {
   return (
     <HomeHeading
       eyebrow="Most Loved"
       title="Best Sellers"
-      subtitle="Most Loved. Most Trusted."
       href="/collections/shop-all?bestSeller=true"
-      tone="dark"
-      className="md:mb-12"
+      desktopLink={{ href: "/collections/shop-all?bestSeller=true", label: "View All", top: 53 }}
+      className={ROW}
     />
+  );
+}
+
+function Chevron({ dir }) {
+  return (
+    <svg className="w-[45%] h-[45%]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d={dir < 0 ? "M19 12H5m0 0l6-6m-6 6l6 6" : "M5 12h14m0 0l-6-6m6 6l-6 6"} />
+    </svg>
   );
 }
 
@@ -72,12 +83,9 @@ export default function BestSellers() {
     }
   }, [loadPage]);
 
+  // Desktop paging width; phones scroll instead.
   useEffect(() => {
-    const update = () => {
-      if (window.innerWidth >= 1024) setVisibleCount(4);
-      else if (window.innerWidth >= 640) setVisibleCount(2);
-      else setVisibleCount(1);
-    };
+    const update = () => setVisibleCount(window.innerWidth >= 1024 ? 4 : 3);
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
@@ -100,26 +108,67 @@ export default function BestSellers() {
           perfumes[(((currentIndex + i) % n) + n) % n],
         );
 
+  // Near the end of the phone row, fetch the next page.
+  const onPhoneScroll = (e) => {
+    const el = e.currentTarget;
+    if (el.scrollLeft + el.clientWidth >= el.scrollWidth - el.clientWidth) prefetchMore();
+  };
+
+  const card = (perfume, key) => {
+    const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
+    return (
+      <BestSellerCard
+        key={key}
+        look="home"
+        name={perfume.name}
+        brand={brandLabel}
+        image={perfume.images?.main || ""}
+        impressionName={perfume.impressionName || ""}
+        slug={perfume.slug}
+        perfumeId={perfume._id}
+        editions={perfume.editions || []}
+        gender={perfume.gender || ""}
+        scentFamily={perfume.scentFamily || ""}
+        avgRating={perfume.avgRating || 0}
+        discountPercent={perfume.discountPercent || 0}
+        globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
+        href={`/products/${perfume.slug}`}
+        onQuickView={() => {
+          setSelectedPerfume(perfume);
+          setModalOpen(true);
+        }}
+      />
+    );
+  };
+
+  // Desktop: four (three below lg) equal columns, 1.53vw apart.
+  const colWidth =
+    visibleCount === 4 ? "calc((100% - 3 * 1.53vw) / 4)" : "calc((100% - 2 * 1.53vw) / 3)";
+
+  const arrow =
+    "absolute top-1/2 -translate-y-1/2 z-20 w-[2.63vw] h-[2.63vw] min-w-8 min-h-8 max-w-12 max-h-12 rounded-full flex items-center justify-center bg-[#f1ece4] border border-[#ddd5c9] text-[#6f6a63] hover:text-[#2b2b2b] hover:border-[var(--fa-gold)] transition-colors";
+
   if (loading) {
     return (
-      <div className={`py-8 md:py-10 ${GROUND}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Heading />
-          {/* Placeholder count matches the four cards the carousel shows */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-12 sm:px-14">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className={`rounded-2xl overflow-hidden animate-pulse ${i ? "hidden sm:block" : ""}`}>
-                <div className={`${IMAGE_SHAPE} bg-[var(--fa-dark-raised)] md:bg-[var(--fa-home-cream)]`} />
-                <div className="bg-[var(--fa-beige)] p-4 space-y-2">
-                  <div className="h-3 bg-[var(--fa-border)] w-3/4" />
-                  <div className="h-3 bg-[var(--fa-border)] w-1/2" />
-                  <div className="h-8 bg-[var(--fa-border)] mt-3" />
-                </div>
+      <section className={`pt-[15px] pb-[31px] md:pt-[34px] md:pb-[36px] ${GROUND}`} aria-busy="true">
+        <Heading />
+        <div className={`mt-[11px] md:mt-[28px] flex gap-[10px] md:gap-[1.53vw] overflow-hidden px-3 ${ROW}`}>
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className={`shrink-0 w-[71.1vw] md:w-[calc((100%-3*1.53vw)/4)] rounded-[12px] border border-[#d8d0c4] overflow-hidden animate-pulse ${i > 1 ? "hidden md:block" : ""}`}
+            >
+              <div className="aspect-square bg-[#e9e2d7]" />
+              <div className="h-[156px] bg-[#f4ede4] px-[15px] pt-[12px] space-y-[10px]">
+                <div className="h-[14px] w-2/3 mx-auto bg-[#e3dacd]" />
+                <div className="h-[12px] w-3/4 bg-[#e3dacd]" />
+                <div className="h-[12px] w-1/2 bg-[#e3dacd]" />
+                <div className="h-[12px] w-3/5 bg-[#e3dacd]" />
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -127,80 +176,43 @@ export default function BestSellers() {
 
   return (
     <>
-      <div className={`py-8 md:py-10 relative overflow-visible ${GROUND}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible">
-          <Heading />
+      <section className={`pt-[15px] pb-[31px] md:pt-[34px] md:pb-[36px] ${GROUND}`}>
+        <Heading />
 
-          <div className="relative overflow-visible">
-            <button
-              onClick={handlePrevious}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[var(--fa-home-strip)] border border-[var(--fa-border)] text-[var(--fa-ink)]/70 hover:text-[var(--fa-ink)] hover:border-[var(--fa-gold)] transition-colors duration-200"
-              aria-label="Previous products"
-            >
-              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <div className="min-w-0 px-12 sm:px-14">
-              <div className="flex gap-3">
-                {visibleItems.map((perfume, index) => {
-                  const brandLabel = Array.isArray(perfume.brands) ? perfume.brands.join(", ") : perfume.brand || "";
-                  const hasSpecialOfferTag = (perfume.tags || []).some((t) => /special\s*-?\s*offer/i.test(t));
-                  return (
-                    <div
-                      key={`${currentIndex}-${index}`}
-                      className="shrink-0"
-                      style={{
-                        width:
-                          visibleCount === 1
-                            ? "100%"
-                            : visibleCount === 2
-                            ? "calc((100% - 12px) / 2)"
-                            : visibleCount === 3
-                            ? "calc((100% - 24px) / 3)"
-                            : "calc((100% - 36px) / 4)",
-                      }}
-                    >
-                      <BestSellerCard
-                        name={perfume.name}
-                        brand={brandLabel}
-                        image={perfume.images?.main || ""}
-                        impressionName={perfume.impressionName || ""}
-                        slug={perfume.slug}
-                        perfumeId={perfume._id}
-                        editions={perfume.editions || []}
-                        gender={perfume.gender || ""}
-                        scentFamily={perfume.scentFamily || ""}
-                        avgRating={perfume.avgRating || 0}
-                        discountPercent={perfume.discountPercent || 0}
-                        globalAdmirePercent={perfume.globalAdmirePercent ?? 60}
-                        href={`/products/${perfume.slug}`}
-                        imageClass={IMAGE_SHAPE}
-                        onQuickView={() => {
-                          setSelectedPerfume(perfume);
-                          setModalOpen(true);
-                        }}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+        {/* Phones: swipe row */}
+        <div
+          onScroll={onPhoneScroll}
+          className="md:hidden mt-[11px] flex gap-[10px] overflow-x-auto snap-x snap-mandatory scroll-px-3 px-3 scrollbar-none"
+          role="region"
+          aria-label="Best sellers"
+        >
+          {perfumes.map((perfume) => (
+            <div key={perfume._id} className="snap-start shrink-0 w-[71.1vw]">
+              {card(perfume)}
             </div>
+          ))}
+          <div aria-hidden="true" className="shrink-0 w-px" />
+        </div>
 
-            <button
-              onClick={handleNext}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-2 md:p-2.5 rounded-full bg-[var(--fa-home-strip)] border border-[var(--fa-border)] text-[var(--fa-ink)]/70 hover:text-[var(--fa-ink)] hover:border-[var(--fa-gold)] transition-colors duration-200"
-              aria-label="Next products"
-            >
-              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+        {/* Desktop: paged row */}
+        <div className={`hidden md:block relative mt-[28px] ${ROW}`}>
+          <button onClick={handlePrevious} className={`${arrow} left-[2.56vw]`} aria-label="Previous products">
+            <Chevron dir={-1} />
+          </button>
+
+          <div className="flex gap-[1.53vw]">
+            {visibleItems.map((perfume, index) => (
+              <div key={`${currentIndex}-${index}`} className="shrink-0 min-w-0" style={{ width: colWidth }}>
+                {card(perfume)}
+              </div>
+            ))}
           </div>
 
+          <button onClick={handleNext} className={`${arrow} right-[2.56vw]`} aria-label="Next products">
+            <Chevron dir={1} />
+          </button>
         </div>
-      </div>
+      </section>
 
       <UniversalModal isOpen={modalOpen} onClose={() => setModalOpen(false)} wide heading={genderHeading(selectedPerfume?.name, selectedPerfume?.gender)}>
         {selectedPerfume && <QuickAddModal key={selectedPerfume._id} perfume={selectedPerfume} onClose={() => setModalOpen(false)} />}

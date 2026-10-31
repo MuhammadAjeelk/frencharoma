@@ -102,13 +102,18 @@ export default function Header() {
     setIsAccountOpen(false);
   };
 
+  // Three links either side of the logo, whose own "FRENCH AROMAS" lettering
+  // fills the `spacer` slot on desktop (2026-10 mockup).
   const menuItems = [
-    { name: "SHOP", href: "/collections/shop-all", shopMenu: true },
+    { name: "SHOP ALL", href: "/collections/shop-all", shopMenu: true },
     { name: "BEST SELLERS", href: "/collections/shop-all?bestSeller=true" },
     { name: "SHOP BY BRAND", href: "#", brandDropdown: true },
+    { spacer: true },
     { name: "SPECIAL OFFERS", href: "/collections/shop-all?specialOffer=true" },
     { name: "DISCOVERY BOX", href: "/collections/discovery-box" },
+    { name: "BLOGS", href: "/blogs/blog" },
   ];
+  const drawerItems = menuItems.filter((item) => !item.spacer);
 
 
   const baseMarquee = [
@@ -155,10 +160,13 @@ export default function Header() {
         </div>
       </div>
 
-      <header className="header relative z-50 border-b border-[var(--fa-border)] bg-[var(--fa-dark)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      {/* Charcoal chrome from the 2026-10 mockups: 61px on phones (a shade
+          darker), 157px on desktop with the logo centred over the nav row and
+          search / icons 123px in from each edge of the 1369px design. */}
+      <header className="header relative z-50 bg-[var(--fa-home-phone-dark)] lg:bg-[var(--fa-dark)] lg:h-[157px]">
+        <div className="px-4 sm:px-6 lg:px-[8.98vw]">
           {/* Top Section */}
-          <div className="flex items-center justify-between py-1.5 lg:py-2">
+          <div className="flex items-center justify-between h-[61px] lg:h-auto lg:items-start lg:pt-[43px]">
             {/* Left — Search */}
             <div className="flex items-center gap-2 flex-1 lg:flex-none overflow-visible">
               {/* Mobile Menu Button */}
@@ -174,13 +182,13 @@ export default function Header() {
               <div className="hidden lg:block relative overflow-visible">
                 <button
                   onClick={() => setIsSearchExpanded(true)}
-                  className={`flex items-center gap-2 py-2 focus:outline-none text-[var(--fa-gold)] hover:text-[var(--fa-gold-hover)] transition-colors duration-200 whitespace-nowrap ${FOCUS_RING} ${
+                  className={`flex items-center gap-[7px] w-[140px] h-[22px] px-[7px] border border-[#a69c8d] focus:outline-none text-[#d8cfc1] hover:text-[var(--fa-gold-hover)] hover:border-[var(--fa-gold-hover)] transition-colors duration-200 whitespace-nowrap ${FOCUS_RING} ${
                     isSearchExpanded ? "invisible" : ""
                   }`}
                   aria-label="Search"
                 >
-                  <MaskIcon src="/icons/search.svg" />
-                  <span className="text-[13px] font-medium uppercase tracking-[0.12em]">
+                  <MaskIcon src="/icons/search.svg" className="w-3 h-3" />
+                  <span className="font-[Arial,Helvetica,sans-serif] text-[11px] tracking-[0.04em]">
                     Search
                   </span>
                 </button>
@@ -325,7 +333,7 @@ export default function Header() {
 
             {/* Logo — Center */}
             <div
-              className={`flex-1 flex justify-center ${isSearchOpen ? "lg:flex hidden" : "flex"}`}
+              className={`flex-1 flex justify-center lg:flex-none lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-[23px] ${isSearchOpen ? "lg:flex hidden" : "flex"}`}
             >
               <Link href="/">
                 <Image
@@ -333,14 +341,14 @@ export default function Header() {
                   alt="French Aromas"
                   width={96}
                   height={36}
-                  className="w-auto h-[52px] sm:h-[62px] lg:h-[74px] max-w-[92px] object-contain transition-transform duration-300 hover:scale-105"
+                  className="w-auto h-[50px] lg:h-[106px] max-w-[92px] lg:max-w-none object-contain transition-[filter] duration-300 hover:brightness-110"
                   priority
                 />
               </Link>
             </div>
 
             {/* Right — Wishlist, Account, Cart */}
-            <div className="flex items-center gap-5 lg:gap-6 flex-1 justify-end lg:flex-none">
+            <div className="flex items-center gap-5 lg:gap-[27px] flex-1 justify-end lg:flex-none">
               {/* Wishlist */}
               <Link
                 href="/wishlist"
@@ -512,9 +520,12 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:block bg-[var(--fa-beige)] border-t border-[var(--fa-border)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <nav className="relative flex items-center justify-center py-2">
+        {/* Desktop Navigation — one row across the header, the logo's lettering
+            sitting in the middle slot. Spacing collapses evenly on narrow
+            desktops: 71px between items at the mockup's 1369px. */}
+        <div className="hidden lg:block absolute inset-x-0 top-[103px] [--nav-font:clamp(12px,1.1vw,15px)] [--nav-gap:clamp(18px,calc((100vw-941px)/6),71px)] [--nav-logo-w:125px]">
+          <div>
+            <nav className="relative flex items-center justify-center">
             <Suspense
               fallback={
                 <NavList
@@ -569,7 +580,7 @@ export default function Header() {
 
               <nav>
                 <ul className="space-y-1">
-                  {menuItems.map((item, index) => (
+                  {drawerItems.map((item, index) => (
                     <li key={index}>
                       {item.shopMenu ? (
                         <MobileShopMenu label={item.name} families={families} status={familiesStatus}

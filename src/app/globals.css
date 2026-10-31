@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  /* Reference palette: espresso chrome, ivory panels, champagne highlights.
-     UI colors only: photography and logo assets retain their original pixels. */
-  --fa-dark: #281b12;
-  --fa-dark-deep: #20150e;
-  --fa-dark-raised: #3b2b20;
+  /* Reference palette: charcoal chrome (#373838, the ground the 2026-10
+     homepage mockup and docs/design-migration.md both specify), ivory panels,
+     champagne highlights. UI colors only: photography and logo assets retain
+     their original pixels. */
+  --fa-dark: #373838;
+  --fa-dark-deep: #292929;
+  --fa-dark-raised: #474848;
   --fa-cream: #f7f2ea;
   --fa-beige: #eee3d4;
   --fa-gold: #b99a66;
@@ -18,17 +20,22 @@
   --fa-border: #d7c5ad;
   --fa-hover: #f0e2d1;
   --fa-selected: #ead8bf;
-  --fa-hover-dark: #493425;
+  --fa-hover-dark: #4d4e4e;
   --fa-disabled: #d1c3b1;
   --fa-premium: #ddd3c4;
   --fa-peach: #edd8ca;
-  /* Homepage grounds, sampled from the 2026-10 homepage mockup. Desktop
-     alternates cream and paper bands; phones alternate sand with the dark. */
+  /* Homepage, sampled from the 2026-10 mockups. Section bands alternate
+     cream and paper on every device; phones draw the header and trust strip
+     a shade darker than desktop does. */
   --fa-home-cream: #f4f0ea;
   --fa-home-paper: #fefefe;
-  --fa-home-strip: #f7f0e5;
-  --fa-home-sand: #decfba;
+  --fa-home-white: #fefefe;
+  --fa-home-strip: #f6f0e6;
   --fa-home-rule: #dec496;
+  --fa-home-phone-dark: #201e1e;
+  --fa-home-text: #373435;
+  --fa-home-text-deep: #201e1e;
+  --fa-home-link: #52658c;
   --background: var(--fa-dark);
   --foreground: var(--fa-ink);
   --primary: var(--fa-cream);
