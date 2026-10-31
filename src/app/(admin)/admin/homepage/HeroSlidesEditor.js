@@ -32,7 +32,7 @@ function Thumb({ art, label, wide }) {
   return (
     <div
       className={`relative bg-gray-100 border border-gray-200 rounded-md overflow-hidden flex items-center justify-center ${
-        wide ? "aspect-[2880/985] w-full max-w-md" : "aspect-[1290/1405] w-24 shrink-0"
+        wide ? "aspect-[2880/985] w-full max-w-md" : "aspect-[756/825] w-24 shrink-0"
       }`}
     >
       {art?.src ? (
@@ -246,7 +246,7 @@ export default function HeroSlidesEditor() {
           <h2 className="text-lg font-semibold text-gray-900">Hero slides</h2>
           <p className="text-sm text-gray-500 mt-0.5">
             The banners already include their “Explore Collection” button, so the whole slide is the
-            link. Upload desktop at 5700 × 1950 and phone at 1290 × 1405 (any size with the same shape works). A slide with no phone image is hidden on phones.
+            link. Upload desktop at 5700 × 1950 and phone at 1512 × 1650 (any size with the same shape works). A slide with no phone image is hidden on phones.
           </p>
         </div>
         {!loading && !isDefault && (

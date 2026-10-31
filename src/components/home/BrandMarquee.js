@@ -19,6 +19,14 @@ function Chevron({ dir }) {
   );
 }
 
+// One copy's width, measured between the first card of each copy, so side
+// padding never shifts the wrap point.
+function loopWidth(el, count) {
+  const a = el.children[0];
+  const b = el.children[count];
+  return a && b ? b.offsetLeft - a.offsetLeft : el.scrollWidth / 2;
+}
+
 export default function BrandMarquee({ items, label, itemClass, gapClass }) {
   const ref = useRef(null);
   const paused = useRef(false);
@@ -33,7 +41,7 @@ export default function BrandMarquee({ items, label, itemClass, gapClass }) {
     const tick = (now) => {
       const dt = Math.min(now - last, 64);
       last = now;
-      const half = el.scrollWidth / 2;
+      const half = loopWidth(el, items.length);
       if (!paused.current && now >= resumeAt.current && half > el.clientWidth) {
         // Pick up wherever a swipe or arrow left it.
         if (Math.abs(el.scrollLeft - pos) > 2) pos = el.scrollLeft;
@@ -48,13 +56,13 @@ export default function BrandMarquee({ items, label, itemClass, gapClass }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [items.length]);
 
   const nudge = (dir) => {
     const el = ref.current;
     const first = el?.firstElementChild;
     if (!el || !first) return;
-    const half = el.scrollWidth / 2;
+    const half = loopWidth(el, items.length);
     // Stay inside the doubled strip so a step back from the start still works.
     if (dir < 0 && el.scrollLeft < first.offsetWidth) el.scrollLeft += half;
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
@@ -81,7 +89,7 @@ export default function BrandMarquee({ items, label, itemClass, gapClass }) {
         onTouchEnd={release}
         onFocus={hold}
         onBlur={release}
-        className={`flex overflow-x-auto scrollbar-none px-3 md:px-0 ${gapClass}`}
+        className={`flex overflow-x-auto scrollbar-none px-[3.17vw] md:px-0 ${gapClass}`}
       >
         {[0, 1].map((copy) =>
           items.map((item, i) => (

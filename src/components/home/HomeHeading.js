@@ -31,14 +31,14 @@ export default function HomeHeading({
   return (
     <div className={className}>
       {/* Phones */}
-      <div className="md:hidden flex items-baseline justify-between gap-3 px-[11px]">
-        <h2 className="font-[family-name:var(--font-tinos)] font-normal text-[24px] leading-none tracking-[0.03em] text-[var(--fa-home-text-deep)]">
+      <div className="md:hidden flex items-baseline justify-between gap-3 px-[3.17vw]">
+        <h2 className="font-[family-name:var(--font-tinos)] font-normal text-[6.02vw] leading-none tracking-[0.03em] text-[var(--fa-home-text-deep)]">
           {title}
         </h2>
         {href && (
           <Link
             href={href}
-            className="shrink-0 font-[Arial,Helvetica,sans-serif] font-bold text-[13px] leading-none text-[var(--fa-home-link)] underline underline-offset-[2px] decoration-1 hover:text-[var(--fa-home-text-deep)] transition-colors"
+            className="shrink-0 font-[Arial,Helvetica,sans-serif] font-bold text-[3.3vw] leading-none text-[var(--fa-home-link)] underline underline-offset-[2px] decoration-1 hover:text-[var(--fa-home-text-deep)] transition-colors"
           >
             View All
           </Link>

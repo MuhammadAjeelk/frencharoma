@@ -10,7 +10,7 @@ import { DEFAULT_HERO_SLIDES, HERO_DESKTOP as DESKTOP, HERO_MOBILE as MOBILE } f
 //
 // Phones get the square-ish mobile art where one has been supplied. A slide
 // with no mobile art is left out below sm rather than squeezed: its wide art
-// cropped into a 1290x1405 frame would lose the bottles and the copy.
+// cropped into the 756 × 825 phone frame would lose the bottles and the copy.
 // The slide list is admin-managed (Admin → Homepage Images); see
 // DEFAULT_HERO_SLIDES in src/lib/siteMedia.js for the shape.
 
@@ -98,7 +98,7 @@ export default function HeroCarousel({ slides: allSlides = DEFAULT_HERO_SLIDES }
       <div
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        className="relative w-full aspect-[1290/1405] sm:aspect-[2880/985] overflow-hidden bg-[#e9d9c6]"
+        className="relative w-full aspect-[756/825] sm:aspect-[2880/985] overflow-hidden bg-[#e9d9c6]"
       >
         {slides.map((slide, index) => (
           <Link

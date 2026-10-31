@@ -11,9 +11,11 @@ import BrandMarquee from "./BrandMarquee";
 // The homepage sections of the 2026-10 mockups. Every image, and the slot list
 // of each section, comes from the admin-managed registry (src/lib/siteMedia.js).
 //
-// Spacing is the mockups' own, section by section, because the designer did
-// not space them uniformly: desktop values are the 1369px mockup's pixels,
-// phone values the phone mockup's divided by its 1.94 scale. Desktop content
+// Spacing is the mockups' own. Desktop values are the 1369px mockup's pixels.
+// Phones follow the 756-unit phone spec in vw (1 unit = 100/756 vw), so every
+// section keeps its drawn proportions on any phone: 431-unit sections with a
+// 31-unit top pad, a 45.5-unit title, 20.5 units to a 273-unit card row, and
+// 61 units below; 24-unit side gutters and 15-unit gaps between cards. Desktop content
 // spans the full width less a 2.41vw margin each side, as drawn.
 
 const FRAME = "md:px-[2.41vw]";
@@ -44,9 +46,9 @@ function Section({ ground, pad, children }) {
 
 export function ShopByGender({ media = DEFAULT_MEDIA }) {
   return (
-    <Section ground={CREAM} pad="pt-[15px] pb-[31px] md:pt-[7px] md:pb-0">
+    <Section ground={CREAM} pad="pt-[4.1vw] pb-[8.07vw] md:pt-[7px] md:pb-0">
       <HomeHeading title="Shop by Gender" href="/collections/shop-all" desktop={false} />
-      <div className={`mt-[11px] md:mt-0 ${FRAME}`}>
+      <div className={`mt-[2.71vw] md:mt-0 ${FRAME}`}>
         <CardRow id="gender" media={media} label="Shop by gender" />
       </div>
     </Section>
@@ -55,14 +57,14 @@ export function ShopByGender({ media = DEFAULT_MEDIA }) {
 
 export function ShopByBrand({ media = DEFAULT_MEDIA }) {
   return (
-    <Section ground={`${WHITE} md:bg-[var(--fa-home-cream)]`} pad="pt-[15px] pb-[31px] md:pt-[35px] md:pb-[67px]">
+    <Section ground={`${WHITE} md:bg-[var(--fa-home-cream)]`} pad="pt-[4.1vw] pb-[8.07vw] md:pt-[35px] md:pb-[67px]">
       <HomeHeading eyebrow="Iconic Brands" title="Shop by Brand" href="/collections/shop-all?view=brands" />
-      <div className={`mt-[11px] md:mt-[27px] ${FRAME}`}>
+      <div className={`mt-[2.71vw] md:mt-[27px] ${FRAME}`}>
         <div className="md:px-[4.38vw]">
           <BrandMarquee
             label="Shop by brand"
-            gapClass="gap-[13px] md:gap-[2.37vw]"
-            itemClass="w-[36.4vw] md:w-[calc((100%-5*2.37vw)/6)]"
+            gapClass="gap-[3.17vw] md:gap-[2.37vw]"
+            itemClass="w-[36.11vw] md:w-[calc((100%-5*2.37vw)/6)]"
             items={slotsOf("brands").map((slot) => (
               <ArtCard key={slot.key} art={media[slot.key]} round sizes="(max-width: 767px) 37vw, 13vw" />
             ))}
@@ -75,9 +77,9 @@ export function ShopByBrand({ media = DEFAULT_MEDIA }) {
 
 export function ShopBySeason({ media = DEFAULT_MEDIA }) {
   return (
-    <Section ground={CREAM} pad="pt-[15px] pb-[31px] md:pt-[21px] md:pb-[38px]">
+    <Section ground={CREAM} pad="pt-[4.1vw] pb-[8.07vw] md:pt-[21px] md:pb-[38px]">
       <HomeHeading eyebrow="Seasonal Scents" title="Shop by Season" href="/collections/shop-all" />
-      <div className={`mt-[11px] md:mt-[21px] ${FRAME}`}>
+      <div className={`mt-[2.71vw] md:mt-[21px] ${FRAME}`}>
         <CardRow id="seasons" media={media} label="Shop by season" />
       </div>
     </Section>
@@ -94,10 +96,10 @@ export function ShopByEdition({ media = DEFAULT_MEDIA }) {
   const span = art.phoneCrop || 47;
 
   return (
-    <Section ground={WHITE} pad="pt-[15px] pb-[31px] md:pt-[30px] md:pb-[59px]">
+    <Section ground={WHITE} pad="pt-[4.1vw] pb-[8.07vw] md:pt-[30px] md:pb-[59px]">
       <HomeHeading eyebrow="Find Your Style" title="Shop by Edition" href="/collections/shop-all" />
 
-      <div className="mt-[11px] md:hidden">
+      <div className="mt-[2.71vw] md:hidden">
         <SnapRow label="Shop by edition">
           {luxury && <ArtCard art={art} href={luxury.href} cta={luxury} crop={{ start: 0, span }} sizes="85vw" />}
           {premium && <ArtCard art={art} href={premium.href} cta={premium} crop={{ start: 100 - span, span }} sizes="85vw" />}
@@ -121,7 +123,7 @@ export function ShopByEdition({ media = DEFAULT_MEDIA }) {
 
 export function ShopByScent({ media = DEFAULT_MEDIA }) {
   return (
-    <Section ground={`${WHITE} md:bg-[var(--fa-home-cream)]`} pad="pt-[15px] pb-[17px] md:pt-[33px] md:pb-[42px]">
+    <Section ground={`${WHITE} md:bg-[var(--fa-home-cream)]`} pad="pt-[4.1vw] pb-[8.07vw] md:pt-[33px] md:pb-[42px]">
       <HomeHeading
         eyebrow="Choose Your Experience"
         title="Shop by Scent Profile"
@@ -129,7 +131,7 @@ export function ShopByScent({ media = DEFAULT_MEDIA }) {
         desktopLink={{ href: "/collections/shop-all", label: "More", top: 64 }}
         className={FRAME}
       />
-      <div className={`mt-[11px] md:mt-[31px] ${FRAME}`}>
+      <div className={`mt-[2.71vw] md:mt-[31px] ${FRAME}`}>
         <CardRow id="scents" media={media} label="Shop by scent profile" />
       </div>
     </Section>
@@ -155,7 +157,7 @@ function OfferBanner({ desktop, phone }) {
 export function OfferBanners({ media = DEFAULT_MEDIA }) {
   const ids = ["discoveryBox", "specialOffers", "bundleOffers"];
   return (
-    <section className="bg-white flex flex-col gap-[5px] md:gap-[27px]">
+    <section className="bg-white flex flex-col gap-[1.32vw] md:gap-[27px]">
       {ids.map((id) => (
         <OfferBanner key={id} desktop={media[`promo.${id}`]} phone={media[`promo.${id}.mobile`]} />
       ))}

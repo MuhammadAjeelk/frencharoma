@@ -19,7 +19,8 @@ import getSiteMedia from "@/lib/getSiteMedia";
 export const revalidate = 3600;
 
 // The phone and desktop mockups stack the sections in the same order except
-// that phones show Edition before Season, so each carries `order-N md:order-M`.
+// that phones show Edition before Season, so each carries `order-N md:order-M`,
+// and phones repeat the trust strip's second half above the customer strip.
 export default async function Home() {
   const { media, heroSlides, reviews } = await getSiteMedia();
 
@@ -52,7 +53,11 @@ export default async function Home() {
       <Reveal className="order-9">
         <OfferBanners media={media} />
       </Reveal>
-      <div className="order-10">
+      {/* Phones only: the second row of trust tiles (see WhyChooseUs) */}
+      <Reveal className="order-10 md:hidden">
+        <WhyChooseUs media={media} phoneTiles={[3, 6]} desktop={false} />
+      </Reveal>
+      <div className="order-11">
         <CustomerStrip reviews={reviews} />
       </div>
     </div>

@@ -24,8 +24,8 @@ export default function SnapRow({
   label,
   desktop = "grid",
   cols = 3,
-  itemClass = "w-[84.2vw] md:w-auto",
-  gapClass = "gap-2 md:gap-[9px]",
+  itemClass = "w-[84.26vw] md:w-auto",
+  gapClass = "gap-[1.98vw] md:gap-[9px]",
   className = "",
 }) {
   const ref = useRef(null);
@@ -63,7 +63,7 @@ export default function SnapRow({
       <div
         ref={ref}
         onScroll={sync}
-        className={`flex overflow-x-auto snap-x snap-mandatory scroll-px-3 px-3 scrollbar-none md:px-0 md:scroll-px-0 ${gapClass} ${
+        className={`flex overflow-x-auto snap-x snap-mandatory scroll-px-[3.17vw] px-[3.17vw] scrollbar-none md:px-0 md:scroll-px-0 ${gapClass} ${
           grid ? `md:grid md:overflow-visible ${cols === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}` : ""
         }`}
       >

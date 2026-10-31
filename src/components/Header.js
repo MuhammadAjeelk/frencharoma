@@ -160,10 +160,10 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Charcoal chrome from the 2026-10 mockups: 61px on phones (a shade
-          darker), 157px on desktop with the logo centred over the nav row and
+      {/* Charcoal chrome from the 2026-10 mockups, the same on every device:
+          61px tall on phones, 157px on desktop with the logo centred over the nav row and
           search / icons 123px in from each edge of the 1369px design. */}
-      <header className="header relative z-50 bg-[var(--fa-home-phone-dark)] lg:bg-[var(--fa-dark)] lg:h-[157px]">
+      <header className="header relative z-50 bg-[var(--fa-dark)] lg:h-[157px]">
         <div className="px-4 sm:px-6 lg:px-[8.98vw]">
           {/* Top Section */}
           <div className="flex items-center justify-between h-[61px] lg:h-auto lg:items-start lg:pt-[43px]">

@@ -11,8 +11,8 @@ import HomeHeading from "./home/HomeHeading";
 // - Desktop: paper band; four cards across the middle 88.8% of the width
 //   (77px in from each edge of the 1369px mockup, 21px apart), light round
 //   arrows outside them that page four at a time.
-// - Phones: cream band; a swipe row with each card 71% wide and the next one
-//   peeking in.
+// - Phones: cream band; a swipe row of 537 × 827-unit cards (71.03vw) with
+//   the next one peeking in.
 const GROUND = "bg-[var(--fa-home-cream)] md:bg-[var(--fa-home-paper)]";
 const ROW = "md:px-[5.62vw]";
 
@@ -150,13 +150,13 @@ export default function BestSellers() {
 
   if (loading) {
     return (
-      <section className={`pt-[15px] pb-[31px] md:pt-[34px] md:pb-[36px] ${GROUND}`} aria-busy="true">
+      <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[36px] ${GROUND}`} aria-busy="true">
         <Heading />
-        <div className={`mt-[11px] md:mt-[28px] flex gap-[10px] md:gap-[1.53vw] overflow-hidden px-3 ${ROW}`}>
+        <div className={`mt-[2.71vw] md:mt-[28px] flex gap-[1.98vw] md:gap-[1.53vw] overflow-hidden px-[3.17vw] ${ROW}`}>
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className={`shrink-0 w-[71.1vw] md:w-[calc((100%-3*1.53vw)/4)] rounded-[12px] border border-[#d8d0c4] overflow-hidden animate-pulse ${i > 1 ? "hidden md:block" : ""}`}
+              className={`shrink-0 w-[71.03vw] md:w-[calc((100%-3*1.53vw)/4)] rounded-[12px] border border-[#d8d0c4] overflow-hidden animate-pulse ${i > 1 ? "hidden md:block" : ""}`}
             >
               <div className="aspect-square bg-[#e9e2d7]" />
               <div className="h-[156px] bg-[#f4ede4] px-[15px] pt-[12px] space-y-[10px]">
@@ -176,18 +176,18 @@ export default function BestSellers() {
 
   return (
     <>
-      <section className={`pt-[15px] pb-[31px] md:pt-[34px] md:pb-[36px] ${GROUND}`}>
+      <section className={`pt-[4.1vw] pb-[8.07vw] md:pt-[34px] md:pb-[36px] ${GROUND}`}>
         <Heading />
 
         {/* Phones: swipe row */}
         <div
           onScroll={onPhoneScroll}
-          className="md:hidden mt-[11px] flex gap-[10px] overflow-x-auto snap-x snap-mandatory scroll-px-3 px-3 scrollbar-none"
+          className="md:hidden mt-[2.71vw] flex gap-[1.98vw] overflow-x-auto snap-x snap-mandatory scroll-px-[3.17vw] px-[3.17vw] scrollbar-none"
           role="region"
           aria-label="Best sellers"
         >
           {perfumes.map((perfume) => (
-            <div key={perfume._id} className="snap-start shrink-0 w-[71.1vw]">
+            <div key={perfume._id} className="snap-start shrink-0 w-[71.03vw]">
               {card(perfume)}
             </div>
           ))}

@@ -130,23 +130,27 @@ function Tile({ item, media, onOpen }) {
 
 // Images come from the admin-managed map: trust.<id>.strip (or .icon for the
 // text-label tile) and trust.<id>.popup.
-export default function WhyChooseUs({ media = DEFAULT_MEDIA }) {
+//
+// The phone spec splits the strip: tiles 1–3 sit under the hero and 4–6 above
+// the customer strip, each a 111-unit row (14.68vw). `phoneTiles` picks the
+// slice; `desktop={false}` leaves out the desktop row for the second use.
+export default function WhyChooseUs({ media = DEFAULT_MEDIA, phoneTiles = [0, 3], desktop = true }) {
   const [openIndex, setOpenIndex] = useState(null);
   const active = openIndex != null ? FEATURES[openIndex] : null;
   const activeArt = active?.media ? media[`trust.${active.media}.popup`]?.src : null;
 
   return (
-    <section className="bg-[var(--fa-home-phone-dark)] md:bg-[var(--fa-dark)]">
-      {/* Phones: 2 × 3 */}
+    <section className={`bg-[var(--fa-dark)] ${desktop ? "" : "md:hidden"}`}>
+      {/* Phones: one row of three */}
       <ul
-        className="md:hidden grid grid-cols-3 gap-y-[23px] pt-[10px] pb-[12px] [--tile-label:13.5px] [--tile-gap:8px]"
+        className="md:hidden grid grid-cols-3 items-center h-[14.68vw] [--tile-label:3.46vw] [--tile-gap:2.05vw]"
         aria-label="Why French Aromas"
       >
-        {STRIP.map((item, i) => (
+        {STRIP.slice(...phoneTiles).map((item, i) => (
           <li
             key={item.id}
-            className={`relative flex h-[41px] justify-center ${
-              i % 3 ? "before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-[37px] before:w-px before:bg-[#cdaa63]/45" : ""
+            className={`relative flex h-[10.45vw] justify-center ${
+              i ? "before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-[9.39vw] before:w-px before:bg-[#cdaa63]/45" : ""
             }`}
           >
             <Tile item={item} media={media} onOpen={setOpenIndex} />
@@ -155,17 +159,19 @@ export default function WhyChooseUs({ media = DEFAULT_MEDIA }) {
       </ul>
 
       {/* Desktop: one row */}
-      <ul
-        className="hidden md:flex items-center justify-center h-[7.96vw] [--tile-label:1.76vw] [--tile-gap:1.17vw]"
-        aria-label="Why French Aromas"
-      >
-        {STRIP.map((item, i) => (
-          <li key={item.id} className="flex items-center h-[5.19vw]">
-            {i > 0 && <span aria-hidden="true" className="mx-[1.75vw] h-[4.4vw] w-px bg-[#cdaa63]/40" />}
-            <Tile item={item} media={media} onOpen={setOpenIndex} />
-          </li>
-        ))}
-      </ul>
+      {desktop && (
+        <ul
+          className="hidden md:flex items-center justify-center h-[7.96vw] [--tile-label:1.76vw] [--tile-gap:1.17vw]"
+          aria-label="Why French Aromas"
+        >
+          {STRIP.map((item, i) => (
+            <li key={item.id} className="flex items-center h-[5.19vw]">
+              {i > 0 && <span aria-hidden="true" className="mx-[1.75vw] h-[4.4vw] w-px bg-[#cdaa63]/40" />}
+              <Tile item={item} media={media} onOpen={setOpenIndex} />
+            </li>
+          ))}
+        </ul>
+      )}
 
       <UniversalModal
         isOpen={openIndex != null}

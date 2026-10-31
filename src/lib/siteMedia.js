@@ -16,7 +16,7 @@
 // Until the list has been saved once, these built-in slides are shown. A slide
 // with no phone art is hidden on phones rather than cropped.
 export const HERO_DESKTOP = { width: 2880, height: 985 };
-export const HERO_MOBILE = { width: 1290, height: 1405 };
+export const HERO_MOBILE = { width: 1512, height: 1650 }; // 756 × 825 in the phone spec, at 2×
 export const HERO_MAX_SLIDES = 10;
 
 const builtInSlide = (id, title, href, desktop, mobile) => ({
@@ -160,10 +160,10 @@ const promo = (id, label, href, desktop, phone) => [
   }),
   card(`promo.${id}.mobile`, `${label} — phone`, {
     src: phone.src,
-    width: phone.width,
-    height: phone.height,
-    maxWidth: 1510,
-    hint: `${phone.width * 2} × ${phone.height * 2} phone banner. The whole banner is the link.`,
+    width: 1512,
+    height: 674,
+    maxWidth: 1512,
+    hint: "1512 × 674 phone banner (756 × 337 in the phone spec). The whole banner is the link.",
     href,
     alt: label,
     cta: phone.cta,
@@ -252,7 +252,7 @@ export const SITE_MEDIA_SECTIONS = [
   {
     id: "editions",
     title: "Shop By Edition",
-    note: "One banner with a button on each half. Phones show it as two cards: the left 47% (Luxury) and the right 47% (Premium).",
+    note: "One banner with a button on each half. Phones show it as two cards: the left and right 46.7% (Luxury, Premium).",
     slots: [
       card("editions.banner", "Luxury & Premium banner", {
         src: V3("editions-v1"),
@@ -261,7 +261,8 @@ export const SITE_MEDIA_SECTIONS = [
         maxWidth: 2880,
         hint: "5432 × 1088. Luxury text on the left, Premium on the right; keep the space under each list clear for its button.",
         alt: "Luxury Edition and Premium Edition",
-        phoneCrop: 47,
+        // Each phone card is 637 × 273 (2.333:1): 46.74% of the banner's width.
+        phoneCrop: 46.74,
         ctas: [
           { label: "Shop Luxury", href: "/collections/shop-all?edition=luxury", look: "pill-outline-gold", x: 5.91, y: 78.5, w: 11.9, h: 12.6, size: 1.46 },
           { label: "Shop Premium", href: "/collections/shop-all?edition=premium", look: "pill-dark", x: 74.96, y: 78.5, w: 13.5, h: 12.6, size: 1.46 },
@@ -293,10 +294,8 @@ export const SITE_MEDIA_SECTIONS = [
           cta: { label: "Build Your Box", look: "rect-dark-caps", x: 75.95, y: 75.0, w: 13.3, h: 12.8, size: 0.99 },
         },
         {
-          src: V3("promo-discovery-box-mobile-mock-v1"),
-          width: 755,
-          height: 378,
-          cta: { label: "Build Your Box", look: "pill-dark", x: 55.0, y: 71.4, w: 28.7, h: 11.3, size: 3.2 },
+          src: V3("promo-discovery-box-mobile-mock-v2"),
+          cta: { label: "Build Your Box", look: "pill-dark", x: 55.0, y: 80.1, w: 28.7, h: 12.67, size: 3.2 },
         },
       ),
       ...promo(
@@ -308,10 +307,8 @@ export const SITE_MEDIA_SECTIONS = [
           cta: { label: "Explore", look: "rect-dark", x: 14.83, y: 74.0, w: 7.82, h: 12.2, size: 1.02 },
         },
         {
-          src: V3("promo-special-offers-mobile-mock-v1"),
-          width: 755,
-          height: 378,
-          cta: { label: "Shop Now", look: "pill-dark", x: 7.6, y: 80.0, w: 22.8, h: 11.5, size: 3.2 },
+          src: V3("promo-special-offers-mobile-mock-v2"),
+          cta: { label: "Shop Now", look: "pill-dark", x: 7.6, y: 83.8, w: 22.8, h: 12.9, size: 3.2 },
         },
       ),
       ...promo(
@@ -326,8 +323,6 @@ export const SITE_MEDIA_SECTIONS = [
         },
         {
           src: V3("promo-bundle-offers-mobile-mock-v1"),
-          width: 755,
-          height: 337,
           cta: { label: "Shop Now", look: "pill-dark", x: 38.6, y: 81.0, w: 22.8, h: 13.6, size: 3.2 },
         },
       ),

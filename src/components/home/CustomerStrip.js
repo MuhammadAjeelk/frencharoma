@@ -111,7 +111,7 @@ function Quote({ reviews }) {
 
 export default function CustomerStrip({ reviews = [] }) {
   return (
-    <section className="bg-[var(--fa-home-strip)] py-[17px] md:py-0 md:h-[149px] md:flex md:items-center">
+    <section className="bg-[var(--fa-home-strip)] min-h-[44.58vw] flex items-center md:min-h-0 md:h-[149px]">
       <div className="w-full md:h-full md:grid md:grid-cols-[51.9%_1fr] md:items-center">
         <div className="md:self-start md:pt-[25px] md:h-full md:border-r md:border-[var(--fa-home-text)]/12">
           <Quote reviews={reviews} />

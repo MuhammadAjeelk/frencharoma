@@ -25,14 +25,12 @@
   --fa-premium: #ddd3c4;
   --fa-peach: #edd8ca;
   /* Homepage, sampled from the 2026-10 mockups. Section bands alternate
-     cream and paper on every device; phones draw the header and trust strip
-     a shade darker than desktop does. */
+     cream and white; the header and trust strip use --fa-dark everywhere. */
   --fa-home-cream: #f4f0ea;
   --fa-home-paper: #fefefe;
   --fa-home-white: #fefefe;
   --fa-home-strip: #f6f0e6;
   --fa-home-rule: #dec496;
-  --fa-home-phone-dark: #201e1e;
   --fa-home-text: #373435;
   --fa-home-text-deep: #201e1e;
   --fa-home-link: #52658c;
