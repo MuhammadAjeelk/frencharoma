@@ -245,6 +245,7 @@ img { image-rendering: -webkit-optimize-contrast; }
   transform-origin: center;
   pointer-events: none;
 }
+.strike-diagonal-bold::after { height: 2px; }
 
 /* Quick 0.3s side-to-side shake. */
 @keyframes cart-vibrate {

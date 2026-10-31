@@ -2,7 +2,6 @@ import HeroCarousel from "@/components/HeroCarousel";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import BestSellers from "@/components/BestSellers";
 import Reveal from "@/components/Reveal";
-import BundleOfferModal from "@/components/BundleOfferModal";
 import {
   ShopByGender,
   ShopByBrand,
@@ -56,7 +55,6 @@ export default async function Home() {
       <div className="order-10">
         <CustomerStrip reviews={reviews} />
       </div>
-      <BundleOfferModal />
     </div>
   );
 }

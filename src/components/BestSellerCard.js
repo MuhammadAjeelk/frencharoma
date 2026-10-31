@@ -258,7 +258,7 @@ export default function BestSellerCard({
               {headlinePrice != null ? (
                 <>
                   {disc > 0 && (
-                    <span className="text-[#555] line-through decoration-[#e23b3b] decoration-[1.5px]">{formatRs(headlinePrice)}</span>
+                    <span className="strike-diagonal strike-diagonal-bold text-[#555]">{formatRs(headlinePrice)}</span>
                   )}
                   <span className="font-bold text-[#a8329e]">{formatRs(finalOf(headlinePrice))}</span>
                 </>
